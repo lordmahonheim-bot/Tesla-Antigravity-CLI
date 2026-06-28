@@ -1,5 +1,5 @@
 # Ops Consultant — AI Agents, CLI Workflows & Local Governance
-*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Author:* Lord Mahonheim  
 *Status:* Verified Reference (statut/valide)  
 *Tagline:* "Security is not a delay, it is a process; authorize consciously."
 

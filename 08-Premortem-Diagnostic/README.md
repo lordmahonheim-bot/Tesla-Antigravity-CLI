@@ -1,5 +1,5 @@
 # Ops Consultant — AI Agents, CLI Workflows & Local Governance
-*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Author:* Lord Mahonheim  
 *Status:* Verified Reference (statut/valide)  
 *Tagline:* "Fail before deployment in simulation, so you do not fail in reality."
 

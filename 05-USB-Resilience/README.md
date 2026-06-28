@@ -1,5 +1,5 @@
 # Ops Consultant — AI Agents, CLI Workflows & Local Governance
-*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Author:* Lord Mahonheim  
 *Status:* Verified Reference (statut/valide)  
 *Tagline:* "Hardware is fragile, drivers are strict; build local resilience."
 

@@ -1,5 +1,5 @@
 # Ops Consultant — AI Agents, CLI Workflows & Local Governance
-*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Author:* Lord Mahonheim  
 *Status:* Verified Reference (statut/valide)  
 *Tagline:* "An agent without memory is a machine without history; persistence builds intelligence."
 
