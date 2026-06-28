@@ -1,37 +1,91 @@
-# Alexandria Universal Library
+# Ops Consultant — AI Agents, CLI Workflows & Local Governance
+*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Status:* Verified Reference (statut/valide)  
+*Tagline:* "Knowledge without indexing is noise; Alexandria structures truth."
 
-## Hybrid Architecture (SQL + Vectors)
-Alexandria represents the universal library and cognitive indexing layer of the Vigilum Codex ecosystem. It operates on a hybrid storage and retrieval architecture combining:
-1. **Lexical Retrieval (SQLite FTS5)**: For exact matching of keywords, paths, tags, and titles.
-2. **Semantic Retrieval (ChromaDB)**: For concept-based searches using dense embeddings, ensuring high-recall query matching even when precise vocabulary differs.
+## Tested Environment Table
+| Parameter | Value |
+| :--- | :--- |
+| Date | 2026-06-28 |
+| Host Machine | MIDGARD |
+| Operating System | Linux (Ubuntu/Debian) |
+| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Python Version | 3.10+ |
+| SQLite Version | 3.37+ (FTS5 Enabled) |
 
-These two retrieval methods are combined via a Reciprocal Rank Fusion (RRF) algorithm to deliver unified, high-accuracy context.
+## Important Security Notice
+This project indexes markdown notes and files locally. No physical database files (`*.db`), journaling logs (`*-journal`), or vector storage caches (`.chroma_vectors/`) are allowed to be tracked by Git.
 
-## SQLite Schema & FTS5 Virtual Table
-The indexing database `alexandria_brain.db` implements the following schema:
+## Table of Contents
+1. Executive Summary
+2. Problem Statement
+3. Product Promise
+4. Core Principles Table
+5. Architecture Diagram
+6. Repository Layout
+7. Workflow Sequence
+8. Technical Stack
+9. Security and Governance Rules
+10. Acceptance Criteria
+11. Final Verdict & Signature Sentence
 
-```sql
--- File tracking registry
-CREATE TABLE IF NOT EXISTS file_registry (
-    filepath TEXT PRIMARY KEY,
-    last_modified REAL NOT NULL
-);
+## Executive Summary
+Alexandria is a local hybrid repository indexer combining lexical (SQLite FTS5) and semantic (ChromaDB) search routing. It enables the agent to search through large text documents rapidly, bypassing context window limitations.
+Instead of scanning large directories linearly, the agent queries FTS5 tables and vector spaces, combining results via Reciprocal Rank Fusion (RRF).
 
--- Lexical Full-Text Search (FTS5) table
-CREATE VIRTUAL TABLE fts_vault_index USING fts5(
-    chunk_id,
-    filepath,
-    content
-);
+## Problem Statement
+In previous iterations, the agent searched files by reading directories linearly. This strategy saturated the LLM context window with irrelevant data, resulting in timeouts and high token costs. Furthermore, concurrent file writes without lock controls led to database write contentions.
+
+## Product Promise
+* **What it does:** Provides instant, structured retrieval of local knowledge using FTS5 match queries and sentence embeddings.
+* **What it does NOT do:** Connect to external cloud vector databases or index files outside specified directories.
+
+## Core Principles Table
+| Principle | Meaning | Impact |
+| :--- | :--- | :--- |
+| Lexical Efficiency | Use SQLite FTS5 for exact keyword matching. | Drastically reduces token ingestion latency. |
+| Semantic Context | ChromaDB and Sentence-Transformers capture meaning. | Returns relevant sections even with synonymous terms. |
+| Hybrid Fusion | RRF merges scores of both methods. | Combines the precision of keywords and the depth of meaning. |
+
+## Architecture Diagram
+```mermaid
+graph TD
+    A[Query Text] --> B[Execute Lexical Search SQLite FTS5]
+    A --> C[Execute Semantic Search ChromaDB]
+    B --> D[Compute RRF Fusion]
+    C --> D
+    D --> E[Retrieve Top 5 Chunks]
 ```
 
-## Semantic Incremental Indexer
-The script `indexer_hybrid.py` scans a localized documentation folder (the `Vault`), splits modified documents into overlapping chunks, computes dense vector representations using a local SentenceTransformer model (default: `all-MiniLM-L6-v2`), and inserts them into ChromaDB and the SQLite FTS5 index. It tracks modification times in the `file_registry` to execute in a strictly incremental, token-efficient manner.
-
-## Running the RRF Search Router
-The hybrid search router fuses lexical and semantic scores using RRF to return the top results without any LLM hallucination.
-To query the database:
-```bash
-python 02-Alexandria-Database/search_router.py "your search query"
+## Repository Layout
+```text
+02-Alexandria-Database/
+├── README.md
+├── indexer_hybrid.py
+└── search_router.py
 ```
-*Note: Make sure `chromadb` and `sentence-transformers` are installed in your environment before running.*
+
+## Workflow Sequence
+1. The developer runs `indexer_hybrid.py` to check for modified files in the Vault.
+2. Modified files are parsed, split into overlaps, and saved to SQLite FTS5 and ChromaDB.
+3. Obsolete entries from deleted files are automatically purged.
+4. The search client uses `search_router.py` to query both databases and retrieve context.
+
+## Technical Stack
+* **Database:** SQLite 3.37+ (FTS5 module)
+* **Vector Store:** ChromaDB (local persistence)
+* **Model:** Sentence-Transformers (`all-MiniLM-L6-v2`)
+* **Core:** Python 3.10+
+
+## Security and Governance Rules
+* The database path must be kept under `.gitignore`.
+* ChromaDB client must be configured with a local persistent folder.
+* Maximum vector chunk sizes are strictly capped to 500 characters to optimize search efficiency.
+
+## Acceptance Criteria
+* Running `indexer_hybrid.py` executes a full scan and registers documents.
+* Running `search_router.py 'query'` retrieves matching context blocks.
+
+## Final Verdict & Signature Sentence
+**VERDICT: OPERATIONAL SYSTEM STABILIZED**  
+*"Order in indexing leads to speed in retrieval."*

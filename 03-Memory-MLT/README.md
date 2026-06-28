@@ -1,18 +1,88 @@
-# Long-Term Semantic Memory (LTM)
+# Ops Consultant — AI Agents, CLI Workflows & Local Governance
+*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Status:* Verified Reference (statut/valide)  
+*Tagline:* "An agent without memory is a machine without history; persistence builds intelligence."
 
-## Cognitive Persistence Architecture
-The Long-Term Memory (LTM) module ensures cognitive persistence and capitalization across execution sessions. By converting transient agent interaction transcripts into structured, indexed markdown documents, this module builds a cumulative memory layer that enables future sessions to build directly upon past discoveries.
+## Tested Environment Table
+| Parameter | Value |
+| :--- | :--- |
+| Date | 2026-06-28 |
+| Host Machine | MIDGARD |
+| Operating System | Linux (Ubuntu/Debian) |
+| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Python Version | 3.10+ |
 
-## Consolidating Interaction History
-The script `update_session_history.py` parses local agent console logs and transcripts, extracting requests, diagnostic findings, actions, and validations. It condenses these into:
-1. A **Cognitive Synthesis Table**: A brief summary mapping session date, session ID, and main objective.
-2. A **Detailed Session Log**: Expandable markdown blocks preserving precise interactions, stored in a consolidated history file (`SESSION_TRANSCRIPTS.md`).
+## Important Security Notice
+This project parses CLI log transcripts (`transcript.jsonl`) generated locally by the agent runtime. The transcripts file and history details containing potential API keys or private system files are strictly kept in the local cache and excluded from version control.
 
-## Idempotent Update Script Usage
-The session updater is strictly idempotent, meaning it updates existing session blocks matching the current `ANTIGRAVITY_CONVERSATION_ID` or appends a new block if not present, preventing duplicate logs.
-To run the consolidation script:
-```bash
-export ANTIGRAVITY_CONVERSATION_ID="your-session-uuid"
-python 03-Memory-MLT/update_session_history.py
+## Table of Contents
+1. Executive Summary
+2. Problem Statement
+3. Product Promise
+4. Core Principles Table
+5. Architecture Diagram
+6. Repository Layout
+7. Workflow Sequence
+8. Technical Stack
+9. Security and Governance Rules
+10. Acceptance Criteria
+11. Final Verdict & Signature Sentence
+
+## Executive Summary
+The Long-Term Memory (MLT) module extracts session transcript logs from the local Antigravity runtime, summarizes key interactions using a structured format, and updates a centralized history file `SESSION_TRANSCRIPTS.md`.
+This script triggers semantic indexing automatically, consolidating new knowledge chunks for Alexandria immediately after execution.
+
+## Problem Statement
+In early development phases, restarting the Antigravity CLI cleared the agent's active memory. The agent forgot previous debug steps, warnings, and configurations, forcing the developer to repeat instructions. Manual logs were unstructured, and raw JSONL records grew too large to parse during prompt injection.
+
+## Product Promise
+* **What it does:** Automates the extraction, structuring, and summary indexing of session interactions into a single, structured markdown log file.
+* **What it does NOT do:** Sync memory data over the network or leak host credentials.
+
+## Core Principles Table
+| Principle | Meaning | Impact |
+| :--- | :--- | :--- |
+| Idempotence | Session updates can be run multiple times safely. | Prevents duplicates in history. |
+| Cognitive Synthesis | Summarizes details using Diagnostic/Action blocks. | Keeps transcripts readable and concise. |
+| Automatic Indexing | Links directly into the Alexandria index. | Instantly indexes session notes. |
+
+## Architecture Diagram
+```mermaid
+graph TD
+    A[End of Work Cycle] --> B[Execute update_session_history.py]
+    B --> C[Read local transcript.jsonl]
+    C --> D[Generate Session Synthesis Block]
+    D --> E[Write to SESSION_TRANSCRIPTS.md]
+    E --> F[Trigger Alexandria Hybrid Indexer]
 ```
-*Note: Make sure `GEMINI_APP_DATA_DIR` is set or points to your actual application home folder structure.*
+
+## Repository Layout
+```text
+03-Memory-MLT/
+├── README.md
+└── update_session_history.py
+```
+
+## Workflow Sequence
+1. The script retrieves the active session ID from `ANTIGRAVITY_CONVERSATION_ID`.
+2. It parses the JSONL log records under the local `.system_generated/logs/` path.
+3. It filters user prompts and model responses, separating diagnostic analyses.
+4. It formats the summary block and inserts it under the global summary table.
+5. It invokes the local Alexandria indexer script to parse the updated history file.
+
+## Technical Stack
+* **Runtime:** Python 3.10+
+* **Libraries:** `json`, `os`, `re`, `sys`, `subprocess`
+* **Format:** Markdown + HTML Details tag wrapper
+
+## Security and Governance Rules
+* Hardcoded system paths are resolved dynamically using environment fallbacks.
+* Session text transcripts are excluded via `.gitignore` to prevent secret leaks.
+
+## Acceptance Criteria
+* Running `update_session_history.py` completes without exceptions.
+* The script successfully locates and parses `transcript.jsonl` files and updates the target markdown archive.
+
+## Final Verdict & Signature Sentence
+**VERDICT: OPERATIONAL SYSTEM STABILIZED**  
+*"Memory is the foundation of local agent alignment."*

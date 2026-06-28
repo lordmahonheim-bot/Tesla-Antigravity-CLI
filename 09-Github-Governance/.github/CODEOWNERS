@@ -1,7 +1,2 @@
-# CODEOWNERS for Tesla Repository (Vigilum Codex Governance)
-# Global owner by default
+# Global owners of this repository
 * @lordmahonheim-bot
-
-# Specific components delegated to the Tesla agent team
-/sandbox/ @lordmahonheim-bot/tesla-agent
-/memory/ @lordmahonheim-bot/tesla-agent

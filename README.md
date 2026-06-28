@@ -1,31 +1,116 @@
-# Vigilum Codex - Local MVP GitHub Repository
+# Ops Consultant — AI Agents, CLI Workflows & Local Governance
+*Author:* Abdellah MOUHTAJ (Mahonheim)  
+*Status:* Verified Reference (statut/valide)  
+*Tagline:* "An un-governed agent is a liability; structure is the mother of security."
 
-Welcome to the public MVP repository of the **Vigilum Codex** operational system, orchestrated by **Tesla**.
+## Tested Environment Table
+| Parameter | Value |
+| :--- | :--- |
+| Date | 2026-06-28 |
+| Host Machine | MIDGARD |
+| Operating System | Linux (Ubuntu/Debian) |
+| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Python Version | 3.10+ |
+| Node.js Version | 18+ |
+| SQLite Version | 3.37+ |
 
-This repository contains local proof-of-concept frameworks, automation scripts, and governance systems designed to support human performance, strategic decision-making, and secure local AI execution under the direction of **Lord Mahonheim**.
+## Important Security Notice
+This repository contains anonymized configuration models and utility wrappers. No active passwords, private Obsidian vaults, local database files (`*.db`, `.chroma_vectors`), or API tokens are tracked.
 
-## Repository Structure
+## Table of Contents
+1. Executive Summary
+2. Problem Statement
+3. Product Promise
+4. Core Principles Table
+5. Architecture Diagram
+6. Repository Layout
+7. Workflow Sequence
+8. Technical Stack
+9. Security and Governance Rules
+10. Acceptance Criteria
+11. Final Verdict & Signature Sentence
 
-The project is organized into 9 modules:
+## Executive Summary
+Vigilum Codex is an institution-matrice dedicated to human performance, strategic intelligence, and governed local AI operations. The projects hosted within this repository form the technical infrastructure of the Tesla agent, operating locally on MIDGARD.
+This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 9 subprojects ranging from static code syntax healing to secure graphical authentication wrappers and hybrid search engines.
 
-1.  **[01-LSP-Self-Healing](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/01-LSP-Self-Healing/)**: Implements pre-commit code verification using an LSP daemon.
-2.  **[02-Alexandria-Database](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/02-Alexandria-Database/)**: Local hybrid knowledge indexer and search router (SQL FTS5 + vector database).
-3.  **[03-Memory-MLT](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/03-Memory-MLT/)**: Long-Term Memory (LTM) updater to record session summaries.
-4.  **[04-Web-Raider](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/04-Web-Raider/)**: Sovereign Playwright scraping scripts without third-party API dependencies.
-5.  **[05-USB-Resilience](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/05-USB-Resilience/)**: Secure mounting and repair scripts for external physical storage.
-6.  **[06-Sudo-Askpass](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/06-Sudo-Askpass/)**: Graphical sudo prompt wraps using Zenity dialog panels.
-7.  **[07-Strategic-Armement](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/07-Strategic-Armement/)**: Pluridisciplinary engineering plans and developmental roadmaps.
-8.  **[08-Premortem-Diagnostic](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/08-Premortem-Diagnostic/)**: Templates and guidelines for predictive project failure diagnosis.
-9.  **[09-Github-Governance](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/09-Github-Governance/)**: Compliance, CODEOWNERS, dependabot configuration, and commit standards.
+## Problem Statement
+In previous iterations, the AI agent functioned without clear local boundaries. This resulted in multiple system level errors:
+1. **Broken local paths:** Hardcoded paths (`/home/lord-mahonheim/bifrost/tesla`) rendered scripts non-portable.
+2. **Context Saturation:** Linear directory sweeps overloaded the model's token cache, leading to high latency and search failures.
+3. **Authentication blocks:** Background commands froze due to missing TTY prompts, and git operations were rejected due to unbound SSH key permissions.
+4. **Isolated tools:** Scripts were built in isolation without common imports, causing naming collisions and dependency breakage.
 
-## Doctrinal References
-The repository's underlying philosophy is detailed in the institutional matrix document [MY_COMPANY.md](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/MY_COMPANY.md).
+## Product Promise
+* **What it does:** Scaffolds a complete, documented set of local agent modules, verifying syntactic correctness, cognitive persistence, and secure execution.
+* **What it does NOT do:** Route telemetry to external servers, allow direct remote branch pushing without checks, or bypass manual approvals.
 
-## Operational Rules
-*   **Absolute Local Execution**: No network push operations are executed without explicit permission from Lord Mahonheim.
-*   **Anonymization**: All local path references and credentials have been cleaned and replaced with relative directory resolution.
-*   **Commit Format**: All changes must use *Conventional Commits*.
+## Core Principles Table
+| Principle | Meaning | Impact |
+| :--- | :--- | :--- |
+| Local Execution | All processes run on host MIDGARD. | Guarantees complete data sovereignty. |
+| Verification First | Run LSP and syntax tests before commit. | Guarantees codebase structural integrity. |
+| Explicit Approval | Root modifications require operator dialog. | Retains human authority over system changes. |
 
----
-*Signé / Fait par : Tesla sur Antigravity CLI*  
-*Main rendue à Mahonheim*
+## Architecture Diagram
+```mermaid
+graph TD
+    A[Vigilum Codex Core] --> B[01-LSP-Self-Healing]
+    A --> C[02-Alexandria-Database]
+    A --> D[03-Memory-MLT]
+    A --> E[04-Web-Raider]
+    A --> F[05-USB-Resilience]
+    A --> G[06-Sudo-Askpass]
+    A --> H[07-Strategic-Armement]
+    A --> I[08-Premortem-Diagnostic]
+    A --> J[09-Github-Governance]
+```
+
+## Repository Layout
+```text
+MVP-GITHUB/
+├── .gitignore
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── MY_COMPANY.md
+├── README.md
+├── SECURITY.md
+├── SUPPORT.md
+├── 01-LSP-Self-Healing/
+├── 02-Alexandria-Database/
+├── 03-Memory-MLT/
+├── 04-Web-Raider/
+├── 05-USB-Resilience/
+├── 06-Sudo-Askpass/
+├── 07-Strategic-Armement/
+├── 08-Premortem-Diagnostic/
+└── 09-Github-Governance/
+```
+
+## Workflow Sequence
+1. The developer triggers updates within a project folder.
+2. Code edits are checked by `01-LSP-Self-Healing` via local pyright diagnostics.
+3. Successful revisions are documented and indexed using the `02-Alexandria-Database` hybrid indexer.
+4. Action logs are consolidated into the `03-Memory-MLT` long-term persistence layer.
+5. All system or push actions must abide by the rules configured in `09-Github-Governance`.
+
+## Technical Stack
+* **Languages:** Python 3.10+, Bash (Shell)
+* **Frameworks:** Playwright, Sentence-Transformers
+* **Storage:** SQLite FTS5, ChromaDB (local)
+* **Testing:** Pyright LSP
+
+## Security and Governance Rules
+* Isolation: Tools must run within the designated user privileges.
+* Zero Network Autonomy: The agent cannot add remotes, commit keys, or push code without explicit manual authorization.
+* Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
+
+## Acceptance Criteria
+* All 9 subprojects exist and are fully populated.
+* Pyright reports 0 errors across all Python files.
+* Local repository branch versioning is initialized on `feature/scaffolding-mvp`.
+
+## Final Verdict & Signature Sentence
+**VERDICT: OPERATIONAL SYSTEM STABILIZED**  
+*"Precision in structure brings governance in execution."*
