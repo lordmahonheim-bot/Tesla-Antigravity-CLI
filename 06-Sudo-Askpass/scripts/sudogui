@@ -1,0 +1,26 @@
+#!/bin/sh
+# 06-Sudo-Askpass: Secure Graphic Sudo Wrapper
+# Executes sudo commands using Zenity graphical askpass wrapper
+set -e
+
+LOCAL_BIN="$HOME/.local/bin"
+ASKPASS_BIN="$LOCAL_BIN/sudo-askpass-zenity"
+
+if [ ! -f "$ASKPASS_BIN" ]; then
+    SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+    if [ -f "$SCRIPT_DIR/sudo-askpass-zenity" ]; then
+        ASKPASS_BIN="$SCRIPT_DIR/sudo-askpass-zenity"
+    fi
+fi
+
+export SUDO_ASKPASS="$ASKPASS_BIN"
+
+if [ -z "${DISPLAY:-}" ]; then
+  export DISPLAY=":0"
+fi
+
+if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
+  export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+fi
+
+exec sudo -A "$@"
