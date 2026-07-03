@@ -1,0 +1,105 @@
+{
+  "manifest": {
+    "name": "Tesla",
+    "version": "3.0.0",
+    "schemaVersion": "1.0",
+    "role": "Gemini / Antigravity Runtime Adapter",
+    "description": "Single source of truth describing the Tesla architecture."
+  },
+  "core": {
+    "loadOrder": [
+      "SOUL.md",
+      "ENGINE.md",
+      "AGENTS.md",
+      "FORCE_TOOLING.md",
+      "CONTEXT.md",
+      "GEMINI.md"
+    ],
+    "required": [
+      "SOUL.md",
+      "ENGINE.md",
+      "AGENTS.md",
+      "FORCE_TOOLING.md",
+      "CONTEXT.md",
+      "GEMINI.md"
+    ]
+  },
+  "extensions": {
+    "available": [
+      "Alexandria",
+      "Arcanis",
+      "Web Raider",
+      "Premortem",
+      "GitHub Manager",
+      "Webwright",
+      "Jules"
+    ]
+  },
+  "profiles": {
+    "default": "default",
+    "available": [
+      "default",
+      "research",
+      "audit",
+      "coding",
+      "documentation",
+      "arcanis"
+    ]
+  },
+  "bootstrap": {
+    "stopOnMissingRequired": true,
+    "allowOptionalExtensions": true,
+    "governanceRequired": true
+  },
+  "engines": {
+    "supported": [
+      "Gemini",
+      "GPT",
+      "Claude",
+      "Qwen"
+    ]
+  },
+  "reserved": {
+    "capabilities": {},
+    "plugins": {},
+    "hooks": {},
+    "events": {},
+    "telemetry": {},
+    "security": {}
+  },
+  "adapter": {
+    "type": "Runtime Adapter",
+    "target": "TESLA.json",
+    "purpose": "Bridge Gemini/Antigravity runtime with the Tesla platform manifest."
+  },
+  "runtime": {
+    "engine": "Gemini",
+    "adapter": "GEMINI.md",
+    "configurationScope": "Antigravity",
+    "platformManifest": "TESLA.json"
+  },
+  "architecture": {
+    "layers": [
+      "SOUL",
+      "ENGINE",
+      "AGENTS",
+      "SKILLS",
+      "MCP",
+      "TOOLS"
+    ],
+    "manifest": "TESLA.json"
+  },
+  "governance": {
+    "framework": "FORCE_TOOLING.md",
+    "role": "Canonical Capability Governance Framework",
+    "scope": [
+      "CapabilityDiscovery",
+      "CapabilitySelection",
+      "CapabilityRouting",
+      "CapabilityGovernance",
+      "CapabilityLifecycle",
+      "PolicyRegistry",
+      "MetaGovernance"
+    ]
+  }
+}

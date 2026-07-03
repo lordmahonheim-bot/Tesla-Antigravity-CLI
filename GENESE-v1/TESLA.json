@@ -1,0 +1,114 @@
+{
+  "manifest": {
+    "name": "Tesla",
+    "role": "Universal Platform Manifest",
+    "version": "2.0.0",
+    "schemaVersion": "1.0",
+    "description": "Single Source of Truth describing the Tesla agentic platform."
+  },
+  "architecture": {
+    "layers": [
+      "SOUL",
+      "ENGINE",
+      "AGENTS",
+      "FORCE_TOOLING",
+      "SKILLS",
+      "MCP",
+      "TOOLS"
+    ]
+  },
+  "bootstrap": {
+    "entrypoint": "SOUL.md",
+    "loadOrder": [
+      "SOUL.md",
+      "ENGINE.md",
+      "AGENTS.md",
+      "FORCE_TOOLING.md",
+      "CONTEXT.md",
+      "GEMINI.md"
+    ],
+    "stopOnMissingCore": true
+  },
+  "core": {
+    "documents": [
+      {
+        "name": "SOUL.md",
+        "role": "Identity and immutable principles"
+      },
+      {
+        "name": "GEMINI.md",
+        "role": "Cognitive engine behaviour"
+      },
+      {
+        "name": "AGENTS.md",
+        "role": "Operational governance"
+      },
+      {
+        "name": "CONTEXT.md",
+        "role": "Permanent contextual knowledge"
+      },
+      {
+        "name": "ENGINE.md",
+        "role": "Universal cognitive engine"
+      },
+      {
+        "name": "FORCE_TOOLING.md",
+        "role": "Canonical capability governance framework"
+      }
+    ]
+  },
+  "profiles": {
+    "default": "default",
+    "available": [
+      "default",
+      "research",
+      "audit",
+      "coding",
+      "documentation",
+      "arcanis"
+    ]
+  },
+  "modules": {
+    "registered": [
+      "Alexandria",
+      "Arcanis",
+      "Web Raider",
+      "Webwright",
+      "Premortem",
+      "GitHub Manager",
+      "Jules"
+    ]
+  },
+  "engines": {
+    "supported": [
+      "Gemini",
+      "GPT",
+      "Claude",
+      "Qwen"
+    ]
+  },
+  "compatibility": {
+    "engineIndependent": true,
+    "configurationAdapter": "settings.json"
+  },
+  "reserved": {
+    "skills": {},
+    "mcp": {},
+    "tools": {},
+    "hooks": {},
+    "events": {},
+    "telemetry": {},
+    "security": {}
+  },
+  "governance": {
+    "framework": "FORCE_TOOLING.md",
+    "capabilityModel": "Capability Governance",
+    "principles": [
+      "CapabilityDiscovery",
+      "CapabilitySelection",
+      "CapabilityRouting",
+      "CapabilityLifecycle",
+      "MetaGovernance"
+    ]
+  }
+}
