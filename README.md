@@ -32,7 +32,7 @@ This repository contains anonymized configuration models and utility wrappers. N
 
 ## Executive Summary
 Vigilum Codex is an institution-matrice dedicated to human performance, strategic intelligence, and governed local AI operations. The projects hosted within this repository form the technical infrastructure of the Tesla agent, operating locally on MIDGARD.
-This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 9 subprojects ranging from static code syntax healing to secure graphical authentication wrappers and hybrid search engines.
+This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 18 subprojects ranging from static code syntax healing to secure graphical authentication wrappers and hybrid search engines.
 
 ## Problem Statement
 In previous iterations, the AI agent functioned without clear local boundaries. This resulted in multiple system level errors:
@@ -55,15 +55,32 @@ In previous iterations, the AI agent functioned without clear local boundaries. 
 ## Architecture Diagram
 ```mermaid
 graph TD
-    A[Vigilum Codex Core] --> B[01-LSP-Self-Healing]
-    A --> C[02-Alexandria-Database]
-    A --> D[03-Memory-MLT]
-    A --> E[04-Web-Raider]
-    A --> F[05-USB-Resilience]
-    A --> G[06-Sudo-Askpass]
-    A --> H[07-Strategic-Armement]
-    A --> I[08-Premortem-Diagnostic]
-    A --> J[09-Github-Governance]
+    A[Vigilum Codex Core] --> Core[Core Automation]
+    A --> Gov[Governance & Auditing]
+    A --> Data[Data & Memory]
+    A --> Media[Media & Cloud]
+
+    Core --> B["01-LSP-Self-Healing"]
+    Core --> E["04-Web-Raider"]
+    Core --> G["06-Sudo-Askpass"]
+    Core --> K["10-Github-MVP-Scaffolding"]
+    Core --> Q["16-Tesla-Master-Code"]
+
+    Gov --> F["05-USB-Resilience"]
+    Gov --> H["07-Strategic-Armement"]
+    Gov --> I["08-Integration-Antigravity-Google-Agents-MIDGARD"]
+    Gov --> J["09-Github-Governance"]
+    Gov --> L["11-Tesla-Arcanis-Skill"]
+
+    Data --> C["02-Alexandria-Database"]
+    Data --> D["03-Memory-MLT"]
+    Data --> M["12-Alexandria-RAG-Unification"]
+    Data --> P["15-Obsidian-Database"]
+    Data --> R["17-DB-Subagents-Skills"]
+
+    Media --> N["13-Jules-Cloud-Integration"]
+    Media --> O["14-Llama-cpp-Evaluation"]
+    Media --> S["18-Tesla-Video-Director"]
 ```
 
 ## Repository Layout
@@ -84,16 +101,26 @@ MVP-GITHUB/
 ├── 05-USB-Resilience/
 ├── 06-Sudo-Askpass/
 ├── 07-Strategic-Armement/
-├── 08-Premortem-Diagnostic/
-└── 09-Github-Governance/
+├── 08-Integration-Antigravity-Google-Agents-MIDGARD/
+├── 09-Github-Governance/
+├── 10-Github-MVP-Scaffolding/
+├── 11-Tesla-Arcanis-Skill/
+├── 12-Alexandria-RAG-Unification/
+├── 13-Jules-Cloud-Integration/
+├── 14-Llama-cpp-Evaluation/
+├── 15-Obsidian-Database/
+├── 16-Tesla-Master-Code/
+├── 17-DB-Subagents-Skills/
+└── 18-Tesla-Video-Director/
 ```
 
 ## Workflow Sequence
 1. The developer triggers updates within a project folder.
-2. Code edits are checked by `01-LSP-Self-Healing` via local pyright diagnostics.
-3. Successful revisions are documented and indexed using the `02-Alexandria-Database` hybrid indexer.
-4. Action logs are consolidated into the `03-Memory-MLT` long-term persistence layer.
-5. All system or push actions must abide by the rules configured in `09-Github-Governance`.
+2. Code edits are checked by `01-LSP-Self-Healing` via local pyright diagnostics, and pre-flight lints are enforced by `16-Tesla-Master-Code`.
+3. Successful revisions are documented and indexed using `02-Alexandria-Database` and the RAG indexers of `15-Obsidian-Database`.
+4. Action logs and subagent sessions are consolidated into `03-Memory-MLT` and `17-DB-Subagents-Skills` databases.
+5. High-level evaluations (`14-Llama-cpp-Evaluation`), cloud computations (`13-Jules-Cloud-Integration`), and media ingestion (`18-Tesla-Video-Director`) are dispatched as needed.
+6. All system or push actions must abide by the rules configured in `09-Github-Governance` and staged cleanly via `10-Github-MVP-Scaffolding`.
 
 ## Technical Stack
 * **Languages:** Python 3.10+, Bash (Shell)
@@ -107,9 +134,9 @@ MVP-GITHUB/
 * Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
 
 ## Acceptance Criteria
-* All 9 subprojects exist and are fully populated.
+* All 18 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
-* Local repository branch versioning is initialized on `feature/scaffolding-mvp`.
+* Local repository branch versioning is initialized on `feature/complete-mvp-v3`.
 
 ## Final Verdict & Signature Sentence
 **VERDICT: OPERATIONAL SYSTEM STABILIZED**  
