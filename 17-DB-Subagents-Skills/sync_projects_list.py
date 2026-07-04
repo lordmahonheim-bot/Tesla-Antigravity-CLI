@@ -2,32 +2,22 @@
 # sync_projects_list.py — Automatically consolidate project history from SGC files, SQLite DB and INDEX.md into v3.0 list.
 import os
 import re
-import sqlite3
 import shutil
 from datetime import datetime
+from db_connector import get_db_connection, DB_PATH, WORKSPACE
 
-# Anonymized paths configurations
-WORKSPACE = os.environ.get("TESLA_WORKSPACE", ".")
-DB_PATH = os.environ.get("ALEXANDRIA_DB_PATH", os.path.join(WORKSPACE, "Avalon/03-Resources/alexandria_brain.db"))
 INDEX_PATH = os.path.join(WORKSPACE, "Gestion-de-Chantiers/INDEX.md")
 ARCHIVE_README_PATH = os.path.join(WORKSPACE, "Gestion-de-Chantiers/Archivage-de-Chantiers/README.md")
 BASE_LIST_PATH = os.path.join(WORKSPACE, "OUTPUTS/liste_projets_antigravity_BASE.md")
 V3_LIST_PATH = os.path.join(WORKSPACE, "OUTPUTS/liste_projets_antigravity_v3.md")
 AVALON_V3_PATH = os.path.join(WORKSPACE, "Avalon/03-Resources/liste_projets_antigravity_v3.md")
 
-def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys = ON;")
-    conn.execute("PRAGMA journal_mode = WAL;")
-    conn.execute("PRAGMA busy_timeout = 10000;")
-    return conn
-
 # Clean local absolute paths to prevent credential / private info leaks
 def clean_absolute_paths(text):
     if not text:
         return text
-    # Replace absolute home path with relative markdown workspace path
-    for prefix in ("/home/lord-mahonheim/bifrost/tesla/", "/home/lord-mahonheim/"):
+    # Replace absolute home path with relative markdown workspace path dynamically
+    for prefix in (WORKSPACE + "/", "/home/lord-mahonheim/bifrost/tesla/", "/home/lord-mahonheim/"):
         text = text.replace(prefix, "")
     return text
 
@@ -70,7 +60,7 @@ def get_base_projects_content():
 
 # Parse the maximum project number in the base list to resume sequential numbering
 def get_next_project_number(base_content):
-    numbers = [int(n) for n in re.findall(r"###\s*(\d+)\s*\.\s*Projet", base_content)]
+    numbers = [int(n) for n in re.findall(r"###\s*(\d+)\.\s*Projet", base_content)]
     if numbers:
         return max(numbers) + 1
     return 15
@@ -115,6 +105,7 @@ def parse_project_details(filepath):
         desc_match = re.search(r"## 2\. Description([\s\S]*?)(## 3\.|$)", content)
         if desc_match:
             desc_text = desc_match.group(1).strip()
+            # Clean list markers or bullet formatting if needed
             details["description"] = clean_absolute_paths(desc_text)
             
         # Parse TODO list (completed items in Section 6 or Criteria of closure in Section 10)
@@ -159,6 +150,7 @@ def sync_list():
                     if match:
                         proj_id = match.group(1)
                         proj_name = match.group(2).strip()
+                        # Normalise to standard key
                         proj_key = proj_name.upper().replace(" ", "-").replace("'", "-")
                         active_projects.append((proj_id, proj_name, proj_key))
         except Exception as e:
@@ -191,6 +183,7 @@ def sync_list():
             cursor = conn.cursor()
             cursor.execute("SELECT session_id, task_name, status FROM subagents_tasks WHERE status='done';")
             for session_id, task_name, status in cursor.fetchall():
+                # We can group tasks by their session or associated theme prefix
                 if session_id not in db_tasks:
                     db_tasks[session_id] = []
                 db_tasks[session_id].append(clean_absolute_paths(task_name))
@@ -202,12 +195,15 @@ def sync_list():
     chantiers_blocks = []
     
     def find_matching_file(p_name, p_key):
+        # 1. Correspondance exacte
         for k in (p_key, p_key.replace("-", ""), p_name.upper().replace(" ", "-")):
             if k in project_files:
                 return project_files[k]
+        # 2. Correspondance par sous-chaîne
         for k, filepath in project_files.items():
             if k in p_key or p_key in k:
                 return filepath
+        # 3. Correspondance floue par intersection de mots clés significatifs (>= 3 car)
         tokens = [t.upper() for t in re.findall(r"[a-zA-Z0-9]{3,}", p_name) if t.upper() not in ("DEEP", "SUBAGENT", "AGENT")]
         if tokens:
             best_match = None
@@ -217,11 +213,11 @@ def sync_list():
                 if score > max_score:
                     max_score = score
                     best_match = filepath
-            if max_score >= 1:
+            if max_score >= 1: # Au moins un mot-clé fort commun
                 return best_match
         return None
 
-    EXCLUDE_PROJECT_IDS = {"001", "002", "003"}
+    EXCLUDE_PROJECT_IDS = {"001", "002", "003", "004"}
     archived_ids = {x[0] for x in archived_projects}
     next_num = get_next_project_number(base_section)
 
@@ -330,6 +326,7 @@ Main rendue à Mahonheim"""
     backup_dir = os.path.join(WORKSPACE, "memory/backup")
     os.makedirs(backup_dir, exist_ok=True)
     
+    # Rotates backup files 0 to 9
     if os.path.exists(V3_LIST_PATH):
         for i in range(8, -1, -1):
             old_bak = os.path.join(backup_dir, f"liste_projets_antigravity_v3.md.bak.{i}")

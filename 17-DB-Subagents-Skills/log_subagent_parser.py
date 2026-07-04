@@ -3,11 +3,8 @@
 import os
 import json
 import re
-import sqlite3
 from datetime import datetime
-
-# Anonymized database path configuration
-DB_PATH = os.environ.get("ALEXANDRIA_DB_PATH", "Avalon/03-Resources/alexandria_brain.db")
+from db_connector import get_db_connection, DEFAULT_WORKSPACE
 
 # Robust Regexes for Scrubbing Sensitive Secrets
 SCRUB_PATTERNS = [
@@ -33,14 +30,6 @@ def scrub_text(text):
     for pattern, replacement in SCRUB_PATTERNS:
         scrubbed = pattern.sub(replacement, scrubbed)
     return scrubbed
-
-def get_db_connection():
-    # Enforce SQLite session pragmas
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys = ON;")
-    conn.execute("PRAGMA journal_mode = WAL;")
-    conn.execute("PRAGMA busy_timeout = 10000;")
-    return conn
 
 # Helper to check if a local process PID is active (Unix/Linux)
 def is_pid_alive(pid):
@@ -254,13 +243,8 @@ def parse_transcript_and_store(conversation_id, transcript_path, parent_session_
             # 2. DELETE and RE-INSERT Tasks (to ensure fresh idempotency)
             conn.execute("DELETE FROM subagents_tasks WHERE session_id = ?;", (conversation_id,))
             
-            # Read current active tasks from files to log them
-            outputs_dir = os.environ.get("TESLA_OUTPUTS_DIR")
-            if not outputs_dir:
-                # Try relative resolution to project workspace
-                workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(DB_PATH))))
-                outputs_dir = os.path.join(workspace_dir, "OUTPUTS")
-                
+            # Read current active tasks from files to log them dynamically
+            outputs_dir = os.environ.get("TESLA_OUTPUTS_DIR", os.path.join(DEFAULT_WORKSPACE, "OUTPUTS"))
             if os.path.exists(outputs_dir):
                 todo_files = [
                     os.path.join(outputs_dir, f)

@@ -1,28 +1,16 @@
 #!/usr/bin/env python3
 # db_init.py — Initialize tables in alexandria_brain.db with schema versioning
-import sqlite3
 import os
 from datetime import datetime
-
-# Anonymized database path configuration
-DB_PATH = os.environ.get("ALEXANDRIA_DB_PATH", "Avalon/03-Resources/alexandria_brain.db")
-
-def get_db_connection():
-    # Enforce connection-scoped pragma for foreign keys
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys = ON;")
-    conn.execute("PRAGMA journal_mode = WAL;")
-    conn.execute("PRAGMA busy_timeout = 10000;")
-    return conn
+from db_connector import get_db_connection, DB_PATH
 
 def init_database():
     print(f"[*] Initializing database at {DB_PATH}...")
     
     # Ensure directory exists
-    if os.path.dirname(DB_PATH):
-        os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     
-    conn = get_db_connection()
+    conn = get_db_connection(create_if_missing=True)
     try:
         # Create schema_version table
         conn.execute("""

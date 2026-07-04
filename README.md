@@ -122,6 +122,11 @@ MVP-GITHUB/
 5. High-level evaluations (`14-Llama-cpp-Evaluation`), cloud computations (`13-Jules-Cloud-Integration`), and media ingestion (`18-Tesla-Video-Director`) are dispatched as needed.
 6. All system or push actions must abide by the rules configured in `09-Github-Governance` and staged cleanly via `10-Github-MVP-Scaffolding`.
 
+## Feature Highlights (v3.0.0)
+*   **SQLite Safe Mode (`mode=rw`):** Centralized `db_connector.py` database wrapper enforces read-write only constraints by default. This blocks scripts from silently creating blank SQLite files on disk if the primary database is missing, ensuring configuration consistency.
+*   **Active Log Rotation:** The session history manager automatically archives older transcript blocks (>15 days) from the working markdown logs to a local `/backup/transcripts_archive` directory to save token context size.
+*   **Context & Secret Protection:** The subagent transcript logs parser dynamically scrubs AWS, GitHub, Slack, JWT, and SSH private keys using regex filters, ensuring no secret keys are tracked in the database or session markdown history.
+
 ## Technical Stack
 * **Languages:** Python 3.10+, Bash (Shell)
 * **Frameworks:** Playwright, Sentence-Transformers
