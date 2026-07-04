@@ -32,7 +32,7 @@ This repository contains anonymized configuration models and utility wrappers. N
 
 ## Executive Summary
 Vigilum Codex is an institution-matrice dedicated to human performance, strategic intelligence, and governed local AI operations. The projects hosted within this repository form the technical infrastructure of the Tesla agent, operating locally on MIDGARD.
-This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 18 subprojects ranging from static code syntax healing to secure graphical authentication wrappers and hybrid search engines.
+This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 19 subprojects ranging from static code syntax healing to secure graphical authentication wrappers, hybrid search engines, and universal knowledge curation.
 
 ## Problem Statement
 In previous iterations, the AI agent functioned without clear local boundaries. This resulted in multiple system level errors:
@@ -77,6 +77,7 @@ graph TD
     Data --> M["12-Alexandria-RAG-Unification"]
     Data --> P["15-Obsidian-Database"]
     Data --> R["17-DB-Subagents-Skills"]
+    Data --> T["19-Tesla-Curator-Prime"]
 
     Media --> N["13-Jules-Cloud-Integration"]
     Media --> O["14-Llama-cpp-Evaluation"]
@@ -111,7 +112,8 @@ MVP-GITHUB/
 ├── 15-Obsidian-Database/
 ├── 16-Tesla-Master-Code/
 ├── 17-DB-Subagents-Skills/
-└── 18-Tesla-Video-Director/
+├── 18-Tesla-Video-Director/
+└── 19-Tesla-Curator-Prime/
 ```
 
 ## Workflow Sequence
@@ -121,6 +123,7 @@ MVP-GITHUB/
 4. Action logs and subagent sessions are consolidated into `03-Memory-MLT` and `17-DB-Subagents-Skills` databases.
 5. High-level evaluations (`14-Llama-cpp-Evaluation`), cloud computations (`13-Jules-Cloud-Integration`), and media ingestion (`18-Tesla-Video-Director`) are dispatched as needed.
 6. All system or push actions must abide by the rules configured in `09-Github-Governance` and staged cleanly via `10-Github-MVP-Scaffolding`.
+7. Knowledge synthesis, document verification, and citation archives are managed and certified by `19-Tesla-Curator-Prime` before integration into the Obsidian Avalon vault.
 
 ## Feature Highlights (v3.0.0)
 *   **SQLite Safe Mode (`mode=rw`):** Centralized `db_connector.py` database wrapper enforces read-write only constraints by default. This blocks scripts from silently creating blank SQLite files on disk if the primary database is missing, ensuring configuration consistency.
@@ -139,9 +142,9 @@ MVP-GITHUB/
 * Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
 
 ## Acceptance Criteria
-* All 18 subprojects exist and are fully populated.
+* All 19 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
-* Local repository branch versioning is initialized on `feature/complete-mvp-v3`.
+* Local repository branch versioning is initialized on `feature/tesla-curator-prime-mvp`.
 
 ## Final Verdict & Signature Sentence
 **VERDICT: OPERATIONAL SYSTEM STABILIZED**  
