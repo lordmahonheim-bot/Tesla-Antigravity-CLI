@@ -35,6 +35,7 @@ graph TD
 ```text
 18-Tesla-Video-Director/
 ├── README.md
+├── SKILL.md
 ├── upload_file.py
 └── video/
     ├── generate_video.py
@@ -73,3 +74,4 @@ graph TD
 ## Security and Governance Rules
 * The API key must be parsed from `os.environ.get("GEMINI_API_KEY")`; never hardcode keys in files.
 * Clean up all intermediate clips in `media/` and temporary workspace paths post-execution.
+* The master specification file [SKILL.md](SKILL.md) governs the full cognitive architecture, multimodal analysis engine, cinematographic intelligence, multi-platform editing, AI generation model selection, agentic orchestration, and quality certification protocol of the Video Director agent.
