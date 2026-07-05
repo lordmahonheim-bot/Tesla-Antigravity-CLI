@@ -147,7 +147,7 @@ MVP-GITHUB/
 ## Acceptance Criteria
 * All 20 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
-* Local repository branch versioning is initialized on `feature/premortem-master-mvp`.
+* Local repository branch versioning is initialized on `feature/master-code-mvp-v2`.
 
 ## Final Verdict & Signature Sentence
 **VERDICT: OPERATIONAL SYSTEM STABILIZED**  

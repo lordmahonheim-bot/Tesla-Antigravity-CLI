@@ -39,6 +39,7 @@ graph TD
 ```text
 16-Tesla-Master-Code/
 ├── README.md
+├── SKILL.md
 ├── biome.json
 ├── lint_all.sh
 ├── pyrightconfig.json
@@ -67,3 +68,4 @@ graph TD
 ## Security and Governance Rules
 * The linter configuration must exclude virtual env directories (`.venv`, `node_modules`).
 * Execution of scripts via Deno must run with flags `--allow-net=none` to prevent unsolicited outbound calls.
+* The master specification file [SKILL.md](SKILL.md) governs the entire execution flow, testing methodologies (TDD, BDD, mutation), polyglot coding standards (9 languages), and validation pipelines of the agent.
