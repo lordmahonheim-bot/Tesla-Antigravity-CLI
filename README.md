@@ -73,6 +73,7 @@ graph TD
     Gov --> L["11-Tesla-Arcanis-Skill"]
     Gov --> U["20-Tesla-Premortem"]
     Gov --> V["21-Tesla-Web-Raider"]
+    Gov --> W["22-Shadow-Targeting-Method"]
 
     Data --> C["02-Alexandria-Database"]
     Data --> D["03-Memory-MLT"]
@@ -117,7 +118,8 @@ MVP-GITHUB/
 ├── 18-Tesla-Video-Director/
 ├── 19-Tesla-Curator-Prime/
 ├── 20-Tesla-Premortem/
-└── 21-Tesla-Web-Raider/
+├── 21-Tesla-Web-Raider/
+└── 22-Shadow-Targeting-Method/
 ```
 
 ## Workflow Sequence
@@ -130,6 +132,7 @@ MVP-GITHUB/
 7. Knowledge synthesis, document verification, and citation archives are managed and certified by `19-Tesla-Curator-Prime` before integration into the Obsidian Avalon vault.
 8. Predictive failure scenarios, AMDEC/FMEA assessments, and dynamic risk graph entries are mapped and certified by `20-Tesla-Premortem` before critical systems execution.
 9. Internet operations, OSINT searches, web navigation via Webwright, fact-checking, and evidence collection are dispatched to and certified by `21-Tesla-Web-Raider` to support all subagent operations.
+10. Shadow-targeted injection mechanisms, naming conventions, and metadata standards are defined and validated by `22-Shadow-Targeting-Method` to bypass subscription limits while maintaining modularity.
 
 ## Feature Highlights (v3.0.0)
 *   **SQLite Safe Mode (`mode=rw`):** Centralized `db_connector.py` database wrapper enforces read-write only constraints by default. This blocks scripts from silently creating blank SQLite files on disk if the primary database is missing, ensuring configuration consistency.
@@ -148,9 +151,9 @@ MVP-GITHUB/
 * Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
 
 ## Acceptance Criteria
-* All 21 subprojects exist and are fully populated.
+* All 22 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
-* Local repository branch versioning is initialized on `feature/web-raider-mvp-v3`.
+* Local repository branch versioning is initialized on `feature/web-raider-mvp-v4`.
 
 ## Final Verdict & Signature Sentence
 **VERDICT: OPERATIONAL SYSTEM STABILIZED**  
