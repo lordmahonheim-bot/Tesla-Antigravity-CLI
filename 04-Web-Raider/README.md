@@ -61,6 +61,7 @@ graph TD
 ```text
 04-Web-Raider/
 ├── README.md
+├── SKILL.md
 └── examples/
     └── scrape_demo.py
 ```
@@ -82,6 +83,7 @@ graph TD
 * The crawler must only browse public web domains or local test instances.
 * Headless browser execution limits: 30 seconds page timeout.
 * Downloads are disabled by default to protect the host filesystem.
+* The master specification file [SKILL.md](SKILL.md) governs the full cognitive architecture, Webwright execution engine, progressive navigation token economy, OWASP Agentic Top 10 security rules, and subagent orchestration of the Web-Raider agent.
 
 ## Acceptance Criteria
 * Running `scrape_demo.py` loads the target test website successfully.
