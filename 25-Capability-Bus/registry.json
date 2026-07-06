@@ -1,0 +1,130 @@
+{
+  "plugins": [
+    {
+      "id": "canonical_sync",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Stable",
+      "requires": ["jq", "sha256sum"],
+      "provides": ["Synchronization"],
+      "depends_on": [],
+      "events": ["FileChanged", "FileCreated"],
+      "levels": [1, 2, 3],
+      "enabled": true,
+      "script": "00_canonical_sync.sh",
+      "priority": 10,
+      "policy": {
+        "retry": 0,
+        "timeout": 30,
+        "parallel": false,
+        "critical": true
+      }
+    },
+    {
+      "id": "lint_validator",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Stable",
+      "requires": ["just"],
+      "provides": ["Linting"],
+      "depends_on": [],
+      "events": ["FileChanged", "ManualSync"],
+      "levels": [1, 2, 3],
+      "enabled": true,
+      "script": "01_lint.sh",
+      "priority": 20,
+      "policy": {
+        "retry": 0,
+        "timeout": 15,
+        "parallel": false,
+        "critical": true
+      }
+    },
+    {
+      "id": "memory_linker",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Deprecated",
+      "requires": ["ln"],
+      "provides": ["Memory"],
+      "depends_on": [],
+      "events": ["FileChanged", "FileCreated"],
+      "levels": [1],
+      "enabled": false,
+      "script": "02_memory.sh",
+      "priority": 30,
+      "policy": {
+        "retry": 0,
+        "timeout": 5,
+        "parallel": false,
+        "critical": false
+      }
+    },
+    {
+      "id": "avalon_archiver",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Stable",
+      "requires": ["cp"],
+      "provides": ["Archiving"],
+      "depends_on": ["canonical_sync"],
+      "events": ["FileChanged", "FileCreated"],
+      "levels": [1, 2],
+      "enabled": true,
+      "script": "03_avalon.sh",
+      "priority": 40,
+      "policy": {
+        "retry": 0,
+        "timeout": 10,
+        "parallel": false,
+        "critical": false
+      }
+    },
+    {
+      "id": "alexandria_indexer",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Stable",
+      "requires": ["just"],
+      "provides": ["Indexing"],
+      "depends_on": ["avalon_archiver"],
+      "events": ["FileChanged", "FileCreated", "ManualSync"],
+      "levels": [1, 2],
+      "enabled": true,
+      "script": "04_alexandria.sh",
+      "priority": 50,
+      "policy": {
+        "retry": 1,
+        "timeout": 60,
+        "parallel": false,
+        "critical": true
+      }
+    },
+    {
+      "id": "arcanis_auditor",
+      "type": "Capability",
+      "version": "1.0",
+      "owner": "Tesla",
+      "stage": "Stable",
+      "requires": [],
+      "provides": ["Cognitive Audit"],
+      "depends_on": ["alexandria_indexer"],
+      "events": ["FileChanged"],
+      "levels": [1],
+      "enabled": true,
+      "script": "05_arcanis.sh",
+      "priority": 60,
+      "policy": {
+        "retry": 0,
+        "timeout": 30,
+        "parallel": false,
+        "critical": true
+      }
+    }
+  ]
+}

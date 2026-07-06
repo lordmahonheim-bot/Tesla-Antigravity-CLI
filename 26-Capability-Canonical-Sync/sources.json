@@ -1,0 +1,87 @@
+{
+  "AGENTS.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/AGENTS.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/AGENTS.md",
+      "/home/lord-mahonheim/.gemini/AGENTS.md"
+    ]
+  },
+  "ENGINE.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/ENGINE.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/ENGINE.md",
+      "/home/lord-mahonheim/.gemini/ENGINE.md"
+    ]
+  },
+  "SOUL.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/SOUL.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/SOUL.md",
+      "/home/lord-mahonheim/.gemini/SOUL.md"
+    ]
+  },
+  "GEMINI.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/GEMINI.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/GEMINI.md",
+      "/home/lord-mahonheim/.gemini/GEMINI.md"
+    ]
+  },
+  "FORCE_TOOLING.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/FORCE_TOOLING.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/FORCE_TOOLING.md",
+      "/home/lord-mahonheim/.gemini/FORCE_TOOLING.md"
+    ]
+  },
+  "TESLA.json": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/TESLA.json",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/TESLA.json",
+      "/home/lord-mahonheim/.gemini/TESLA.json"
+    ]
+  },
+  "ABOUT_ME.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/ABOUT_ME.md",
+    "targets": [
+      "/home/lord-mahonheim/.gemini/ABOUT_ME.md"
+    ]
+  },
+  "MY_BRANDING.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_BRANDING.md",
+    "targets": [
+      "/home/lord-mahonheim/.gemini/MY_BRANDING.md"
+    ]
+  },
+  "MY_COMPANY.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_COMPANY.md",
+    "targets": [
+      "/home/lord-mahonheim/.gemini/MY_COMPANY.md"
+    ]
+  },
+  "MY_STRATEGIC_STYLE.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_STRATEGIC_STYLE.md",
+    "targets": [
+      "/home/lord-mahonheim/.gemini/MY_STRATEGIC_STYLE.md"
+    ]
+  },
+  "settings.json": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/settings.json",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/settings.json"
+    ]
+  },
+  "shadow-targeting-method.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/shadow-targeting-method.md",
+    "targets": [
+      "/home/lord-mahonheim/bifrost/tesla/.agents/shadow-targeting-method.md",
+      "/home/lord-mahonheim/.gemini/shadow-targeting-method.md"
+    ]
+  },
+  "liste_projets_antigravity_v3.md": {
+    "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/liste_projets_antigravity_v3.md",
+    "targets": [
+      "/home/lord-mahonheim/.gemini/liste_projets_antigravity_v3.md"
+    ]
+  }
+}

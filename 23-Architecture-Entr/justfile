@@ -1,0 +1,68 @@
+# justfile - Gouvernance de code sécurisée pour tesla-master-code
+# Sous la doctrine du Vigilum Codex pour Lord Mahonheim
+
+default:
+    @just --list
+
+# Vérifier si le dépôt Git local est propre
+assert-clean-git:
+    @if [ -n "$(git status --porcelain)" ]; then \
+        echo "[-] ERREUR : Le dépôt Git local n'est pas propre. Committe ou stash tes modifications avant de muter le code."; \
+        exit 1; \
+    fi
+
+# Analyse de conformité Python (Vérification seule)
+lint-python:
+    ruff check .
+
+# Formater le code Python en place (sécurisé par Git)
+format-python: assert-clean-git
+    ruff format .
+    ruff check --fix .
+
+# Analyse de conformité JS/TS/CSS/JSON (Vérification seule)
+lint-web:
+    biome check .
+
+# Formater le code Web en place (sécurisé par Git)
+format-web: assert-clean-git
+    biome format --write .
+
+# Exécuter un script JS/TS de manière isolée via la sandbox Deno
+run-js file:
+    deno run --allow-read=. --allow-write=/tmp/ --allow-net=none --v8-flags="--max-old-space-size=256" {{file}}
+
+# Exécuter un bytecode WASM de manière isolée via la sandbox Wasmtime
+run-wasm file:
+    wasmtime run --dir=.::ro {{file}}
+
+# Analyser structurellement un fichier avec Tree-sitter CLI (< 200 Ko)
+parse-ast file:
+    @FILE_SIZE=$$(wc -c < "{{file}}"); \
+    if [ $$FILE_SIZE -gt 204800 ]; then \
+        echo "[-] ERREUR : Le fichier dépasse la limite de 200 Ko pour le parsing AST."; \
+        exit 1; \
+    fi; \
+    tree-sitter parse {{file}}
+
+# Installer Agent Reach et initialiser ses dépendances web
+install-agent-reach:
+    @.venv/bin/pip install https://github.com/Panniantong/agent-reach/archive/main.zip
+# Indexation hybride Alexandria
+index:
+    python3 indexer_hybrid.py
+
+# Watcher du Capability Bus (Mode Développement)
+watch:
+    @echo "[*] Démarrage du Watcher (Capability Bus)..."
+    @find memory/ -type f 2>/dev/null | entr -p ./tools/capability_bus/capability_dispatcher.sh /_
+
+# Lint Markdown
+lint-markdown:
+    @echo "[*] Validation syntaxique Markdown..."
+    # Placeholder pour un futur appel à markdownlint-cli
+
+# Snapshot explicite (Runtime)
+snapshot:
+    @echo "[*] Snapshot explicite des états..."
+    # Commande future de sync des runtime logs
