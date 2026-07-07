@@ -106,10 +106,15 @@ AGENTS délègue, il ne réimplémente pas.
 
   Situation                Destination
   ------------------------ ------------------
-  Deep Research            ARCANIS.md
+  Deep Research & Acquisition    tesla-arcanis-360
+  Curation & Certification tesla-curator-prime (Skill)
+  Ingénierie logicielle    tesla-master-code (Skill)
+  Gestion dépôts GitHub    tesla-github-manager (Skill)
+  Production vidéo         tesla-video-director (Skill)
+  Analyse de risques       premortem (Skill)
   Gestion documentaire     ALEXANDRIA.md
   Mémoire long terme       MEMORY.md
-  Navigation autonome      WEB_RAIDER.md
+  Navigation autonome      tesla-web-raider (Skill)
   Auto-correction Python   SELF_HEALING.md
   Documentation publique   README_POLICY.md
 

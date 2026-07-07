@@ -10,10 +10,10 @@
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
 | Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
-| Skill Path | `.agents/skills/tesla-arcanis` |
+| Skill Path | `.agents/skills/tesla-arcanis-360` |
 
 ## Important Security Notice
-Tesla Arcanis operates under strict token economy constraints. It utilizes precise local lookup tools (ripgrep, jq, FTS5) to prevent context bloating and memory leaks. No private files or credentials are ever read or indexed in bulk.
+Tesla Arcanis-360 operates under strict token economy constraints. It utilizes precise local lookup tools (ripgrep, jq, FTS5) to prevent context bloating and memory leaks. No private files or credentials are ever read or indexed in bulk.
 
 ## Table of Contents
 1. Executive Summary
@@ -29,7 +29,7 @@ Tesla Arcanis operates under strict token economy constraints. It utilizes preci
 11. Final Verdict & Signature Sentence
 
 ## Executive Summary
-Tesla Arcanis is a specialized elite agent profile designed for deep research, document analysis, and comprehensive security auditing under the Vigilum Codex. By implementing the Shadow-Targeting pattern, it overrides the platform limits of Antigravity CLI to execute advanced static code analysis and structural checks on complex configurations.
+Tesla Arcanis-360 is a specialized elite agent profile designed for deep research, document analysis, and comprehensive security auditing under the Vigilum Codex. By implementing the Shadow-Targeting pattern, it overrides the platform limits of Antigravity CLI to execute advanced static code analysis and structural checks on complex configurations.
 
 ## Problem Statement
 When reviewing large documentation directories, raw system logs, or complex configuration sheets, generic LLMs easily bloat their context windows, causing latency, memory leaks, and high hallucination rates. Furthermore, default Antigravity CLI controls block the deployment of custom dynamic subagents.
@@ -58,17 +58,16 @@ graph TD
 
 ## Repository Layout
 ```text
-11-Tesla-Arcanis-Skill/
+11-Tesla-Arcanis-360-Skill/
 ├── README.md
-├── arcanis_prompt.md
-└── arcanis_skill.md
+└── SKILL.md
 ```
 
 ## Workflow Sequence
 1. The operator launches the research task.
-2. The orchestrator calls the subagent `self` and applies the Arcanis skill profile.
-3. Arcanis queries Alexandria using `search_router.py` to retrieve document chunks.
-4. Arcanis formulates and stress-tests hypotheses (H0 vs H1).
+2. The orchestrator calls the subagent `self` and applies the Arcanis-360 skill profile.
+3. Arcanis-360 queries Alexandria using `search_router.py` to retrieve document chunks.
+4. Arcanis-360 formulates and stress-tests hypotheses (H0 vs H1).
 5. The report is compiled and certified using a SHA256 cryptographic seal.
 
 ## Technical Stack
@@ -80,7 +79,7 @@ graph TD
 * Verification of SSH configurations, raw environments, or unauthorized keys is strictly prohibited.
 
 ## Acceptance Criteria
-* The Arcanis prompt (`arcanis_prompt.md`) must clearly define the 5-step methodology (Plan, Collect, Hypotheses, Review, Synthesize).
+* The Arcanis-360 skill (`SKILL.md`) must clearly define the 5-step methodology (Plan, Collect, Hypotheses, Review, Synthesize).
 * Delivered reports must contain the YAML metadata block and the SHA256 seal.
 
 ## Final Verdict & Signature Sentence
