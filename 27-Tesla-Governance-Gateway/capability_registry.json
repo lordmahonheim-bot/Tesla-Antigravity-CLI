@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "name": "Tesla Governance Gateway Registry",
+  "capabilities": [
+    {
+      "id": "security_validation",
+      "agent": "tesla-arcanis",
+      "script": "agents/tesla-arcanis.sh",
+      "priority": "P0",
+      "policy": "strict-block",
+      "async": false
+    },
+    {
+      "id": "repository_validation",
+      "agent": "tesla-github-manager",
+      "script": "agents/tesla-github-manager.sh",
+      "priority": "P1",
+      "policy": "strict-block",
+      "async": false
+    },
+    {
+      "id": "code_validation",
+      "agent": "tesla-master-code",
+      "script": "agents/tesla-master-code.sh",
+      "priority": "P2",
+      "policy": "strict-block",
+      "async": false
+    },
+    {
+      "id": "documentation_validation",
+      "agent": "tesla-curator-prime",
+      "script": "agents/tesla-curator-prime.sh",
+      "priority": "P3",
+      "policy": "warn",
+      "async": false
+    },
+    {
+      "id": "knowledge_sync",
+      "agent": "alexandria",
+      "script": "agents/alexandria.sh",
+      "priority": "P4",
+      "policy": "background",
+      "async": true
+    },
+    {
+      "id": "memory_logging",
+      "agent": "memory",
+      "script": "agents/memory.sh",
+      "priority": "P5",
+      "policy": "background",
+      "async": true
+    }
+  ]
+}
