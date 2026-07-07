@@ -581,3 +581,8 @@ confidence_by_angle:
 ```
 
 </quick_reference_card>
+
+
+## Règle Absolue de Livraison (SGC)
+> [!IMPORTANT]
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.

@@ -915,3 +915,8 @@ This section documents the external references, industry best practices, and pri
 
 **Tesla Master Code** — V3.0 Canonical  
 *Chief Software Engineering Agent — Builder, Validator, Guardian.*
+
+
+## Règle Absolue de Livraison (SGC)
+> [!IMPORTANT]
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.

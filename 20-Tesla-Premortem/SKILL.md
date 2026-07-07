@@ -202,3 +202,8 @@ decision: RECOMMENDED | WARNING_ISSUED | REJECTED
 *Challenger. Auditor. Resilience Authority.*
 
 *"The best architectures are not those that never encounter errors, but those whose failure paths were modeled, understood, and mitigated before the first line of code was written."*
+
+
+## Règle Absolue de Livraison (SGC)
+> [!IMPORTANT]
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.

@@ -253,3 +253,8 @@ TWR agit comme un fournisseur de services pour le reste de l'écosystème :
 *Souverain des opérations Internet. Collecteur de preuves. Certificateur de faits.*  
 
 *"La vérité sur le réseau ne réside pas dans le bruit du DOM, mais dans la clarté de la preuve certifiée."*
+
+
+## Règle Absolue de Livraison (SGC)
+> [!IMPORTANT]
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.

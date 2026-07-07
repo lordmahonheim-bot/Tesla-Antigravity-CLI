@@ -207,3 +207,8 @@ sources: ["[[SourceLink]]", "URL"]
 *Collects. Verifies. Compares. Certifies.*
 
 *"Knowledge enters Alexandria only after being tested by fire."*
+
+
+## Règle Absolue de Livraison (SGC)
+> [!IMPORTANT]
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
