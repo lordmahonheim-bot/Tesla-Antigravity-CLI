@@ -1,0 +1,53 @@
+# Agent Contract Template – Tesla Mission Orchestrator v4.0
+id: N3
+mission: Refactor Module X
+agent: tesla-master-code
+role: Code
+
+input:
+  - plan_architecture.md
+  - repo_path: ./
+
+output:
+  - patch.diff
+  - tests_pass.log
+  - lsp_diagnostics_clean.json
+
+preconditions:
+  - git_clean: true
+  - lsp_clean: true
+  - plan_validated_by_premortem: true
+
+postconditions:
+  - tests_green: true
+  - no_lsp_errors: true
+  - conventional_commits: true
+
+risks:
+  - regression_api
+  - breaking_change_public_interface
+
+time_estimate_min: 25
+cost_estimate_tokens: M
+
+capability_min:
+  Reasoning: 70
+  Code: 85
+  Audit: 60
+
+model_recommended: claude-sonnet
+model_fallback: claude-opus
+# Fallback uniquement après 2 retries échoués
+
+retry_policy:
+  max_retries: 2
+  backoff: prompt_tighten
+  fallback_model: claude-opus
+  escalate_to: Mahonheim
+
+budget_node:
+  claude_tokens_est: 120k
+  quota_group: claude
+
+state: PLANNED
+# CREATED → PLANNED → RUNNING → BLOCKED/WAITING → REVIEW → DONE → ARCHIVED

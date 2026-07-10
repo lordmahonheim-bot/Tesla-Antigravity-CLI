@@ -1,0 +1,71 @@
+# Mission Graph – Exemple canonique
+# Tesla Mission Orchestrator v4.0
+
+mission: Refactor Module X
+version: 1.0
+budget_envelope:
+  gemini_pct: 60
+  claude_pct: 35
+  gpt_oss_pct: 5
+
+nodes:
+  - id: N1
+    role: Research
+    agents: [tesla-arcanis-360, tesla-curator-prime]
+    depends_on: []
+    can_run_parallel_with: []
+    capability_min: {Reasoning: 40, Code: 30, Audit: 30}
+    model_recommended: gemini-flash
+    complexity: Low
+    time_estimate_min: 15
+    contract_ref: contracts/N1.yaml
+
+  - id: N2
+    role: Architecture
+    agents: [tesla-arcanis-360]
+    depends_on: [N1]
+    capability_min: {Reasoning: 75, Code: 60}
+    model_recommended: gemini-pro
+    complexity: Medium
+
+  - id: N2b
+    role: Challenger
+    agents: [premortem]
+    depends_on: [N2]
+    can_run_parallel_with: []
+    capability_min: {Audit: 90, Reasoning: 85}
+    model_recommended: claude-opus
+    complexity: High
+    reason_opus: "Premortem système critique – arbitrage sécurité"
+
+  - id: N3
+    role: Code
+    agents: [tesla-master-code]
+    depends_on: [N2b]
+    capability_min: {Code: 85, Reasoning: 70}
+    model_recommended: claude-sonnet
+    complexity: Medium
+
+  - id: N4
+    role: Test
+    agents: [tesla-master-code]
+    depends_on: [N3]
+    capability_min: {Code: 80}
+    model_recommended: claude-sonnet
+    complexity: Medium
+
+  - id: N5
+    role: Documentation
+    agents: [tesla-curator-prime]
+    depends_on: [N4]
+    capability_min: {Memory: 60}
+    model_recommended: gemini-flash
+    complexity: Low
+    shadow_targeting: true
+    target_subagent: self
+
+scheduler:
+  critical_path: [N1, N2, N2b, N3, N4, N5]
+  parallel_groups: []
+
+state: PLANNED
