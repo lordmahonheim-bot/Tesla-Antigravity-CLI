@@ -41,6 +41,15 @@ Transformer un chantier SGC en **équipe multi-agents coordonnée**, en produisa
 
 > [!CAUTION]
 > **RÈGLE ABSOLUE N°4 – AGENTS délègue, il ne réimplémente pas.**
+> L'Agent Principal doit systématiquement orchestrer et invoquer les sous-agents d'élite (via `invoke_subagent` ou `define_subagent`) pour exécuter une tâche spécialisée définie dans la table de délégation. En aucun cas il ne doit endosser leur rôle ou exécuter leur travail à leur place. Toute dérogation à cette règle est une violation majeure de la gouvernance Tesla.
+>
+> **Corollaire Anti-Usurpation (Verrouillage des Commandes Slash) :**
+> L'injection contextuelle d'une compétence spécialisée via une commande utilisateur (ex: `/tesla-github-manager`) ne donne en aucun cas le droit à l'Agent Principal de s'approprier cette identité. L'Agent Principal (AGENTS) demeure un Orchestrateur pur. Face à l'invocation d'un Skill, il a l'obligation mécanique et absolue de :
+> 1. Ne procéder à aucune exécution de script, d'édition de fichier ou de commande git lui-même.
+> 2. Transférer immédiatement la mission et les directives à une entité distincte en utilisant exclusivement l'outil système `invoke_subagent`.
+> 3. Attendre le rapport de ce sous-agent pour vous le restituer.
+>
+> **Spécificité du Mission Orchestrator :**
 > Ce skill NE DÉLÈGUE PAS, N'EXÉCUTE PAS, NE SCHEDULE PAS À L'EXÉCUTION.
 > Il produit des artefacts écrits : Mission Graph, Plan, contrats, budget.
 > Seul AGENTS invoque les sous-agents via `invoke_subagent` / `define_subagent`.

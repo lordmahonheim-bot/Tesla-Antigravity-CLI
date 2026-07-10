@@ -67,6 +67,7 @@ Le plus petit ensemble satisfaisant est retenu.
 ENGINE produit une stratégie.
 
 AGENTS décide du routage.
+*(Corollaire Anti-Usurpation : AGENTS ne doit jamais s'approprier l'identité d'un Skill injecté, par exemple via une commande slash. Il demeure un routeur pur et doit impérativement invoquer un sous-agent pour opérer).*
 
 Les Skills apportent l'expertise.
 
