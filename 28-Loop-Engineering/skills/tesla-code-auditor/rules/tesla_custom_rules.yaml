@@ -1,0 +1,84 @@
+rules:
+  # === Python Security Rules ===
+  - id: python-eval-usage
+    pattern: eval(...)
+    message: "Use of eval() is strictly forbidden due to arbitrary code execution risks."
+    languages: [python]
+    severity: ERROR
+
+  - id: python-exec-usage
+    pattern: exec(...)
+    message: "Use of exec() is strictly forbidden due to arbitrary code execution risks."
+    languages: [python]
+    severity: ERROR
+
+  - id: python-command-injection
+    patterns:
+      - pattern-either:
+          - pattern: os.system(...)
+          - pattern: os.popen(...)
+          - pattern: subprocess.Popen(..., shell=True, ...)
+          - pattern: subprocess.run(..., shell=True, ...)
+          - pattern: subprocess.check_output(..., shell=True, ...)
+    message: "Command execution with shell=True or os.system/popen is dangerous and can lead to command injection."
+    languages: [python]
+    severity: ERROR
+
+  - id: python-hardcoded-secrets
+    patterns:
+      - pattern: $VAR = "..."
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: (?i)(api_key|secret|password|token|private_key|passwd)
+    message: "Hardcoded API keys, secrets, tokens, or passwords detected."
+    languages: [python]
+    severity: ERROR
+
+  - id: python-insecure-file-permissions
+    patterns:
+      - pattern: os.chmod($FILE, $MODE)
+      - metavariable-regex:
+          metavariable: $MODE
+          regex: (0o777|777|0o755|755|0o666|666)
+    message: "Setting overly permissive file permissions (chmod 777/755/666) is forbidden."
+    languages: [python]
+    severity: WARNING
+
+  # === Governance & Vigilum Codex Rules ===
+  - id: governance-unauthorized-write
+    patterns:
+      - pattern-either:
+          - pattern: open($PATH, ...)
+          - pattern: Path($PATH).write_text(...)
+          - pattern: Path($PATH).write_bytes(...)
+          - pattern: shutil.copy(..., $PATH)
+          - pattern: shutil.move(..., $PATH)
+      - metavariable-regex:
+          metavariable: $PATH
+          regex: "^(?!.*(\\.agents|\\.runtime|\\.temp|/tmp)).*$"
+    message: "Writing or modifying files outside authorized directories (.agents/, .runtime/, .temp/, /tmp/) is prohibited."
+    languages: [python]
+    severity: ERROR
+
+  - id: governance-unauthorized-git-push
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.run(["git", "push", ...], ...)
+          - pattern: subprocess.Popen(["git", "push", ...], ...)
+          - pattern: os.system("git push ...")
+    message: "Git push operations without explicit authorization flags/approvals are prohibited under local governance."
+    languages: [python]
+    severity: ERROR
+
+  - id: governance-delete-logs
+    patterns:
+      - pattern-either:
+          - pattern: os.remove($FILE)
+          - pattern: os.unlink($FILE)
+          - pattern: Path($FILE).unlink(...)
+      - metavariable-regex:
+          metavariable: $FILE
+          regex: ".*\\.log$"
+    message: "Direct deletion of log files (*.log) is prohibited. Log rotation and management must go through the audit logger."
+    languages: [python]
+    severity: ERROR
