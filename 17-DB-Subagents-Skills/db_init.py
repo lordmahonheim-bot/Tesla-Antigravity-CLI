@@ -107,6 +107,56 @@ def init_database():
             )
             conn.commit()
             print("[+] Schema version 1.0 applied successfully.")
+            current_version = "1.0"
+            
+        if current_version == "1.0":
+            # Run DDL scripts for 2.0
+            print("[*] Applying schema version 2.0...")
+            conn.executescript("""
+            -- 1. Table de suivi des sessions de boucles autonomes
+            CREATE TABLE IF NOT EXISTS loop_executions (
+                id TEXT PRIMARY KEY,
+                project TEXT NOT NULL,
+                contract_version TEXT NOT NULL,
+                goal TEXT NOT NULL,
+                start_time TEXT NOT NULL,          -- Format ISO 8601 UTC (ex. 'YYYY-MM-DDTHH:MM:SSZ')
+                end_time TEXT,                     -- Format ISO 8601 UTC
+                status TEXT NOT NULL CHECK(status IN ('PASS', 'DELAY', 'BLOCK', 'RUNNING')),
+                total_iterations INTEGER DEFAULT 0,
+                total_tokens INTEGER DEFAULT 0,    -- Comptabilisation exacte des jetons consommés
+                total_cost_usd REAL DEFAULT 0.0,   -- Coût financier cumulé en USD
+                max_iterations INTEGER NOT NULL,
+                token_budget INTEGER NOT NULL,     -- Limite de jetons (ex. 80000)
+                financial_budget_usd REAL NOT NULL -- Limite financière (ex. 5.00)
+            );
+
+            -- 2. Table de suivi détaillé des itérations
+            CREATE TABLE IF NOT EXISTS loop_iterations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                execution_id TEXT NOT NULL,
+                iteration_number INTEGER NOT NULL,
+                timestamp TEXT NOT NULL,           -- Format ISO 8601 UTC
+                action_taken TEXT NOT NULL,
+                verdict TEXT NOT NULL CHECK(verdict IN ('PASS', 'DELAY', 'BLOCK')),
+                learning_deltas TEXT,              -- JSON sérialisé (advice, errors, etc.)
+                tokens_used INTEGER DEFAULT 0,     -- Jetons consommés pour cette itération
+                cost_usd REAL DEFAULT 0.0,         -- Coût financier de cette itération en USD
+                report_path TEXT,                  -- Chemin vers le rapport d'audit détaillé
+                FOREIGN KEY (execution_id) REFERENCES loop_executions(id) ON DELETE CASCADE
+            );
+
+            -- 3. Indexations d'optimisation
+            CREATE INDEX IF NOT EXISTS idx_loop_executions_status ON loop_executions(status);
+            CREATE INDEX IF NOT EXISTS idx_loop_iterations_exec ON loop_iterations(execution_id);
+            """)
+            
+            # Record version 2.0 application
+            conn.execute(
+                "INSERT INTO schema_version (version, applied_at) VALUES (?, ?);",
+                ("2.0", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            )
+            conn.commit()
+            print("[+] Schema version 2.0 applied successfully.")
         else:
             print("[*] Schema version is already up to date.")
             
