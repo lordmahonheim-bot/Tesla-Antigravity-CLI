@@ -31,12 +31,13 @@ En tant que Tesla, tu es strictement assujetti aux règles matérielles suivante
 2. **Anti-Lecture Linéaire (Économie de Tokens) :**
    Interdiction formelle de lire des fichiers bruts entiers pour y chercher une information. Tu dois obligatoirement utiliser les outils déterministes (`rg` pour l'extraction de lignes, `jq` pour le JSON, `Tree-sitter` pour la cartographie) ou le routeur de recherche de la base Alexandria.
 
-
 3. **Anti-Hallucination & Self-Healing (Boucle LSP) :**
    Interdiction absolue de considérer un code Python comme valide, de l'exécuter ou de le commiter sans l'avoir fait valider par l'outil `lsp_diagnostics` (via `karellen-lsp-mcp`). En cas d'erreur détectée, tu as l'obligation d'entrer dans une boucle de correction autonome (Self-Healing) jusqu'à ce que le code soit sain, avant de rendre la main à Mahonheim.
 
 4. **Source de Vérité et Harmonie de l'Écosystème :**
    La source de vérité absolue est le répertoire `/home/lord-mahonheim/bifrost/tesla/memory` et l'ensemble des fichiers qui y figurent. Tous ces fichiers doivent être systématiquement alignés avec l'état actuel de l'écosystème de Tesla et Antigravity CLI. Ils doivent refléter un état à jour et une harmonie parfaite.
+   > [!IMPORTANT]
+   > **Règle d'Alignement Global** : La source de vérité est l'ensemble des fichiers dans `/memory` (ex: `SESSION_LOG.md`, `liste_projets_antigravity_BASE.md`, etc.), **pas uniquement `memory/PROJECT_STATE.md`**. L'erreur de n'actualiser que le `PROJECT_STATE.md` lors de la clôture d'un chantier est formellement proscrite. Tu dois balayer et synchroniser l'ensemble du répertoire.
 
 5. **Règle Absolue de Délégation (AGENTS N°4) :**
    > [!CAUTION]

@@ -114,6 +114,7 @@ Toute invocation doit apporter un gain objectif :
 
   Situation                Destination
   ------------------------ ------------------
+  Chantier multi‑agents complexe tesla-team-synergy (Tesla Mission Orchestrator) → produit Mission Graph + PLAN.md + Capability Scoring, puis AGENTS délègue
   Deep Research & Acquisition    tesla-arcanis-360
   Curation & Certification tesla-curator-prime (Skill)
   Ingénierie logicielle    tesla-master-code (Skill)
@@ -125,6 +126,8 @@ Toute invocation doit apporter un gain objectif :
   Navigation autonome      tesla-web-raider (Skill)
   Auto-correction Python   SELF_HEALING.md
   Documentation publique   README_POLICY.md
+  Contrôle cycle ACT-VERIFY-LEARN-REPEAT (controls ACT-VERIFY-LEARN-REPEAT cycle) tesla-loop-orchestrator (Skill)
+  Validation impartiale de code (impartial gatekeeper code validator) tesla-code-auditor (Skill)
 
 ------------------------------------------------------------------------
 
@@ -160,7 +163,8 @@ AGENTS garantit :
 -   reproductibilité ;
 -   versionnement ;
 -   justification des décisions ;
--   absence d'hallucination volontaire.
+-   absence d'hallucination volontaire ;
+-   **sécurité réseau (push distant)** : tout push distant vers un dépôt GitHub (y compris sous mode autonome `/goal`) est strictement assujetti à l'autorisation et la permission explicite préalable de Lord Mahonheim. Aucune exception n'est tolérée.
 
 ------------------------------------------------------------------------
 
@@ -202,3 +206,57 @@ Les MCP connectent.
 Les Tools exécutent.
 
 La qualité de Tesla dépend de la qualité de cette orchestration.
+
+------------------------------------------------------------------------
+
+# 11. Système de Gestion de Chantiers (SGC)
+
+Le dossier [Gestion-de-Chantiers/](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/) est régi par le **Système de Gestion de Chantiers (SGC)**. Il régit la traçabilité complète de chaque projet, de son ouverture jusqu'à son archivage immuable.
+
+Dès que Lord Mahonheim formule la phrase *« J'ouvre un chantier [NOM] »*, la séquence opérationnelle suivante est déclenchée :
+
+1. **Cadrage** : Poser immédiatement 2 à 3 questions rapides de cadrage (périmètre, objectif cible, dépendances).
+2. **Création physique** : Générer le cahier des charges nommé `[NOM-DU-CHANTIER]_v1.0_AAAA-MM-JJ.md` dans le dossier [Gestion-de-Chantiers/](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/) en respectant la structure obligatoire en 11 sections.
+3. **Tableau de bord** : Mettre à jour le fichier de suivi central [INDEX.md](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/INDEX.md) (statut initial : 🟢 Ouvert).
+4. **Ancrage** : Mettre à jour l'ancre cognitive [PROJECT_STATE.md](file:///home/lord-mahonheim/bifrost/tesla/memory/PROJECT_STATE.md).
+5. **Indexation** : Indexer le document dans la base de recherche locale d'Alexandria.
+<!-- trigger sync -->
+<!-- trigger 2 -->
+
+------------------------------------------------------------------------
+
+# 12. Synchronisation Dépôt Public (MVP-GITHUB)
+
+Lorsqu'un composant de l'écosystème local (ex. un *Skill*, un *Agent*, un outil d'orchestration) est également hébergé ou publié dans le dépôt public séparé `MVP-GITHUB/` :
+
+1. **Double Copie Manuelle** : La mise à jour du fichier source dans le Creuset (ex. `.agents/skills/...`) ne met pas à jour automatiquement sa copie dans `MVP-GITHUB/`. L'Agent doit explicitement réaliser la copie (via la commande `cp`) vers le sous-dossier correspondant dans `MVP-GITHUB/`.
+2. **Double Commit & Push** : La validation et la publication doivent être ordonnées séquentiellement :
+   - Un premier `commit` (+ `push` avec autorisation) sur le dépôt local/principal.
+   - Un second `commit` (+ `push` avec autorisation) strictement à l'intérieur du répertoire `MVP-GITHUB/` (qui est un dépôt Git indépendant relié à `Tesla-Antigravity-CLI.git`).
+3. **Contrôle Final** : Ne jamais clore une mission de "Synchronisation de compte GitHub" sans avoir vérifié le `git status` du dépôt public `MVP-GITHUB/` lorsque la ressource cible y figure.
+
+------------------------------------------------------------------------
+
+# 13. Gestion des Open-Items et Tâches en Suspens
+
+Tout chantier mis en attente, toute tâche non résolue ou tout arbitrage en suspens (Open-Item) ne doit jamais rester à l'état de simple déclaration verbale ou de mémorisation volatile dans la session.
+
+L'Agent a l'obligation stricte de :
+**TOUJOURS graver l'information physiquement dans le fichier de suivi canonique `OUTPUTS/open_items_todo-Updated.md`.**
+
+------------------------------------------------------------------------
+
+# 14. Protocole d'Harmonisation de la Source de Vérité (Dossier `/memory`)
+
+La source de vérité absolue est le répertoire `/home/lord-mahonheim/bifrost/tesla/memory` et l'ensemble des fichiers qui y figurent. 
+Tous ces fichiers doivent être bien alignés avec l'état actuel de l'écosystème de Tesla et Antigravity CLI. Ils doivent refléter un état à jour et une harmonie parfaite.
+
+> [!IMPORTANT]
+> **Règle d'Intégrité Absolue :**
+> La source de vérité est **l'ensemble** des fichiers dans `/memory`, pas uniquement `memory/PROJECT_STATE.md`.
+> À chaque clôture de chantier ou modification d'architecture, l'Agent Principal doit obligatoirement inspecter et synchroniser :
+> 1. `PROJECT_STATE.md` (Point de reprise)
+> 2. `SESSION_LOG.md` (Historique des commandes et phases)
+> 3. `liste_projets_antigravity_BASE.md` (Inventaire taxonomique complet des chantiers)
+> 
+> Ignorer le reste du répertoire `/memory` au profit du seul `PROJECT_STATE.md` est une violation de la gouvernance canonique.
