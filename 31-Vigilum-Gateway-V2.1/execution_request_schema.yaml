@@ -1,0 +1,19 @@
+# Execution Request Artifact (Vigilum Gateway V2.1)
+# Ce schéma YAML définit le contrat déclaratif entre un sous-agent (qui n'a pas les droits)
+# et l'Orchestrateur (qui exécute l'action). À déposer dans /OUTPUTS/execution_request_XXX.yaml
+
+schema_version: "1.0"
+execution_request:
+  id: "req-{{uuid}}"
+  origin_agent: "<nom_du_sous_agent_emetteur>"
+  security_level: "LOW | MEDIUM | HIGH"  # HIGH requiert la vigilance extrême de l'Orchestrateur
+
+  operation:
+    type: "WRITE_FILE | DELETE_FILE | RUN_COMMAND"
+    target_path: "<chemin_absolu_de_la_cible>"
+    payload: |
+      <Contenu exact à écrire ou commande exacte à lancer>
+    
+  context:
+    justification: "<Pourquoi cette action est-elle vitale pour la mission?>"
+    rollback_strategy: "<Comment annuler l'action en cas de désastre?>"
