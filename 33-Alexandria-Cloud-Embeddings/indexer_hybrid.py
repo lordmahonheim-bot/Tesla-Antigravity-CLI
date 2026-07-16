@@ -17,7 +17,7 @@ from core.security import PIIScrubber
 
 # Verrous de configuration de l'infrastructure via variables d'environnement
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.getenv("ALEXANDRIA_DB_PATH", os.path.join(BASE_DIR, "database", "alexandria_brain.db"))
+DB_PATH = os.getenv("ALEXANDRIA_DB_PATH", os.path.join(BASE_DIR, "Avalon", "03-Resources", "alexandria_brain.db"))
 VAULT_DIR = os.getenv("ALEXANDRIA_VAULT_DIR", os.path.join(BASE_DIR, "Avalon"))
 MODEL_NAME = os.getenv("ALEXANDRIA_MODEL_NAME", "models/gemini-embedding-001")
 DIMENSION = int(os.getenv("ALEXANDRIA_EMBEDDING_DIM", "768"))

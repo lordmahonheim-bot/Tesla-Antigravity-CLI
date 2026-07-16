@@ -16,7 +16,7 @@ from core.embeddings import GeminiEmbeddingProvider
 # Configuration de l'infrastructure via variables d'environnement
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
-DB_PATH = os.getenv("ALEXANDRIA_DB_PATH", os.path.join(ROOT_DIR, "database", "alexandria_brain.db"))
+DB_PATH = os.getenv("ALEXANDRIA_DB_PATH", os.path.join(ROOT_DIR, "Avalon", "03-Resources", "alexandria_brain.db"))
 MODEL_NAME = os.getenv("ALEXANDRIA_MODEL_NAME", "models/gemini-embedding-001")
 DIMENSION = int(os.getenv("ALEXANDRIA_EMBEDDING_DIM", "768"))
 
