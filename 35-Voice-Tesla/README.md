@@ -1,69 +1,69 @@
 # VOICE-TESLA
 
-> Pipeline vocal PTT (Push-To-Talk) local, offline et sécurisé pour Antigravity CLI via Whisper.cpp et tmux.
+> Local, offline, and secure PTT (Push-To-Talk) voice pipeline for Antigravity CLI via Whisper.cpp and tmux.
 
-## Prérequis et Installation Rapide
+## Prerequisites and Quick Installation
 
-### Prérequis
-- Système d'exploitation Linux (Wayland ou X11).
-- **PipeWire** (`pw-record`) ou ALSA (`arecord`) ou SoX (`rec`) pour la capture audio.
-- **tmux** pour l'injection des commandes vers la session CLI cible.
-- **whisper.cpp** compilé localement (`whisper-cli`) et modèle GGML (ex: `ggml-base.bin`).
+### Prerequisites
+- Linux operating system (Wayland or X11).
+- **PipeWire** (`pw-record`), ALSA (`arecord`), or SoX (`rec`) for audio capture.
+- **tmux** to inject commands into the target CLI session.
+- **whisper.cpp** compiled locally (`whisper-cli`) and a GGML model (e.g., `ggml-base.bin`).
 
 ### Installation
-1. Copiez les scripts dans un emplacement de votre `PATH` (ex: `~/.local/bin/`).
-2. Renseignez la variable `WHISPER_DIR` dans le script `voice-tesla.sh` pour pointer vers votre installation de `whisper.cpp`.
-3. Assurez-vous de posséder les droits d'exécution :
+1. Copy the scripts to a location in your `PATH` (e.g., `~/.local/bin/`).
+2. Set the `WHISPER_DIR` variable in the `voice-tesla.sh` script to point to your `whisper.cpp` installation.
+3. Ensure you have execution rights:
    ```bash
    chmod +x voice-tesla.sh voice-health-check.sh voice-tesla-install.sh
    ```
-4. Attribuez un raccourci clavier global (ex: `Super+V`) au script `voice-tesla.sh` via votre gestionnaire de fenêtres (i3, Sway, GNOME, etc.).
+4. Assign a global keyboard shortcut (e.g., `Super+V`) to the `voice-tesla.sh` script via your window manager (i3, Sway, GNOME, etc.).
 
-## Usage et Exemples
+## Usage and Examples
 
-1. Lancez une session Antigravity dans tmux (nommée `agy` par défaut) :
+1. Launch an Antigravity session in tmux (named `agy` by default):
    ```bash
    tmux new-session -s agy 'agy'
    ```
-2. Pressez votre raccourci clavier global pour lancer l'enregistrement vocal. Parlez distinctement (durée conseillée : 3 à 8 secondes).
-3. Relâchez / laissez le timeout terminer l'enregistrement.
-4. Une interface Zenity/yad apparaîtra pour valider la transcription. Vous pouvez modifier la commande, l'accepter (`OK`) ou l'annuler.
-5. Une fois validée, la commande est directement injectée dans votre session `agy`.
+2. Press your global keyboard shortcut to start the voice recording. Speak clearly (recommended duration: 3 to 8 seconds).
+3. Release / let the timeout finish the recording.
+4. A Zenity/yad interface will appear to validate the transcription. You can edit the command, accept it (`OK`), or cancel it.
+5. Once validated, the command is directly injected into your `agy` session.
 
-### Santé du système
-Utilisez le script de vérification de l'environnement pour vous assurer que les dépendances sont réunies :
+### System Health
+Use the environment check script to ensure all dependencies are met:
 ```bash
 ./voice-health-check.sh
 ```
 
 ## Architecture & Design Decisions
 
-### Schéma de Fonctionnement
+### Workflow Diagram
 ```mermaid
 flowchart TD
-    A[Raccourci Clavier] --> B(voice-tesla.sh)
-    B --> C[Détection Audio pw-record / arecord]
-    C --> D[Fichier WAV tmp]
-    D --> E{Vérification Taille > 1 Ko}
-    E -->|Oui| F[whisper-cli local ggml-base.bin]
-    E -->|Non| Z[Annulation: Silence]
-    F --> G[Transcription FR entropy-thold 2.6]
-    G --> H{Gate de Confirmation Zenity/Yad}
+    A[Keyboard Shortcut] --> B(voice-tesla.sh)
+    B --> C[Audio Detection pw-record / arecord]
+    C --> D[tmp WAV File]
+    D --> E{Size Check > 1 KB}
+    E -->|Yes| F[Local whisper-cli ggml-base.bin]
+    E -->|No| Z[Cancel: Silence]
+    F --> G[Transcription entropy-thold 2.6]
+    G --> H{Zenity/Yad Confirmation Gate}
     H -->|OK| I[tmux send-keys]
-    H -->|Cancel| Y[Annulation]
-    I --> J[Session agy]
-    J --> K[(Logging JSONL)]
+    H -->|Cancel| Y[Cancellation]
+    I --> J[agy Session]
+    J --> K[(JSONL Logging)]
 ```
 
 ### Design Decisions
-- **Confinement Zéro Cloud** : La transcription s'effectue à 100% en local via `whisper.cpp`, garantissant aucune exfiltration réseau des interactions vocales.
-- **Gate de Confirmation** : Les actions irréversibles sont bloquées par une étape de validation formelle. La transcription est affichée et éditable avant injection dans `tmux`.
-- **Anti-Hallucination** : L'utilisation de `--entropy-thold 2.6` avec `whisper-cli` limite grandement la génération de texte intempestive en cas de bruits de fond ou silences prolongés.
-- **Support Agnostique Wayland/X11** : L'injection via `tmux` s'affranchit des complexités de `xdotool` sous Wayland.
+- **Zero Cloud Confinement**: Transcription is performed 100% locally via `whisper.cpp`, guaranteeing no network exfiltration of voice interactions.
+- **Confirmation Gate**: Irreversible actions are blocked by a formal validation step. The transcription is displayed and editable before injection into `tmux`.
+- **Anti-Hallucination**: Using `--entropy-thold 2.6` with `whisper-cli` greatly reduces unwanted text generation during background noise or prolonged silences.
+- **Agnostic Wayland/X11 Support**: Injection via `tmux` bypasses the complexities of `xdotool` on Wayland.
 
-## Contribution & Gouvernance
+## Contribution & Governance
 
-Référez-vous aux fichiers `CONTRIBUTING.md` et `CODE_OF_CONDUCT.md` du dépôt pour comprendre nos normes. Pour VOICE-TESLA, tout ajout doit respecter :
-- Le maintien de l'isolation locale stricte.
-- Le cycle "Zéro Secret" et la robustesse du pipeline (pas de race conditions).
-- L'audit continu par les processus d'intégration continue de l'écosystème Tesla.
+Refer to the repository's `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` files to understand our standards. For VOICE-TESLA, any addition must respect:
+- Maintenance of strict local isolation.
+- The "Zero Secret" cycle and pipeline robustness (no race conditions).
+- Continuous auditing by the Tesla ecosystem's continuous integration processes.
