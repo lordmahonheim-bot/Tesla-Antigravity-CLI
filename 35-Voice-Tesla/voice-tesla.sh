@@ -3,14 +3,14 @@
 # voice-tesla.sh — Pipeline Vocal Local pour Antigravity CLI (MIDGARD)
 # Version  : 1.0.0
 # Chantier : VOICE-TESLA / Mission N4
-# Chaîne   : PTT → enregistrement → transcription → confirmation → injection tmux
+# Chaîne   : PTT → enregistrement → transcription → confirmation → injection zellij
 # Sécurité : Gate de confirmation OBLIGATOIRE + trap EXIT + zéro cloud
 # =============================================================================
 
 set -euo pipefail
 
 # Injection dynamique du chemin de whisper-cli
-export PATH="$PATH:/home/lord-mahonheim/bifrost/tesla/tools/whisper.cpp/build/bin"
+export PATH="$PATH:/home/lord-mahonheim/bifrost/tesla/tools/whisper.cpp/build/bin:/home/lord-mahonheim/.local/bin"
 
 # ---------------------------------------------------------------------------
 # CONSTANTES & CONFIGURATION
@@ -23,10 +23,10 @@ readonly WHISPER_BIN="${WHISPER_BIN:-whisper-cli}"
 readonly DEFAULT_MODEL_BASE="${HOME}/bifrost/tesla/tools/whisper.cpp/models"
 readonly LATENCY_ALERT_SEC=7
 readonly MIN_AUDIO_BYTES=1024       # Seuil silence : < 1 Ko = silence
-RECORD_DURATION="${RECORD_DURATION:-5}"  # secondes par défaut
+RECORD_DURATION="${RECORD_DURATION:-15}"  # secondes par défaut
 
 # Paramètres Whisper anti-hallucination
-readonly WHISPER_LANG="fr"
+readonly WHISPER_LANG="auto"
 readonly WHISPER_ENTROPY_THOLD="2.6"
 
 # Couleurs terminal
@@ -79,8 +79,8 @@ Usage: $(basename "$0") [OPTIONS]
 Options:
   -d, --duration  SEC    Durée d'enregistrement en secondes (défaut: ${RECORD_DURATION})
   -m, --model     NAME   Modèle whisper : tiny | base | small (défaut: auto-détection)
-  -s, --session   NAME   Forcer le nom de session tmux cible
-  --dry-run              Transcription sans injection dans tmux
+  -s, --session   NAME   Forcer le nom de session zellij cible
+  --dry-run              Transcription sans injection dans zellij
   -v, --version          Afficher la version
   -h, --help             Afficher cette aide
 
@@ -159,13 +159,14 @@ detect_audio_backend() {
 # ---------------------------------------------------------------------------
 record_audio() {
     local outfile="$1"
-    local duration="$2"
     local backend
     backend="$(detect_audio_backend)"
 
     log_header "ENREGISTREMENT"
-    echo -e "${BOLD}${GREEN}🎙  Parlez maintenant... (${duration}s)${RESET}"
-    echo -e "${YELLOW}    Appuyez sur Ctrl+C pour arrêter prématurément${RESET}\n"
+    echo -e "${BOLD}${GREEN}🎙  Parlez maintenant... (Mode Open-free)${RESET}"
+    echo -e "${YELLOW}    Appuyez sur [Entrée] pour terminer l'enregistrement${RESET}\n"
+
+    local rec_pid
 
     case "$backend" in
         pipewire)
@@ -176,19 +177,7 @@ record_audio() {
                 --format=s16 \
                 --target=auto \
                 "${outfile%.wav}.raw" 2>/dev/null &
-            local rec_pid=$!
-            sleep "$duration"
-            kill "$rec_pid" 2>/dev/null || true
-            wait "$rec_pid" 2>/dev/null || true
-            # Convertir RAW → WAV 16kHz mono
-            if command -v sox &>/dev/null; then
-                sox -r 16000 -e signed -b 16 -c 1 "${outfile%.wav}.raw" "$outfile" 2>/dev/null
-                rm -f "${outfile%.wav}.raw"
-            else
-                # Construire header WAV manuellement si sox absent
-                _raw_to_wav "${outfile%.wav}.raw" "$outfile" 16000
-                rm -f "${outfile%.wav}.raw"
-            fi
+            rec_pid=$!
             ;;
         alsa)
             log_info "Backend : ALSA (arecord)"
@@ -197,21 +186,37 @@ record_audio() {
                 --format=S16_LE \
                 --rate=16000 \
                 --channels=1 \
-                --duration="$duration" \
-                "$outfile" 2>/dev/null
+                "$outfile" 2>/dev/null &
+            rec_pid=$!
             ;;
         sox)
             log_info "Backend : SoX (rec)"
             rec \
                 --quiet \
                 "$outfile" \
-                rate 16000 channels 1 \
-                trim 0 "$duration" 2>/dev/null
+                rate 16000 channels 1 2>/dev/null &
+            rec_pid=$!
             ;;
         none)
             die "Aucun backend audio trouvé. Installez pw-record, arecord ou sox."
             ;;
     esac
+
+    # Attente que l'utilisateur appuie sur Entrée
+    read -r
+    kill "$rec_pid" 2>/dev/null || true
+    wait "$rec_pid" 2>/dev/null || true
+
+    # Convertir RAW → WAV 16kHz mono si pipewire
+    if [[ "$backend" == "pipewire" ]]; then
+        if command -v sox &>/dev/null; then
+            sox -r 16000 -e signed -b 16 -c 1 "${outfile%.wav}.raw" "$outfile" 2>/dev/null
+            rm -f "${outfile%.wav}.raw"
+        else
+            _raw_to_wav "${outfile%.wav}.raw" "$outfile" 16000
+            rm -f "${outfile%.wav}.raw"
+        fi
+    fi
 
     echo -e "\n${BOLD}⏹  Enregistrement terminé.${RESET}"
 }
@@ -372,33 +377,26 @@ transcribe_audio() {
 }
 
 # ---------------------------------------------------------------------------
-# DÉTECTION SESSION TMUX AGY
+# DÉTECTION SESSION ZELLIJ AGY
 # ---------------------------------------------------------------------------
-detect_tmux_session() {
+detect_zellij_session() {
     if [[ -n "${FORCE_SESSION}" ]]; then
         # Vérifier que la session forcée existe
-        if tmux has-session -t "${FORCE_SESSION}" 2>/dev/null; then
+        if zellij list-sessions 2>/dev/null | grep -q "^${FORCE_SESSION}\b"; then
             echo "${FORCE_SESSION}"
             return 0
         else
-            log_warn "Session tmux forcée '${FORCE_SESSION}' introuvable."
+            log_warn "Session zellij forcée '${FORCE_SESSION}' introuvable."
             return 1
         fi
     fi
 
-    # Chercher une session contenant "agy" dans ses fenêtres ou son nom
+    # Chercher une session contenant "agy" dans son nom
     local sessions
-    sessions=$(tmux ls 2>/dev/null | awk -F: '{print $1}') || true
+    sessions=$(zellij list-sessions -n 2>/dev/null | sed 's/ (.*//' || true)
 
     for session in $sessions; do
-        # Vérifier le nom de session
         if echo "$session" | grep -qi "agy"; then
-            echo "$session"
-            return 0
-        fi
-        # Vérifier les processus dans la session
-        if tmux list-panes -t "$session" -F "#{pane_current_command}" 2>/dev/null \
-            | grep -qi "agy\|antigravity"; then
             echo "$session"
             return 0
         fi
@@ -406,7 +404,7 @@ detect_tmux_session() {
 
     # Fallback : proposer la première session disponible
     local first_session
-    first_session=$(tmux ls 2>/dev/null | head -1 | awk -F: '{print $1}') || true
+    first_session=$(zellij list-sessions -n 2>/dev/null | head -1 | sed 's/ (.*//' || true)
     if [[ -n "$first_session" ]]; then
         log_warn "Aucune session 'agy' trouvée. Utilisation de '${first_session}'."
         echo "$first_session"
@@ -470,27 +468,27 @@ confirmation_gate() {
 }
 
 # ---------------------------------------------------------------------------
-# INJECTION TMUX
+# INJECTION ZELLIJ
 # ---------------------------------------------------------------------------
-inject_tmux() {
+inject_zellij() {
     local session="$1"
     local text="$2"
 
-    log_header "INJECTION TMUX"
+    log_header "INJECTION ZELLIJ"
     log_info "Session cible : ${session}"
     log_info "Commande : ${text}"
 
     if $DRY_RUN; then
-        log_warn "[DRY-RUN] Injection simulée — aucune commande envoyée à agy."
+        log_warn "[DRY-RUN] Injection simulée — aucune commande envoyée à zellij."
         return 0
     fi
 
-    # Injection sécurisée : -l flag pour traiter comme input littéral
-    tmux send-keys -t "${session}" -l "${text}"
+    # Injection sécurisée
+    zellij action --session "${session}" write-chars "${text}"
     sleep 0.1
-    tmux send-keys -t "${session}" Enter
+    zellij action --session "${session}" write 13
 
-    log_ok "✅ Commande injectée dans tmux:${session}"
+    log_ok "✅ Commande injectée dans zellij:${session}"
 }
 
 # ---------------------------------------------------------------------------
@@ -525,8 +523,8 @@ main() {
     # --- Pré-vérification des outils ---
     command -v whisper-cli &>/dev/null || \
         die "whisper-cli introuvable. Exécutez voice-tesla-install.sh."
-    command -v tmux &>/dev/null || \
-        die "tmux introuvable. Installez-le avec : sudo apt install tmux"
+    command -v zellij &>/dev/null || \
+        die "zellij introuvable. Veuillez l'installer."
     command -v bc &>/dev/null || log_warn "bc absent — affichage latence en ms uniquement"
 
     # --- Sélection du modèle ---
@@ -536,14 +534,14 @@ main() {
         log_info "Modèle auto-sélectionné : ${SELECTED_MODEL}"
     fi
 
-    # --- Détection session tmux ---
-    local tmux_session=""
+    # --- Détection session zellij ---
+    local zellij_session=""
     if ! $DRY_RUN; then
-        tmux_session=$(detect_tmux_session) || {
-            log_warn "Aucune session tmux trouvée."
-            log_warn "Démarrez une session avec : tmux new-session -s agy"
+        zellij_session=$(detect_zellij_session) || {
+            log_warn "Aucune session zellij trouvée."
+            log_warn "Démarrez une session avec : zellij -s agy"
             if ! $DRY_RUN; then
-                die "Session tmux requise pour l'injection."
+                die "Session zellij requise pour l'injection."
             fi
         }
     fi
@@ -583,7 +581,7 @@ main() {
     local log_action
     case "$action" in
         OK)
-            inject_tmux "${tmux_session}" "${final_text}"
+            inject_zellij "${zellij_session}" "${final_text}"
             log_action="INJECTED"
             ;;
         A)

@@ -156,43 +156,42 @@ check_audio_backend() {
 # ---------------------------------------------------------------------------
 # SECTION 4 : TMUX & SESSION AGY
 # ---------------------------------------------------------------------------
-check_tmux_session() {
-    section "4. tmux & Session AGY"
+check_zellij_session() {
+    section "4. Zellij & Session AGY"
 
-    if ! command -v tmux &>/dev/null; then
-        check_fail "tmux introuvable"
-        echo "    → Installez avec : sudo apt install tmux"
+    export PATH="$PATH:/home/lord-mahonheim/.local/bin"
+    if ! command -v zellij &>/dev/null; then
+        check_fail "zellij introuvable"
+        echo "    → Veuillez installer zellij"
         return 1
     fi
 
-    local tmux_version
-    tmux_version=$(tmux -V 2>/dev/null || echo "version inconnue")
-    check_pass "tmux installé : ${tmux_version}"
+    local zellij_version
+    zellij_version=$(zellij --version 2>/dev/null || echo "version inconnue")
+    check_pass "zellij installé : ${zellij_version}"
 
     # Lister toutes les sessions
     local sessions
-    sessions=$(tmux ls 2>/dev/null | awk -F: '{print $1}') || true
+    sessions=$(zellij list-sessions -n 2>/dev/null | sed 's/ (.*//') || true
 
     if [[ -z "$sessions" ]]; then
-        check_warn "Aucune session tmux active"
-        echo "    → Pour démarrer une session agy : tmux new-session -s agy 'agy'"
+        check_warn "Aucune session zellij active"
+        echo "    → Pour démarrer une session agy : zellij -s agy"
         return 0
     fi
 
     local agy_found=false
     for session in $sessions; do
-        local procs
-        procs=$(tmux list-panes -t "$session" -F "#{pane_current_command}" 2>/dev/null | tr '\n' ' ')
-        if echo "${session} ${procs}" | grep -qi "agy\|antigravity"; then
-            check_pass "Session AGY trouvée : '${session}' (processus: ${procs})"
+        if echo "${session}" | grep -qi "agy\|antigravity"; then
+            check_pass "Session AGY trouvée : '${session}'"
             agy_found=true
         else
-            echo -e "  ${CYAN}ℹ  INFO${RESET}  Session tmux disponible : '${session}' (${procs})"
+            echo -e "  ${CYAN}ℹ  INFO${RESET}  Session zellij disponible : '${session}'"
         fi
     done
 
     if [[ "$agy_found" == false ]]; then
-        check_warn "Aucune session tmux ne contient 'agy'. Utilisez --session NOM pour forcer."
+        check_warn "Aucune session zellij ne contient 'agy'. Utilisez --session NOM pour forcer."
     fi
 }
 
@@ -341,7 +340,7 @@ echo -e "\n${BOLD}${CYAN}voice-health-check v${SCRIPT_VERSION}${RESET} — Déma
 check_whisper_cli
 check_whisper_models
 check_audio_backend
-check_tmux_session
+check_zellij_session
 check_latency_benchmark
 check_log_dir
 print_report

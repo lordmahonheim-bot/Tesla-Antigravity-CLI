@@ -1,13 +1,13 @@
 # VOICE-TESLA
 
-> Local, offline, and secure PTT (Push-To-Talk) voice pipeline for Antigravity CLI via Whisper.cpp and tmux.
+> Local, offline, and secure PTT (Push-To-Talk) voice pipeline for Antigravity CLI via Whisper.cpp and Zellij.
 
 ## Prerequisites and Quick Installation
 
 ### Prerequisites
 - Linux operating system (Wayland or X11).
 - **PipeWire** (`pw-record`), ALSA (`arecord`), or SoX (`rec`) for audio capture.
-- **tmux** to inject commands into the target CLI session.
+- **Zellij** to inject commands into the target CLI session.
 - **whisper.cpp** compiled locally (`whisper-cli`) and a GGML model (e.g., `ggml-base.bin`).
 
 ### Installation
@@ -21,9 +21,9 @@
 
 ## Usage and Examples
 
-1. Launch an Antigravity session in tmux (named `agy` by default):
+1. Launch an Antigravity session in Zellij (named `agy` by default):
    ```bash
-   tmux new-session -s agy 'agy'
+   Zellij new-session -s agy 'agy'
    ```
 2. Press your global keyboard shortcut to start the voice recording. Speak clearly (recommended duration: 3 to 8 seconds).
 3. Release / let the timeout finish the recording.
@@ -49,7 +49,7 @@ flowchart TD
     E -->|No| Z[Cancel: Silence]
     F --> G[Transcription entropy-thold 2.6]
     G --> H{Zenity/Yad Confirmation Gate}
-    H -->|OK| I[tmux send-keys]
+    H -->|OK| I[Zellij send-keys]
     H -->|Cancel| Y[Cancellation]
     I --> J[agy Session]
     J --> K[(JSONL Logging)]
@@ -57,9 +57,9 @@ flowchart TD
 
 ### Design Decisions
 - **Zero Cloud Confinement**: Transcription is performed 100% locally via `whisper.cpp`, guaranteeing no network exfiltration of voice interactions.
-- **Confirmation Gate**: Irreversible actions are blocked by a formal validation step. The transcription is displayed and editable before injection into `tmux`.
+- **Confirmation Gate**: Irreversible actions are blocked by a formal validation step. The transcription is displayed and editable before injection into `Zellij`.
 - **Anti-Hallucination**: Using `--entropy-thold 2.6` with `whisper-cli` greatly reduces unwanted text generation during background noise or prolonged silences.
-- **Agnostic Wayland/X11 Support**: Injection via `tmux` bypasses the complexities of `xdotool` on Wayland.
+- **Agnostic Wayland/X11 Support**: Injection via `Zellij` bypasses the complexities of `xdotool` on Wayland.
 
 ## Contribution & Governance
 

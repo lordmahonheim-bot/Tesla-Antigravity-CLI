@@ -55,12 +55,13 @@ check_dependencies() {
         echo ""
     fi
 
-    # tmux
-    if command -v tmux &>/dev/null; then
-        log_ok "tmux : $(tmux -V)"
+    # zellij
+    export PATH="$PATH:/home/lord-mahonheim/.local/bin"
+    if command -v zellij &>/dev/null; then
+        log_ok "zellij : $(zellij --version)"
     else
-        log_error "tmux MANQUANT"
-        echo "    → sudo apt install tmux"
+        log_error "zellij MANQUANT"
+        echo "    → Veuillez installer zellij"
     fi
 
     # Backend audio (au moins un requis)
@@ -334,7 +335,7 @@ print_summary() {
         echo -e "  ${CYAN}vt${RESET}                   — Raccourci court"
         echo ""
         echo -e "  ${BOLD}Première utilisation :${RESET}"
-        echo "    1. Lancez une session tmux : tmux new-session -s agy 'agy'"
+        echo "    1. Lancez une session zellij : zellij -s agy"
         echo "    2. Testez : voice-tesla --dry-run"
         echo "    3. Liez Caps_Lock au script (voir instructions Phase 5 ci-dessus)"
     else
