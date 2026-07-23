@@ -1,77 +1,87 @@
-# Book-to-Skill: Superpowers Meta-Skill Evolution
+# Book-To-Skill: Tesla Writing Skills
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-A major architectural evolution of the `superpowers:writing-skills` meta-skill designed to algorithmically digest dense literature, extract actionable knowledge, and automatically generate deployable skills for the Tesla-Antigravity ecosystem.
+**A high-performance hybrid architecture framework for converting massive textual knowledge into executable agent skills via SkillOpt, Book-to-Skill optimization, and Shadow-Targeting TDD.**
 
-## 1. Prerequisites & Quick Install
+## 1. Prerequisites & Quick Start
 
-### Prerequisites
+### Requirements
+- Antigravity CLI Environment (`@lordmahonheim-bot` ecosystem)
 - Python 3.12+
-- `Tesla-Antigravity-CLI` core engine active
-- Valid `MCP` connections configured (`obsidian-avalon`, `github`)
+- Git
 
-### Quick Install
-Deploy the Book-to-Skill module directly via the Antigravity CLI:
-
+### Installation
+Clone and symlink the skill to your Antigravity skills directory:
 ```bash
-tesla-cli skill install book-to-skill --override-superpowers
+cd /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/40-Book-To-Skill-Tesla-Writing-Skills
+ln -s $(pwd) ~/.gemini/config/plugins/tesla-skills/skills/book-to-skill
 ```
-
-Ensure your target directory is mapped correctly for the `SKILL.md` router initialization.
 
 ## 2. Usage & Examples
 
-### Basic Book Ingestion
-To parse a markdown or PDF book and generate the baseline skill structure:
+To invoke the skill within the Antigravity CLI, ensure your plugin is loaded and execute a context-aware query.
 
 ```bash
-tesla-cli run book-to-skill --input /path/to/book.pdf --output /path/to/skill_dir/
+# Example: Inject a book chunk and generate a skill blueprint
+antigravity run --skill book-to-skill --input "path/to/book_chunk.md" --mode generate
 ```
 
-### Expected Output
-The system will generate a highly optimized `SKILL.md`, a `glossary.md`, and interconnecting overlap pointers within the target directory.
-
-```text
-Processing... [████████████████████] 100%
-Success: Generated 1 SKILL.md and 1 glossary.md.
-Active Overlap Pointers configured: 14 nodes.
-```
+### Typical Workflow
+1. **Feed Context**: Supply raw text data (capped at 800 lines).
+2. **Optimize**: The SkillOpt engine distills the content using text-space optimization.
+3. **Validate**: The Shadow-Targeting TDD framework automatically runs RED-GREEN-REFACTOR cycles without disrupting the main CLI state.
 
 ## 3. Architecture & Design Decisions
 
-The Book-to-Skill architecture is engineered for absolute density, zero-fluff extraction, and strict module isolation.
+The system leverages a tripartite hybrid architecture to ensure maximum context density without exceeding token limits.
 
-### Technical Constraints & Paradigms
-- **800-Line Ceiling**: To prevent token overflow and ensure crisp execution context, no generated `SKILL.md` or auxiliary file may exceed 800 lines. The system automatically paginates or cross-references content beyond this limit.
-- **SKILL.md Router**: Acts as the central nervous system. It does not store all data but routes the execution engine to specific sub-modules or `glossary.md` files.
-- **Active Overlap Pointers**: Ensures that multiple generated skills can communicate and share context without duplicating logic. If Skill A and Skill B share a concept, they reference a common active pointer.
-- **Lazy Loading Shielding**: Data is loaded strictly on-demand. The router only loads the specific instructions required for the current sub-task, protecting the context window from contamination.
-
-### System Topology
+### Mermaid Topology
 
 ```mermaid
 graph TD
-    A[Raw Book Data] -->|Ingestion Engine| B(Data Extraction)
-    B --> C{Chunking & Summarization}
-    C -->|Core Logic| D[SKILL.md Router]
-    C -->|Definitions| E[glossary.md]
-    D -->|Lazy Loading| F[Execution Context]
-    E -->|Lazy Loading| F
-    D <-->|Active Overlap Pointers| G[Other Skills]
+    A[Raw Input Data] --> B{Book-to-Skill Core}
+    
+    subgraph Book-to-Skill
+        B --> C[800 Lines Ceiling]
+        B --> D[Lazy Loading]
+        B --> E[glossary.md Integration]
+    end
+    
+    subgraph SkillOpt Engine
+        C --> F[Rollout & Bounded Updates]
+        D --> F
+        F --> G[Validation Gate]
+        G -- Reject --> H[Rejected-Edit Buffer]
+        G -- Approve --> I[Slow Update]
+    end
+    
+    subgraph Shadow-Targeting TDD
+        I --> J[Stealth Injection into Antigravity CLI]
+        J --> K[RED: Failing Test]
+        K --> L[GREEN: Passing Test]
+        L --> M[REFACTOR: Clean Code]
+    end
+    
+    M --> N[Executable Skill Output]
 ```
+
+### Components
+- **SkillOpt**: Executive optimization in textual space. Implements Rollout, Bounded Updates, a strict Validation Gate, a Rejected-Edit Buffer, and Slow Update protocols.
+- **Book-to-Skill**: Designed to handle massive text by enforcing an 800-line ceiling per context window, implementing Lazy Loading, and utilizing a centralized `glossary.md` to maintain definitional consistency.
+- **Shadow-Targeting TDD**: A continuous RED-GREEN-REFACTOR loop that operates via stealth injection directly into the Antigravity CLI, allowing tests to run in parallel without blocking main workflows.
 
 ## 4. Security & Resilience
 
-- **Token Overflow Protection**: The 800-line ceiling is enforced strictly. Exceeding this limit triggers an automatic segmentation fault gracefully handled by the paginator.
-- **Lazy Loading Shielding**: Prevents memory leaks and context poisoning by loading only the necessary nodes into active memory.
-- **OpenSSF Compliance**: All generated outputs comply with standard security policies, ensuring no arbitrary execution blocks are improperly formatted or exposed.
+- **Anti-Crash Protocols**: Any failure in the Shadow-Targeting loop triggers an immediate fallback to the Rejected-Edit Buffer. Main branch state remains untainted.
+- **OpenSSF Compliance**: Strict validation gates ensure no unverified code execution occurs during the Book-to-Skill conversion process.
+- **Execution Limits**: Hardcapped at 800 lines of processing to prevent context exhaustion and OOM (Out Of Memory) errors within the LLM.
 
 ## 5. Contribution & Governance
 
-Contributions to this MVP must adhere strictly to the **Vigilum Codex**.
+All contributions must adhere to the **Vigilum Codex**.
 
-- All pull requests must include a `--dry-run` log.
-- Do not bypass the 800-line ceiling.
-- Ensure all Active Overlap Pointers resolve correctly before requesting a review.
-- Direct push is forbidden without explicit authorization from Lord Mahonheim.
+1. **Strict Pull Requests**: No direct commits to `main` (unless authorized by Lord Mahonheim).
+2. **Conventional Commits**: Use `<type>(<scope>): <description>` format.
+3. **No Fluff**: Keep documentation and code dense and factual.
+4. **Testing**: All new features must pass Shadow-Targeting TDD validation gates.
