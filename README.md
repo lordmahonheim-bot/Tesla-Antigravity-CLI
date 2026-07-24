@@ -108,7 +108,7 @@ MVP-GITHUB/
 ├── 08-Integration-Antigravity-Google-Agents-MIDGARD/
 ├── 09-Github-Governance/
 ├── 10-Github-MVP-Scaffolding/
-├── 11-Tesla-Arcanis-Skill/
+├── 11-Tesla-Arcanis-360-Skill/
 ├── 12-Alexandria-RAG-Unification/
 ├── 13-Jules-Cloud-Integration/
 ├── 14-Llama-cpp-Evaluation/
@@ -119,7 +119,27 @@ MVP-GITHUB/
 ├── 19-Tesla-Curator-Prime/
 ├── 20-Tesla-Premortem/
 ├── 21-Tesla-Web-Raider/
-└── 22-Shadow-Targeting-Method/
+├── 22-Shadow-Targeting-Method/
+├── 23-Architecture-Entr/
+├── 24-Event-Bus/
+├── 25-Capability-Bus/
+├── 26-Capability-Canonical-Sync/
+├── 27-Tesla-Governance-Gateway/
+├── 28-Loop-Engineering/
+├── 29-Tesla-Team-Synergy/
+├── 30-Tesla-Understand-Graph/
+├── 31-Vigilum-Gateway-V2.1/
+├── 32-SIA-TESLA-H/
+├── 33-Alexandria-Cloud-Embeddings/
+├── 34-Reddit-Commander/
+├── 35-Voice-Tesla/
+├── 36-Veille-Strategique/
+├── 37-MCP-Telegram/
+├── 38-Obsidian-Graph-Relationnel/
+├── 39-Tesla-Writing-Skills/
+├── 40-Book-To-Skill-Tesla-Writing-Skills/
+├── 41-Tesla-Eye/
+└── 42-OPRO-Grad/
 ```
 
 ## Workflow Sequence
