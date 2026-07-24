@@ -42,7 +42,7 @@ graph TD
     A[Tesla Engine] -->|Invokes| B(tesla_eye.py)
     B -->|ImageGrab.grab| C[X11 Display Context]
     C -->|Pixel Data| B
-    B -->|Save| D[/tmp/capture.png]
+    B -->|Save| D["/tmp/capture.png"]
     D -->|Context ingested| A
 ```
 
