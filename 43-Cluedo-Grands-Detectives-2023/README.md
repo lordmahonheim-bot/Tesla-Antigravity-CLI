@@ -8,6 +8,8 @@
 
 Open `manuel_cluedo_clean.html` in any modern web browser to view the interactive manual. The `Cluedo - Manuel Intéractif.pdf` provides an A4 print-ready version with identical visual fidelity. No installation or build steps are required to view the content.
 
+📥 **[Télécharger le Manuel Officiel Hasbro (PDF)](Manuel-Cluedo-VF.pdf)** : Ce fichier contient le livret de règles complet du jeu (édition 2023 F6420).
+
 ## 2. Usage & Output
 
 - **HTML Viewing**: Simply double-click the `manuel_cluedo_clean.html` file.
