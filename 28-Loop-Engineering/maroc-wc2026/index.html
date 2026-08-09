@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Lions de l'Atlas — Mondial 2026</title>
+  <meta name="description" content="Parcours du Maroc à la Coupe du Monde FIFA 2026. Timeline, highlights, statistiques et effectif.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="zellige-bg"></div>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <svg class="hero-star" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Étoile chérifienne du Maroc">
+      <title>Étoile chérifienne du Maroc</title>
+      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+    </svg>
+    <h1 id="hero-title">Les Lions de l'Atlas — Mondial 2026</h1>
+    <p class="subtitle">De Rabat à la conquête de l'Amérique</p>
+    
+    <div class="hero-stats">
+      <div class="stat-badge">
+        <span class="stat-val">4</span>
+        <span class="stat-label">Matchs joués</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-val">3</span>
+        <span class="stat-label">Victoires</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-val">7</span>
+        <span class="stat-label">Buts marqués</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-val">1/8</span>
+        <span class="stat-label">Stade atteint</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- BANDEAU PROCHAIN MATCH -->
+    <div id="next-match-container"></div>
+
+    <!-- TIMELINE SECTION -->
+    <section>
+      <h2 class="section-title">La Voie Royale</h2>
+      <div class="timeline" id="timeline-container">
+        <!-- Rendu par JS -->
+      </div>
+    </section>
+
+    <!-- GROUPE C SECTION -->
+    <section>
+      <h2 class="section-title">Le Groupe C</h2>
+      <div class="groupe-container">
+        <div class="table-wrapper">
+          <table id="groupe-table">
+            <thead>
+              <tr>
+                <th>Rang</th>
+                <th>Équipe</th>
+                <th>Diff</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rendu par JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="results-wrapper" id="groupe-results">
+          <!-- Rendu par JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS & RECORDS -->
+    <section>
+      <h2 class="section-title">Stats & Records</h2>
+      <div class="stats-grid" id="stats-container">
+        <!-- Rendu par JS -->
+      </div>
+    </section>
+
+    <!-- L'EFFECTIF 360° -->
+    <section>
+      <h2 class="section-title">L'Effectif 360°</h2>
+      <div class="filters" id="player-filters">
+        <button type="button" class="filter-btn active" data-filter="all">Tous</button>
+        <button type="button" class="filter-btn" data-filter="Gardien">Gardiens</button>
+        <button type="button" class="filter-btn" data-filter="Défenseur">Défenseurs</button>
+        <button type="button" class="filter-btn" data-filter="Milieu">Milieux</button>
+        <button type="button" class="filter-btn" data-filter="Attaquant">Attaquants</button>
+      </div>
+      <div class="effectif-grid" id="effectif-container">
+        <!-- Rendu par JS -->
+      </div>
+    </section>
+
+    <!-- HERITAGE 2022 -->
+    <section class="heritage" id="heritage-container">
+      <!-- Rendu par JS -->
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Page non officielle de fan — <span id="footer-date"></span></p>
+    <p>Développé avec passion pour suivre le parcours des Lions de l'Atlas.</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

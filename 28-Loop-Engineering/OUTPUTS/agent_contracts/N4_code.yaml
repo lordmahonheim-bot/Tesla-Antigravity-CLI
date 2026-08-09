@@ -1,0 +1,11 @@
+id: N4
+agent: tesla-master-code
+input: [target_architecture.md, premortem_report.md, /home/lord-mahonheim/Documents/SyncThing/QWEN - Data/Understand Anything .txt]
+output: [wrapper_LSP.py, test_loop.py, audit_results.json]
+preconditions: [N3_complete, lsp_ready]
+postconditions: [tests_pass, zero_lsp_errors]
+risks: [api_breaking_changes, lsp_incompatibility]
+time_estimate_min: 45
+cost_estimate_tokens: L
+model_recommended: claude-sonnet
+capability_min: {Code: 95, Reasoning: 85}

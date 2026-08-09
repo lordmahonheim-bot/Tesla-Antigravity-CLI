@@ -1,0 +1,15 @@
+id: N4
+agent: tesla-master-code
+input: ["/home/lord-mahonheim/Documents/SyncThing/QWEN - Data/SIA.txt", N2_deep_research_archi.md]
+output: [N4_code_audit_plan.md, N4_lsp_loop.md]
+preconditions: [N2_completed]
+postconditions: [code_audited, plan_ready]
+risks: [logic_errors, infinite_loops]
+time_estimate_min: 45
+cost_estimate_tokens: 200k
+model_recommended: claude-3-7-sonnet
+capability_min: {Code: 95, Audit: 90}
+checkpoint_contract: |
+  [CHECKPOINT CONTRACT]
+  Vérification statique rigoureuse et conception du Wrapper LSP / Loop Engineering.
+  Directive Broker d'Artefacts V2.1 : Exposer les plans d'intervention et les diffs potentiels de façon isolée et sûre.

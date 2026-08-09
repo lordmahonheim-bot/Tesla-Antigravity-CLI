@@ -1,0 +1,23 @@
+mission: Cluedo-Grands_Détectives-2023
+version: 1.0
+nodes:
+  - id: N1
+    role: Acquisition & Extraction (Assets & Base64 Prep)
+    agents: [tesla-web-raider, tesla-arcanis-360]
+    depends_on: []
+    contract_ref: contracts/N1.yaml
+  - id: N2
+    role: Curation & UX Writing
+    agents: [tesla-curator-prime, tesla-writing-skills]
+    depends_on: [N1]
+    contract_ref: contracts/N2.yaml
+  - id: N3
+    role: Engineering & HTML Construction
+    agents: [tesla-master-code]
+    depends_on: [N2]
+    contract_ref: contracts/N3.yaml
+  - id: N4
+    role: QA, Stress-Test & Resilience
+    agents: [premortem]
+    depends_on: [N3]
+    contract_ref: contracts/N4.yaml

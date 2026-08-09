@@ -1,0 +1,1007 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * style.css — Lions de l'Atlas : Parcours Mondial 2026
+ * ═══════════════════════════════════════════════════════════════
+ * Direction artistique : Dark Premium × Maroc
+ * Palette : Rouge marocain (#C1272D), Vert drapeau (#006233),
+ *					 Or premium (#FFD700), Fond sombre (#0D1117)
+ */
+
+/* ── Reset & Variables ── */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	/* Couleurs Maroc */
+	--rouge: #c1272d;
+	--rouge-vif: #e63946;
+	--vert: #006233;
+	--vert-clair: #00a86b;
+	--or: #ffd700;
+	--or-sombre: #b8860b;
+
+	/* Fonds */
+	--fond-primaire: #0d1117;
+	--fond-carte: #161b22;
+	--fond-carte-hover: #1c2333;
+	--fond-surface: #21262d;
+	--fond-verre: rgba(22, 27, 34, 0.85);
+
+	/* Textes */
+	--texte-primaire: #e6edf3;
+	--texte-secondaire: #8b949e;
+	--texte-tertiaire: #484f58;
+
+	/* Bordures */
+	--bordure: #30363d;
+	--bordure-focus: #58a6ff;
+
+	/* Effets */
+	--ombre-carte: 0 8px 32px rgba(0, 0, 0, 0.4);
+	--ombre-hero: 0 20px 60px rgba(193, 39, 45, 0.15);
+	--transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	--transition-lente: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Typographie */
+	--police-titre: "Outfit", system-ui, -apple-system, sans-serif;
+	--police-corps: "Inter", system-ui, -apple-system, sans-serif;
+
+	/* Espacement */
+	--espace-section: clamp(4rem, 8vw, 8rem);
+	--espace-contenu: clamp(1rem, 3vw, 2rem);
+	--largeur-max: 1200px;
+
+	/* Rayon */
+	--rayon: 12px;
+	--rayon-lg: 20px;
+}
+
+/* ── Polices ── */
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 300 900;
+	font-display: swap;
+	src: url("https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2")
+		format("woff2");
+}
+
+@font-face {
+	font-family: "Outfit";
+	font-style: normal;
+	font-weight: 300 900;
+	font-display: swap;
+	src: url("https://cdn.jsdelivr.net/fontsource/fonts/outfit:vf@latest/latin-wght-normal.woff2")
+		format("woff2");
+}
+
+/* ── Base ── */
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 5rem;
+}
+
+body {
+	font-family: var(--police-corps);
+	background: var(--fond-primaire);
+	color: var(--texte-primaire);
+	line-height: 1.7;
+	overflow-x: hidden;
+	-webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+a {
+	color: var(--bordure-focus);
+	text-decoration: none;
+	transition: color var(--transition);
+}
+
+a:hover {
+	color: var(--or);
+}
+
+/* ── Barre de Navigation ── */
+.nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	background: var(--fond-verre);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	border-bottom: 1px solid var(--bordure);
+	padding: 0.75rem 0;
+}
+
+.nav__inner {
+	max-width: var(--largeur-max);
+	margin: 0 auto;
+	padding: 0 var(--espace-contenu);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.nav__logo {
+	font-family: var(--police-titre);
+	font-size: 1.25rem;
+	font-weight: 800;
+	color: var(--texte-primaire);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.nav__logo-accent {
+	color: var(--rouge);
+}
+
+.nav__links {
+	list-style: none;
+	display: flex;
+	gap: 1.5rem;
+}
+
+.nav__link {
+	font-size: 0.85rem;
+	font-weight: 500;
+	color: var(--texte-secondaire);
+	transition: color var(--transition);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.nav__link:hover {
+	color: var(--or);
+}
+
+.nav__burger {
+	display: none;
+	background: none;
+	border: none;
+	color: var(--texte-primaire);
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+/* ── HERO ── */
+.hero {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 8rem var(--espace-contenu) 4rem;
+	overflow: hidden;
+}
+
+.hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(
+			ellipse 80% 60% at 50% 20%,
+			rgba(193, 39, 45, 0.12) 0%,
+			transparent 60%
+		),
+		radial-gradient(
+			ellipse 60% 40% at 80% 80%,
+			rgba(0, 98, 51, 0.08) 0%,
+			transparent 50%
+		);
+	pointer-events: none;
+}
+
+.hero__badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.4rem 1rem;
+	background: rgba(193, 39, 45, 0.15);
+	border: 1px solid rgba(193, 39, 45, 0.3);
+	border-radius: 100px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--rouge-vif);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 1.5rem;
+	animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+	0%,
+	100% {
+		box-shadow: 0 0 0 0 rgba(193, 39, 45, 0.2);
+	}
+	50% {
+		box-shadow: 0 0 20px 5px rgba(193, 39, 45, 0.15);
+	}
+}
+
+.hero__title {
+	font-family: var(--police-titre);
+	font-size: clamp(2.5rem, 7vw, 5rem);
+	font-weight: 900;
+	line-height: 1.1;
+	margin-bottom: 1rem;
+	background: linear-gradient(
+		135deg,
+		var(--texte-primaire) 40%,
+		var(--or) 100%
+	);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.hero__subtitle {
+	font-size: clamp(1rem, 2.5vw, 1.35rem);
+	color: var(--texte-secondaire);
+	max-width: 600px;
+	margin: 0 auto 2.5rem;
+	font-weight: 400;
+}
+
+/* ── Statistiques Hero ── */
+.hero__stats {
+	display: flex;
+	gap: 2rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-bottom: 3rem;
+}
+
+.hero__stat {
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon);
+	padding: 1.25rem 2rem;
+	text-align: center;
+	min-width: 140px;
+	transition: all var(--transition);
+}
+
+.hero__stat:hover {
+	border-color: var(--rouge);
+	transform: translateY(-3px);
+	box-shadow: 0 8px 24px rgba(193, 39, 45, 0.15);
+}
+
+.hero__stat-value {
+	font-family: var(--police-titre);
+	font-size: 2rem;
+	font-weight: 800;
+	color: var(--or);
+	display: block;
+}
+
+.hero__stat-label {
+	font-size: 0.75rem;
+	color: var(--texte-secondaire);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin-top: 0.25rem;
+}
+
+/* ── Compte à rebours ── */
+.countdown {
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon-lg);
+	padding: 2rem 3rem;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	box-shadow: var(--ombre-hero);
+}
+
+.countdown__label {
+	font-size: 0.85rem;
+	color: var(--texte-secondaire);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+
+.countdown__timer {
+	display: flex;
+	gap: 1.5rem;
+}
+
+.countdown__unit {
+	text-align: center;
+}
+
+.countdown__number {
+	font-family: var(--police-titre);
+	font-size: clamp(2rem, 5vw, 3.5rem);
+	font-weight: 800;
+	color: var(--rouge);
+	line-height: 1;
+}
+
+.countdown__unit-label {
+	font-size: 0.7rem;
+	color: var(--texte-tertiaire);
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+	margin-top: 0.25rem;
+}
+
+.countdown__match-info {
+	font-size: 0.9rem;
+	color: var(--texte-secondaire);
+}
+
+.countdown__match-info strong {
+	color: var(--or);
+}
+
+/* ── Sections Communes ── */
+.section {
+	padding: var(--espace-section) var(--espace-contenu);
+	max-width: var(--largeur-max);
+	margin: 0 auto;
+}
+
+.section__header {
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.section__overtitle {
+	font-size: 0.8rem;
+	color: var(--rouge);
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.section__title {
+	font-family: var(--police-titre);
+	font-size: clamp(1.75rem, 4vw, 2.5rem);
+	font-weight: 800;
+	color: var(--texte-primaire);
+}
+
+.section__title--accent {
+	color: var(--rouge);
+}
+
+/* ── TIMELINE ── */
+.timeline {
+	position: relative;
+	padding-left: 3rem;
+}
+
+.timeline::before {
+	content: "";
+	position: absolute;
+	left: 1rem;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	background: linear-gradient(
+		to bottom,
+		var(--rouge),
+		var(--vert),
+		var(--or),
+		var(--rouge)
+	);
+	opacity: 0.4;
+}
+
+.timeline__item {
+	position: relative;
+	margin-bottom: 3rem;
+	opacity: 0;
+	transform: translateY(30px);
+	transition: all var(--transition-lente);
+}
+
+.timeline__item.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.timeline__item::before {
+	content: "";
+	position: absolute;
+	left: -2.35rem;
+	top: 1.5rem;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--rouge);
+	border: 3px solid var(--fond-primaire);
+	box-shadow: 0 0 0 3px var(--rouge);
+	z-index: 2;
+}
+
+.timeline__item--match::before {
+	background: var(--vert);
+	box-shadow: 0 0 0 3px var(--vert);
+}
+
+.timeline__item--upcoming::before {
+	background: var(--or);
+	box-shadow: 0 0 0 3px var(--or);
+	animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.timeline__card {
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon-lg);
+	overflow: hidden;
+	transition: all var(--transition);
+}
+
+.timeline__card:hover {
+	border-color: var(--rouge);
+	box-shadow: var(--ombre-carte);
+	transform: translateX(5px);
+}
+
+.timeline__card-image {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	border-bottom: 1px solid var(--bordure);
+}
+
+.timeline__card-body {
+	padding: 1.5rem;
+}
+
+.timeline__card-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-bottom: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.timeline__card-date {
+	font-size: 0.8rem;
+	color: var(--texte-secondaire);
+	font-weight: 500;
+}
+
+.timeline__card-badge {
+	display: inline-flex;
+	padding: 0.2rem 0.6rem;
+	border-radius: 100px;
+	font-size: 0.7rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.timeline__card-badge--match {
+	background: rgba(0, 98, 51, 0.15);
+	color: var(--vert-clair);
+	border: 1px solid rgba(0, 98, 51, 0.3);
+}
+
+.timeline__card-badge--qualification {
+	background: rgba(193, 39, 45, 0.15);
+	color: var(--rouge-vif);
+	border: 1px solid rgba(193, 39, 45, 0.3);
+}
+
+.timeline__card-badge--tirage {
+	background: rgba(255, 215, 0, 0.1);
+	color: var(--or);
+	border: 1px solid rgba(255, 215, 0, 0.25);
+}
+
+.timeline__card-badge--upcoming {
+	background: rgba(255, 215, 0, 0.15);
+	color: var(--or);
+	border: 1px solid rgba(255, 215, 0, 0.35);
+	animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+.timeline__card-title {
+	font-family: var(--police-titre);
+	font-size: 1.3rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	color: var(--texte-primaire);
+}
+
+.timeline__card-score {
+	font-family: var(--police-titre);
+	font-size: 1.1rem;
+	font-weight: 800;
+	color: var(--or);
+	margin-bottom: 0.75rem;
+	padding: 0.5rem 1rem;
+	background: rgba(255, 215, 0, 0.08);
+	border-radius: var(--rayon);
+	display: inline-block;
+}
+
+.timeline__card-text {
+	font-size: 0.95rem;
+	color: var(--texte-secondaire);
+	line-height: 1.7;
+}
+
+.timeline__card-motm {
+	margin-top: 1rem;
+	padding: 0.6rem 1rem;
+	background: rgba(193, 39, 45, 0.1);
+	border-left: 3px solid var(--rouge);
+	border-radius: 0 var(--rayon) var(--rayon) 0;
+	font-size: 0.85rem;
+	color: var(--texte-secondaire);
+}
+
+.timeline__card-motm strong {
+	color: var(--rouge-vif);
+}
+
+.timeline__card-stat {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 0.75rem;
+	padding: 0.5rem 0.75rem;
+	background: var(--fond-surface);
+	border-radius: var(--rayon);
+}
+
+.timeline__card-stat-value {
+	font-family: var(--police-titre);
+	font-size: 1.5rem;
+	font-weight: 800;
+	color: var(--or);
+}
+
+.timeline__card-stat-label {
+	font-size: 0.8rem;
+	color: var(--texte-secondaire);
+}
+
+/* ── GROUPE C ── */
+.groupe__table {
+	width: 100%;
+	border-collapse: collapse;
+	background: var(--fond-carte);
+	border-radius: var(--rayon-lg);
+	overflow: hidden;
+	border: 1px solid var(--bordure);
+}
+
+.groupe__table thead {
+	background: var(--fond-surface);
+}
+
+.groupe__table th {
+	padding: 0.75rem 1rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--texte-secondaire);
+	text-align: center;
+}
+
+.groupe__table th:nth-child(2) {
+	text-align: left;
+}
+
+.groupe__table td {
+	padding: 0.85rem 1rem;
+	text-align: center;
+	font-size: 0.9rem;
+	border-top: 1px solid var(--bordure);
+}
+
+.groupe__table td:nth-child(2) {
+	text-align: left;
+	font-weight: 600;
+}
+
+.groupe__table-row--qualified td:nth-child(2) {
+	color: var(--vert-clair);
+}
+
+.groupe__table-row--morocco td {
+	background: rgba(193, 39, 45, 0.08);
+}
+
+.groupe__table-row--morocco td:nth-child(2) {
+	color: var(--rouge-vif);
+	font-weight: 700;
+}
+
+.groupe__resultats {
+	margin-top: 2rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 0.75rem;
+}
+
+.groupe__resultat {
+	padding: 0.75rem 1rem;
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon);
+	font-size: 0.9rem;
+	text-align: center;
+	color: var(--texte-secondaire);
+	transition: all var(--transition);
+}
+
+.groupe__resultat:hover {
+	border-color: var(--rouge);
+	color: var(--texte-primaire);
+}
+
+/* ── EFFECTIF ── */
+.effectif__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 1rem;
+}
+
+.effectif__joueur {
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon);
+	padding: 1.25rem;
+	transition: all var(--transition);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.effectif__joueur:hover {
+	border-color: var(--vert);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 16px rgba(0, 98, 51, 0.1);
+}
+
+.effectif__joueur-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.effectif__joueur-nom {
+	font-family: var(--police-titre);
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--texte-primaire);
+}
+
+.effectif__joueur-numero {
+	font-family: var(--police-titre);
+	font-size: 1.5rem;
+	font-weight: 800;
+	color: var(--texte-tertiaire);
+	line-height: 1;
+}
+
+.effectif__joueur-details {
+	display: flex;
+	gap: 0.75rem;
+	font-size: 0.8rem;
+	color: var(--texte-secondaire);
+}
+
+.effectif__joueur-poste {
+	padding: 0.15rem 0.5rem;
+	background: var(--fond-surface);
+	border-radius: 100px;
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.effectif__joueur-poste--gardien {
+	color: var(--or);
+}
+
+.effectif__joueur-poste--defenseur {
+	color: var(--vert-clair);
+}
+
+.effectif__joueur-poste--milieu {
+	color: var(--bordure-focus);
+}
+
+.effectif__joueur-poste--attaquant {
+	color: var(--rouge-vif);
+}
+
+.effectif__joueur-fait {
+	font-size: 0.8rem;
+	color: var(--texte-secondaire);
+	font-style: italic;
+	border-left: 2px solid var(--or);
+	padding-left: 0.75rem;
+	margin-top: 0.25rem;
+}
+
+/* ── STATS ── */
+.stats__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.5rem;
+}
+
+.stats__card {
+	background: var(--fond-carte);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon-lg);
+	padding: 2rem;
+	transition: all var(--transition);
+	position: relative;
+	overflow: hidden;
+}
+
+.stats__card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--rouge), var(--or));
+}
+
+.stats__card:hover {
+	border-color: var(--or-sombre);
+	transform: translateY(-4px);
+	box-shadow: 0 12px 32px rgba(255, 215, 0, 0.08);
+}
+
+.stats__card-title {
+	font-family: var(--police-titre);
+	font-size: 1.15rem;
+	font-weight: 700;
+	color: var(--texte-primaire);
+	margin-bottom: 0.25rem;
+}
+
+.stats__card-info {
+	font-size: 0.75rem;
+	color: var(--texte-tertiaire);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin-bottom: 0.75rem;
+}
+
+.stats__card-value {
+	font-family: var(--police-titre);
+	font-size: 2.25rem;
+	font-weight: 900;
+	color: var(--or);
+	margin-bottom: 0.75rem;
+}
+
+.stats__card-desc {
+	font-size: 0.85rem;
+	color: var(--texte-secondaire);
+	line-height: 1.6;
+}
+
+/* ── HÉRITAGE 2022 ── */
+.heritage {
+	position: relative;
+	background: linear-gradient(
+		135deg,
+		rgba(193, 39, 45, 0.08) 0%,
+		rgba(0, 98, 51, 0.05) 100%
+	);
+	border: 1px solid var(--bordure);
+	border-radius: var(--rayon-lg);
+	padding: 3rem;
+	text-align: center;
+}
+
+.heritage::before {
+	content: "🦁";
+	position: absolute;
+	top: -1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 2.5rem;
+	background: var(--fond-primaire);
+	padding: 0 1rem;
+}
+
+.heritage__title {
+	font-family: var(--police-titre);
+	font-size: clamp(1.5rem, 3vw, 2rem);
+	font-weight: 800;
+	color: var(--or);
+	margin-bottom: 1rem;
+}
+
+.heritage__text {
+	font-size: 1rem;
+	color: var(--texte-secondaire);
+	line-height: 1.8;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+/* ── FOOTER ── */
+.footer {
+	text-align: center;
+	padding: 3rem var(--espace-contenu);
+	border-top: 1px solid var(--bordure);
+	margin-top: var(--espace-section);
+}
+
+.footer__text {
+	font-size: 0.8rem;
+	color: var(--texte-tertiaire);
+}
+
+.footer__text strong {
+	color: var(--texte-secondaire);
+}
+
+/* ── Animations d'Entrée ── */
+.fade-in {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: all var(--transition-lente);
+}
+
+.fade-in.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+	.nav__links {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: var(--fond-verre);
+		backdrop-filter: blur(20px);
+		flex-direction: column;
+		padding: 1rem;
+		border-bottom: 1px solid var(--bordure);
+	}
+
+	.nav__links.is-open {
+		display: flex;
+	}
+
+	.nav__burger {
+		display: block;
+	}
+
+	.hero__stats {
+		gap: 1rem;
+	}
+
+	.hero__stat {
+		min-width: 110px;
+		padding: 1rem;
+	}
+
+	.hero__stat-value {
+		font-size: 1.5rem;
+	}
+
+	.countdown {
+		padding: 1.5rem;
+	}
+
+	.countdown__timer {
+		gap: 1rem;
+	}
+
+	.timeline {
+		padding-left: 2rem;
+	}
+
+	.timeline::before {
+		left: 0.5rem;
+	}
+
+	.timeline__item::before {
+		left: -1.85rem;
+		width: 12px;
+		height: 12px;
+	}
+
+	.groupe__table {
+		font-size: 0.8rem;
+	}
+
+	.groupe__table th,
+	.groupe__table td {
+		padding: 0.5rem;
+	}
+
+	.heritage {
+		padding: 2rem 1.5rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.hero__stat {
+		min-width: 90px;
+		padding: 0.75rem;
+	}
+
+	.hero__stat-value {
+		font-size: 1.25rem;
+	}
+
+	.effectif__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.stats__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Accessibilité ── */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		/* biome-ignore lint/complexity/noImportantStyles: Required for accessibility override of all animations */
+		animation-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Required for accessibility override of all animations */
+		animation-iteration-count: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Required for accessibility override of all transitions */
+		transition-duration: 0.01ms !important;
+	}
+
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+:focus-visible {
+	outline: 2px solid var(--bordure-focus);
+	outline-offset: 2px;
+}
+
+/* ── Utilitaires ── */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

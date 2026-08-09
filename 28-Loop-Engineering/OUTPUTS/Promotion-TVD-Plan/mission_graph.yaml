@@ -1,0 +1,28 @@
+mission: Promotion Tesla-Video-Director (Next Level)
+version: 1.1
+nodes:
+  - id: N1
+    role: Curation_Audits
+    agents: [tesla-curator-prime]
+    depends_on: []
+    contract_ref: agent_contracts/N1_Curation.yaml
+  - id: N1b
+    role: Web_Reconnaissance
+    agents: [tesla-web-raider]
+    depends_on: []
+    contract_ref: agent_contracts/N1b_WebRecon.yaml
+  - id: N2
+    role: Feasibility_Study
+    agents: [tesla-arcanis-360]
+    depends_on: [N1, N1b]
+    contract_ref: agent_contracts/N2_Feasibility.yaml
+  - id: N3
+    role: Architecture_Design
+    agents: [tesla-master-code]
+    depends_on: [N2]
+    contract_ref: agent_contracts/N3_Architecture.yaml
+  - id: N4
+    role: Risk_Assessment
+    agents: [premortem]
+    depends_on: [N3]
+    contract_ref: agent_contracts/N4_Premortem.yaml

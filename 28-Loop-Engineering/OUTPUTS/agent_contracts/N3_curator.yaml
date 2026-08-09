@@ -1,0 +1,15 @@
+id: N3
+agent: tesla-curator-prime
+input: [N2_deep_research_archi.md]
+output: [N3_alexandria_docs.md]
+preconditions: [N2_completed]
+postconditions: [documentation_indexed]
+risks: [knowledge_loss]
+time_estimate_min: 15
+cost_estimate_tokens: 40k
+model_recommended: gemini-2.5-flash
+capability_min: {Documentation: 90, Context: 80}
+checkpoint_contract: |
+  [CHECKPOINT CONTRACT]
+  Harmonisation avec la structure Alexandria de l'écosystème Tesla.
+  Directive Broker d'Artefacts V2.1 : Lier les métadonnées pour l'indexation RAG.

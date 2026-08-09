@@ -1,71 +1,125 @@
-# Project 16 — Tesla Master Code (Lints, Verifications and Sandboxes)
-*Author:* Lord Mahonheim  
-*Status:* Verified Reference (statut/valide)  
-*Tagline:* "A validated codebase is a trustworthy shield against system degradation."
+# ⚡ MVP 16 — Tesla Master Code
 
-## Executive Summary
-This project organizes the syntax check, typing validation, formatting, and sandboxed runtimes under the Vigilum Codex. It includes configuration templates for **Pyright**, **Ruff**, and **Biome**, as well as a master orchestration linter script `lint_all.sh` to run syntax verifications on local modifications before git check-ins.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-## Problem Statement
-Developing code without standardized static analysis rules leads to formatting drift, syntax errors, and missing typings. Running unverified code can trigger background daemon exceptions. Additionally, running client JS or WebAssembly modules directly poses a security threat. We need strict pre-flight checks and isolated execution sandboxes.
+> **Tesla Antigravity CLI · @lordmahonheim-bot**  
+> **Authoritative Documentation — Exclusive Code Generation & Artifact Actuator Engine**
 
-## Product Promise
-* **What it does:** Validates Python types (Pyright), verifies syntax/formatting (Ruff & Biome), and defines isolated sandboxes (Deno & Wasmtime) for untrusted executions.
-* **What it does NOT do:** Automatically correct logical flows without testing or run unchecked packages on host systems.
+---
 
-## Core Principles Table
-| Principle | Meaning | Impact |
-| :--- | :--- | :--- |
-| Zero Errors | Pyright must return 0 typing errors before push. | Avoids import/module crashes. |
-| Strict Formatting | Automated linting checks via Ruff and Biome. | Standardizes spacing and styles. |
-| Sandboxed Runtime | Isolated execution via Deno and Wasmtime. | Shields host filesystem/network. |
+## 🎯 Executive Summary & Architectural Role
 
-## Architecture Diagram
+**Tesla Master Code** (MVP 16) is the core code generation, syntax implementation, and artifact writer component of the **Tesla Antigravity CLI** ecosystem. Under the **Loop Engineering (MVP 28)** architecture, `tesla-master-code` operates **exclusively as the Acteur / Writer**.
+
+### 🔒 Separation of Powers Doctrine (Vigilum Codex)
+In accordance with the **Vigilum Codex**, `tesla-master-code` is strictly decoupled from auditing and certification responsibilities:
+- **Exclusive Acteur Responsibility**: `tesla-master-code` receives natural language contract goals and structured learning deltas (`learning_deltas`), modifies target source code files, and emits an authoritative execution manifest (`output_manifest.json`).
+- **No Self-Auditing**: `tesla-master-code` is strictly **forbidden from self-certifying** or issuing `PASS`/`BLOCK` audit verdicts. Self-auditing creates critical cognitive bias and security risks.
+- **Independent Verification**: All generated artifacts and manifests are submitted directly to `tesla-code-auditor` (MVP 44) for independent 4-level validation.
+
+---
+
+## 🏗️ Architecture & Interaction Flow
+
+In the Loop Engineering framework (`ACT` phase), `tesla-master-code` functions as the execution engine for code synthesis and refinement:
+
 ```mermaid
-graph TD
-    A[Code Contribution] --> B[Ruff check / format]
-    A --> C[Biome check / format]
-    A --> D[Pyright typing check]
-    B -- Clean --> E[Code Sandboxing tests]
-    C -- Clean --> E
-    D -- Clean --> E
-    E --> F[Deno sandbox: read-only]
-    E --> G[Wasmtime sandbox: isolated WASM]
-    F --> H[Verified Code approved for Commit]
-    G --> H
+flowchart TD
+    TLO["🔄 tesla-loop-orchestrator"] -->|1. Goal Spec & Learning Deltas| TMC["⚡ tesla-master-code (Acteur)"]
+    
+    subgraph Acteur Engine ["Tesla Master Code Execution"]
+        TMC --> TaskParser["📥 Contract & Feedback Parser"]
+        TaskParser --> CodeGen["💻 Code Generation & Refactoring"]
+        CodeGen --> FormatCheck["🧹 Pre-flight Syntax & Format Check\n(Ruff, Biome, Pyright Configs)"]
+        FormatCheck --> ManifestGen["📄 Generate output_manifest.json\n(SHA-256 File Hashes)"]
+    end
+
+    ManifestGen -->|2. Emits Output Manifest| OUTPUT[("📁 /home/lord-mahonheim/bifrost/tesla/OUTPUTS/\noutput_manifest.json")]
+    OUTPUT -->|3. Passed for Independent Audit| TCA["🛡️ tesla-code-auditor (MVP 44)"]
+    
+    TCA -->|Audit Verdict & Learning Deltas| TLO
+    TLO -->|If DELAY: Next Iteration Deltas| TMC
 ```
 
-## Target Files and Layout
+---
+
+## ⚙️ Core Capabilities & Pre-Flight Tooling
+
+In addition to acting as the primary Acteur in the iterative loop, `tesla-master-code` provides standardized pre-flight linter configurations and runtime sandboxes for host protection:
+
+| Tool / Capability | Purpose | Configuration File |
+|---|---|---|
+| **Pyright** | Static Python typing enforcement | `pyrightconfig.json` |
+| **Ruff** | Python fast linting & style enforcement | `ruff.toml` |
+| **Biome** | Fast JavaScript/TypeScript/JSON formatting | `biome.json` |
+| **Master Linter** | Orchestrated pre-flight verification script | `lint_all.sh` |
+| **Manifest Generator** | Produces cryptographic `output_manifest.json` | `master_code.py` |
+
+---
+
+## 📄 Manifest & CLI Specification
+
+When invoked by `tesla-loop-orchestrator` during the `ACT` phase, `tesla-master-code` processes task goals and feedback, then outputs `output_manifest.json`.
+
+### Command Line Interface (`master_code.py`)
+```bash
+python3 /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/16-Tesla-Master-Code/master_code.py \
+  --contract /path/to/loop_contract.yaml \
+  --feedback "Pyright: TYPE_MISMATCH in src/main.py line 42"
+```
+
+### Generated Manifest Format (`output_manifest.json`)
+```json
+{
+  "files_modified": [
+    "src/main.py",
+    "tests/test_main.py"
+  ],
+  "hashes": {
+    "src/main.py": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+    "tests/test_main.py": "b785a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae4"
+  },
+  "timestamp": "2026-08-09T06:00:00Z"
+}
+```
+
+---
+
+## 📁 Target Directory Structure
+
 ```text
 16-Tesla-Master-Code/
-├── README.md
-├── SKILL.md
-├── biome.json
-├── lint_all.sh
-├── pyrightconfig.json
-└── ruff.toml
+├── README.md               # Authoritative documentation (Acteur role in Loop Engineering)
+├── SKILL.md                # Skill specification and coding standards
+├── biome.json              # Biome Linter configuration
+├── lint_all.sh             # Master pre-flight verification script
+├── master_code.py          # Acteur script & output_manifest.json generator
+├── pyrightconfig.json      # Pyright typing configuration
+└── ruff.toml               # Ruff Python linter configuration
 ```
 
-## Verification & Sandboxing Specifications
-1. **Pyright configuration (`pyrightconfig.json`):**
-   Points to the local workspace Python virtual environment for syntax inspection:
-   ```json
-   {
-     "venvPath": ".",
-     "venv": ".venv"
-   }
-   ```
-2. **Web files configuration (`biome.json`):**
-   Limits checks to local working paths, enforcing standard JavaScript/TypeScript and JSON formatting rules.
-3. **Python Linter (`ruff.toml`):**
-   Defines checking rules (E, F, W, I) and target Python version compatibility.
-4. **Master verification tool (`lint_all.sh`):**
-   Wraps all commands into a single executable diagnostic:
-   ```bash
-   bash lint_all.sh
-   ```
+---
 
-## Security and Governance Rules
-* The linter configuration must exclude virtual env directories (`.venv`, `node_modules`).
-* Execution of scripts via Deno must run with flags `--allow-net=none` to prevent unsolicited outbound calls.
-* The master specification file [SKILL.md](SKILL.md) governs the entire execution flow, testing methodologies (TDD, BDD, mutation), polyglot coding standards (9 languages), and validation pipelines of the agent.
+## 🏛️ Governance & Vigilum Codex Compliance
+
+1. **Strict Separation of Powers**: `tesla-master-code` generates code; `tesla-code-auditor` evaluates it. Neither component may invade the other's operational domain.
+2. **Zero-Bypass Manifest**: All modified files must be explicitly declared in `output_manifest.json` with accurate cryptographic SHA-256 hashes.
+3. **Iterative Refinement**: Upon receiving a `DELAY` verdict with `learning_deltas`, `tesla-master-code` applies surgical modifications targeting only the reported error locations without regressions.
+
+---
+
+## 📋 MVP 16 Metadata
+
+| Parameter | Value |
+|---|---|
+| **MVP ID** | MVP 16 |
+| **Component** | Tesla Master Code |
+| **Role** | Exclusive Acteur / Writer (Loop Engineering) |
+| **Author** | `@lordmahonheim-bot` |
+| **Status** | ✅ `MVP COMPLETE` |
+| **Ecosystem** | Tesla Antigravity CLI |
+| **Dependencies** | MVP 28 (`28-Loop-Engineering`), MVP 44 (`44-Tesla-Code-Auditor`) |
+
+---
+
+*Part of the [Tesla Antigravity CLI](https://github.com/lordmahonheim-bot/Tesla-Antigravity-CLI) ecosystem — Vigilum Codex doctrine.*

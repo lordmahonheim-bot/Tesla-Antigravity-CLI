@@ -1,0 +1,9 @@
+<svg role="img" aria-labelledby="title-canada-maroc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <title id="title-canada-maroc">Canada Maroc</title>
+  <rect width="800" height="450" fill="#0D1117"/>
+  <rect x="50" y="50" width="700" height="350" rx="20" fill="#1a1a2e" stroke="#006233" stroke-width="2"/>
+  <text x="400" y="180" text-anchor="middle" fill="#006233" font-size="42" font-family="system-ui" font-weight="bold">🇲🇦 vs 🇨🇦</text>
+  <text x="400" y="230" text-anchor="middle" fill="#E8E8E8" font-size="22" font-family="system-ui" font-weight="600">Huitième de finale</text>
+  <text x="400" y="270" text-anchor="middle" fill="#888" font-size="16" font-family="system-ui">NRG Stadium, Houston · 4 juillet 2026</text>
+  <text x="400" y="320" text-anchor="middle" fill="#C1272D" font-size="20" font-family="system-ui" font-weight="bold">À VENIR</text>
+</svg>

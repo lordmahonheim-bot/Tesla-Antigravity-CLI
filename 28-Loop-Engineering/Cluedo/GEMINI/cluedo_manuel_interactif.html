@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluedo - Manuel d'Instructions Interactif & Guide du Détective</title>
+    <style>
+        :root {
+            --bg-primary: #120c12;
+            --bg-secondary: #1a121d;
+            --bg-card: #251a2b;
+            --accent-gold: #d4af37;
+            --accent-red: #8b0000;
+            --accent-ruby: #e63946;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #3d2b45;
+            --font-serif: 'Georgia', 'Times New Roman', serif;
+            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 50% 0%, #2c1636 0%, #120c12 70%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #2a080c 0%, #120c12 100%);
+            border-bottom: 3px solid var(--accent-gold);
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        header p.subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-ruby);
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 2rem 0;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: rgba(18, 12, 18, 0.95);
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: #34233d;
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-gold);
+            color: #120c12;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Tab Content Section */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards & Section Styling */
+        .card-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: #e2e8f0;
+            font-size: 1.3rem;
+            margin: 15px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Story Section */
+        .invitation-card {
+            background: #2a1f1d;
+            border: 2px dashed var(--accent-gold);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            font-family: var(--font-serif);
+            color: #f3e5ab;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .invitation-card h3 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Suspects Grid */
+        .suspects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .suspect-card {
+            background: var(--bg-secondary);
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suspect-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+
+        .suspect-card.rose { border-left-color: #e63946; }
+        .suspect-card.moutarde { border-left-color: #e9c46a; }
+        .suspect-card.olive { border-left-color: #2a9d8f; }
+        .suspect-card.pervenche { border-left-color: #457b9d; }
+        .suspect-card.violet { border-left-color: #9d4edd; }
+        .suspect-card.leblanc { border-left-color: #f8f9fa; }
+
+        .suspect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .suspect-name {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .suspect-role {
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: var(--accent-gold);
+        }
+
+        .suspect-secret {
+            background: rgba(139, 0, 0, 0.2);
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .suspect-card.active .suspect-secret {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .toggle-btn {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* Weapons & Rooms Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .item-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            border-color: var(--accent-gold);
+            background: #231828;
+            transform: scale(1.03);
+        }
+
+        .item-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        /* Interactive Setup Step Checklist */
+        .step-list {
+            list-style: none;
+        }
+
+        .step-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .step-number {
+            background: var(--accent-gold);
+            color: #120c12;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-color: #2a9d8f;
+        }
+
+        .step-item.completed .step-number {
+            background: #2a9d8f;
+            color: white;
+        }
+
+        /* Dice Simulator Section */
+        .simulator-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .die {
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+
+        .die.magnifier {
+            color: var(--accent-red);
+            border: 3px solid var(--accent-red);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #b38f2a 100%);
+            color: #120c12;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(212, 175, 55, 0.5);
+        }
+
+        .dice-result-msg {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            min-height: 30px;
+        }
+
+        /* Detective Sheet Table */
+        .detective-table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table.detective-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1522;
+            border: 1px solid var(--border-color);
+        }
+
+        table.detective-table th, table.detective-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        table.detective-table th {
+            background: #2a1b30;
+            color: var(--accent-gold);
+            font-family: var(--font-serif);
+        }
+
+        table.detective-table th.section-header {
+            background: var(--accent-red);
+            color: white;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        table.detective-table td.item-name {
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .cell-check {
+            cursor: pointer;
+            user-select: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 45px;
+            height: 35px;
+            transition: background 0.2s;
+        }
+
+        .cell-check:hover {
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .cell-check.state-x {
+            color: var(--accent-ruby);
+        }
+
+        .cell-check.state-v {
+            color: #2a9d8f;
+        }
+
+        /* Badge/Pill Tags */
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .tag-red { background: rgba(230, 57, 70, 0.2); color: #e63946; border: 1px solid #e63946; }
+        .tag-gold { background: rgba(212, 175, 55, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .nav-tabs { flex-direction: column; }
+            .tab-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>CLUEDO</h1>
+            <p class="subtitle">L'un d'eux est coupable ; personne n'est innocent. Le jeu des grands détectives.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('histoire')">📜 Histoire</button>
+            <button class="tab-btn" onclick="switchTab('suspects')">👥 Suspects</button>
+            <button class="tab-btn" onclick="switchTab('armes-lieux')">🗡️ Armes & Lieux</button>
+            <button class="tab-btn" onclick="switchTab('mise-en-place')">⚙️ Mise en Place</button>
+            <button class="tab-btn" onclick="switchTab('regles')">🎲 Règles du Jeu</button>
+            <button class="tab-btn" onclick="switchTab('victoire')">🏆 Victoire & Variantes</button>
+            <button class="tab-btn" onclick="switchTab('carnet')">🔍 Carnet Détective</button>
+        </nav>
+
+        <!-- SECTION 1: HISTOIRE -->
+        <div id="tab-histoire" class="tab-content active">
+            <div class="card-box">
+                <h2>📜 La Nuit du Meurtre</h2>
+                <div class="invitation-card">
+                    <h3>✉️ Invitation Privée</h3>
+                    <p><em>"M. Mat Lenoir demande de lui faire l'honneur de votre compagnie pour un dîner privé dans son manoir historique Tudor.<br>
+                    Hors d'œuvres servis au coucher du soleil, dîner servi à 20 h.<br>
+                    Votre présence est d'ores et déjà confirmée."</em></p>
+                </div>
+                <p>Six invités soigneusement sélectionnés arrivent au manoir Tudor, la demeure familiale de Mat Lenoir, dit le Macchabée, après avoir reçu une mystérieuse invitation.</p>
+                <p>Pendant le dîner, Lenoir annonce son projet de construction d'un hôtel de luxe extravagant et démesuré, à l'endroit même d'un parc populaire de la ville. Tout le monde s'y oppose, mais Lenoir révèle ensuite qu'il a des informations pour tous les faire chanter et les forcer à l'aider. S'ils refusent, leurs secrets seront révélés.</p>
+                <p>Peu de temps après, il s'excuse et les invités se dispersent pour digérer la nouvelle. Un cri retentit. Les invités découvrent Lenoir, assassiné.</p>
+                <p style="font-weight: bold; color: var(--accent-gold); font-size: 1.1rem; text-align: center; margin-top: 15px;">
+                    C'est maintenant à vous d'élucider le mystère !
+                </p>
+            </div>
+
+            <div class="card-box">
+                <h2>📦 Contenu de la Boîte</h2>
+                <ul style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; list-style-type: '🔍 ';">
+                    <li>1 Plateau de jeu (Manoir Tudor)</li>
+                    <li>6 Pions Personnage</li>
+                    <li>6 Pions Arme</li>
+                    <li>50 Cartes au total :</li>
+                    <ul style="margin-left: 20px; list-style-type: '▪ ';">
+                        <li>6 Cartes Personnage</li>
+                        <li>6 Cartes Arme</li>
+                        <li>9 Cartes Pièce</li>
+                        <li>29 Cartes Indice</li>
+                    </ul>
+                    <li>1 Étui confidentiel</li>
+                    <li>1 Carnet de détective</li>
+                    <li>2 Dés (dont 1 dé avec icône Loupe)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 2: SUSPECTS -->
+        <div id="tab-suspects" class="tab-content">
+            <div class="card-box">
+                <h2>👥 Qui a tué Mat Lenoir ?</h2>
+                <p>Cliquez sur chaque suspect pour révéler son secret et son mobile de chantage par Mat Lenoir :</p>
+                
+                <div class="suspects-grid">
+                    <!-- Rose -->
+                    <div class="suspect-card rose" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">Mlle Rose</span>
+                            <span class="tag tag-red">Média</span>
+                        </div>
+                        <p class="suspect-role">Journaliste d'investigation</p>
+                        <p>Bourgeoise à première vue, elle écrit en réalité sous le pseudonyme de « Cyan » et a fait mettre des mafieux en prison.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Lenoir est le seul à connaître sa véritable identité. Il exige une critique élogieuse sur son nouvel hôtel pour préserver son anonymat.
+                        </div>
+                    </div>
+
+                    <!-- Moutarde -->
+                    <div class="suspect-card moutarde" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">Colonel Moutarde</span>
+                            <span class="tag tag-gold">Militaire</span>
+                        </div>
+                        <p class="suspect-role">Héros de guerre décoré</p>
+                        <p>Homme d'action respecté par l'armée, aux récits d'évasions et de batailles héroïques.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Moutarde n'a en réalité jamais combattu pendant la bataille pour laquelle il a reçu sa plus prestigieuse médaille. Lenoir menace d'exposer cette imposture.
+                        </div>
+                    </div>
+
+                    <!-- Olive -->
+                    <div class="suspect-card olive" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">M. le Maire Olive</span>
+                            <span class="tag tag-gold">Politique</span>
+                        </div>
+                        <p class="suspect-role">Maire du Comté Coloris</p>
+                        <p>Sympathique et populaire, en pleine préparation de sa ré-élection avec un dossier irréprochable.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Sa campagne a été financée secrètement par un don d'une importante famille de criminels. Lenoir exige la modification du zonage du parc contre son silence.
+                        </div>
+                    </div>
+
+                    <!-- Pervenche -->
+                    <div class="suspect-card pervenche" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">Maître Pervenche</span>
+                            <span class="tag tag-gold">Justice</span>
+                        </div>
+                        <p class="suspect-role">Avocate tenace</p>
+                        <p>Reconnue pour son statut et sa capacité à gagner n'importe quel procès dans un tribunal.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Elle a eu recours à de faux témoins pour remporter des procès. Lenoir la force à le représenter dans les négociations pour l'hôtel sous peine de tout révéler.
+                        </div>
+                    </div>
+
+                    <!-- Violet -->
+                    <div class="suspect-card violet" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">Professeur Violet</span>
+                            <span class="tag tag-gold">Érudit</span>
+                        </div>
+                        <p class="suspect-role">Professeur d'antiquités</p>
+                        <p>Perspicace et attentif aux détails, expert en détection... et fabrication de contrefaçons.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Le doctorat de Violet trônant dans son bureau est un faux. Lenoir veut qu'il fabrique un faux acte de propriété sur le parc.
+                        </div>
+                    </div>
+
+                    <!-- Leblanc -->
+                    <div class="suspect-card leblanc" onclick="toggleSecret(this)">
+                        <div class="suspect-header">
+                            <span class="suspect-name">Cheffe Leblanc</span>
+                            <span class="tag tag-gold">Gastronomie</span>
+                        </div>
+                        <p class="suspect-role">Cheffe cuisinière</p>
+                        <p>Ambitieuse et talentueuse, elle rêve de quitter les cuisines de Lenoir pour ouvrir son propre restaurant.</p>
+                        <span class="toggle-btn">🔎 Clique pour révéler le mobile</span>
+                        <div class="suspect-secret">
+                            <strong>Chantage de Lenoir :</strong> Elle a soutiré de l'argent à Lenoir pour financer son projet. Lenoir la contraint à gérer ingratement le restaurant de son hôtel.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: ARMES ET LIEUX -->
+        <div id="tab-armes-lieux" class="tab-content">
+            <div class="card-box">
+                <h2>🗡️ Avec quelle Arme ? (6 Armes)</h2>
+                <div class="items-grid">
+                    <div class="item-card"><div class="item-icon">🕯️</div><strong>Chandelier</strong></div>
+                    <div class="item-card"><div class="item-icon">🔧</div><strong>Clé anglaise</strong></div>
+                    <div class="item-card"><div class="item-icon">🪢</div><strong>Corde</strong></div>
+                    <div class="item-card"><div class="item-icon">🦯</div><strong>Barre de fer</strong></div>
+                    <div class="item-card"><div class="item-icon">🔫</div><strong>Révolver</strong></div>
+                    <div class="item-card"><div class="item-icon">🗡️</div><strong>Poignard</strong></div>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h2>🏰 Et OÙ ? (9 Pièces du Manoir)</h2>
+                <div class="items-grid">
+                    <div class="item-card"><div class="item-icon">🛋️</div><strong>Salon</strong></div>
+                    <div class="item-card"><div class="item-icon">🍳</div><strong>Cuisine</strong></div>
+                    <div class="item-card"><div class="item-icon">🎱</div><strong>Salle de billard</strong></div>
+                    <div class="item-card"><div class="item-icon">🌿</div><strong>Jardin d'hiver</strong></div>
+                    <div class="item-card"><div class="item-icon">🍽️</div><strong>Salle à manger</strong></div>
+                    <div class="item-card"><div class="item-icon">📚</div><strong>Bibliothèque</strong></div>
+                    <div class="item-card"><div class="item-icon">💼</div><strong>Bureau</strong></div>
+                    <div class="item-card"><div class="item-icon">🚪</div><strong>Entrée</strong></div>
+                    <div class="item-card"><div class="item-icon">💃</div><strong>Salle de réception</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: MISE EN PLACE -->
+        <div id="tab-mise-en-place" class="tab-content">
+            <div class="card-box">
+                <h2>⚙️ Étapes de Mise en Place (Cochez pour suivre)</h2>
+                <ul class="step-list">
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">1</div>
+                        <div>Placez les <strong>6 pions Personnage</strong> sur leurs cases de couleur correspondantes sur le plateau (même s'il y a moins de 6 joueurs). Choisissez votre personnage.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">2</div>
+                        <div>Placez aléatoirement <strong>chaque arme</strong> dans une pièce différente.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">3</div>
+                        <div>Séparez les <strong>29 cartes Indice</strong>. Mélangez-les et placez la pile face cachée à côté du plateau.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">4</div>
+                        <div>Séparez les autres cartes en 3 piles : <em>Personnages</em>, <em>Armes</em>, <em>Pièces</em>. Mélangez chaque pile face cachée.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">5</div>
+                        <div><strong>Création de la preuve :</strong> Prenez la carte du dessus de chaque pile et glissez-la discrètement dans l'<strong>Étui Confidentiel</strong> sans que personne ne les voie. Placez l'étui au centre du plateau.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">6</div>
+                        <div>Mélangez toutes les cartes Personnage, Arme et Pièce restantes ensemble, puis distribuez-les intégralement entre les joueurs (égalité parfaite non requise).</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">7</div>
+                        <div>Distribuez une feuille du carnet de détective et un crayon à chaque joueur.</div>
+                    </li>
+                    <li class="step-item" onclick="toggleStep(this)">
+                        <div class="step-number">8</div>
+                        <div>Regardez vos cartes en secret et cochez les éléments correspondants sur votre feuille de détective. (Ils ne sont pas dans l'étui !).</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 5: REGLES DU JEU -->
+        <div id="tab-regles" class="tab-content">
+            <div class="card-box">
+                <h2>🎲 Tour de Jeu & Déplacement</h2>
+                <p>Chaque joueur lance les dés. Le plus haut score commence. À votre tour, lancez les dés et effectuez vos actions :</p>
+
+                <h3>1. Déplacement du Pion</h3>
+                <ul>
+                    <li>Déplacez votre pion d'au maximum le nombre de cases indiqué par les dés.</li>
+                    <li>Interdictions : Diagonales, repasser deux fois sur la même case, traverser/s'arrêter sur une case occupée.</li>
+                    <li><strong>Entrer dans une pièce :</strong> Pas besoin du nombre exact de cases ! Vous devez juste franchir une porte non bloquée.</li>
+                    <li><strong>Déjà dans une pièce :</strong> Vous n'êtes pas contraint de vous déplacer pour émettre une hypothèse. Si la pièce possède un passage secret, vous pouvez l'emprunter directement.</li>
+                </ul>
+
+                <h3>🔍 Icône Loupe sur le Dé</h3>
+                <p>Si vous obtenez l'icône Loupe sur l'un des dés :</p>
+                <div style="background: rgba(230, 57, 70, 0.15); border-left: 4px solid var(--accent-red); padding: 12px; margin: 10px 0; border-radius: 4px;">
+                    Piochez la première <strong>Carte Indice</strong>, lisez-la à haute voix, appliquez immédiatement son effet, puis remettez-la sous la pile. (Si vous obtenez deux loupes, piochez UNE seule carte).
+                </div>
+
+                <h3>2. Émettre une Hypothèse</h3>
+                <p>Lorsque vous êtes dans une pièce, formulez une hypothèse :</p>
+                <p style="font-style: italic; color: var(--accent-gold); text-align: center; font-size: 1.1rem; margin: 10px 0;">
+                    « Est-ce [Personnage], avec [Arme], dans [la Pièce où vous vous trouvez] ? »
+                </p>
+                <ul>
+                    <li>Déplacez immédiatement le pion du personnage suspecté et l'arme dans votre pièce.</li>
+                    <li>Le joueur à votre gauche vérifie ses cartes : s'il possède l'une des cartes nommées, il vous la montre <strong>secrètement</strong>. S'il en a plusieurs, il choisit laquelle vous montrer.</li>
+                    <li>S'il n'en a aucune, le joueur suivant fait de même, jusqu'à ce qu'une carte vous soit montrée.</li>
+                    <li>Cochez la carte montrée sur votre feuille : elle est innocentée !</li>
+                </ul>
+            </div>
+
+            <!-- Interactive Dice Roll Simulator -->
+            <div class="simulator-box">
+                <h3>🎲 Simulateur de Lancer de Dés Cluedo</h3>
+                <p>Testez le comportement des dés avec l'icône Loupe :</p>
+                <div class="dice-container">
+                    <div id="die1" class="die">1</div>
+                    <div id="die2" class="die magnifier">🔍</div>
+                </div>
+                <button class="btn-action" onclick="rollDice()">Lancer les Dés !</button>
+                <div id="dice-result" class="dice-result-msg">Cliquez sur le bouton pour lancer !</div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: VICTOIRE & VARIANTES -->
+        <div id="tab-victoire" class="tab-content">
+            <div class="card-box">
+                <h2>🏆 Comment Gagner (Porter une Accusation)</h2>
+                <p>Dès que vous pensez avoir résolu le mystère, vous pouvez porter une <strong>Accusation</strong> pendant votre tour (après ou sans hypothèse). Vous devez être dans une pièce.</p>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Déclarez à voix haute : <strong>« J'accuse [Personnage], avec [Arme], dans [Pièce]. »</strong></li>
+                    <li>Regardez discrètement les 3 cartes à l'intérieur de l'<strong>Étui Confidentiel</strong>.</li>
+                </ol>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div style="background: rgba(42, 157, 143, 0.2); border: 2px solid #2a9d8f; padding: 15px; border-radius: 8px;">
+                        <h3 style="color: #2a9d8f; margin-top:0;">✅ Accusation Correcte</h3>
+                        <p>Les 3 cartes correspondent exactement ! <strong>Félicitations, vous gagnez immédiatement la partie !</strong></p>
+                    </div>
+                    <div style="background: rgba(230, 57, 70, 0.2); border: 2px solid #e63946; padding: 15px; border-radius: 8px;">
+                        <h3 style="color: #e63946; margin-top:0;">❌ Accusation Erronée</h3>
+                        <p>Vous vous êtes trompé ! Remettez les cartes dans l'étui. Vous êtes <strong>éliminé</strong> de la course (plus de déplacement ni d'hypothèse), mais vous devez continuer à montrer vos cartes pour répondre aux hypothèses des autres joueurs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h2>👥 Mode 2 Joueurs ou Par Équipe</h2>
+                <p>Cette variante suit les règles classiques avec deux ajustements :</p>
+                <ul>
+                    <li><strong>Mise en place :</strong> Après la distribution normale, placez 4 cartes aléatoires face cachée dans 4 pièces (ex. les pièces d'angle).</li>
+                    <li><strong>Jeu :</strong> En entrant dans une pièce contenant une carte neutre, consultez-la discrètement, cochez-la sur votre carnet, puis émettez votre hypothèse normalement.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 7: CARNET DE DETECTIVE INTERACTIF -->
+        <div id="tab-carnet" class="tab-content">
+            <div class="card-box">
+                <h2>🔍 Feuil de Détective Digitale Interactive</h2>
+                <p>Cliquez sur n'importe quelle case du tableau pour changer son état : <strong>Neutre ➔ ❌ (Éliminé) ➔ ✔️ (Possédé/Innocent) ➔ Neutre</strong>.</p>
+
+                <div class="detective-table-wrapper">
+                    <table class="detective-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%; text-align: left;">Éléments</th>
+                                <th>Moi</th>
+                                <th>J1</th>
+                                <th>J2</th>
+                                <th>J3</th>
+                                <th>J4</th>
+                                <th>J5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- SUSPECTS -->
+                            <tr><th colspan="7" class="section-header">QUI ? (Suspects)</th></tr>
+                            <tr><td class="item-name">Olive</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Moutarde</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Pervenche</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Violet</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Rose</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Leblanc</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+
+                            <!-- WEAPONS -->
+                            <tr><th colspan="7" class="section-header">AVEC QUOI ? (Armes)</th></tr>
+                            <tr><td class="item-name">Chandelier</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Poignard</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Barre de fer</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Révolver</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Corde</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Clé anglaise</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+
+                            <!-- ROOMS -->
+                            <tr><th colspan="7" class="section-header">OÙ ? (Pièces)</th></tr>
+                            <tr><td class="item-name">Salle de réception</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Salle de billard</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Jardin d'hiver</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Salle à manger</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Entrée</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Cuisine</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Bibliothèque</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Salon</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                            <tr><td class="item-name">Bureau</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td><td class="cell-check" onclick="cycleCell(this)">-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Manuel d'instruction interactif Cluedo Édition Tudor Manor &copy; Hasbro Gaming / Développé pour utilisation locale.</p>
+    </footer>
+
+    <script>
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tabs .tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Suspect Secret Toggle
+        function toggleSecret(card) {
+            card.classList.toggle('active');
+        }
+
+        // Interactive Checklist Step
+        function toggleStep(item) {
+            item.classList.toggle('completed');
+        }
+
+        // Dice Roll Simulator Function
+        function rollDice() {
+            const die1 = document.getElementById('die1');
+            const die2 = document.getElementById('die2');
+            const resultMsg = document.getElementById('dice-result');
+
+            // Animate rolling
+            die1.style.transform = "rotate(360deg)";
+            die2.style.transform = "rotate(-360deg)";
+
+            setTimeout(() => {
+                die1.style.transform = "rotate(0deg)";
+                die2.style.transform = "rotate(0deg)";
+
+                const val1 = Math.floor(Math.random() * 6) + 1;
+                const val2Raw = Math.floor(Math.random() * 6) + 1;
+
+                die1.textContent = val1;
+
+                if (val2Raw === 6) {
+                    die2.textContent = "🔍";
+                    die2.className = "die magnifier";
+                    resultMsg.innerHTML = `<strong>Résultat : ${val1} + 🔍 Loupe !</strong><br>Déplacez-vous de max ${val1 + 1} cases ET piocher 1 Carte Indice !`;
+                } else {
+                    die2.textContent = val2Raw;
+                    die2.className = "die";
+                    const total = val1 + val2Raw;
+                    resultMsg.innerHTML = `<strong>Résultat : ${val1} + ${val2Raw} = ${total} cases</strong> de déplacement au maximum.`;
+                }
+            }, 200);
+        }
+
+        // Detective Sheet Interactive Cycling
+        function cycleCell(cell) {
+            if (cell.textContent === '-' || cell.textContent === '') {
+                cell.textContent = '❌';
+                cell.className = 'cell-check state-x';
+            } else if (cell.textContent === '❌') {
+                cell.textContent = '✔️';
+                cell.className = 'cell-check state-v';
+            } else {
+                cell.textContent = '-';
+                cell.className = 'cell-check';
+            }
+        }
+    </script>
+</body>
+</html>

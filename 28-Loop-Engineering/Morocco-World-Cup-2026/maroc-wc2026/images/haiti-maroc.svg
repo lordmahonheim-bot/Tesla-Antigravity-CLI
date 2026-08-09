@@ -1,0 +1,11 @@
+<svg role="img" aria-labelledby="title-haiti-maroc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <title id="title-haiti-maroc">Haiti Maroc</title>
+  <rect width="800" height="450" fill="#0D1117"/>
+  <rect x="50" y="50" width="700" height="350" rx="20" fill="#1a1a2e" stroke="#C1272D" stroke-width="2"/>
+  <text x="400" y="150" text-anchor="middle" fill="#C1272D" font-size="36" font-family="system-ui" font-weight="bold">🇲🇦 4 — 2 🇭🇹</text>
+  <text x="400" y="195" text-anchor="middle" fill="#E8E8E8" font-size="20" font-family="system-ui" font-weight="600">Maroc vs Haïti</text>
+  <text x="400" y="230" text-anchor="middle" fill="#888" font-size="16" font-family="system-ui">Mercedes-Benz Stadium · 24 juin 2026</text>
+  <text x="400" y="270" text-anchor="middle" fill="#006233" font-size="14" font-family="system-ui">⚽ Hakimi 39' · Saibari 45+1' · Rahimi 78' · Gessime 89'</text>
+  <text x="400" y="305" text-anchor="middle" fill="#888" font-size="13" font-family="system-ui">Haïti : Bounou csc 10' · Isidor 43'</text>
+  <text x="400" y="340" text-anchor="middle" fill="#C1272D" font-size="13" font-family="system-ui">★ Homme du match : Achraf Hakimi</text>
+</svg>

@@ -1,0 +1,15 @@
+id: N2
+agent: tesla-arcanis-360
+input: ["/home/lord-mahonheim/Documents/SyncThing/QWEN - Data/SIA.txt", N1_online_research.md]
+output: [N2_deep_research_archi.md]
+preconditions: [N1_completed]
+postconditions: [architecture_defined]
+risks: [over_engineering]
+time_estimate_min: 30
+cost_estimate_tokens: 150k
+model_recommended: claude-3-7-sonnet
+capability_min: {Reasoning: 95, Architecture: 90}
+checkpoint_contract: |
+  [CHECKPOINT CONTRACT]
+  Conception de l'architecture SIA sans implémentation prématurée. Analyse profonde du fichier source.
+  Directive Broker d'Artefacts V2.1 : Sauvegarder l'analyse et l'architecture dans le dossier d'artefacts certifié.

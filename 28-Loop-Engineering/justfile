@@ -1,0 +1,11 @@
+# justfile for Avalon Operations
+start-ops:
+    systemctl --user daemon-reload
+    systemctl --user enable --now avalon-daemon.service
+    systemctl --user enable --now avalon-watcher.path
+    systemctl --user enable --now avalon-maintenance.timer
+
+stop-ops:
+    systemctl --user disable --now avalon-daemon.service
+    systemctl --user disable --now avalon-watcher.path
+    systemctl --user disable --now avalon-maintenance.timer

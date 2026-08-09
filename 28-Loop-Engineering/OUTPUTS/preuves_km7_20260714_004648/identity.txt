@@ -1,0 +1,11 @@
+printf: Needs 1 argument (see "printf --help")
+VS
+model=KM7
+device=KM7
+product=KM7
+serial=131T215004038H
+android=11
+sdk=30
+security_patch=2021-07-05
+fingerprint=MECOOL/KM7/KM7:11/RTT0.210608.002/20210825:user/release-keys
+abi=armeabi-v7a,armeabi

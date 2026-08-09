@@ -1,0 +1,28 @@
+# Tesla sandbox egress policy
+# Phase 3 placeholder only. No runtime enforcement yet.
+
+policy: egress-default-deny
+status: placeholder
+phase: 3
+
+default:
+  network: deny
+  dns: deny
+  lan: deny
+  cloud: deny
+  external_accounts: deny
+
+allowed_by_default: []
+
+requires_validation:
+  - package_registries
+  - github
+  - browser_targets
+  - ai_cli_endpoints
+  - cloud_endpoints
+  - external_accounts
+
+markers:
+  TESLA_SANDBOX_EGRESS_DEFAULT_DENY_DRAFTED: 1
+  TESLA_SANDBOX_PHASE_3_ACTIVE: 1
+  MAIN_RENDUE_A_MAHONHEIM: 1

@@ -1,0 +1,11 @@
+id: N1
+agent: tesla-arcanis-360
+input: [/home/lord-mahonheim/Documents/SyncThing/QWEN - Data/Understand Anything .txt]
+output: [analysis_report.md, target_architecture.md]
+preconditions: [file_accessible]
+postconditions: [analysis_complete, architecture_defined]
+risks: [misunderstanding_scope, overly_complex_architecture]
+time_estimate_min: 30
+cost_estimate_tokens: M
+model_recommended: claude-sonnet
+capability_min: {Reasoning: 90, Architecture: 85}

@@ -1,0 +1,31 @@
+mission:
+  id: "MVP28-LOOP-ENGINEERING"
+  description: "Finalisation de l'intégration Loop Engineering × Tesla-Code-Auditor (MVP 28)"
+  nodes:
+    - id: "tesla-arcanis-360"
+      role: "Architecte Système / Orchestration globale"
+      tasks: ["Superviser la synchronisation des composants", "Valider la conformité architecturale au Vigilum Codex"]
+    - id: "tesla-curator-prime"
+      role: "Gardien de la Mémoire Canonique"
+      tasks: ["Vérifier l'alignement de /memory/", "Assurer la persistance Alexandria SQLite v2.0", "Mettre à jour l'inventaire taxonomique"]
+    - id: "tesla-web-raider"
+      role: "Veille et synchronisation externe"
+      tasks: ["Vérifier l'état du dépôt distant", "Superviser la publication sur MVP-GITHUB"]
+    - id: "tesla-master-code"
+      role: "Implémentation technique et câblage"
+      tasks: ["Câbler Orchestrator -> Master-Code", "Câbler Orchestrator -> Code-Auditor", "Implémenter transitions PASS/DELAY/BLOCK"]
+    - id: "tesla-premortem"
+      role: "Évaluateur de risques / Red Teaming"
+      tasks: ["Exécuter l'audit Premortem final (Avocat du diable, Inspecteur, Vigie)"]
+    - id: "tesla-writing-skills"
+      role: "Documentation et Rédaction"
+      tasks: ["Rédiger le README.md d'autorité", "Produire les rapports de clôture et de blocage"]
+  edges:
+    - from: "tesla-arcanis-360"
+      to: ["tesla-curator-prime", "tesla-master-code"]
+    - from: "tesla-master-code"
+      to: ["tesla-premortem", "tesla-writing-skills"]
+    - from: "tesla-premortem"
+      to: "tesla-arcanis-360"
+    - from: "tesla-writing-skills"
+      to: "tesla-web-raider"

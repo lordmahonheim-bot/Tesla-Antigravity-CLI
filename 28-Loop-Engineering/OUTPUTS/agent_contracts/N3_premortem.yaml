@@ -1,0 +1,11 @@
+id: N3
+agent: premortem
+input: [target_architecture.md, integration_docs.md]
+output: [premortem_report.md, economy_risks.md]
+preconditions: [N2_complete]
+postconditions: [risks_identified, budget_validated]
+risks: [hidden_dependencies, runaway_costs]
+time_estimate_min: 20
+cost_estimate_tokens: M
+model_recommended: gpt-4o
+capability_min: {Reasoning: 95, RiskAnalysis: 90}

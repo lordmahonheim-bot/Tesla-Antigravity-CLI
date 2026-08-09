@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lions de l'Atlas — Parcours Mondial 2026</title>
+  <meta name="description" content="Revivez le parcours du Maroc à la Coupe du Monde FIFA 2026 : timeline interactive, statistiques dynamiques, effectif complet et résultats officiels.">
+  <meta name="theme-color" content="#C1272D">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Préconnexion pour les polices Google -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- ═══ Navigation ═══ -->
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="nav__inner">
+      <div class="nav__logo">
+        🇲🇦 <span class="nav__logo-accent">Lions</span> de l'Atlas
+      </div>
+      <button class="nav__burger" id="nav-burger" type="button"
+              aria-label="Ouvrir le menu" aria-expanded="false"
+              aria-controls="nav-links">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a class="nav__link" href="#parcours">Parcours</a></li>
+        <li><a class="nav__link" href="#groupe-c">Groupe C</a></li>
+        <li><a class="nav__link" href="#effectif-section">Effectif</a></li>
+        <li><a class="nav__link" href="#stats-section">Stats</a></li>
+        <li><a class="nav__link" href="#heritage-section">Héritage</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <header class="hero" id="hero">
+    <div class="hero__badge">🏆 Coupe du Monde FIFA 2026</div>
+    <h1 class="hero__title">Les Lions de l'Atlas</h1>
+    <p class="hero__subtitle">Parcours du Maroc à la Coupe du Monde FIFA 2026 — USA, Canada, Mexique.</p>
+
+    <!-- Statistiques calculées dynamiquement depuis APP_DATA -->
+    <div class="hero__stats" id="hero-stats">
+      <!-- Rendu par app.js -->
+    </div>
+
+    <!-- Compte à rebours -->
+    <div class="countdown" id="countdown">
+      <!-- Rendu par app.js -->
+    </div>
+  </header>
+
+  <!-- ═══ Timeline ═══ -->
+  <section class="section" id="parcours" aria-labelledby="parcours-titre">
+    <div class="section__header fade-in">
+      <p class="section__overtitle">Chronologie</p>
+      <h2 class="section__title" id="parcours-titre">Le <span class="section__title--accent">Parcours</span></h2>
+    </div>
+    <div class="timeline" id="timeline" role="feed" aria-label="Timeline du parcours">
+      <!-- Rendu par app.js -->
+    </div>
+  </section>
+
+  <!-- ═══ Groupe C ═══ -->
+  <section class="section" id="groupe-c" aria-labelledby="groupe-titre">
+    <div class="section__header fade-in">
+      <p class="section__overtitle">Phase de Groupes</p>
+      <h2 class="section__title" id="groupe-titre">Groupe <span class="section__title--accent">C</span></h2>
+    </div>
+    <div id="groupe" class="fade-in">
+      <!-- Rendu par app.js -->
+    </div>
+  </section>
+
+  <!-- ═══ Effectif ═══ -->
+  <section class="section" id="effectif-section" aria-labelledby="effectif-titre">
+    <div class="section__header fade-in">
+      <p class="section__overtitle">L'Équipe</p>
+      <h2 class="section__title" id="effectif-titre">L'<span class="section__title--accent">Effectif</span></h2>
+    </div>
+    <div class="effectif__grid" id="effectif">
+      <!-- Rendu par app.js -->
+    </div>
+  </section>
+
+  <!-- ═══ Statistiques ═══ -->
+  <section class="section" id="stats-section" aria-labelledby="stats-titre">
+    <div class="section__header fade-in">
+      <p class="section__overtitle">Les Chiffres</p>
+      <h2 class="section__title" id="stats-titre">Statistiques <span class="section__title--accent">Clés</span></h2>
+    </div>
+    <div class="stats__grid" id="stats">
+      <!-- Rendu par app.js -->
+    </div>
+  </section>
+
+  <!-- ═══ Héritage 2022 ═══ -->
+  <section class="section" id="heritage-section" aria-labelledby="heritage-titre">
+    <div class="heritage fade-in" id="heritage">
+      <!-- Rendu par app.js -->
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer" id="footer-content">
+    <!-- Rendu par app.js -->
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
