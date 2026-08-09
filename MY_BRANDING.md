@@ -1,6 +1,9 @@
 # MY_BRANDING.md
+
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 *Author:* Abdellah MOUHTAJ (Lord Mahonheim)  
-*Status:* Verified Reference (statut/valide)  
+*Status:* Verified Reference (status/valid)  
 
 > [!NOTE]
 > For a full personal biography, identity guidelines, and operational preferences, see [ABOUT_ME.md](ABOUT_ME.md).

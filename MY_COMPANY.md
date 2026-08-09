@@ -1,437 +1,439 @@
 # MY_COMPANY.md
 
-## Vigilum Codex — Fiche institutionnelle opérationnelle
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-**Statut :** fichier de référence à ajouter dans Tesla (Antigravity)  
-**Rôle du fichier :** centraliser les informations validées sur Vigilum Codex  
-**Nom recommandé :** `MY_COMPANY.md` ou `my_company.md`
+## Vigilum Codex — Operational Institutional Factsheet
 
----
-
-## 1. Identité générale
-
-### Faits vérifiés
-
-- **Nom de l'organisation :** Vigilum Codex
-- **Nature :** institution-matrice, sanctuaire intellectuel, bibliothèque vivante, repère stratégique et structure-mère de projets
-- **Fondateur :** Abdellah MOUHTAJ, alias LORD Mahonheim / Mahonheim
-- **Formule courte :** Performance humaine. Intelligence stratégique. Opérations IA gouvernées.
-
-### Définition synthétique
-
-**Vigilum Codex est une institution-matrice dédiée à la performance humaine, à l'intelligence stratégique et aux opérations IA gouvernées.**
-
-Vigilum Codex n'est pas seulement une marque, un cabinet ou un projet technologique. C'est une structure-mère destinée à organiser une vision, des méthodes, des systèmes, des contenus, des offres et des projets autour d'une doctrine cohérente.
+**Status:** Reference file to be added in Tesla (Antigravity)
+**File Role:** Centralize validated information about Vigilum Codex
+**Recommended Name:** `MY_COMPANY.md` or `my_company.md`
 
 ---
 
-## 2. Positionnement du fondateur
+## 1. General Identity
 
-### Positionnement retenu
+### Verified Facts
 
-**Consultant en performance humaine & opérations IA gouvernées**
+- **Organization Name:** Vigilum Codex
+- **Nature:** Matrix-institution, intellectual sanctuary, living library, strategic landmark, and project mother-structure
+- **Founder:** Abdellah MOUHTAJ, alias LORD Mahonheim / Mahonheim
+- **Short Formula:** Human performance. Strategic intelligence. Governed AI operations.
 
-### Positionnement opérationnel complémentaire
+### Synthetic Definition
+
+**Vigilum Codex is a matrix-institution dedicated to human performance, strategic intelligence, and governed AI operations.**
+
+Vigilum Codex is not just a brand, a firm, or a technological project. It is a mother-structure intended to organize a vision, methods, systems, contents, offers, and projects around a coherent doctrine.
+
+---
+
+## 2. Founder's Positioning
+
+### Retained Positioning
+
+**Human Performance & Governed AI Operations Consultant**
+
+### Complementary Operational Positioning
 
 **Ops Consultant — AI Agents, CLI Workflows & Local Governance**
 
-### À affirmer
+### To Affirm
 
-Le fondateur de Vigilum Codex conçoit, structure, documente et gouverne des systèmes opérationnels combinant excellence humaine, intelligence stratégique et outils IA maîtrisés.
+The founder of Vigilum Codex designs, structures, documents, and governs operational systems combining human excellence, strategic intelligence, and mastered AI tools.
 
-### À éviter
+### To Avoid
 
-Ne pas présenter le fondateur comme :
+Do not present the founder as a:
 
-- développeur logiciel classique ;
-- codeur pur ;
-- expert IA uniquement technique ;
-- formateur soft skills générique ;
-- consultant IA sans ancrage humain.
-
----
-
-## 3. Architecture fondamentale
-
-Vigilum Codex repose sur trois branches principales :
-
-1. **Performance Humaine**
-2. **Intelligence Stratégique**
-3. **Opérations IA Gouvernées**
-
-Principe directeur :
-
-> Humain au centre. IA comme infrastructure. Gouvernance comme garde-fou.
+- classic software developer;
+- pure coder;
+- purely technical AI expert;
+- generic soft skills trainer;
+- AI consultant without human anchoring.
 
 ---
 
-## 4. Branche 1 — Performance Humaine
+## 3. Fundamental Architecture
 
-La performance humaine reste un domaine autonome.
+Vigilum Codex rests on three main branches:
 
-Elle regroupe :
+1. **Human Performance**
+2. **Strategic Intelligence**
+3. **Governed AI Operations**
 
-- excellence de service ;
-- standardisation premium ;
-- soft skills ;
-- techniques de communication ;
-- posture professionnelle ;
-- intelligence relationnelle ;
-- qualité d'accueil ;
-- expérience client ;
-- discipline opérationnelle ;
-- transmission des standards.
+Guiding principle:
 
-Directive : l'IA ne remplace pas la présence, le discernement, la relation, l'écoute, la posture ou l'excellence de service.
+> Human at the center. AI as infrastructure. Governance as a safeguard.
 
 ---
 
-## 5. Branche 2 — Intelligence Stratégique
+## 4. Branch 1 — Human Performance
 
-L'intelligence stratégique transforme l'information brute en intelligence exploitable.
+Human performance remains an autonomous domain.
 
-Elle regroupe :
+It groups:
 
-- veille ;
-- analyse ;
-- mémoire ;
-- structuration du savoir ;
-- synthèse ;
-- prise de décision ;
-- hiérarchisation ;
-- détection des tendances ;
-- transformation de l'information en action.
+- service excellence;
+- premium standardization;
+- soft skills;
+- communication techniques;
+- professional posture;
+- relational intelligence;
+- welcoming quality;
+- customer experience;
+- operational discipline;
+- transmission of standards.
 
-Objectif : passer de la consommation d'information à la maîtrise de l'information.
+Directive: AI does not replace presence, discernment, relationship, listening, posture, or service excellence.
 
 ---
 
-## 6. Branche 3 — Opérations IA Gouvernées
+## 5. Branch 2 — Strategic Intelligence
 
-Les opérations IA gouvernées placent l'IA au service des systèmes, sans la placer au centre de l'identité humaine.
+Strategic intelligence transforms raw information into actionable intelligence.
 
-Elles regroupent :
+It groups:
 
-- agents IA ;
-- CLI workflows ;
-- automatisations ;
-- gouvernance locale ;
-- documentation ;
-- traçabilité ;
-- systèmes locaux ;
-- auditabilité ;
-- orchestration no-code / low-code ;
-- maîtrise des dépendances techniques.
+- monitoring/watch;
+- analysis;
+- memory;
+- knowledge structuring;
+- synthesis;
+- decision making;
+- prioritization;
+- trend detection;
+- transforming information into action.
 
-Objectif : utiliser les agents IA comme infrastructure maîtrisable, documentée et gouvernée.
+Objective: Move from information consumption to information mastery.
+
+---
+
+## 6. Branch 3 — Governed AI Operations
+
+Governed AI operations place AI at the service of systems, without placing it at the center of human identity.
+
+They group:
+
+- AI agents;
+- CLI workflows;
+- automations;
+- local governance;
+- documentation;
+- traceability;
+- local systems;
+- auditability;
+- no-code / low-code orchestration;
+- mastery of technical dependencies.
+
+Objective: Use AI agents as masterable, documented, and governed infrastructure.
 
 ---
 
 ## 7. Mission
 
-Mission de Vigilum Codex :
+Vigilum Codex Mission:
 
-> Structurer l'humain, l'information et les systèmes afin de produire de la clarté, de la discipline, de l'intelligence exploitable et de l'action cohérente.
+> Structure the human, information, and systems to produce clarity, discipline, actionable intelligence, and coherent action.
 
-Vigilum Codex vise à :
+Vigilum Codex aims to:
 
-- élever la performance humaine ;
-- préserver l'excellence relationnelle et opérationnelle ;
-- standardiser les pratiques premium ;
-- transformer l'information en intelligence exploitable ;
-- organiser les connaissances en bibliothèque vivante ;
-- concevoir des workflows opérationnels ;
-- utiliser les agents IA comme outils gouvernés ;
-- favoriser l'exécution locale, traçable et maîtrisée ;
-- relier les projets existants dans une architecture commune.
+- elevate human performance;
+- preserve relational and operational excellence;
+- standardize premium practices;
+- transform information into actionable intelligence;
+- organize knowledge into a living library;
+- design operational workflows;
+- use AI agents as governed tools;
+- promote local, traceable, and controlled execution;
+- link existing projects within a common architecture.
 
 ---
 
 ## 8. Vision
 
-Vision de Vigilum Codex :
+Vigilum Codex Vision:
 
-> Devenir une institution-matrice capable de servir de sanctuaire, de bibliothèque, de laboratoire, de cabinet, de forge conceptuelle et de couche de gouvernance pour des projets intellectuels, humains, stratégiques et technologiques.
+> To become a matrix-institution capable of serving as a sanctuary, library, laboratory, consulting firm, conceptual forge, and governance layer for intellectual, human, strategic, and technological projects.
 
-Vigilum Codex doit être :
+Vigilum Codex must be:
 
-- un sanctuaire personnel ;
-- une bibliothèque vivante ;
-- un repère stratégique ;
-- une maison-mère de projets ;
-- un laboratoire d'outils et de méthodes ;
-- un espace de transmission ;
-- une structure d'excellence humaine et opérationnelle.
-
----
-
-## 9. Publics servis
-
-Vigilum Codex sert plusieurs cercles, dans un ordre progressif :
-
-1. **Le fondateur** — sanctuaire personnel, mémoire structurée, discipline, clarification, production, gouvernance de projets.
-2. **Créateurs, chercheurs, autodidactes exigeants** — méthodes de structuration du savoir, apprentissage, veille, bibliothèque, pensée stratégique.
-3. **Entrepreneurs, consultants et décideurs** — intelligence stratégique, workflows, décision, standardisation, efficacité opérationnelle.
-4. **Organisations, écoles, institutions et entreprises** — excellence de service, standardisation premium, soft skills, communication, procédures, gouvernance IA.
-5. **Communauté intellectuelle** — transmission, culture du savoir, réflexion, systèmes, symbolique, discipline et méthode.
+- a personal sanctuary;
+- a living library;
+- a strategic landmark;
+- a project motherhouse;
+- a laboratory for tools and methods;
+- a space for transmission;
+- a structure for human and operational excellence.
 
 ---
 
-## 10. Déploiement
+## 9. Served Audiences
 
-Déploiement retenu : **de l'intérieur vers l'extérieur**.
+Vigilum Codex serves several circles, in a progressive order:
 
-Ordre de développement :
+1. **The Founder** — personal sanctuary, structured memory, discipline, clarification, production, project governance.
+2. **Creators, Researchers, Demanding Autodidacts** — knowledge structuring methods, learning, monitoring, library, strategic thinking.
+3. **Entrepreneurs, Consultants, and Decision Makers** — strategic intelligence, workflows, decision making, standardization, operational efficiency.
+4. **Organizations, Schools, Institutions, and Companies** — service excellence, premium standardization, soft skills, communication, procedures, AI governance.
+5. **Intellectual Community** — transmission, knowledge culture, reflection, systems, symbolism, discipline, and method.
 
-1. Usage personnel
-2. Corpus interne
-3. Contenus publics
-4. Outils et MVP
+---
+
+## 10. Deployment
+
+Retained deployment: **from the inside out**.
+
+Development order:
+
+1. Personal use
+2. Internal corpus
+3. Public contents
+4. Tools and MVPs
 5. Services
-6. Communauté / école / institution
+6. Community / school / institution
 
-Le développement doit rester progressif, cohérent et gouverné.
+The development must remain progressive, coherent, and governed.
 
 ---
 
-## 11. Noyau opérationnel minimal
+## 11. Minimal Operational Core
 
-Vigilum Codex doit relier quatre fonctions essentielles :
+Vigilum Codex must link four essential functions:
 
-### 11.1 Bibliothèque vivante
+### 11.1 Living Library
 
-- lectures ;
-- notes ;
-- références ;
-- idées ;
-- concepts ;
-- archives ;
-- mémoire structurée.
+- readings;
+- notes;
+- references;
+- ideas;
+- concepts;
+- archives;
+- structured memory.
 
-### 11.2 Tableau de bord de pilotage
+### 11.2 Control Dashboard
 
-- projets ;
-- priorités ;
-- tâches ;
-- décisions ;
-- routines ;
-- objectifs ;
-- livrables.
+- projects;
+- priorities;
+- tasks;
+- decisions;
+- routines;
+- objectives;
+- deliverables.
 
-### 11.3 Atelier de production
+### 11.3 Production Workshop
 
-- textes ;
-- fiches ;
-- méthodes ;
-- formations ;
-- prototypes ;
-- systèmes ;
-- documents opérationnels.
+- texts;
+- factsheets;
+- methods;
+- training courses;
+- prototypes;
+- systems;
+- operational documents.
 
-### 11.4 Moteur de veille et d'intelligence
+### 11.4 Monitoring and Intelligence Engine
 
-- collecte d'information ;
-- filtrage ;
-- analyse ;
-- synthèse ;
-- signaux faibles ;
-- aide à la décision.
+- information gathering;
+- filtering;
+- analysis;
+- synthesis;
+- weak signals;
+- decision support.
 
-Principe : faire circuler l'information entre bibliothèque, pilotage, production et veille sans créer une structure inutilement lourde.
+Principle: circulate information between library, dashboard, production, and monitoring without creating an unnecessarily heavy structure.
 
 ---
 
 ## 12. Doctrine
 
-La doctrine de Vigilum Codex repose sur huit règles :
+The Vigilum Codex doctrine rests on eight rules:
 
-1. **Clarté avant complexité** — toute structure doit simplifier la pensée.
-2. **Production avant accumulation** — le savoir doit produire des décisions, méthodes, textes, outils ou livrables.
-3. **Cohérence avant expansion** — aucun projet ne doit entrer s'il ne renforce pas l'architecture globale.
-4. **Excellence avant vitesse** — les livrables doivent viser solidité, précision et durabilité.
-5. **Humain au centre** — posture, relation, discernement et communication restent souverains.
-6. **Standard comme colonne vertébrale** — l'excellence doit devenir reproductible et transmissible.
-7. **IA comme infrastructure** — les outils IA servent l'organisation, l'analyse, l'automatisation et la documentation.
-8. **Gouvernance comme garde-fou** — les systèmes doivent rester maîtrisables, traçables, documentés et auditables.
-
----
-
-## 13. Identité visuelle
-
-L'identité visuelle de Vigilum Codex repose sur :
-
-- un œil ;
-- un codex ouvert ;
-- une géométrie sacrée de type cube de Métatron ;
-- une architecture circulaire et symétrique ;
-- une palette noir, or et bordeaux.
-
-### Symbolique
-
-- **Œil :** vigilance, perception, conscience, lucidité.
-- **Codex :** mémoire organisée, savoir structuré, transmission.
-- **Géométrie sacrée :** ordre, structure, harmonie, cohérence systémique.
-- **Cercle :** unité, totalité, système relié.
-- **Monogramme VC :** signature opérationnelle.
-
-Définition symbolique :
-
-> Vigilum Codex transforme la vigilance en connaissance exploitable.
+1. **Clarity over complexity** — any structure must simplify thinking.
+2. **Production over accumulation** — knowledge must produce decisions, methods, texts, tools, or deliverables.
+3. **Coherence over expansion** — no project should enter if it does not reinforce the global architecture.
+4. **Excellence over speed** — deliverables must aim for solidity, precision, and durability.
+5. **Human at the center** — posture, relationship, discernment, and communication remain sovereign.
+6. **Standard as a backbone** — excellence must become reproducible and transmissible.
+7. **AI as infrastructure** — AI tools serve organization, analysis, automation, and documentation.
+8. **Governance as a safeguard** — systems must remain masterable, traceable, documented, and auditable.
 
 ---
 
-## 14. Systèmes et projets associés
+## 13. Visual Identity
 
-Vigilum Codex agit comme couche-mère reliant plusieurs systèmes et projets :
+The visual identity of Vigilum Codex rests on:
+
+- an eye;
+- an open codex;
+- a sacred geometry like Metatron's cube;
+- a circular and symmetrical architecture;
+- a black, gold, and burgundy palette.
+
+### Symbolism
+
+- **Eye:** vigilance, perception, consciousness, lucidity.
+- **Codex:** organized memory, structured knowledge, transmission.
+- **Sacred Geometry:** order, structure, harmony, systemic coherence.
+- **Circle:** unity, totality, linked system.
+- **Monogram VC:** operational signature.
+
+Symbolic definition:
+
+> Vigilum Codex transforms vigilance into actionable knowledge.
+
+---
+
+## 14. Associated Systems and Projects
+
+Vigilum Codex acts as a mother-layer connecting several systems and projects:
 
 ### Akasha Weave
 
-Système cognitif externe destiné à transformer des flux d'informations brutes en intelligence stratégique exploitable.
+External cognitive system intended to transform raw information flows into actionable strategic intelligence.
 
 ### Argus Core
 
-Système local de collecte, traitement et consultation de flux RSS et d'articles.
+Local system for collecting, processing, and consulting RSS feeds and articles.
 
 ### T.A.H.O Nexus
 
-Système de veille stratégique automatisé destiné à transformer l'actualité en information structurée, analysée et exploitable.
+Automated strategic monitoring system intended to transform news into structured, analyzed, and actionable information.
 
 ### MVP GitHub
 
-Fragments opérationnels publics du système global : démonstrateurs de conception, documentation, orchestration, structuration et gouvernance.
+Public operational fragments of the global system: demonstrators of design, documentation, orchestration, structuring, and governance.
 
-Ces MVP doivent être présentés comme preuves de capacité à concevoir, assembler, documenter et gouverner des systèmes opérationnels, pas comme preuves de codage pur.
+These MVPs must be presented as proofs of capability to design, assemble, document, and govern operational systems, not as proofs of pure coding.
 
-Tout MVP Github doit être rédigé en anglais.
-
----
-
-## 15. Modèle économique retenu
-
-Modèle : hybride en strates.
-
-Ordre de monétisation et de développement :
-
-1. Usage personnel consolidé
-2. Contenus publics
-3. Produits intellectuels
-4. Outils numériques
-5. Services premium
-6. Communauté / école / cercle privé
-7. Institution structurée
+Any Github MVP must be written in English.
 
 ---
 
-## 16. Offres futures possibles
+## 15. Retained Economic Model
 
-Offres alignées avec Vigilum Codex :
+Model: layered hybrid.
 
-1. Audit de performance humaine
-2. Standardisation premium des procédures
-3. Audit d'intelligence stratégique
-4. Mise en place de workflows IA gouvernés
-5. Formation soft skills & communication
-6. Formation opérations IA gouvernées
-7. Veille stratégique structurée
+Monetization and development order:
 
----
-
-## 17. Langage public recommandé
-
-### Bio longue
-
-Consultant en performance humaine & opérations IA gouvernées. Ex-PNC Royal Air Maroc, certifié IATA. Spécialisé en excellence de service, standardisation premium, soft skills, communication, AI Agents, CLI Workflows et Local Governance. Fondateur de Vigilum Codex.
-
-### Bio courte
-
-Consultant en performance humaine & opérations IA gouvernées. Fondateur de Vigilum Codex.
-
-### Signature professionnelle
-
-Performance humaine · Intelligence stratégique · Opérations IA gouvernées
-
-### Phrase de présentation
-
-Vigilum Codex aide à structurer la performance humaine, l'information stratégique et les opérations IA gouvernées dans des systèmes clairs, documentés et exploitables.
+1. Consolidated personal use
+2. Public contents
+3. Intellectual products
+4. Digital tools
+5. Premium services
+6. Community / school / private circle
+7. Structured institution
 
 ---
 
-## 18. Langage à éviter
+## 16. Possible Future Offers
 
-Éviter :
+Offers aligned with Vigilum Codex:
 
-- performance humaine augmentée par l'IA ;
-- tout-IA ;
-- développeur IA ;
-- codeur ;
-- expert technique pur ;
-- coach générique ;
-- consultant IA sans ancrage humain ;
-- projet technologique isolé.
-
-Raison : ces formulations brouillent la séparation entre performance humaine, intelligence stratégique et opérations IA gouvernées.
+1. Human performance audit
+2. Premium procedure standardization
+3. Strategic intelligence audit
+4. Implementation of governed AI workflows
+5. Soft skills & communication training
+6. Governed AI operations training
+7. Structured strategic monitoring
 
 ---
 
-## 19. Structure interne recommandée
+## 17. Recommended Public Language
+
+### Long Bio
+
+Human Performance & Governed AI Operations Consultant. Ex-Cabin Crew Royal Air Maroc, IATA certified. Specialized in service excellence, premium standardization, soft skills, communication, AI Agents, CLI Workflows, and Local Governance. Founder of Vigilum Codex.
+
+### Short Bio
+
+Human Performance & Governed AI Operations Consultant. Founder of Vigilum Codex.
+
+### Professional Signature
+
+Human Performance · Strategic Intelligence · Governed AI Operations
+
+### Introduction Sentence
+
+Vigilum Codex helps structure human performance, strategic information, and governed AI operations into clear, documented, and actionable systems.
+
+---
+
+## 18. Language to Avoid
+
+Avoid:
+
+- human performance augmented by AI;
+- all-AI;
+- AI developer;
+- coder;
+- pure technical expert;
+- generic coach;
+- AI consultant without human anchoring;
+- isolated technological project.
+
+Reason: these formulations blur the separation between human performance, strategic intelligence, and governed AI operations.
+
+---
+
+## 19. Recommended Internal Structure
 
 ```text
 VIGILUM CODEX
-├── 01_PERFORMANCE_HUMAINE
-│   ├── Excellence de service
-│   ├── Standardisation premium
-│   ├── Soft skills
+├── 01_HUMAN_PERFORMANCE
+│   ├── Service Excellence
+│   ├── Premium Standardization
+│   ├── Soft Skills
 │   ├── Communication
-│   ├── Posture professionnelle
-│   └── Expérience client
+│   ├── Professional Posture
+│   └── Customer Experience
 │
-├── 02_INTELLIGENCE_STRATEGIQUE
-│   ├── Veille
-│   ├── Analyse
-│   ├── Mémoire
-│   ├── Décision
-│   ├── Synthèse
-│   └── Structuration du savoir
+├── 02_STRATEGIC_INTELLIGENCE
+│   ├── Monitoring
+│   ├── Analysis
+│   ├── Memory
+│   ├── Decision Making
+│   ├── Synthesis
+│   └── Knowledge Structuring
 │
-├── 03_OPERATIONS_IA_GOUVERNEES
+├── 03_GOVERNED_AI_OPERATIONS
 │   ├── AI Agents
 │   ├── CLI Workflows
 │   ├── Local Governance
-│   ├── Automatisation
+│   ├── Automation
 │   ├── Documentation
-│   └── Traçabilité
+│   └── Traceability
 │
-├── 04_PROJETS_SYSTEMES
+├── 04_PROJECTS_AND_SYSTEMS
 │   ├── Akasha Weave
 │   ├── Argus Core
 │   ├── T.A.H.O Nexus
 │   └── MVP GitHub
 │
-├── 05_CONTENUS_PUBLICS
-│   ├── Manifestes
+├── 05_PUBLIC_CONTENTS
+│   ├── Manifestos
 │   ├── Articles
-│   ├── Fiches
+│   ├── Factsheets
 │   ├── Guides
-│   └── Retours d'expérience
+│   └── Feedback and Field Notes
 │
-└── 06_OFFRES
+└── 06_OFFERS
     ├── Audits
-    ├── Formations
-    ├── Conseil
-    ├── Accompagnement
-    └── Produits numériques
+    ├── Training Courses
+    ├── Consulting
+    ├── Coaching
+    └── Digital Products
 ```
 
 ---
 
-## 20. Directive finale pour Tesla
+## 20. Final Directive for Tesla
 
-Quand Tesla travaille sur Vigilum Codex, il doit préserver trois séparations :
+When Tesla works on Vigilum Codex, it must preserve three separations:
 
-1. La performance humaine reste humaine.
-2. L'intelligence stratégique transforme l'information en décision.
-3. Les opérations IA gouvernées servent d'infrastructure maîtrisable.
+1. Human performance remains human.
+2. Strategic intelligence transforms information into decisions.
+3. Governed AI operations serve as masterable infrastructure.
 
-Phrase finale :
+Final phrase:
 
-> Vigilum Codex organise la vigilance, la connaissance et l'action dans un système gouverné.
+> Vigilum Codex organizes vigilance, knowledge, and action within a governed system.
