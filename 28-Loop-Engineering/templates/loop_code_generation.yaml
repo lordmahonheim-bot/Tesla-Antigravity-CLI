@@ -1,0 +1,40 @@
+meta:
+  name: "fix-cache-lock-race"
+  version: "1.0.0"
+  project: "tesla-core"
+  description: "Fix potential deadlocks in core cache implementation during parallel writes"
+
+execution_limits:
+  max_iterations: 5
+  financial_budget_usd: 3.50
+  token_budget: 80000
+  timeout_seconds: 180
+
+target:
+  files:
+    - "core/cache.py"
+    - "tests/test_cache.py"
+  directory: "/home/lord-mahonheim/bifrost/tesla"
+
+goal: >
+  Refactor the locking mechanism in core/cache.py to use double-checked locking with a timeout.
+  Ensure that when a thread fails to acquire the write lock within 2.0 seconds, it raises a
+  CacheLockTimeout exception instead of blocking indefinitely. Clean up all acquired locks in 
+  a try-finally block. Ensure all tests in tests/test_cache.py pass.
+
+verify:
+  rungs:
+    - "style"
+    - "types"
+    - "tests"
+    - "referee"
+  strict: true
+  custom_rules_path: ".agents/skills/tesla-code-auditor/rules/tesla_custom_rules.yaml"
+
+referee_config:
+  model: "gemini-1.5-flash"
+  temperature: 0.0
+
+rollback_policy:
+  strategy: "git"
+  auto_rollback: true
