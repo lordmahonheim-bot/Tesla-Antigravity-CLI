@@ -1,0 +1,8 @@
+#!/bin/sh
+# 06-Sudo-Askpass: Sudo Graphic Askpass Dialog
+# Zenity-based graphical dialog for secure sudo password prompt
+exec /usr/bin/zenity \
+  --password \
+  --title="Authentication required" \
+  --text="Privileged authorization (sudo) is required.\n\nPlease enter your password to continue." \
+  --width=460

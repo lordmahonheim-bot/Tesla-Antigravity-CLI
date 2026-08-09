@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kill Switch State",
+  "description": "Schéma d'état du coupe-circuit matériel (Rule 15).",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "system_status": {
+      "type": "string",
+      "enum": ["ACTIVE", "PAUSED", "HALTED_PHYSICAL"],
+      "description": "État global du démon OPRO-Grad"
+    },
+    "hourly_triggers_count": {
+      "type": "integer",
+      "maximum": 5,
+      "description": "Compteur de déclenchements dans l'heure courante"
+    },
+    "daily_token_usage": {
+      "type": "integer",
+      "maximum": 500000,
+      "description": "Consommation token de la journée pour OPRO"
+    },
+    "physical_switch_detected": {
+      "type": "boolean",
+      "description": "True si le fichier /etc/tesla/HALT_OPRO est présent"
+    }
+  },
+  "required": ["timestamp", "system_status", "hourly_triggers_count", "daily_token_usage", "physical_switch_detected"]
+}

@@ -1,0 +1,18 @@
+[Unit]
+Description=Tesla Ecosystem Watcher (Event Bus via entr)
+After=network.target
+
+[Service]
+Type=simple
+# Exécution depuis le répertoire racine du projet
+WorkingDirectory=/home/lord-mahonheim/bifrost/tesla
+# Lancement de la recette just qui encapsule entr
+ExecStart=/home/lord-mahonheim/.cargo/bin/just watch
+# Redémarrage automatique en cas de crash
+Restart=always
+RestartSec=5
+# Isolation et environnement
+Environment="PATH=/home/lord-mahonheim/.local/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=default.target

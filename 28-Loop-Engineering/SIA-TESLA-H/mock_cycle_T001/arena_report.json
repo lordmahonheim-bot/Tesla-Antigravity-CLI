@@ -1,0 +1,12 @@
+{
+  "arena_run_id": "ARENA-9001",
+  "patch_id": "PTCH-001",
+  "fitness_score": 92,
+  "baseline_comparison": {
+    "lsp_errors_diff": -2,
+    "token_usage_diff": -1500,
+    "success_rate_diff": 15
+  },
+  "security_violations": 0,
+  "conclusion": "PASS"
+}

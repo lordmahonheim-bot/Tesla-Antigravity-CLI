@@ -1,0 +1,74 @@
+
+
+## ANALYSE CRITIQUE — SuperBrain (`sidinsearch/superbrain`)
+
+---
+
+### 1. Explication vulgarisée
+
+SuperBrain est une application Android auto-hébergée, propulsée par l'IA, qui agit comme une archive personnelle de contenu. Son principe est simple : l'utilisateur partage n'importe quelle URL depuis n'importe quelle application (Instagram, YouTube, un navigateur), et le backend Python l'analyse automatiquement. Le résultat : un titre lisible, un résumé, des tags, une catégorie, une transcription audio si applicable, et une identification musicale si la vidéo contient de la musique.
+
+L'architecture est composée de quatre éléments distincts : un backend Python (FastAPI), une application Android (React Native/Expo SDK 54), une interface en ligne de commande (`superbrain-cli`), et une extension navigateur (`superbrain-extension`). Ce dernier composant, absent de l'analyse précédente, est notable.
+
+Toutes les données sont stockées localement dans une base SQLite (mode WAL) — aucun abonnement cloud, aucune collecte de données, aucun verrouillage fournisseur.
+
+---
+
+### 2. Fact-checking — Vérification et corrections
+
+**Affirmations vérifiées :**
+
+Le projet utilise effectivement Instaloader pour télécharger les posts Instagram, et le README recommande explicitement un compte secondaire/jetable : « Use a secondary / burner Instagram account — not your main personal account. » C'est une violation avérée des CGU de Meta, confirmée par l'architecture du code.
+
+Le routeur multi-IA est fonctionnel et sophistiqué : il classe les fournisseurs par vitesse via une moyenne mobile exponentielle (EMA), applique un cooldown de 5 minutes sur erreur générique et 30 minutes sur une erreur HTTP 429 (rate limit), et rafraîchit dynamiquement la liste des modèles gratuits d'OpenRouter toutes les 6 heures.
+
+**Corrections de l'analyse précédente :**
+
+| Point de l'analyse précédente | Statut | Correction factuelle |
+|---|---|---|
+| « Complexité d'installation élevée » | **Partiellement inexact** | Une méthode d'installation en une seule ligne est disponible via npm : `npx -y superbrain-server@latest`. Docker est aussi supporté. |
+| « Absence sur iOS » | **Confirmé** | L'app cible exclusivement Android (Gradle). Aucun support iOS documenté. |
+| Aucune mention de l'extension navigateur | **Omission** | Le répertoire `superbrain-extension` existe dans la structure du dépôt, ce qui élargit le périmètre fonctionnel au-delà du seul mobile. |
+| Aucune mention de la licence | **Omission critique** | Le projet est sous licence AGPL-3.0 : l'usage commercial ou en SaaS sans publication du code source modifié est interdit ; une licence commerciale séparée est requise dans ce cas. C'est un élément juridique et stratégique majeur. |
+| Métrique d'adoption non mentionnée | **Omission** | Au 9 août 2026 : 66 étoiles, 8 forks, 1 observateur. La dernière version est SuperBrain v2.0.0, publiée le 19 avril 2026, avec 225 commits au total. Cela indique un projet actif mais à adoption communautaire encore modeste. |
+
+---
+
+### 3. Avantages & Inconvénients
+
+**Avantages confirmés par le code source :**
+
+**Souveraineté totale des données** : SQLite en mode WAL, aucun serveur tiers des créateurs, mode offline-first avec file d'attente locale et synchronisation automatique à la reconnexion.
+
+**Résilience du routeur IA** : la chaîne de fallback pour l'analyse de texte est Groq → Gemini → OpenRouter (modèles hardcodés) → OpenRouter dynamique → Ollama. Pour YouTube, Gemini analyse la vidéo nativement sans téléchargement. Aucun fournisseur unique n'est un point de défaillance.
+
+**Options d'hébergement variées** : du Raspberry Pi (~50 $ unique) au VPS cloud (Hetzner à 3,29 €/mois, AWS EC2 gratuit), en passant par un simple PC local exposé via ngrok. L'accessibilité financière est réelle.
+
+**API REST complète** : 18 endpoints documentés, avec Swagger UI disponible à `/docs` et ReDoc à `/redoc`. L'API est accessible par clé (`X-API-Key`), ce qui ouvre des intégrations tierces.
+
+**Inconvénients structurels :**
+
+**Risque légal Instagram** : le mode authentifié contourne l'API officielle de Meta via Instaloader. Même si les credentials ne sont jamais transmis ailleurs qu'aux serveurs d'Instagram, cette pratique viole les CGU et expose le compte utilisé à des restrictions ou bans.
+
+**Dépendance aux APIs gratuites :** Le modèle économique repose sur les tiers gratuits de Groq, Gemini et OpenRouter. Si un fournisseur modifie ses conditions (ce qui est historiquement fréquent), le routeur bascule sur l'alternative suivante, mais l'absence totale de fournisseur rémunéré crée une fragilité systémique à long terme.
+
+**Adoption communautaire faible :** 66 étoiles et 8 forks au 9 août 2026 signalent un projet techniquement intéressant mais sans masse critique. Cela implique un écosystème de contributeurs réduit, une documentation communautaire limitée, et un risque d'abandon à moyen terme si le mainteneur principal se désengage.
+
+**AGPL-3.0 comme contrainte commerciale :** Toute utilisation dans un service réseau (SaaS) oblige à publier le code source modifié. L'usage commercial propriétaire nécessite une licence séparée. Pour les développeurs souhaitant construire un produit dessus, c'est une barrière juridique non négligeable.
+
+---
+
+### 4. Bilan Stratégique
+
+**Verdict : OPPORTUNITÉ technique ciblée, à risque juridique mesurable et à adoption limitée**
+
+**Pour les profils techniques individuels (développeurs, chercheurs, architectes de connaissance) :**
+C'est une opportunité nette. L'installation en une commande (`npx -y superbrain-server@latest`), le support Docker, et les 18 endpoints REST en font un outil immédiatement intégrable dans un écosystème personnel existant — comme MIDGARD. La capacité à ingérer du contenu web, YouTube et Instagram dans une base SQLite consultable en texte intégral est directement pertinente pour un workflow de veille et d'intelligence stratégique.
+
+**Pour un usage professionnel ou commercial :**
+La licence AGPL-3.0 interdit l'usage commercial propriétaire sans accord séparé, et la dépendance à l'extraction Instagram non officielle représente un risque légal réel vis-à-vis de Meta. Ce n'est pas un outil viable pour une infrastructure organisationnelle sans audit juridique préalable.
+
+**Angle mort de l'analyse précédente :**
+L'analyse fournie en entrée était globalement exacte sur le plan technique, mais elle présentait trois lacunes que je signale explicitement : (1) l'existence d'une extension navigateur, (2) la simplification de l'installation via npm/Docker, et (3) l'absence totale d'analyse de la licence AGPL-3.0, qui est pourtant le facteur stratégique le plus discriminant pour toute décision d'adoption au-delà de l'usage personnel.
+
+

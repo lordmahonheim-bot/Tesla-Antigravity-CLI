@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch Avalon Directory for Changes
+
+[Path]
+PathModified=/home/lord-mahonheim/bifrost/tesla/Avalon
+Unit=avalon-daemon.service
+
+[Install]
+WantedBy=default.target

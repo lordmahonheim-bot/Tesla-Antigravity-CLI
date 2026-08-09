@@ -1,0 +1,49 @@
+# 09-Github-Governance: Exclusion Strict (Doctrine Vigilum Codex)
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python bytecode caches
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Physical database files (strict exclusion)
+**/*.db
+**/*.db-journal
+**/*.db-wal
+**/*.db-shm
+**/*.sqlite
+**/*.sqlite3
+
+# Vector embeddings caches
+**/.chroma_vectors/
+**/.agy_cache/
+
+# Execution logs and temporary reports
+**/*.log
+**/logs/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.pyrightpy/
+
+# Environment configurations containing secrets
+.env
+.env.*
+!.env.example
+
+# Interaction transcripts containing private queries
+**/SESSION_TRANSCRIPTS.md
+**/SESSION_LOG.md
+
+# Operating system and IDE local settings
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

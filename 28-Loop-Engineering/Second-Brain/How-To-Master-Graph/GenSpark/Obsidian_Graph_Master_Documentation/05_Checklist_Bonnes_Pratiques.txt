@@ -1,0 +1,77 @@
+════════════════════════════════════════════════════════════════════════════════
+   05 — CHECK-LIST OPÉRATIONNELLE : Bonnes pratiques d'un Graph maîtrisé
+════════════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────────────────────────
+NIVEAU 1 — LES FONDAMENTAUX (à valider avant tout)
+────────────────────────────────────────────────────────────────────────────────
+
+☐  Le vault a une VOCATION claire (PKM, projets, recherche, journal…).
+☐  Les notes suivent un naming convention stable et sémantique.
+☐  Un FRONTMATTER minimal (type + tags) existe sur les notes récentes.
+☐  Un vocabulaire de tags contrôlé (10-30 tags actifs, cohérents).
+☐  La règle des 2 liens (§10) est appliquée sur les nouvelles notes.
+☐  Au moins 1 MOC "Home" existe et sert de point d'entrée.
+☐  Le Graph View est ouvert au moins 1× par semaine.
+
+────────────────────────────────────────────────────────────────────────────────
+NIVEAU 2 — CONFIGURATION VISUELLE
+────────────────────────────────────────────────────────────────────────────────
+
+☐  Les 4 zones (Filters, Groups, Display, Forces) sont RÉGLÉES —
+   pas laissées aux valeurs par défaut.
+☐  Entre 3 et 8 GROUPES de couleurs sont définis, distincts et informatifs.
+☐  Les couleurs des groupes sont accessibles (contraste suffisant).
+☐  L'ordre des groupes reflète leur priorité (spécifique → générique).
+☐  Un preset de FORCES (§7) est choisi consciemment.
+☐  Au moins 3 configurations sont BOOKMARKÉES et nommées explicitement.
+☐  Un snippet CSS personnalise le rendu WebGL (voir 02_CSS_Snippets_Graph.txt).
+
+────────────────────────────────────────────────────────────────────────────────
+NIVEAU 3 — HYGIÈNE STRUCTURELLE (rituels)
+────────────────────────────────────────────────────────────────────────────────
+
+☐  Rituel HEBDOMADAIRE : filtrage sur Orphans → connexion ou archivage.
+☐  Rituel MENSUEL : screenshot du Graph global pour suivre l'évolution.
+☐  Rituel TRIMESTRIEL : audit des MOCs (obsolètes ? à scinder ? à fusionner ?).
+☐  Le Local Graph est UTILISÉ pendant l'écriture (side pane permanent).
+☐  Les tags rarement utilisés (<3 notes) sont soit fusionnés soit supprimés.
+☐  Les notes "méga" (>2000 mots) sont scindées en atoms.
+
+────────────────────────────────────────────────────────────────────────────────
+NIVEAU 4 — PLUGINS ET ANALYSE
+────────────────────────────────────────────────────────────────────────────────
+
+☐  Extended Graph installé et configuré (au minimum : images sur nœuds).
+☐  Graph Analysis installé — Hub/Authority consulté au moins 1× par mois.
+☐  Les 5 notes à plus haute centralité sont soit des MOCs, soit ont un MOC.
+☐  Breadcrumbs (optionnel) : hiérarchie typée définie pour au moins 1 domaine.
+☐  Une configuration Juggl (hierarchical) sauvegardée pour un domaine clé.
+
+────────────────────────────────────────────────────────────────────────────────
+NIVEAU 5 — MASTER (excellence continue)
+────────────────────────────────────────────────────────────────────────────────
+
+☐  Palette CSS custom cohérente avec le thème du vault.
+☐  Chaque MOC référence les MOCs voisins (le graph des MOCs est connexe).
+☐  Aucun MOC "fantôme" (vide ou non mis à jour depuis 3 mois).
+☐  Un export SVG du Graph est archivé chaque semestre (historique).
+☐  Ratio wikilinks/tags entre 3× et 10× (lu via Graph Analysis).
+☐  Au moins 1 note-pont interdisciplinaire par domaine (Betweenness élevée).
+☐  Documentation personnelle : votre "philosophie de Graph" est écrite.
+
+────────────────────────────────────────────────────────────────────────────────
+SIGNAUX D'ALERTE (à corriger sans délai)
+────────────────────────────────────────────────────────────────────────────────
+
+⚠  Plus de 20 % de notes orphelines             → règle des 2 liens.
+⚠  Un seul cluster géant hairball                → filtrer + grouper (§8).
+⚠  Palette >10 couleurs                          → consolider les groupes.
+⚠  Aucun nœud "gros" (aucun hub)                 → créer des MOCs (§11).
+⚠  Toutes les notes ont la même taille           → wikilinks manquants.
+⚠  Le graph n'a pas été ouvert depuis 30 jours   → intégrer au rituel.
+
+════════════════════════════════════════════════════════════════════════════════
+Cochez, mesurez, itérez. Un graph maîtrisé n'est pas un état final,
+mais un DIALOGUE VIVANT entre votre pensée et sa représentation.
+════════════════════════════════════════════════════════════════════════════════

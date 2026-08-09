@@ -1,0 +1,8 @@
+{
+  "patch_id": "PTCH-001",
+  "rca_id": "RCA-T001-001",
+  "target_file": "/home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-master-code/SKILL.md",
+  "diff": "@@ -176,6 +176,7 @@\n - Ruff compliance;\n - pytest-first validation;\n - import hygiene;\n+- explicit use of TypedDict for complex nested dictionaries;\n - virtualenv discipline;\n - avoidance of mutable default arguments and dynamic ambiguity.",
+  "patch_class": "MINOR",
+  "estimated_tokens_change": 12
+}

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Tesla Governance Gateway (TGG) - Point d'entrée
+
+# 1. Préparation de l'événement
+export GIT_EVENT="GitPreCommit"
+
+# 2. Règle Absolue N°4 : La Gateway délègue, elle ne réimplémente pas.
+#    Nous déléguons directement au Policy Engine.
+TGG_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+TESLA_ROOT="$(cd "$TGG_DIR/../.." && pwd)"
+export TESLA_ROOT
+
+POLICY_ENGINE="$TGG_DIR/policy_engine.sh"
+
+if [ ! -x "$POLICY_ENGINE" ]; then
+    echo -e "\033[31m[CRITICAL]\033[0m Tesla Governance Gateway rompue : $POLICY_ENGINE introuvable."
+    exit 1
+fi
+
+# 3. Mode Break-Glass (Bris de glace)
+if [ "$TESLA_OVERRIDE" = "1" ]; then
+    echo -e "\033[33m[WARNING]\033[0m BYPASS TGG ACTIVÉ (TESLA_OVERRIDE=1). Commit non audité."
+    # On pourrait loguer ça dans memory ici.
+    exit 0
+fi
+
+# 4. Exécution du Policy Engine (Délégation au Capability Bus)
+"$POLICY_ENGINE"
+EXIT_CODE=$?
+
+exit $EXIT_CODE

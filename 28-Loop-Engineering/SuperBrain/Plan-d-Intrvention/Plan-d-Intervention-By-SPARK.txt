@@ -1,0 +1,171 @@
+
+
+# 🧠 SUPERBRAIN — Plan d'Intervention & de Déploiement sur Android
+### Feuille de route maîtresse — Du point zéro au système opérationnel
+
+---
+
+## 1. DÉFINITION DU RÉSULTAT FINAL
+
+À l'issue de ce plan, l'état cible à atteindre est le suivant :
+
+> **Un smartphone Android équipé de l'application SuperBrain, connecté à un backend auto-hébergé fonctionnel, capable de :**
+> 1. Recevoir n'importe quelle URL (Instagram, YouTube, page web, Reddit…) via le menu « Partager » d'Android.
+> 2. La transmettre au serveur Python (FastAPI) hébergé sur votre machine, joignable depuis le téléphone **même hors du réseau local** (tunnel HTTPS).
+> 3. Déclencher une analyse IA automatique (titre, résumé, catégorie, tags, transcription audio, identification musicale) via le routeur multi-providers (Gemini / Groq / OpenRouter / Ollama).
+> 4. Stocker le tout dans une base SQLite **que vous possédez**, consultable, filtrable et organisable en collections depuis l'application.
+> 5. Recevoir des rappels intelligents « Watch Later » et fonctionner en mode hors-ligne avec synchronisation différée.
+
+**Critère de succès unique et mesurable :** partager une vidéo YouTube depuis l'application YouTube → voir apparaître dans SuperBrain, en moins de 60 secondes, une fiche complète avec titre, résumé, catégorie et tags générés par l'IA.
+
+---
+
+## 2. RESSOURCES NÉCESSAIRES
+
+### 2.1 Hardware
+
+| Ressource | Spécification minimale | Rôle |
+|---|---|---|
+| **Machine hôte (serveur)** | PC Windows 10/11, macOS ou Linux — 4 Go RAM, 10 Go d'espace disque libre. Alternative : Raspberry Pi 4/5 ou VPS | Héberge le backend Python, la base SQLite et les analyses |
+| **Smartphone Android** | Android 8.0+, ~200 Mo d'espace libre | Client mobile (application SuperBrain) |
+| **Réseau** | PC et téléphone sur le même Wi-Fi (phase initiale) + connexion Internet stable | Communication téléphone ↔ serveur |
+
+### 2.2 Software & liens directs de téléchargement
+
+| Logiciel | Lien direct | Obligatoire ? |
+|---|---|---|
+| **Python 3.10+** | [python.org/downloads](https://www.python.org/downloads/) | ✅ Oui |
+| **Node.js 20+** | [nodejs.org](https://nodejs.org/) | ✅ Oui (méthode recommandée) |
+| **ffmpeg** | Windows : `winget install Gyan.FFmpeg` · Linux : `sudo apt install ffmpeg` · [ffmpeg.org/download](https://ffmpeg.org/download.html) | ✅ Oui |
+| **APK SuperBrain (Android)** | [Téléchargement direct — superbrain.apk](https://github.com/sidinsearch/superbrain/releases/latest/download/superbrain.apk) | ✅ Oui |
+| **ngrok** (accès hors réseau local) | [ngrok.com/download](https://ngrok.com/download) | ⚠️ Recommandé |
+| **Docker + Compose** (méthode alternative) | [docs.docker.com/get-docker](https://docs.docker.com/get-docker/) | ❌ Optionnel |
+| **Ollama** (IA 100 % locale, secours hors-ligne) | [ollama.com](https://ollama.com/) | ❌ Optionnel |
+
+### 2.3 Comptes & clés API (gratuits, à créer avant l'installation)
+
+| Provider | Lien d'obtention de la clé | Priorité |
+|---|---|---|
+| **Google Gemini** | [aistudio.google.com](https://aistudio.google.com/) | 🔴 **Indispensable** (niveau gratuit le plus généreux, analyse native YouTube) |
+| **Groq** | [console.groq.com](https://console.groq.com/) | 🟡 Recommandé (inférence la plus rapide, Whisper) |
+| **OpenRouter** | [openrouter.ai](https://openrouter.ai/) | 🟡 Recommandé (fallback gratuit) |
+| **Instagram « burner »** | Compte secondaire jetable — **jamais votre compte principal** (risque de bannissement, CGU Meta) | ❌ Optionnel |
+
+---
+
+## 3. PLAN D'INTERVENTION CHRONOLOGIQUE
+
+> ⚠️ Exécuter les étapes **strictement dans l'ordre**. Chaque étape se termine par un **point de contrôle (✔)** — ne pas passer à la suivante sans le valider.
+
+### PHASE 0 — Préparation de l'environnement (≈ 20 min)
+
+**Étape 1.** Installer **Python 3.10+** sur la machine hôte. Sous Windows, cocher impérativement *« Add Python to PATH »* durant l'installation.
+- ✔ Contrôle : ouvrir un terminal → `python --version` (ou `python3 --version`) doit afficher ≥ 3.10.
+
+**Étape 2.** Installer **Node.js 20+** via le lien ci-dessus.
+- ✔ Contrôle : `node --version` doit afficher ≥ v20 ; `npm --version` doit répondre.
+
+**Étape 3.** Installer **ffmpeg** selon votre OS (commandes du tableau 2.2).
+- ✔ Contrôle : `ffmpeg -version` doit afficher la version installée.
+
+**Étape 4.** Créer les comptes et récupérer les clés API : **Gemini** (obligatoire), puis **Groq** et **OpenRouter** (recommandés). Conserver les trois clés dans un fichier texte temporaire sécurisé.
+- ✔ Contrôle : vous disposez d'au minimum une clé `GEMINI_API_KEY` valide.
+
+### PHASE 1 — Déploiement du backend (≈ 15 min)
+
+**Étape 5.** Sur la machine hôte, lancer l'installateur officiel en une commande :
+```
+npx -y superbrain-server@latest
+```
+Cette commande télécharge le backend dans `~/.superbrain-server`, crée l'environnement virtuel Python, installe les dépendances et lance l'assistant de configuration interactif.
+
+**Étape 6.** Dans l'assistant, saisir les clés API lorsque demandé (au minimum `GEMINI_API_KEY`). Répondre « non » aux identifiants Instagram pour l'instant (configuration différée à l'étape 12).
+
+**Étape 7.** À la fin de l'assistant, le serveur démarre et **affiche un Access Token**. Le copier précieusement (il sera requis à l'étape 10).
+- ✔ Contrôle : depuis un navigateur de la machine, ouvrir `http://localhost:5000/health` → réponse OK.
+
+### PHASE 2 — Exposition réseau du serveur (≈ 10 min)
+
+> **Deux scénarios possibles — choisir selon votre usage :**
+> - **Scénario A (Wi-Fi domestique uniquement)** : le téléphone et le PC sont toujours sur le même réseau → utilisez l'IP locale du PC (ex. `http://192.168.1.X:5000`), passez directement à l'étape 9.
+> - **Scénario B (accès partout, recommandé)** : poursuivez à l'étape 8.
+
+**Étape 8 (Scénario B).** Installer ngrok, créer un compte gratuit, authentifier le client, puis exposer le port :
+```
+ngrok http 5000
+```
+Alternative intégrée : `superbrain-server ngrok`. Copier l'URL HTTPS générée (ex. `https://xxxx.ngrok-free.app`).
+- ✔ Contrôle : depuis le navigateur **du téléphone** (en 4G/5G, Wi-Fi coupé), ouvrir `https://xxxx.ngrok-free.app/health` → réponse OK.
+
+### PHASE 3 — Installation de l'application Android (≈ 5 min)
+
+**Étape 9.** Sur le smartphone :
+1. Télécharger l'APK : [superbrain.apk](https://github.com/sidinsearch/superbrain/releases/latest/download/superbrain.apk)
+2. Autoriser *« Installer depuis des sources inconnues »* dans les paramètres Android (Paramètres → Sécurité → Sources inconnues, ou via l'autorisation proposée au moment de l'ouverture du fichier).
+3. Ouvrir le fichier APK et installer.
+- ✔ Contrôle : l'icône SuperBrain apparaît dans le tiroir d'applications et l'app se lance.
+
+### PHASE 4 — Connexion application ↔ backend (≈ 5 min)
+
+**Étape 10.** Dans l'application SuperBrain → **Settings** :
+1. Champ **Backend URL** : saisir l'URL ngrok (Scénario B) ou l'IP locale `http://192.168.1.X:5000` (Scénario A).
+2. Champ **Access Token** : coller le token copié à l'étape 7.
+3. Sauvegarder.
+- ✔ Contrôle : l'application affiche le statut connecté ; l'écran d'accueil charge sans erreur réseau.
+
+### PHASE 5 — Test de validation de bout en bout (≈ 5 min)
+
+**Étape 11.** **Test d'acceptation final** :
+1. Ouvrir YouTube → choisir une vidéo courte → **Partager → SuperBrain**.
+2. Attendre 30–60 secondes.
+3. Ouvrir SuperBrain → la fiche doit afficher titre, résumé, catégorie et tags générés par Gemini.
+4. Renouveler avec un article web (Chrome → Partager → SuperBrain).
+- ✔ Contrôle : les deux contenus apparaissent correctement analysés dans la bibliothèque. **Si oui → le système est OPÉRATIONNEL.**
+
+### PHASE 6 — Configurations optionnelles (post-déploiement)
+
+**Étape 12 (optionnelle).** **Instagram** : créer un compte secondaire jetable, puis depuis le dossier backend :
+```
+python instagram/instagram_login.py
+```
+(gère la 2FA, stocke la session dans `.instaloader_session`). Ou relancer `start.py` pour refaire l'assistant.
+
+**Étape 13 (optionnelle).** **Mode 100 % hors-ligne** : installer [Ollama](https://ollama.com/) sur la machine hôte et télécharger le modèle recommandé :
+```
+ollama pull qwen3-vl:4b
+```
+Le routeur l'utilisera automatiquement en dernier recours si les APIs cloud sont indisponibles.
+
+**Étape 14 (optionnelle).** **Pérennisation** : configurer le démarrage automatique du serveur (`superbrain-server` au boot via le planificateur de tâches Windows / systemd Linux), et mettre à jour régulièrement via :
+```
+superbrain-server update
+```
+
+---
+
+## 4. FEUILLE DE ROUTE MAÎTRESSE — VUE SYNTHÉTIQUE
+
+| Jalon | Phase | Livrable | Durée estimée |
+|---|---|---|---|
+| **J0** | Préparation | Environnement Python/Node/ffmpeg + clés API prêts | 20 min |
+| **J1** | Backend | Serveur FastAPI actif sur port 5000, Access Token généré | 15 min |
+| **J2** | Réseau | URL HTTPS publique (ngrok) joignable en 4G | 10 min |
+| **J3** | Mobile | APK installé sur Android | 5 min |
+| **J4** | Connexion | App configurée (URL + Token) et connectée | 5 min |
+| **J5** | ✅ **Go-Live** | Test YouTube + web réussi de bout en bout | 5 min |
+| **J6** | Extensions | Instagram (compte burner), Ollama, démarrage auto | au rythme souhaité |
+
+**Durée totale du cœur de déploiement : ≈ 1 heure.**
+
+---
+
+## 5. POINTS DE VIGILANCE OPÉRATIONNELS
+
+1. **Sécurité** : ne jamais utiliser votre compte Instagram principal (recommandation explicite du projet — risque de bannissement lié à Instaloader). Les clés API restent dans `config/.api_keys`, jamais partagées.
+2. **Continuité de service** : si le PC s'éteint, l'app passe en mode hors-ligne (file d'attente locale) et synchronise au retour du serveur — aucune perte de contenu.
+3. **Maintenance** : exécuter `superbrain-server update` périodiquement ; les extracteurs (Instagram notamment) dépendent de mises à jour fréquentes face aux contre-mesures des plateformes.
+4. **Plan de repli** : en cas de panne des APIs gratuites (quota), le routeur bascule automatiquement entre providers ; Ollama garantit un fonctionnement dégradé mais 100 % local.
+
+---
+
+

@@ -1,0 +1,9 @@
+DataBase/
+.env
+.env.*
+.antigravitycli/
+*.pem
+*.key
+Avalon/
+sandboxes/
+OUTPUTS/

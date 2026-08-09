@@ -1,0 +1,868 @@
+════════════════════════════════════════════════════════════════════════════════
+
+              MAÎTRISER LE GRAPH VIEW D'OBSIDIAN
+       Le guide complet — Exigences & Bonnes Pratiques 2026
+
+════════════════════════════════════════════════════════════════════════════════
+
+TABLE DES MATIÈRES
+────────────────────────────────────────────────────────────────────────────────
+ §1.  Introduction : pourquoi le Graph View compte
+ §2.  Anatomie du Graph View natif
+ §3.  Global Graph vs Local Graph
+ §4.  Les 4 zones de réglages : Filtres, Groupes, Affichage, Forces
+ §5.  Syntaxe complète des filtres
+ §6.  Groupes de couleurs — la stratégie
+ §7.  Physique du graphe : forces, ressorts, Coulomb
+ §8.  L'effet "hairball" (pelote) et comment le combattre
+ §9.  Les exigences d'un bon graph
+ §10. Bonnes pratiques structurelles (vault-level)
+ §11. Maps of Content (MOC) — le pilier
+ §12. Zettelkasten & Atomic Notes
+ §13. Notes orphelines et culs-de-sac
+ §14. Tags vs Wikilinks : quel rôle dans le graph ?
+ §15. Personnalisation esthétique (CSS)
+ §16. Bookmarks / sauvegarde de configurations
+ §17. Time-lapse animation
+ §18. Plugins essentiels
+ §19. Extended Graph — le upgrade natif
+ §20. Juggl — le graph interactif de nouvelle génération
+ §21. Graph Analysis — les métriques scientifiques
+ §22. Breadcrumbs — la hiérarchie typée
+ §23. InfraNodus — l'analyse sémantique IA
+ §24. Graphviz / Mermaid — les graphes inline
+ §25. Workflows recommandés (débutant → master)
+ §26. Anti-patterns : ce qu'il faut éviter
+ §27. Performance sur gros vaults
+ §28. Export et publication du graph
+ §29. Roadmap d'apprentissage 30/60/90 jours
+ §30. Ressources & bibliographie
+
+════════════════════════════════════════════════════════════════════════════════
+§1. INTRODUCTION : POURQUOI LE GRAPH VIEW COMPTE
+════════════════════════════════════════════════════════════════════════════════
+
+Le Graph View est le plugin CORE d'Obsidian qui visualise votre vault comme un
+réseau de nœuds (notes) et d'arêtes (liens internes). Il n'est PAS un simple
+gadget esthétique : bien configuré, il devient un outil de :
+
+  • DÉCOUVERTE — révéler des connexions oubliées entre notes.
+  • DIAGNOSTIC — repérer les orphelines, les clusters isolés, les lacunes.
+  • NAVIGATION — se déplacer par idée plutôt que par arborescence.
+  • MÉTA-COGNITION — visualiser la topologie de sa propre pensée.
+  • PROGRESSION — comparer l'évolution du vault dans le temps.
+
+Citation clé de la communauté (r/ObsidianMD) :
+  « Le graphe global est esthétique mais peu utile au quotidien.
+    Le VRAI levier, c'est le Local Graph + les groupes de couleurs. »
+
+Principe directeur de Ben Shneiderman appliqué ici :
+  « Overview first, zoom and filter, then details-on-demand. »
+  → Vue globale, puis filtrage, puis détails à la demande.
+
+════════════════════════════════════════════════════════════════════════════════
+§2. ANATOMIE DU GRAPH VIEW NATIF
+════════════════════════════════════════════════════════════════════════════════
+
+  ÉLÉMENT           SIGNIFICATION
+  ─────────         ─────────────────────────────────────────────────────
+  Nœud (cercle)     Une note (ou un tag, une pièce jointe, un lien non-résolu)
+  Arête (ligne)     Un [[lien interne]] entre deux notes
+  Taille du nœud    Nombre de notes qui pointent VERS lui (in-degree)
+  Nœud orphelin     Aucun lien entrant ni sortant
+  Nœud "unresolved" Lien vers une note qui n'existe pas encore
+  Nœud attachment   Fichier joint (image, PDF, mp3…)
+  Nœud tag          Un #tag (si activé dans Filtres)
+
+INTERACTIONS DE BASE
+  • Survol d'un nœud      → surligne ses connexions
+  • Clic gauche           → ouvre la note
+  • Clic droit            → menu contextuel
+  • Molette / +, -        → zoom
+  • Drag / flèches        → déplacement (Shift = plus vite)
+  • Icône engrenage       → panneau de réglages
+  • "Restore defaults"    → tout réinitialiser
+
+Source officielle : https://obsidian.md/help/plugins/graph
+
+════════════════════════════════════════════════════════════════════════════════
+§3. GLOBAL GRAPH vs LOCAL GRAPH
+════════════════════════════════════════════════════════════════════════════════
+
+GLOBAL GRAPH
+  • Toutes les notes du vault.
+  • Utile pour la vue d'ensemble, le diagnostic, les captures d'évolution.
+  • Devient rapidement un "hairball" (pelote illisible) après ~500-1000 notes.
+  • Ouvrir via : icône Ribbon → Open Graph View (raccourci Ctrl/Cmd+G).
+
+LOCAL GRAPH  ★★★ (le plus utile en pratique)
+  • Sous-graphe centré sur la note ACTIVE.
+  • Ouvrir via commande : "Open local graph".
+  • Ajoute un paramètre CRUCIAL : la PROFONDEUR (depth slider).
+     - depth 1 → voisins directs uniquement
+     - depth 2 → voisins des voisins
+     - depth 3+ → contexte étendu (déjà bruité)
+  • Recommandation communauté : depth 2 ou 3 pour lecture, 1 pour focus.
+  • Toutes les options du global graph s'appliquent.
+  • Idéal en side-pane permanent lors de l'écriture d'une note.
+
+RÈGLE PRAGMATIQUE
+  « Fais du Local Graph ton compagnon d'écriture,
+    et du Global Graph ton bilan mensuel. »
+
+════════════════════════════════════════════════════════════════════════════════
+§4. LES 4 ZONES DE RÉGLAGES : FILTRES, GROUPES, AFFICHAGE, FORCES
+════════════════════════════════════════════════════════════════════════════════
+
+──── 4.1 FILTERS (Filtres) ────────────────────────────────────────────────────
+
+  Search files ......... Champ de recherche compatible syntaxe Obsidian Search
+  Tags ................. Afficher les nœuds tags
+  Attachments .......... Afficher les fichiers joints
+  Existing files only .. Cacher les liens non-résolus (notes non créées)
+  Orphans .............. Afficher les notes sans aucun lien
+
+  ⚠ Les fichiers exclus (Settings → Files & Links → Excluded files)
+    n'apparaissent jamais.
+
+──── 4.2 GROUPS (Groupes de couleurs) ─────────────────────────────────────────
+
+  Chaque groupe = (requête de recherche) + (une couleur).
+  • Cliquez sur "New group".
+  • Tapez une requête (ex : `path:Projects/` ou `tag:#literature`).
+  • Choisissez une couleur (cercle coloré).
+  • Ordre = priorité : le PREMIER groupe qui matche s'applique.
+
+──── 4.3 DISPLAY (Affichage) ──────────────────────────────────────────────────
+
+  Arrows ............... Afficher les flèches directionnelles
+  Text fade threshold .. Seuil de fondu du texte (valeurs négatives = plus visible)
+  Node size ............ Taille des cercles
+  Link thickness ....... Épaisseur des arêtes
+  Animate .............. Lance le time-lapse chronologique
+
+──── 4.4 FORCES (Physique) ────────────────────────────────────────────────────
+
+  Center force ......... Force centripète (compact ↔ étalé)
+  Repel force .......... Répulsion entre nœuds (Coulomb-like)
+  Link force ........... Force de rappel des liens (Hooke-like, "ressort")
+  Link distance ........ Longueur au repos des ressorts
+
+Détail dans §7 (physique).
+
+════════════════════════════════════════════════════════════════════════════════
+§5. SYNTAXE COMPLÈTE DES FILTRES
+════════════════════════════════════════════════════════════════════════════════
+
+Le champ "Search files" ET les groupes utilisent la MÊME syntaxe que
+la recherche globale d'Obsidian. Voici l'essentiel :
+
+  OPÉRATEUR / PRÉFIXE     EXEMPLE                        EFFET
+  ─────────────────       ──────────                     ───────────────────────
+  (aucun)                 machine learning               plein-texte fuzzy
+  "…"                     "machine learning"             expression exacte
+  path:                   path:Projects/                 chemin contient
+  file:                   file:2026-07                   nom de fichier contient
+  tag:                    tag:#literature                tag présent
+  content:                content:TODO                   contenu contient
+  line:                   line:(TODO important)          les deux sur MÊME ligne
+  block:                  block:(TODO urgent)            même bloc (paragraphe)
+  section:                section:(intro sources)        même section (heading)
+  task:                   task:                          contient une tâche
+  task-todo: / task-done: task-todo:budget               tâche non/faite
+  /regex/                 /^\d{4}-\d{2}/                 expression régulière
+  OR                      path:Home OR path:Work         union
+  AND (implicite/espace)  tag:#idea tag:#draft           intersection
+  -   (NOT)               -path:Archive                  exclusion
+  ( )                     (tag:#a OR tag:#b) -tag:#c     regroupement
+
+CAS PRATIQUES
+
+  Voir uniquement mes projets actifs :
+     path:Projects/ -path:Projects/Archive/
+
+  Combiner deux domaines :
+     path:home/ OR path:work/
+
+  Toutes les notes de littérature SAUF les brouillons :
+     tag:#literature -tag:#draft
+
+  Exclure les images inline :
+     -path:/\.(png|jpg|jpeg|svg|webp)$/
+
+  Zettelkasten permanent seulement :
+     tag:#permanent -tag:#fleeting
+
+════════════════════════════════════════════════════════════════════════════════
+§6. GROUPES DE COULEURS — LA STRATÉGIE
+════════════════════════════════════════════════════════════════════════════════
+
+Les groupes sont l'outil #1 pour rendre un graph LISIBLE et INFORMATIF.
+Sans groupes, tous les nœuds ont la même couleur et le graph est ornemental.
+Avec groupes, chaque cluster raconte une histoire.
+
+STRATÉGIES ÉPROUVÉES
+
+  1. PAR TYPE DE NOTE (le plus universel)
+       group "MOC"          → tag:#moc                  couleur : rouge
+       group "Permanent"    → tag:#permanent            couleur : vert
+       group "Literature"   → tag:#literature           couleur : bleu
+       group "Fleeting"     → tag:#fleeting             couleur : gris
+       group "Project"      → path:Projects/            couleur : orange
+       group "Daily"        → path:Journal/             couleur : jaune
+
+  2. PAR DOMAINE / SUJET
+       group "Data Science" → tag:#data-science         cyan
+       group "Philosophy"   → tag:#philosophy           violet
+       group "Health"       → tag:#health               vert
+       group "Finance"      → tag:#finance              or
+
+  3. PAR STATUT DE MATURITÉ
+       group "Seedling 🌱"  → tag:#seedling             vert clair
+       group "Budding 🌿"   → tag:#budding              vert
+       group "Evergreen 🌳" → tag:#evergreen            vert foncé
+
+  4. PAR PROJET (temporaire, à archiver ensuite)
+       group "Thesis 2026"  → path:Thesis-2026/         magenta
+
+⚠ RÈGLES D'OR DES GROUPES
+
+  • Max 5 à 8 groupes visibles simultanément → au-delà, illisible.
+  • Choisir des couleurs CONTRASTÉES (utiliser une palette accessible).
+  • Le PREMIER groupe qui matche gagne → placer les plus spécifiques en haut.
+  • Un nœud peut appartenir à UN SEUL groupe visuel → penser priorités.
+  • Utiliser des tags cohérents en amont (voir §11 + §12).
+
+════════════════════════════════════════════════════════════════════════════════
+§7. PHYSIQUE DU GRAPHE : FORCES, RESSORTS, COULOMB
+════════════════════════════════════════════════════════════════════════════════
+
+Le Graph View utilise un algorithme "force-directed" (dirigé par les forces).
+Les nœuds sont soumis à un système physique simulé en temps réel :
+
+  FORCE            ANALOGIE PHYSIQUE           EFFET VISUEL
+  ─────            ─────────────────           ────────────
+  Link force       Loi de Hooke (ressort)      Rapproche les nœuds LIÉS.
+                                               Plus élevé → arêtes courtes/rigides.
+  Repel force      Loi de Coulomb (charges)    Éloigne TOUS les nœuds entre eux.
+                                               Plus élevé → graphe étalé, aéré.
+  Center force     Force centripète            Attire vers le centre.
+                                               Plus élevé → graphe compact/circulaire.
+  Link distance    Longueur au repos ressort   Distance-cible des liens.
+
+ÉQUILIBRE (approximation) — travaux communautaires :
+  F_hooke   = (d(x,y) − link_distance) × link_force
+  F_coulomb = −repel_force / d(x,y)²
+  F_center  = attraction linéaire vers le centre-de-masse
+
+Le moteur historique était d3.js ; il est désormais Pixi.js (rendu WebGL),
+d'où de meilleures performances sur les gros vaults.
+
+PRESETS PRATIQUES (à copier)
+
+  ── PRESET "AÉRÉ & LISIBLE" ────────────────
+   Center force : 0.30
+   Repel force  : 15.00
+   Link force   : 0.50
+   Link distance: 250
+
+  ── PRESET "COMPACT & DENSE" ───────────────
+   Center force : 0.80
+   Repel force  : 8.00
+   Link force   : 1.00
+   Link distance: 80
+
+  ── PRESET "ESTHÉTIQUE" (Reddit u/Aggressive-Ladder770, 151 upvotes) ──
+   Center force : 0.65
+   Repel force  : 12.40
+   Link force   : 0.91
+   Link distance: 30
+   + Filters : Tags ✅ Attachments ✅ Existing files only ❌ Orphans ✅
+   + Display : Arrows ❌ Text fade -1.50 / Node size 0.51 / Link 0.71
+
+  ── PRESET "DIAGNOSTIC" (repérer les orphelins) ──
+   Center force : 0.10
+   Repel force  : 20.00
+   Link force   : 0.20
+   Link distance: 400
+   + Filters : Orphans ✅
+
+════════════════════════════════════════════════════════════════════════════════
+§8. L'EFFET "HAIRBALL" ET COMMENT LE COMBATTRE
+════════════════════════════════════════════════════════════════════════════════
+
+Le "hairball" (pelote de laine) est le phénomène où un graph global devient
+une masse dense, indistincte, impressionnante visuellement mais inutile
+analytiquement. Il apparaît généralement dès 800-1500 notes bien liées.
+
+STRATÉGIES ANTI-HAIRBALL (par ordre d'efficacité)
+
+  1. FILTRER — n'afficher qu'un sous-ensemble via path:/tag:/regex.
+  2. LOCAL GRAPH — passer du global au local, depth 2.
+  3. GROUPES — colorier pour distinguer les clusters.
+  4. AUGMENTER Repel force + Link distance.
+  5. DÉSACTIVER "Attachments" et souvent aussi "Tags" pour épurer.
+  6. Utiliser un plugin qui applique des LAYOUTS alternatifs
+     (hierarchical, grid, circle) → Juggl, Extended Graph.
+  7. Métriques (Graph Analysis) → filtrer sur betweenness/closeness.
+
+════════════════════════════════════════════════════════════════════════════════
+§9. LES EXIGENCES D'UN BON GRAPH
+════════════════════════════════════════════════════════════════════════════════
+
+Un graph MAÎTRISÉ satisfait simultanément 5 exigences :
+
+ 1. LISIBILITÉ
+    • Séparation visuelle des clusters.
+    • Texte lisible aux zooms courants.
+    • Peu de croisements d'arêtes inutiles.
+
+ 2. INFORMATIVITÉ
+    • Les couleurs traduisent un CRITÈRE UTILE (type, domaine, statut).
+    • La taille des nœuds correspond à leur importance réelle.
+    • Les MOCs et hubs sont identifiables au premier coup d'œil.
+
+ 3. STABILITÉ
+    • Les mêmes réglages donnent une topologie reconnaissable.
+    • Configurations sauvegardées via Bookmarks.
+
+ 4. VÉRIDICITÉ
+    • Peu de liens artificiels ("linké pour linker").
+    • Peu d'orphelins injustifiés.
+    • Correspondance entre l'importance perçue et la centralité mesurée.
+
+ 5. ESTHÉTIQUE
+    • Palette cohérente (max 6-8 couleurs).
+    • Densité équilibrée (ni pelote, ni poussière).
+    • Cadrage / physique agréables (voir presets §7).
+
+════════════════════════════════════════════════════════════════════════════════
+§10. BONNES PRATIQUES STRUCTURELLES (VAULT-LEVEL)
+════════════════════════════════════════════════════════════════════════════════
+
+Le graph ne se corrige pas à la surface : il est le REFLET de la structure
+de votre vault. Les bonnes pratiques suivantes sont préalables à tout
+"graph esthétique" :
+
+  A. RÈGLE DES DEUX LIENS (dennes, forum.obsidian.md)
+     « Chaque note devrait avoir AU MOINS 2 liens :
+       — 1 lien parent (vers un index ou MOC),
+       — 1 lien latéral (vers une note voisine). »
+     Effet : plus d'orphelins, hubs naturels, navigation par graph fluide.
+
+  B. UN LIEN = UNE IDÉE PARTAGÉE
+     Ne pas linker par simple co-occurrence de mot.
+     Poser la question : « la connexion sert-elle la compréhension ? »
+
+  C. NOMS DE NOTES STABLES ET SÉMANTIQUES
+     Titres = concepts, pas dates ni codes opaques (sauf Zettelkasten strict).
+
+  D. TAGS CONTRÔLÉS
+     Un vocabulaire de tags fermé (10-30 tags actifs), en frontmatter YAML.
+     Éviter la prolifération : #idée-2, #idea2, #idées → un seul.
+
+  E. FRONTMATTER MINIMAL
+        ---
+        type: permanent | literature | fleeting | moc | project
+        tags: [domain-x, status-y]
+        created: 2026-07-24
+        ---
+
+  F. HIÉRARCHIE PAR LIENS, NON PAR DOSSIERS
+     Les dossiers sont invisibles dans le graph. Utiliser des MOCs (§11).
+
+  G. RE-VISITES PROGRAMMÉES
+     Une revue hebdomadaire du graph filtré sur `Orphans` → connecte
+     ce qui doit l'être, archive le reste.
+
+════════════════════════════════════════════════════════════════════════════════
+§11. MAPS OF CONTENT (MOC) — LE PILIER
+════════════════════════════════════════════════════════════════════════════════
+
+Concept popularisé par Nick Milo (LYT — Linking Your Thinking).
+Un MOC = une note dont le contenu principal est une LISTE DE WIKILINKS
+organisée en sections. C'est un HUB thématique.
+
+POURQUOI LES MOCs DOMINENT LES DOSSIERS
+
+  • Une note peut appartenir à PLUSIEURS MOCs (impossible avec dossiers).
+  • Un MOC peut porter du CONTEXTE (annotations, ordre logique, commentaires).
+  • Un MOC est un NŒUD dans le graph → il structure visuellement le cluster.
+  • Un MOC évolue par simple ajout/retrait de wikilinks.
+
+STRUCTURE TYPE D'UN MOC
+
+    ---
+    tags: [moc]
+    ---
+    # MOC — Machine Learning
+
+    ## Fondations
+    - [[gradient-descent]]
+    - [[bias-variance]]
+
+    ## Modèles supervisés
+    - [[linear-regression]]
+    - [[random-forest]]
+
+    ## Ressources
+    - [[book-elements-of-statistical-learning]]
+
+TYPOLOGIE DES MOCs
+
+  • TOPIC MOC        — un domaine (Marketing, Philosophy…)
+  • PROJECT MOC      — un projet (Thesis 2026)
+  • INDEX / HOME MOC — le MOC des MOCs, point d'entrée du vault
+  • PERSON MOC       — une personne (mentor, auteur, client)
+
+EFFET SUR LE GRAPH
+
+  Les MOCs deviennent des GROS NŒUDS centraux, car de nombreuses notes
+  les référencent en backlink. Créer un groupe visuel dédié :
+      group "MOC" → tag:#moc  → rouge vif.
+  → Le graph devient une constellation où les MOCs sont les étoiles.
+
+════════════════════════════════════════════════════════════════════════════════
+§12. ZETTELKASTEN & ATOMIC NOTES
+════════════════════════════════════════════════════════════════════════════════
+
+La méthode Zettelkasten (Luhmann) prescrit :
+
+  • ATOMICITÉ    — une note = une idée.
+  • CONNEXION    — chaque note doit s'insérer dans le réseau existant.
+  • RÉFÉRENCE    — pas de duplication ; lier plutôt que copier.
+
+Effet sur le graph :
+  → Nœuds nombreux et FIN (pas de méga-notes).
+  → Densité de liens élevée mais SIGNIFIANTE.
+  → Émergence naturelle de clusters thématiques.
+
+Trois types (à mapper en groupes) :
+  #fleeting   — notes éphémères, à traiter puis supprimer.
+  #literature — extraits/citations d'une source lue.
+  #permanent  — notes reformulées, connectées, durables.
+
+════════════════════════════════════════════════════════════════════════════════
+§13. NOTES ORPHELINES ET CULS-DE-SAC
+════════════════════════════════════════════════════════════════════════════════
+
+Deux pathologies visibles dans le graph :
+
+  ORPHELINE  — aucun lien entrant ni sortant. Isolée en périphérie.
+  CUL-DE-SAC — un seul lien entrant, aucun sortant. Passif.
+
+RITUEL HEBDOMADAIRE DE NETTOYAGE
+
+  1. Ouvrir Graph View.
+  2. Filtres → cocher "Orphans" uniquement (via Search : `-outgoing:[[]]`
+     ou plus simplement en observant les nœuds isolés).
+  3. Pour chaque orpheline :
+       a) l'ouvrir,
+       b) chercher au moins UN MOC ou concept lié,
+       c) ajouter [[le-lien]],
+       d) OU l'archiver si obsolète.
+  4. Résultat : graph plus dense, cerveau plus organisé.
+
+════════════════════════════════════════════════════════════════════════════════
+§14. TAGS vs WIKILINKS : QUEL RÔLE DANS LE GRAPH ?
+════════════════════════════════════════════════════════════════════════════════
+
+  WIKILINKS  [[note]]     ⇒ Arêtes du graphe (structure).
+  TAGS       #tag         ⇒ Nœuds tag si activés + critère de groupe (couleur).
+
+RÈGLES
+
+  • Utiliser les WIKILINKS pour exprimer des RELATIONS entre idées.
+  • Utiliser les TAGS pour exprimer des CATÉGORIES / statuts transversaux.
+  • Ne pas remplacer un tag par un [[link]] si l'idée n'a pas sa propre note.
+  • Un bon vault a 3x à 10x plus de wikilinks que de tags.
+
+════════════════════════════════════════════════════════════════════════════════
+§15. PERSONNALISATION ESTHÉTIQUE (CSS)
+════════════════════════════════════════════════════════════════════════════════
+
+Obsidian expose des classes CSS spécifiques au Graph View, exploitables
+via des snippets dans .obsidian/snippets/ (activation dans Settings →
+Appearance → CSS snippets).
+
+CLASSES OFFICIELLES (bridge WebGL → CSS)
+
+  .graph-view.color-fill                 Couleur des nœuds notes
+  .graph-view.color-fill-tag             Couleur des nœuds tag
+  .graph-view.color-fill-attachment      Couleur des attachments
+  .graph-view.color-fill-unresolved      Couleur des liens non-résolus
+  .graph-view.color-fill-highlight       Couleur au survol
+  .graph-view.color-line                 Couleur des arêtes
+  .graph-view.color-line-highlight       Couleur des arêtes au survol
+  .graph-view.color-text                 Couleur du texte (labels)
+  .graph-view.color-arrow                Couleur des flèches
+  .graph-view.color-circle               Couleur du cercle englobant
+
+⚠ Le WebGL n'accepte que la propriété `color:` (pas `background`,
+   ni `opacity` fiable). Utilisez des couleurs hex ou rgb().
+
+Voir le fichier joint 02_CSS_Snippets_Graph.txt pour des snippets complets.
+
+════════════════════════════════════════════════════════════════════════════════
+§16. BOOKMARKS / SAUVEGARDE DE CONFIGURATIONS
+════════════════════════════════════════════════════════════════════════════════
+
+Depuis Obsidian 1.x, les configurations de Graph View peuvent être
+BOOKMARKÉES. C'est une fonctionnalité sous-utilisée mais capitale :
+
+  MODE OPÉRATOIRE
+    1. Régler le graph exactement comme vous voulez.
+    2. Ctrl/Cmd+Shift+B (ou icône bookmark en haut à droite).
+    3. Nommer : "Graph — Vue MOC seulement", "Graph — Diagnostic orphelins"…
+    4. Retrouver dans le panneau Bookmarks.
+
+  CONFIGURATIONS RECOMMANDÉES À BOOKMARKER
+    • "Vue MOC"            → path:MOCs/ + groupe rouge
+    • "Vue Projets actifs" → path:Projects/ -path:Projects/Archive/
+    • "Diagnostic Orphans" → orphans + presets §7 "Diagnostic"
+    • "Vue Zettelkasten"   → tag:#permanent
+    • "Vue Esthétique"     → preset ITS theme (§7)
+
+════════════════════════════════════════════════════════════════════════════════
+§17. TIME-LAPSE ANIMATION
+════════════════════════════════════════════════════════════════════════════════
+
+Fonctionnalité native (Display → Animate).
+Affiche l'apparition chronologique des notes selon leur date de création.
+
+USAGES
+
+  • Storytelling : montrer l'évolution d'un projet.
+  • Rétrospective personnelle : voir "quand" un domaine a pris son essor.
+  • Diagnostic : repérer les périodes de faible connexion.
+
+ASTUCE PRO
+  Combinez animate + filtre `tag:#projet-X` pour raconter l'histoire
+  d'un unique projet.
+
+════════════════════════════════════════════════════════════════════════════════
+§18. PLUGINS ESSENTIELS (RÉCAP)
+════════════════════════════════════════════════════════════════════════════════
+
+Voir le fichier joint 04_Plugins_Ecosysteme.txt pour les fiches détaillées.
+
+  PLUGIN                RÔLE PRINCIPAL
+  ─────────             ──────────────────────────────────────────────
+  Extended Graph        Étend le graph natif : images, formes, arcs, SVG.
+  Juggl                 Graph interactif Cytoscape avec 4 layouts.
+  Graph Analysis        Métriques : centralité, similarité, communautés.
+  Breadcrumbs           Hiérarchie typée (parent/child/sibling).
+  InfraNodus            Analyse sémantique IA du contexte.
+  Simple Graph Builder  Construction manuelle de graphes.
+  Charts / Mermaid      Graphes inline (dans le contenu d'une note).
+  Excalibrain           Visualisation sémantique The Brain-like.
+
+════════════════════════════════════════════════════════════════════════════════
+§19. EXTENDED GRAPH — LE UPGRADE NATIF (ElsaTam)
+════════════════════════════════════════════════════════════════════════════════
+
+Plugin phare sorti en 2024-2025 qui ajoute au graph natif :
+
+  • Images DIRECTEMENT sur les nœuds (photo de personne, cover de livre…).
+  • Arcs colorés autour des nœuds pour tags/propriétés (support Dataview).
+  • Coloration et filtrage des liens par TYPE DE RELATION.
+  • Liens COURBÉS distinguant forward/backward.
+  • FORMES de nœuds selon le type de contenu (ronds, carrés, triangles…).
+  • Mise à l'échelle du nœud du fichier ACTIF.
+  • Métriques statistiques → taille/couleur.
+  • EXPORT SVG (publication, print).
+  • Nœuds ÉPINGLÉS (positions fixes).
+  • Sauvegarde et bascule entre configurations multiples.
+  • Zoom direct sur un nœud.
+
+Repository : https://github.com/ElsaTam/obsidian-extended-graph
+Wiki       : https://github.com/ElsaTam/obsidian-extended-graph/wiki
+
+RECOMMANDATION : c'est le plugin qui offre le meilleur ratio effort/résultat
+si vous voulez rester dans le paradigme du graph natif tout en le
+"suralimentant".
+
+════════════════════════════════════════════════════════════════════════════════
+§20. JUGGL — LE GRAPH INTERACTIF DE NOUVELLE GÉNÉRATION (HEmile)
+════════════════════════════════════════════════════════════════════════════════
+
+Juggl (juggl.io) est un moteur graphique alternatif (Cytoscape.js) offrant :
+
+  • QUATRE LAYOUTS :
+      - Force-directed (comme le natif)
+      - Circle
+      - Grid
+      - HIERARCHICAL (arbre) ← unique
+  • WORKSPACE MODE : mode focus avec menu contextuel radial.
+      Sélectionner, développer, réduire, épingler, cacher.
+      SAUVEGARDER l'état exact du graph et le RECHARGER plus tard.
+  • STYLING avancé :
+      - Style Pane graphique
+      - CSS (voir Juggl CSS)
+      - YAML par nœud
+  • LINK TYPES stylables (labels sur les arêtes).
+  • CODE BLOCK : embarquer un graph Juggl INLINE dans une note :
+        ```juggl
+        // config
+        ```
+  • Local et Global graph modes.
+  • Mobile ready (partiel).
+
+Utilisation typique : revue de littérature complexe, analyse d'un projet,
+enseignement (schéma partageable).
+
+════════════════════════════════════════════════════════════════════════════════
+§21. GRAPH ANALYSIS — LES MÉTRIQUES SCIENTIFIQUES (SkepticMystic)
+════════════════════════════════════════════════════════════════════════════════
+
+Plugin d'analyse structurelle du vault. Il ajoute un panneau "Analysis"
+avec plusieurs FAMILLES D'ALGORITHMES :
+
+  A. LIEN & SIMILARITÉ
+     • Link Prediction    — suggère des liens manquants plausibles.
+     • Similarité         — cosinus, Jaccard, Adamic-Adar entre contenus/liens.
+
+  B. IMPORTANCE (CENTRALITÉ)
+     • Hub / Authority (HITS)   — nœuds influents (autorité) vs référents (hub).
+     • Betweenness centrality    — ponts entre clusters.
+     • Closeness centrality      — proximité moyenne à tous les autres nœuds.
+     • Degree                    — simple compte de connexions.
+
+  C. DÉTECTION DE COMMUNAUTÉS
+     • Label Propagation    — regroupe par diffusion d'étiquettes.
+     • Louvain               — modularité maximale.
+     • Clustering coefficient — densité locale.
+
+USAGE PRATIQUE
+
+  • Trouver les vraies "notes-pilier" (Hub/Authority élevés).
+  • Repérer les ponts stratégiques (Betweenness) — souvent des idées
+    interdisciplinaires précieuses.
+  • Suggestions de liens à créer (Link Prediction) → densifier le graph.
+
+Repo : https://github.com/SkepticMystic/graph-analysis
+
+════════════════════════════════════════════════════════════════════════════════
+§22. BREADCRUMBS — LA HIÉRARCHIE TYPÉE
+════════════════════════════════════════════════════════════════════════════════
+
+Breadcrumbs ajoute une DIMENSION HIÉRARCHIQUE au vault, absente du graph natif.
+Chaque lien peut porter un TYPE : parent, child, sibling, next, prev, custom.
+
+FONCTIONNALITÉS
+
+  • Champs YAML : `up: [[X]]`, `down: [[Y]]`, `next: [[Z]]`.
+  • Vue "Trail" — fil d'ariane en haut de chaque note.
+  • Vue "Matrix" — visualisation des relations typées.
+  • Vue "Ducks in a Row" — chaînes séquentielles.
+  • Vue Juggl-compatible pour un graph HIÉRARCHIQUE (voir §20).
+  • Export JSON de la hiérarchie → alimentation Graphviz.
+
+Pourquoi c'est puissant :
+  Le graph natif est plat et symétrique. Breadcrumbs y superpose
+  une STRUCTURE ORIENTÉE (DAG) — utile pour thèses, cursus, arborescences.
+
+════════════════════════════════════════════════════════════════════════════════
+§23. INFRANODUS — L'ANALYSE SÉMANTIQUE IA
+════════════════════════════════════════════════════════════════════════════════
+
+Plugin (et service) InfraNodus (noduslabs) : analyse CONTEXTUELLE, non
+purement structurelle. Il construit un graph de CONCEPTS (mots-clés
+co-occurrents) plutôt que de fichiers.
+
+APPORTS
+
+  • Fonctionne SANS backlinks manuels (analyse le contenu textuel).
+  • Modularité, betweenness au niveau conceptuel.
+  • Détection de LACUNES sémantiques ("blind spots") — ce qui manque
+    pour connecter deux clusters.
+  • Génération de questions et prompts IA basés sur les gaps.
+
+Recommandé pour : chercheurs, écrivains, veille éditoriale.
+
+════════════════════════════════════════════════════════════════════════════════
+§24. GRAPHVIZ / MERMAID — LES GRAPHES INLINE
+════════════════════════════════════════════════════════════════════════════════
+
+Différent du Graph View : ce sont des DIAGRAMMES rendus DANS le contenu
+d'une note (via code fence), utiles pour :
+
+  • Illustrer un raisonnement.
+  • Un organigramme, une timeline, un ERD.
+  • Publier via Obsidian Publish.
+
+MERMAID (natif Obsidian)
+
+    ```mermaid
+    graph TD
+      A[Idée] --> B[Note fleeting]
+      B --> C[Note permanent]
+      C --> D[[MOC]]
+    ```
+
+  Supporte : flowchart, sequence, class, gantt, gitgraph, ER, mindmap.
+
+GRAPHVIZ (plugin communautaire)
+
+  Layouts avancés : dot (hiérarchique), neato, twopi, circo, sfdp, fdp.
+  Contrôle fin des rangs, sous-graphes, clusters, HTML labels.
+
+    ```dot
+    digraph G {
+      rankdir=LR;
+      "Zettelkasten" -> "Atomicité";
+      "Zettelkasten" -> "Connexions";
+    }
+    ```
+
+CHARTS (Obsidian Charts par phibr0) — pour bar/line/pie/radar à partir
+de données CSV ou inline.
+
+════════════════════════════════════════════════════════════════════════════════
+§25. WORKFLOWS RECOMMANDÉS
+════════════════════════════════════════════════════════════════════════════════
+
+DÉBUTANT (semaine 1)
+  1. Ouvrir Graph View, jouer avec les 4 zones de réglages.
+  2. Créer 1 MOC — "MOC — Home".
+  3. Ajouter le tag `#moc` en frontmatter.
+  4. Créer un groupe rouge : tag:#moc.
+  5. Observer : le MOC devient un gros nœud rouge central.
+
+INTERMÉDIAIRE (semaine 2-4)
+  1. Ajouter 3 à 5 MOCs thématiques.
+  2. Définir 5-8 groupes de couleurs (§6 stratégies).
+  3. Installer Extended Graph.
+  4. Bookmarker 3 configurations utiles.
+  5. Faire un rituel hebdo de nettoyage des orphelins.
+
+AVANCÉ (mois 2-3)
+  1. Installer Graph Analysis + Breadcrumbs.
+  2. Utiliser Hub/Authority pour repérer les vrais hubs et créer des MOCs
+     autour de ceux qui n'en avaient pas.
+  3. Introduire des liens typés (up/down/next).
+  4. Configurer Juggl pour un layout hiérarchique de vos MOCs.
+  5. Exporter en SVG (Extended Graph) pour partage/print.
+
+MASTER (mois 4+)
+  1. Palette CSS custom cohérente avec votre thème.
+  2. Automatisation via Dataview + Templater (MOCs auto-générés).
+  3. InfraNodus pour l'analyse sémantique périodique.
+  4. Export vers Gephi/Cytoscape pour analyses one-shot poussées.
+  5. Documenter votre "graph philosophy" — pour vous et pour partager.
+
+════════════════════════════════════════════════════════════════════════════════
+§26. ANTI-PATTERNS : CE QU'IL FAUT ÉVITER
+════════════════════════════════════════════════════════════════════════════════
+
+  ✗ LINKER POUR LINKER — créer des liens sans sémantique. Le graph devient
+    dense mais faux.
+
+  ✗ TROP DE GROUPES (>10) — palette illisible, les distinctions s'effondrent.
+
+  ✗ MOCs FANTÔMES — un MOC vide ou jamais mis à jour vaut moins qu'un
+    dossier bien nommé.
+
+  ✗ MÉGA-NOTES — une note de 5000 mots devient un nœud "trou noir" qui
+    aspire toute la sémantique. Découper.
+
+  ✗ TAG-SPAM — 40 tags par note = aucune information. Max 5-7 tags utiles.
+
+  ✗ NE RÉGLER QUE L'ESTHÉTIQUE — un joli graph sur une structure faible
+    reste inutile. Structurer d'abord (§10-11), styliser ensuite.
+
+  ✗ IGNORER LE LOCAL GRAPH — c'est là que se joue 80 % de la valeur
+    quotidienne du Graph View.
+
+  ✗ CONFONDRE DOSSIERS ET STRUCTURE — les dossiers n'apparaissent pas
+    dans le graph. Utiliser des MOCs.
+
+════════════════════════════════════════════════════════════════════════════════
+§27. PERFORMANCE SUR GROS VAULTS
+════════════════════════════════════════════════════════════════════════════════
+
+Au-delà de ~5000 notes, le rendu peut ralentir. Techniques :
+
+  • Désactiver "Attachments" et "Tags" dans les Filtres.
+  • Ajouter des chemins aux Excluded files (Settings) pour les archives lourdes.
+  • Diminuer Node size et Text fade threshold (moins de rendu texte).
+  • Utiliser LOCAL Graph au lieu du Global.
+  • Utiliser Juggl / Extended Graph avec layouts non force-directed
+    (grille, hiérarchique) — beaucoup moins coûteux en CPU.
+  • Fermer l'onglet Graph quand non utilisé.
+  • Sur laptop, brancher secteur pour éviter le throttling GPU.
+
+════════════════════════════════════════════════════════════════════════════════
+§28. EXPORT ET PUBLICATION
+════════════════════════════════════════════════════════════════════════════════
+
+  • CAPTURE PNG   — natif : clic droit sur le graph → screenshot OS.
+  • SVG           — via Extended Graph (menu Export → SVG).
+  • DOT/Graphviz  — via Juggl → Cytoscape export, ou Neo4j Stream.
+  • Gephi/GEXF    — via export DOT puis conversion.
+  • Obsidian Publish — le graph natif est publié tel quel, filtres inclus.
+  • Print — préférer SVG haute résolution → PDF via Illustrator/Inkscape.
+
+════════════════════════════════════════════════════════════════════════════════
+§29. ROADMAP D'APPRENTISSAGE 30/60/90 JOURS
+════════════════════════════════════════════════════════════════════════════════
+
+  JOURS 1-7    Maîtrise du Graph natif (4 zones, Local Graph, Bookmarks).
+  JOURS 8-14   Création de 3 MOCs + 5 groupes de couleurs.
+  JOURS 15-30  Structuration : règle des 2 liens, revue orphelins hebdo.
+  JOURS 31-45  CSS snippets, presets de forces, thème.
+  JOURS 46-60  Plugins : Extended Graph + Graph Analysis.
+  JOURS 61-75  Breadcrumbs + hiérarchie typée + Juggl (layout hiérarchique).
+  JOURS 76-90  Métriques (centralité), InfraNodus, export SVG.
+  JOUR 90+     Documentation personnelle, partage, itération continue.
+
+════════════════════════════════════════════════════════════════════════════════
+§30. RESSOURCES & BIBLIOGRAPHIE (voir 06_Sources_Bibliographie.txt)
+════════════════════════════════════════════════════════════════════════════════
+
+Officiel :
+  • https://obsidian.md/help/plugins/graph
+  • https://obsidian.md/help/plugins/search
+  • https://publish.obsidian.md/hub/04+-+Guides%2C+Workflows%2C+%26+Courses/Guides/Graph+view+customization
+
+Communauté / forum :
+  • https://forum.obsidian.md/t/how-do-you-use-the-graph-view/2785
+  • https://forum.obsidian.md/t/styling-graph-view-according-to-note-content/5181
+  • https://forum.obsidian.md/t/is-there-a-way-to-change-the-color-of-the-nodes-in-graph-view/8271
+  • https://forum.obsidian.md/t/graphview-can-i-filter-on-more-than-one-path-or-tag/38443
+  • https://forum.obsidian.md/t/new-plugin-extended-graph/98850
+  • https://forum.obsidian.md/t/graphviz-and-hierarchical-graph-layout-a-review-and-plugin-proposal/31596
+  • https://forum.obsidian.md/t/graph-view-physics-and-force-directed-graphs/72586
+  • https://forum.obsidian.md/t/create-a-graph-based-on-the-folder-structure/32411
+
+Reddit :
+  • https://www.reddit.com/r/ObsidianMD/comments/1466wbw/how_can_i_use_the_graph_view_most_efficiently/
+  • https://www.reddit.com/r/ObsidianMD/comments/1dq4wn5/so_i_discovered_how_to_make_my_graph_look_better/
+
+Plugins GitHub :
+  • https://github.com/ElsaTam/obsidian-extended-graph
+  • https://github.com/HEmile/juggl
+  • https://github.com/SkepticMystic/graph-analysis
+  • https://github.com/noduslabs/infranodus-obsidian-plugin
+  • https://github.com/nickmilo/LYT-Mode
+  • https://github.com/akosbalasko/zoottelkeeper
+
+MOC & PKM :
+  • https://www.natecue.com/en/learn/productivity/map-of-content/
+  • https://www.dsebastien.net/2022-05-15-maps-of-content/
+  • Nick Milo — Linking Your Thinking (LYT)
+
+Articles :
+  • https://medium.com/@jetsadaporn445002/user-guide-for-the-graph-analysis-plug-in-for-obsidian-basics-and-installation-4f384094e93c
+  • https://medium.com/@ann_p/visualizing-connections-graph-views-in-obsidian-tana-and-anytype-3c767e08fe66
+
+Science de la visualisation :
+  • Tamara Munzner — Visualization Analysis and Design.
+  • Ben Shneiderman — "Overview first, zoom and filter, then details on demand".
+  • Joseph Novak — Concept Mapping.
+  • Wikipedia — Force-directed graph drawing.
+
+════════════════════════════════════════════════════════════════════════════════
+FIN DU DOCUMENT PRINCIPAL — voir fichiers annexes 02 à 06.
+Compilé le 2026-07-24.
+════════════════════════════════════════════════════════════════════════════════

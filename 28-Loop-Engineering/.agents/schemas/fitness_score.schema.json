@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Fitness Score (DSPy Arena)",
+  "description": "Schéma de la fonction de coût multi-signal pour l'évaluation des mutations de patch.",
+  "type": "object",
+  "properties": {
+    "run_id": { "type": "string" },
+    "patch_id": { "type": "string" },
+    "resolution_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Taux de succès de la résolution (1.0 = parfait)"
+    },
+    "token_overhead": {
+      "type": "number",
+      "description": "Ratio de surconsommation de tokens vs baseline"
+    },
+    "time_overhead": {
+      "type": "number",
+      "description": "Ratio de surconsommation de temps vs baseline"
+    },
+    "lateral_regression_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Nombre de contrats cassés sur d'autres agents (doit être 0)"
+    },
+    "calculated_fitness": {
+      "type": "number",
+      "description": "Score final = 0.45*R - 0.25*Tk - 0.10*Tps - 10.0*LR"
+    },
+    "gate_decision": {
+      "type": "string",
+      "enum": ["AUTO_MERGE", "REQUIRE_HITL", "REJECTED"],
+      "description": "Décision de la Gate basée sur le score et la gravité"
+    }
+  },
+  "required": ["run_id", "patch_id", "resolution_rate", "lateral_regression_count", "calculated_fitness", "gate_decision"]
+}

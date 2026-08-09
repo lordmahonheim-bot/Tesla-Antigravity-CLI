@@ -1,31 +1,28 @@
 mission:
-  id: "MVP28-LOOP-ENGINEERING"
-  description: "Finalisation de l'intégration Loop Engineering × Tesla-Code-Auditor (MVP 28)"
+  name: Integration_Taxonomie_Officielle
+  objective: "Intégrer la Taxonomie de Gouvernance Officielle SGC dans l'écosystème Tesla."
   nodes:
-    - id: "tesla-arcanis-360"
-      role: "Architecte Système / Orchestration globale"
-      tasks: ["Superviser la synchronisation des composants", "Valider la conformité architecturale au Vigilum Codex"]
-    - id: "tesla-curator-prime"
-      role: "Gardien de la Mémoire Canonique"
-      tasks: ["Vérifier l'alignement de /memory/", "Assurer la persistance Alexandria SQLite v2.0", "Mettre à jour l'inventaire taxonomique"]
-    - id: "tesla-web-raider"
-      role: "Veille et synchronisation externe"
-      tasks: ["Vérifier l'état du dépôt distant", "Superviser la publication sur MVP-GITHUB"]
-    - id: "tesla-master-code"
-      role: "Implémentation technique et câblage"
-      tasks: ["Câbler Orchestrator -> Master-Code", "Câbler Orchestrator -> Code-Auditor", "Implémenter transitions PASS/DELAY/BLOCK"]
-    - id: "tesla-premortem"
-      role: "Évaluateur de risques / Red Teaming"
-      tasks: ["Exécuter l'audit Premortem final (Avocat du diable, Inspecteur, Vigie)"]
-    - id: "tesla-writing-skills"
-      role: "Documentation et Rédaction"
-      tasks: ["Rédiger le README.md d'autorité", "Produire les rapports de clôture et de blocage"]
-  edges:
-    - from: "tesla-arcanis-360"
-      to: ["tesla-curator-prime", "tesla-master-code"]
-    - from: "tesla-master-code"
-      to: ["tesla-premortem", "tesla-writing-skills"]
-    - from: "tesla-premortem"
-      to: "tesla-arcanis-360"
-    - from: "tesla-writing-skills"
-      to: "tesla-web-raider"
+    - id: node_curator
+      agent: Tesla-Curator-Prime
+      task: "Créer memory/TAXONOMY.md et documenter l'ancrage de la nouvelle taxonomie."
+      dependencies: []
+    - id: node_web
+      agent: Tesla-Web-Raider
+      task: "Rechercher des exemples de taxonomies similaires (Projet, Chantier, Workflow, Composant) pour enrichir la définition si nécessaire."
+      dependencies: []
+    - id: node_writer
+      agent: Tesla-Writing-Skills
+      task: "Mettre à jour la terminologie dans Gestion-de-Chantiers/INDEX.md et liste_projets_antigravity_BASE.md avec le style formel SGC."
+      dependencies: [node_curator]
+    - id: node_arcanis
+      agent: Tesla-Arcanis-360
+      task: "Superviser la cohérence globale de l'intégration et définir des stratégies d'implémentation avancées."
+      dependencies: [node_curator, node_web]
+    - id: node_coder
+      agent: Tesla-Master-Code
+      task: "Mettre en place des scripts de validation ou des templates pour s'assurer que la création de futurs éléments respecte la taxonomie."
+      dependencies: [node_arcanis, node_writer]
+    - id: node_premortem
+      agent: Tesla-PREMORTEM
+      task: "Valider qu'aucune règle SGC existante n'est brisée par ces modifications."
+      dependencies: [node_coder]

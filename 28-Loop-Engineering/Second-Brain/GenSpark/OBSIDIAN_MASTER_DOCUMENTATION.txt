@@ -1,0 +1,2301 @@
+================================================================================
+  DOCUMENTATION MASTER OBSIDIAN — DEVENIR EXPERT ET BÂTIR UN SECOND CERVEAU
+  Version compilée : Juillet 2026
+  Objectif : Documentation exhaustive, méthodologique et pédagogique
+  couvrant les exigences, bonnes pratiques et méthodologies complètes
+  pour maîtriser Obsidian et construire un second cerveau personnel.
+================================================================================
+
+SOMMAIRE
+--------------------------------------------------------------------------------
+PARTIE I    — INTRODUCTION & PHILOSOPHIE
+   1. Qu'est-ce qu'Obsidian ?
+   2. Le concept de Second Cerveau (Second Brain)
+   3. Pourquoi choisir Obsidian ?
+   4. Prérequis matériels et logiciels
+
+PARTIE II   — INSTALLATION & PREMIERS PAS
+   5. Installation multi-plateforme
+   6. Créer et configurer un Vault (Coffre)
+   7. Interface utilisateur : anatomie complète
+   8. Workflow des 30 premières minutes
+
+PARTIE III  — SYNTAXE MARKDOWN COMPLÈTE
+   9. Markdown de base
+  10. Syntaxe avancée Obsidian Flavored Markdown
+  11. Liens internes, wikilinks, embeds
+  12. Callouts (12 types officiels)
+  13. Tableaux, mathématiques LaTeX, Mermaid
+  14. Tags et hiérarchie de tags
+
+PARTIE IV   — GESTION DES FICHIERS ET DES MÉDIAS
+  15. Images : insertion, organisation, redimensionnement
+  16. PDF : intégration, annotations, recherche full-text
+  17. Pièces jointes et dossier attachments
+  18. Formats de fichiers acceptés
+
+PARTIE V    — GUIDE DE STYLE ET BONNES PRATIQUES DE RÉDACTION
+  19. Guide de style officiel Obsidian
+  20. Conventions de nommage
+  21. Structure recommandée d'une note
+  22. Notes atomiques (Atomic Notes)
+
+PARTIE VI   — PROPERTIES / FRONTMATTER YAML
+  23. Les 6 types de propriétés
+  24. Bonnes pratiques de nommage YAML
+  25. Templates de frontmatter
+
+PARTIE VII  — MÉTHODOLOGIES DE SECOND CERVEAU
+  26. Méthode PARA (Tiago Forte)
+  27. Méthode Zettelkasten (Luhmann)
+  28. MOC — Maps of Content (Nick Milo)
+  29. Approche minimaliste "Zéro dossier"
+  30. Fusion PARA + Zettelkasten
+
+PARTIE VIII — PLUGINS ESSENTIELS 2026
+  31. Plugins Core (natifs)
+  32. Top 15 plugins communautaires
+  33. Plugins IA et RAG
+  34. Bases : le nouveau plugin base de données
+
+PARTIE IX   — WORKFLOWS AVANCÉS
+  35. Templater : templates dynamiques
+  36. Dataview : requêtes DQL
+  37. Tasks : gestion des tâches
+  38. Excalidraw & Canvas
+  39. Workflow académique complet
+  40. Workflow développeur / ingénieur
+  41. Workflow content creator
+
+PARTIE X    — PERSONNALISATION
+  42. Thèmes et apparence
+  43. CSS Snippets
+  44. Espaces de travail (Workspaces)
+  45. Raccourcis clavier essentiels
+
+PARTIE XI   — SYNCHRONISATION & SAUVEGARDE
+  46. Obsidian Sync (officiel)
+  47. Obsidian Git
+  48. iCloud / Google Drive / Syncthing
+  49. Règle du 3-2-1
+
+PARTIE XII  — LIMITATIONS ET PIÈGES À ÉVITER
+  50. Limitations connues d'Obsidian
+  51. Anti-patterns fréquents
+  52. Résolution de problèmes
+
+PARTIE XIII — SECOND CERVEAU AVEC IA (2026)
+  53. Plugins IA : Smart Connections, Copilot, Nova
+  54. Intégration Claude Code / MCP
+  55. Context Engineering pour l'IA
+
+PARTIE XIV  — ROADMAP DE MAÎTRISE
+  56. Programme d'apprentissage progressif
+  57. Ressources complémentaires
+  58. Sources et bibliographie
+
+================================================================================
+PARTIE I — INTRODUCTION & PHILOSOPHIE
+================================================================================
+
+1. QU'EST-CE QU'OBSIDIAN ?
+--------------------------------------------------------------------------------
+Obsidian est une application de prise de notes et de gestion des connaissances
+personnelles (PKM — Personal Knowledge Management) reposant sur trois principes
+fondamentaux :
+
+  • LOCAL-FIRST : Vos notes sont stockées localement sur votre appareil sous
+    forme de fichiers texte simples (Markdown, .md). Aucune dépendance à un
+    cloud propriétaire. Vos données vous appartiennent totalement.
+
+  • MARKDOWN-BASED : Toutes les notes sont écrites en Markdown, un format
+    texte universel, portable et pérenne. Vous pouvez les lire, éditer et
+    exporter avec n'importe quel éditeur de texte, aujourd'hui et dans 50 ans.
+
+  • LIEN BIDIRECTIONNEL : Obsidian traite vos notes comme un wiki
+    hyperlié. Chaque note peut pointer vers d'autres notes, et Obsidian
+    calcule automatiquement les backlinks (rétroliens), créant un graphe
+    de connaissances.
+
+Métaphore : « Si Notion est l'influenceur productivité avec un ring light,
+Obsidian est le développeur backend en hoodie qui a construit son propre OS
+en silence. » (ps11.hashnode.dev)
+
+Fonctionnalités clés :
+  - Édition Markdown temps réel (Live Preview / Reading / Source)
+  - Recherche full-text du vault entier
+  - Vue graphique (Graph View) — visualisation en réseau de vos notes
+  - Système de plugins extensible (2000+ plugins communautaires)
+  - Thèmes personnalisables (CSS)
+  - Mode hors-ligne total
+  - Multi-plateforme : Windows, macOS, Linux, iOS, Android
+  - Gratuit pour un usage personnel
+
+Modèle économique :
+  - Usage personnel : GRATUIT (toutes les fonctionnalités locales)
+  - Obsidian Sync : payant (synchronisation officielle chiffrée E2E)
+  - Obsidian Publish : payant (publication web de vos notes)
+  - Licence commerciale : payante (usage professionnel)
+
+
+2. LE CONCEPT DE SECOND CERVEAU (SECOND BRAIN)
+--------------------------------------------------------------------------------
+Le terme « Second Brain » (Second Cerveau) a été popularisé par Tiago Forte
+dans son livre "Building a Second Brain" (BASB). Il désigne :
+
+  « Une méthodologie pour délester votre esprit en externalisant vos idées,
+    tâches, connaissances et apprentissages dans un système externe fiable,
+    afin que votre cerveau biologique puisse respirer et se concentrer sur
+    la pensée créative plutôt que sur la mémorisation. »
+
+Objectifs d'un Second Cerveau :
+  1. CAPTURER — Ne plus perdre une idée, une information, un extrait.
+  2. ORGANISER — Retrouver instantanément ce dont vous avez besoin.
+  3. DISTILLER — Résumer et synthétiser pour ancrer la compréhension.
+  4. EXPRIMER — Produire du contenu (articles, décisions, code, projets).
+
+Ces quatre étapes forment la méthode CODE de Tiago Forte :
+  C — Capture
+  O — Organize
+  D — Distill
+  E — Express
+
+Un Second Cerveau bien construit :
+  • Se souvient à votre place des choses que vous avez lues, entendues, vues.
+  • Fait émerger des connexions inattendues entre des idées éloignées.
+  • Vous fait gagner un temps considérable lors de la production de contenu.
+  • Réduit l'anxiété liée à la peur d'oublier.
+  • Devient plus organisé au fur et à mesure qu'il grossit (contre-intuitif).
+
+
+3. POURQUOI CHOISIR OBSIDIAN POUR SON SECOND CERVEAU ?
+--------------------------------------------------------------------------------
+Comparaison Obsidian vs Notion (basée sur les retours d'utilisateurs vérifiés) :
+
+  CRITÈRE                    OBSIDIAN               NOTION
+  ------------------------   --------------------   -----------------------
+  Propriété des données      Locale (100%)          Cloud propriétaire
+  Format                     Markdown standard      Format propriétaire
+  Fonctionnement offline     Complet                Limité
+  Vitesse                    Très rapide            Ralentit avec la taille
+  Personnalisation           Plugins + CSS          Limitée
+  Versioning                 Git (illimité)         Undo basique
+  Coût pour usage personnel  Gratuit                Freemium
+  Prise en main              Courbe moyenne         Immédiate
+  Écosystème                 Communauté active      Templates officiels
+  Adapté aux développeurs    Excellent              Correct
+
+Raison philosophique fondamentale :
+  Vos notes personnelles sont l'extension de votre pensée. Elles doivent
+  vivre dans un format ouvert et local, sur des fichiers que vous
+  contrôlerez toute votre vie. Obsidian est le seul outil grand public
+  à respecter cette contrainte de portabilité totale.
+
+
+4. PRÉREQUIS MATÉRIELS ET LOGICIELS
+--------------------------------------------------------------------------------
+Configuration minimale recommandée :
+  • Windows 10+ / macOS 10.15+ / Linux (AppImage, Flatpak, Snap, .deb, .rpm)
+  • iOS 15+ / Android 8+
+  • RAM : 4 Go minimum, 8 Go confortable (au-delà de 10 000 notes)
+  • Stockage : négligeable pour les notes texte ; prévoir pour les pièces
+    jointes (images, PDF, audio, vidéo)
+  • Connexion internet : optionnelle (uniquement pour Sync, plugins,
+    téléchargements)
+
+Compétences préalables : AUCUNE. La syntaxe Markdown s'apprend en 30 minutes.
+
+Attitudes utiles :
+  • Curiosité (pour explorer les plugins et fonctionnalités)
+  • Patience (les bénéfices d'un second cerveau sont exponentiels dans le temps)
+  • Discipline légère (30 secondes par jour suffisent pour maintenir l'habitude)
+
+
+================================================================================
+PARTIE II — INSTALLATION & PREMIERS PAS
+================================================================================
+
+5. INSTALLATION MULTI-PLATEFORME
+--------------------------------------------------------------------------------
+ÉTAPE 1 : Téléchargement
+  • Rendez-vous sur https://obsidian.md/download
+  • Choisissez la version correspondant à votre système
+  • Vérifiez la signature du binaire pour la sécurité (recommandé)
+
+ÉTAPE 2 : Installation
+  • Windows : exécuter l'installateur .exe (choisir "Install for me only"
+    pour éviter les problèmes de droits admin)
+  • macOS : glisser Obsidian.app dans /Applications
+  • Linux (AppImage) : rendre l'AppImage exécutable puis lancer
+  • Mobile : installer depuis App Store / Google Play
+
+ÉTAPE 3 : Mise à jour de l'installateur
+  Obsidian se compose de deux couches :
+    - L'application (installeur)
+    - Le runtime (mis à jour automatiquement)
+  Il est recommandé de mettre à jour périodiquement l'installateur via
+  le site officiel (Settings > About > Check for updates).
+
+
+6. CRÉER ET CONFIGURER UN VAULT (COFFRE)
+--------------------------------------------------------------------------------
+Le VAULT (Coffre) est un dossier de votre système de fichiers qui contient
+toutes vos notes Markdown et pièces jointes. Obsidian ne fait qu'afficher
+et manipuler ce dossier — vous pouvez y accéder directement avec
+l'Explorateur Windows ou le Finder macOS.
+
+Bonnes pratiques pour créer un vault :
+  1. Choisir un emplacement STABLE et facile à sauvegarder
+     (ex : ~/Documents/ObsidianVault ou ~/Second-Brain)
+  2. Éviter les dossiers synchronisés en temps réel par plusieurs clouds
+     (risque de conflits de fichiers)
+  3. Utiliser un nom de dossier simple sans espaces ni caractères spéciaux
+  4. Créer un vault distinct par grand contexte (personnel, professionnel,
+     projet spécifique) — recommandation de Kevin T'Syen
+
+Structure minimale au démarrage :
+  MonSecondCerveau/
+    ├── .obsidian/          (créé automatiquement, contient la config)
+    ├── 00-Inbox/           (capture rapide)
+    ├── Templates/          (modèles de notes)
+    ├── Attachments/        (images, PDF, médias)
+    └── Bienvenue.md        (première note d'accueil)
+
+
+7. INTERFACE UTILISATEUR : ANATOMIE COMPLÈTE
+--------------------------------------------------------------------------------
+L'interface d'Obsidian est composée de plusieurs zones :
+
+  A) VOLET GAUCHE
+     - Explorateur de fichiers (arborescence du vault)
+     - Recherche
+     - Bookmarks (favoris)
+     - Tags
+     - Graphe local
+     - Notes récentes
+
+  B) ZONE CENTRALE
+     - Onglets de notes ouvertes
+     - Éditeur (mode Live Preview / Reading / Source)
+     - Barre d'onglets empilables
+
+  C) VOLET DROIT
+     - Backlinks (liens entrants)
+     - Outgoing links (liens sortants)
+     - Outline (plan de la note)
+     - Vue graphique globale
+
+  D) RUBAN LATÉRAL (Ribbon)
+     - Icônes des commandes fréquentes
+
+  E) BARRE DE STATUT
+     - Nombre de mots, position curseur, sync status, etc.
+
+Trois modes d'édition :
+  • SOURCE MODE : affichage brut du Markdown (idéal pour apprendre)
+  • LIVE PREVIEW : rendu en temps réel tout en gardant l'édition (recommandé)
+  • READING MODE : rendu final en lecture seule (pour lire)
+
+Raccourci pour basculer : Ctrl/Cmd + E
+
+
+8. WORKFLOW DES 30 PREMIÈRES MINUTES (D'après Optimike)
+--------------------------------------------------------------------------------
+  0-5 min  : Créer votre vault et une note d'accueil "Bienvenue"
+  5-10 min : Écrire une vraie note sur un sujet concret vous concernant
+  10-15 min: Créer trois liens internes [[Nom-de-note]] entre vos notes
+  15-20 min: Ouvrir Backlinks et Vue graphique pour comprendre les relations
+  20-30 min: Décider d'UNE action quotidienne (ex : une note par jour)
+
+Règle d'or : NE PAS installer de plugins tant que vous n'avez pas produit
+100 notes en Markdown vanilla. Vous découvrirez ainsi vos vrais besoins.
+
+
+================================================================================
+PARTIE III — SYNTAXE MARKDOWN COMPLÈTE
+================================================================================
+
+9. MARKDOWN DE BASE (Syntaxe officielle Obsidian)
+--------------------------------------------------------------------------------
+9.1 TITRES / EN-TÊTES
+  # Titre niveau 1
+  ## Titre niveau 2
+  ### Titre niveau 3
+  #### Titre niveau 4
+  ##### Titre niveau 5
+  ###### Titre niveau 6
+  → Jusqu'à 6 niveaux avec le symbole #
+
+9.2 EMPHASE (Gras, italique, surlignage, barré)
+  **Texte en gras**                     ou __Texte en gras__
+  *Texte en italique*                   ou _Texte en italique_
+  ~~Texte barré~~
+  ==Texte surligné==                    (spécifique Obsidian)
+  ***Texte gras et italique***          ou ___Texte gras et italique___
+  **Texte gras et _italique imbriqué_**
+
+9.3 LISTES
+  Non ordonnées :
+    - Élément 1
+    - Élément 2
+      - Sous-élément (indentation 2 ou 4 espaces)
+    * Autre syntaxe valide
+    + Autre syntaxe valide
+
+  Ordonnées :
+    1. Premier élément
+    2. Deuxième élément
+    3. Troisième
+    1) Syntaxe alternative
+
+  Tâches (Task lists) :
+    - [ ] Tâche non terminée
+    - [x] Tâche terminée
+    - [/] Tâche en cours (extension)
+    - [-] Tâche annulée (extension)
+    - [?] Tâche en question (extension)
+
+9.4 CITATIONS
+  > Ceci est une citation.
+  > Elle peut s'étendre sur plusieurs lignes.
+  >
+  > > Et être imbriquée.
+
+9.5 LIGNES HORIZONTALES
+  ---
+  ***
+  ___
+  (trois caractères ou plus sur une ligne isolée)
+
+9.6 CODE
+  Inline : `let x = 42;`
+
+  Bloc avec langage :
+    ```javascript
+    function hello() {
+      console.log("Hello Obsidian!");
+    }
+    ```
+
+  Bloc avec tildes (alternative) :
+    ~~~python
+    def hello():
+        print("Hello Obsidian!")
+    ~~~
+
+  Coloration syntaxique : Obsidian utilise Prism.js. Voir la liste des
+  langages supportés sur https://prismjs.com/#supported-languages
+
+9.7 LIENS EXTERNES
+  [Texte du lien](https://exemple.com)
+  [Texte avec titre](https://exemple.com "Titre au survol")
+  <https://url-directe.com>            (autolink)
+
+9.8 IMAGES EXTERNES
+  ![Texte alternatif](https://exemple.com/image.jpg)
+  ![|300](https://exemple.com/image.jpg)       (largeur 300px)
+  ![|300x200](https://exemple.com/image.jpg)   (300x200)
+
+9.9 NOTES DE BAS DE PAGE (Footnotes)
+  Ceci est une phrase avec une note[^1].
+  [^1]: Voici le contenu de la note de bas de page.
+
+  Note en ligne :
+  Ceci est une phrase^[avec une note en ligne].
+
+9.10 COMMENTAIRES (invisibles au rendu)
+  %% Ceci est un commentaire, visible uniquement en mode Source %%
+
+
+10. SYNTAXE AVANCÉE — OBSIDIAN FLAVORED MARKDOWN (OFM)
+--------------------------------------------------------------------------------
+10.1 TABLEAUX
+  | Colonne 1 | Colonne 2 | Colonne 3 |
+  |-----------|-----------|-----------|
+  | Cellule A | Cellule B | Cellule C |
+  | Cellule D | Cellule E | Cellule F |
+
+  Alignement (via les tirets) :
+  | Gauche | Centre | Droite |
+  |:-------|:------:|-------:|
+  | A      |   B    |      C |
+
+  Astuce : le plugin communautaire "Advanced Tables" facilite grandement
+  l'édition (Tab/Shift-Tab pour naviguer, tri automatique, formules).
+
+10.2 MATHÉMATIQUES LATEX (MathJax)
+  Inline : $E = mc^2$
+
+  Bloc :
+  $$
+  \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+  $$
+
+  Support complet de LaTeX/MathJax : matrices, intégrales, sommes, fractions,
+  symboles grecs, etc.
+
+10.3 DIAGRAMMES MERMAID
+  ```mermaid
+  graph LR
+    A[Idée] --> B[Note atomique]
+    B --> C[MOC]
+    C --> D[Article publié]
+  ```
+
+  Types supportés : flowchart, sequence, gantt, class, state, ER,
+  user journey, pie chart, mindmap, timeline.
+
+10.4 CALLOUTS (12 types officiels)
+  Syntaxe générale :
+    > [!type] Titre facultatif
+    > Contenu du callout, peut s'étendre sur plusieurs lignes.
+    > **Markdown** _fonctionne_ dedans.
+
+  Ajouter `-` après le type pour un callout replié par défaut,
+  ou `+` pour un callout déplié explicitement.
+
+  Les 12 types officiels et leurs alias :
+
+    > [!note]        (alias : default)
+    > [!abstract]    (alias : summary, tldr)
+    > [!info]
+    > [!todo]
+    > [!tip]         (alias : hint, important)
+    > [!success]     (alias : check, done)
+    > [!question]    (alias : help, faq)
+    > [!warning]     (alias : caution, attention)
+    > [!failure]     (alias : fail, missing)
+    > [!danger]      (alias : error)
+    > [!bug]
+    > [!example]
+    > [!quote]       (alias : cite)
+
+  Exemples pratiques :
+    > [!tip] Astuce importante
+    > Utilisez toujours [[wikilinks]] pour créer les connexions du graphe.
+
+    > [!warning]- Attention (replié)
+    > Ne stockez pas vos vaults sur un dossier synchronisé par plusieurs clouds.
+
+10.5 IDENTIFIANTS DE BLOC (Block references)
+  Pour créer un lien vers un bloc spécifique :
+    Contenu à référencer ^unique-id
+
+  Puis on référence avec :
+    [[Note#^unique-id]]        (lien simple)
+    ![[Note#^unique-id]]       (embed du bloc)
+
+
+11. LIENS INTERNES, WIKILINKS ET EMBEDS
+--------------------------------------------------------------------------------
+11.1 DEUX FORMATS DE LIENS INTERNES
+  • Wikilink (recommandé Obsidian) :
+      [[Nom de la note]]
+      [[Nom de la note|Alias affiché]]
+
+  • Markdown standard (interopérable) :
+      [Nom de la note](Nom%20de%20la%20note.md)
+
+  Pour choisir : Settings > Files & Links > "Use [[Wikilinks]]"
+  Recommandation : wikilinks pour usage Obsidian pur ; markdown standard
+  si vous prévoyez d'exporter vers d'autres outils (GitHub, Hugo, etc.).
+
+11.2 LIENS VERS DES SECTIONS
+  [[Note#Titre]]              → lien vers un titre
+  [[Note#Titre#Sous-titre]]   → lien vers un sous-titre imbriqué
+  [[Note#^blockID]]           → lien vers un bloc
+
+11.3 LIENS INTERNES DANS LA MÊME NOTE
+  [[#Titre-de-cette-note]]
+  [[#^blockID]]
+
+11.4 EMBEDS — INTÉGRATION DE CONTENU
+  Syntaxe universelle : préfixer un lien interne par !
+
+  Embed d'une note entière :
+    ![[Note-à-intégrer]]
+
+  Embed d'une section :
+    ![[Note#Titre spécifique]]
+
+  Embed d'un bloc :
+    ![[Note#^blockID]]
+
+  Embed d'une image du vault :
+    ![[image.png]]
+    ![[image.png|300]]        (largeur 300)
+    ![[image.png|300x200]]    (dimensions précises)
+
+  Embed d'un PDF :
+    ![[document.pdf]]
+    ![[document.pdf#page=3]]           (page 3 uniquement)
+    ![[document.pdf#height=400]]       (hauteur 400px)
+
+  Embed d'un fichier audio :
+    ![[extrait.mp3]]
+    ![[podcast.ogg]]
+
+  Embed d'un canvas :
+    ![[MonCanvas.canvas]]
+    (Note : n'affiche que les formes, pas le texte des cartes)
+
+  Embed d'une liste avec block reference :
+    Dans la note source :
+      - Élément 1
+      - Élément 2
+      ^ma-liste
+
+    Dans la note cible :
+      ![[Note-source#^ma-liste]]
+
+  Astuce Desktop : glisser-déposer un fichier supporté directement dans
+  une note l'intègre automatiquement.
+
+
+12. CALLOUTS — DÉTAIL COMPLET
+--------------------------------------------------------------------------------
+Les callouts sont une extension d'Obsidian de la syntaxe blockquote.
+
+Anatomie d'un callout :
+  > [!TYPE]{modifier} Titre
+  > Contenu ligne 1
+  > Contenu ligne 2
+
+Modificateurs :
+  (rien)  → callout ouvert et fixe
+  -       → callout replié (foldable, closed by default)
+  +       → callout dépliable (foldable, open by default)
+
+Callouts imbriqués :
+  > [!note] Note parente
+  > Contenu de la note.
+  >
+  > > [!tip] Astuce imbriquée
+  > > Contenu de l'astuce.
+
+Cas d'usage recommandés :
+  • [!warning]  → alertes de sécurité, pièges à éviter
+  • [!tip]      → astuces, raccourcis
+  • [!example]  → exemples de code, cas concrets
+  • [!quote]    → citations d'auteurs, extraits de livres
+  • [!question] → FAQ, questions ouvertes à explorer
+  • [!todo]     → actions à réaliser (complément à Tasks)
+
+
+13. TABLEAUX, MATHÉMATIQUES, MERMAID (Rappel condensé)
+--------------------------------------------------------------------------------
+Se référer aux sections 10.1, 10.2 et 10.3.
+
+
+14. TAGS ET HIÉRARCHIE DE TAGS
+--------------------------------------------------------------------------------
+14.1 SYNTAXE
+  Simple    : #idée #projet #lecture
+  Imbriqué  : #projet/actif #projet/archive
+              #ressource/livre #ressource/article #ressource/podcast
+
+14.2 EMPLACEMENT
+  • Dans le corps d'une note : # doit être précédé d'un espace ou début
+    de ligne (sinon confondu avec un titre).
+  • Dans le frontmatter YAML (recommandé) :
+      ---
+      tags:
+        - projet/actif
+        - lecture-en-cours
+      ---
+
+14.3 BONNES PRATIQUES
+  • Un maximum de 2-3 tags par note (règle ps11.hashnode.dev)
+  • Utiliser une hiérarchie cohérente #type/sous-type
+  • Ne pas multiplier les tags sémantiquement proches (#idea vs #ideas)
+  • Préférer les liens [[wikilinks]] aux tags pour les CONCEPTS
+    (les tags servent au STATUT et à la NATURE)
+
+14.4 CONVENTION RECOMMANDÉE
+  #status/inbox     #status/wip      #status/done      #status/archive
+  #type/idea        #type/note       #type/moc         #type/project
+  #zone/perso       #zone/travail    #zone/apprentissage
+
+
+================================================================================
+PARTIE IV — GESTION DES FICHIERS ET DES MÉDIAS
+================================================================================
+
+15. IMAGES : INSERTION, ORGANISATION, REDIMENSIONNEMENT
+--------------------------------------------------------------------------------
+15.1 MÉTHODES D'INSERTION D'IMAGES
+  a) GLISSER-DÉPOSER (recommandé)
+     Faire glisser une image depuis l'explorateur système vers la note.
+     Obsidian copie l'image dans le dossier d'attachements et insère
+     automatiquement la syntaxe d'embed.
+
+  b) COPIER-COLLER
+     Copier une capture d'écran (Ctrl/Cmd+Shift+S, ou outil de capture)
+     puis coller dans la note (Ctrl/Cmd+V). Obsidian génère un nom
+     de fichier et copie l'image dans le dossier configuré.
+
+  c) SYNTAXE MARKDOWN MANUELLE
+     ![[image.png]]                   (wikilink, format Obsidian)
+     ![Alt text](chemin/image.png)    (markdown standard)
+
+  d) PLUGIN "Simple Image Inserter"
+     Palette de commandes > "Insert image(s)" > sélectionner > "Open"
+
+  e) BASE64 (déconseillé, alourdit la note)
+     ![](data:image/png;base64,iVBORw0KGgo...)
+
+15.2 CONFIGURER LE DOSSIER D'ATTACHEMENTS
+  Chemin : Settings > Files & Links > "Default location for new attachments"
+
+  Trois modes :
+    1. Vault folder (racine du vault) — chaotique à long terme
+    2. In the folder specified below — un dossier centralisé (recommandé)
+    3. Same folder as current file — chaque note a ses images à côté
+    4. In subfolder under current folder — sous-dossier par note
+
+  Recommandation : créer un dossier "Attachments" ou "assets" à la racine
+  et le définir comme dossier par défaut.
+
+15.3 CHOISIR ENTRE WIKILINK ET MARKDOWN POUR LES IMAGES
+  Settings > Files & Links > "Use [[Wikilinks]]" :
+    • Activé  → ![[image.png]]                (portable seulement Obsidian)
+    • Désactivé → ![alt](attachments/image.png) (compatible tout Markdown)
+
+15.4 REDIMENSIONNER UNE IMAGE
+  ![[image.png|400]]           → largeur 400px, hauteur auto
+  ![[image.png|400x300]]       → 400x300 précis
+  ![300](https://url/img.jpg)  → externe, largeur 300
+
+15.5 REDIMENSIONNEMENT INTERACTIF
+  En mode Reading, cliquez sur l'image puis glissez les coins.
+  Obsidian met à jour la syntaxe dans la note.
+
+15.6 ALIGNEMENT & MISE EN PAGE AVANCÉE (via HTML)
+  <p align="center"><img src="image.png" width="400"></p>
+
+15.7 BONNES PRATIQUES DE GESTION D'IMAGES
+  • Nommer les images de manière descriptive : "obsidian-graph-vue-2026.png"
+    et non "Screenshot_20260722_142302.png".
+  • Compresser les images (TinyPNG, ImageOptim) avant de les ajouter.
+  • Créer un dossier attachments par grande zone thématique si vous
+    avez des milliers d'images.
+  • ATTENTION : Obsidian ne fait pas de recherche full-text dans les
+    images (pas d'OCR natif). Utiliser un plugin comme Text Extractor
+    pour indexer le contenu textuel des images.
+
+
+16. PDF : INTÉGRATION, ANNOTATIONS, RECHERCHE FULL-TEXT
+--------------------------------------------------------------------------------
+16.1 INTÉGRER UN PDF DANS UNE NOTE
+  ![[document.pdf]]                    (embed complet)
+  ![[document.pdf#page=5]]             (ouvre à la page 5)
+  ![[document.pdf#height=600]]         (hauteur 600px de la visionneuse)
+  [[document.pdf]]                     (lien simple, ouvre au clic)
+
+16.2 WORKFLOW ACADÉMIQUE COMPLET (source : effortlessacademic.com)
+  L'objectif : connecter TROIS éléments pour chaque lecture :
+    1) L'annotation dans le PDF
+    2) Un commentaire / conclusion personnel
+    3) Une note de synthèse générale sur le document
+
+  Cela crée des "deep links" (liens profonds) entre la source et vos idées.
+
+16.3 ORGANISATION DES PDF
+  • Dossier dédié : "__Papers/" ou "Bibliographie/"
+  • Nommage cohérent : "Auteur Année Titre.pdf"
+    Exemples :
+      "Smith 2020 - Deep Learning Foundations.pdf"
+      "Forte 2022 - Building a Second Brain.pdf"
+  • Plugin "Attachment Management" pour automatiser l'organisation.
+
+16.4 PLUGINS D'ANNOTATION
+  • PDF++ (recommandé) : édition directe du PDF, annotations incrustées,
+    liens vers passages précis, copier-coller de liens contextuels.
+    Courbe d'apprentissage plus élevée mais puissance maximale.
+  • Annotator : alternative plus légère. Annotations stockées dans des
+    fichiers Markdown séparés (le PDF reste inchangé).
+
+16.5 RECHERCHE FULL-TEXT DANS LES PDF
+  a) Plugin OmniSearch (dans Obsidian)
+     + Plugin Text Extractor (indexation)
+     → Recherche du contenu textuel des PDF depuis la palette Obsidian.
+
+  b) Application externe (macOS) : PDF Search
+     Prévisualisation, tri par pertinence, plus rapide pour de gros corpus.
+
+  c) Zotero 7 : Advanced Search > Attachment Content
+
+16.6 EXPORTER UNE NOTE OBSIDIAN EN PDF
+  Menu > Export to PDF
+  Options : marges, mode d'impression (édition/lecture), taille de page,
+  échelle, images incluses.
+
+
+17. PIÈCES JOINTES ET DOSSIER ATTACHMENTS
+--------------------------------------------------------------------------------
+17.1 PRINCIPE FONDAMENTAL D'OBSIDIAN
+  Obsidian ne "colle" pas les images/PDF/audio DANS la note (comme Word).
+  Il stocke le fichier séparément dans le vault et affiche un lien
+  d'embed. Ceci garantit :
+    • Portabilité (un fichier, un rôle)
+    • Réutilisation (une image dans plusieurs notes)
+    • Performance (les notes Markdown restent légères)
+
+17.2 STRUCTURE RECOMMANDÉE
+  Vault/
+    ├── Attachments/
+    │   ├── Images/
+    │   ├── PDF/
+    │   ├── Audio/
+    │   └── Video/
+    ├── Notes/
+    └── ...
+
+17.3 CONFIGURATION UNIQUE OU PAR SOUS-DOSSIER
+  Settings > Files & Links > Default location for new attachments :
+    • "In the folder specified below" → mettre "Attachments"
+    • Cela s'applique à toutes les images collées / glissées / capturées.
+
+
+18. FORMATS DE FICHIERS ACCEPTÉS PAR OBSIDIAN
+--------------------------------------------------------------------------------
+Formats natifs supportés (affichage direct) :
+  • Markdown  : .md
+  • Images    : .png, .jpg, .jpeg, .gif, .bmp, .svg, .webp
+  • Audio     : .mp3, .wav, .m4a, .3gp, .flac, .ogg, .oga, .opus
+  • Vidéo     : .mp4, .webm, .ogv, .mov, .mkv
+  • Documents : .pdf
+  • Canvas    : .canvas (JSON)
+
+Autres formats :
+  • Peuvent être stockés dans le vault mais ouverts avec l'app système
+    par un clic (Settings > Files & Links > Detect all file extensions).
+
+
+================================================================================
+PARTIE V — GUIDE DE STYLE ET BONNES PRATIQUES DE RÉDACTION
+================================================================================
+
+19. GUIDE DE STYLE OFFICIEL OBSIDIAN
+--------------------------------------------------------------------------------
+Le guide de style officiel (https://obsidian.md/fr/help/style-guide) s'appuie
+sur les standards de :
+  • Google Developer Documentation Style Guide
+  • Microsoft Style Guide
+
+19.1 STYLE LINGUISTIQUE
+  • Utiliser l'anglais international (ou français international)
+  • Éviter les expressions idiomatiques et culturellement spécifiques
+  • Voix active plutôt que passive
+  • Mots simples plutôt que jargon
+  • Être explicite plutôt qu'implicite
+  • Orthographe américaine côté EN ("organize" et non "organise")
+
+19.2 TERMINOLOGIE OBSIDIAN
+  Employer :
+    ✓ "raccourci clavier"          (pas "hotkey")
+    ✓ "application Obsidian"       (pas "Obsidian" seul en contexte marketing)
+    ✓ "sync"                       (pas "synchronisation" en discours technique)
+    ✓ "terme de recherche"         (pas "requête")
+    ✓ "entête"                     (pas "en-tête" ni "titre" pour un heading)
+    ✓ "dossier"                    (pas "répertoire")
+    ✓ "note"                       (pour un fichier Markdown)
+    ✓ "fichier"                    (pour les autres formats)
+    ✓ "nom de la note"             (pas "titre" — le titre est le H1 interne)
+    ✓ "note active"                (pas "note actuelle")
+
+19.3 INTERFACE UTILISATEUR
+  • Texte de boutons  → en **gras** dans la documentation
+  • Actions           → « sélectionnez » (pas « cliquez » ni « appuyez »)
+  • Séquences         → utiliser → :
+      Settings → Files & Links → Default location for new attachments
+
+19.4 FORMATAGE DES ENTÊTES
+  • Utiliser l'impératif : "Configurer le sync" (pas "Configuration du sync")
+  • Sentence case : première lettre en majuscule, reste en minuscule
+    (sauf noms propres)
+  • Éviter la ponctuation finale dans les titres
+
+19.5 FORMATAGE DES LISTES
+  • Utiliser des tirets cadratins (—) pour séparer un terme gras de
+    sa description :
+      • **Vault** — Dossier racine contenant vos notes.
+      • **Note** — Fichier Markdown individuel.
+      • **Backlink** — Référence entrante vers la note courante.
+
+19.6 SAUTS DE LIGNE
+  Ajouter une ligne vide entre chaque bloc Markdown (titre, paragraphe,
+  liste, code, callout) pour améliorer la lisibilité du source ET du rendu.
+
+
+20. CONVENTIONS DE NOMMAGE
+--------------------------------------------------------------------------------
+20.1 NOMS DE FICHIERS (NOTES)
+  Approche 1 — DATE + TITRE (Zettelkasten strict) :
+    2026-07-22 1420 - Notes atomiques.md
+    (YYYY-MM-DD HHMM - Titre.md — unique par nature)
+
+  Approche 2 — TITRE DESCRIPTIF (le plus fréquent) :
+    Notes atomiques - définition.md
+    Second cerveau - méthode CODE.md
+
+  Approche 3 — CONTEXTE + TITRE :
+    2026-07-22-meeting-product-roadmap.md
+    (recommandation pour vaults optimisés IA)
+
+  Bonnes pratiques :
+    ✓ Éviter les caractères spéciaux : / \ : * ? " < > |
+    ✓ Titres courts mais spécifiques (3-7 mots)
+    ✓ Éviter les acronymes obscurs
+    ✓ Pas d'accents dans les noms de fichiers (portabilité multi-OS)
+
+20.2 NOMS DE DOSSIERS
+  ✓ Préfixer par un chiffre pour ordre d'affichage :
+    00-Inbox/
+    10-Projects/
+    20-Areas/
+    30-Resources/
+    40-Archives/
+    99-Templates/
+
+20.3 NOMS DE TAGS
+  ✓ Kebab-case ou hiérarchie : #ma-lecture ou #lecture/en-cours
+  ✗ Éviter les CamelCase inconsistants
+
+20.4 NOMS DE PROPRIÉTÉS YAML
+  ✓ snake_case : due_date, review_date, project_status
+  ✓ Singulier : rating (pas ratings)
+  ✗ Éviter les espaces
+
+
+21. STRUCTURE RECOMMANDÉE D'UNE NOTE
+--------------------------------------------------------------------------------
+Un template universel pour toute note atomique :
+
+  ---
+  title: Titre exact de la note
+  aliases: [Alias 1, Alias 2]
+  tags: [type/note, zone/apprentissage]
+  created: 2026-07-22
+  modified: 2026-07-22
+  source: [[Livre - Building a Second Brain]]
+  status: draft
+  ---
+
+  # Titre de la note (H1)
+
+  > [!abstract] Résumé en une phrase
+  > Le concept en 20 mots maximum, pour que le futur vous comprenne
+  > instantanément en survolant la note.
+
+  ## Idée principale
+
+  Une seule idée exprimée avec vos propres mots (technique Feynman).
+
+  ## Contexte / Exemples
+
+  - Exemple concret 1
+  - Exemple concret 2
+
+  ## Connexions
+
+  - [[Note connexe A]]
+  - [[Note connexe B]]
+  - Voir aussi : [[MOC Sujet Principal]]
+
+  ## Références
+
+  - Source originale : [[Livre - Titre]] p. 42
+  - Article : [Titre](https://url.com)
+
+
+22. NOTES ATOMIQUES (ATOMIC NOTES)
+--------------------------------------------------------------------------------
+Une note atomique respecte trois principes (héritage Zettelkasten) :
+
+  1. UNE SEULE IDÉE PAR NOTE
+     Si une note contient deux idées distinctes, la scinder.
+
+  2. AUTONOMIE
+     La note doit être compréhensible hors de son contexte original.
+     Un futur vous, dans 5 ans, sans mémoire du sujet, doit pouvoir la lire.
+
+  3. LIÉE
+     Chaque note doit pointer vers au moins UNE autre note pertinente
+     (règle Matt Giaro : "link to at least ONE related note").
+
+Anti-exemples de notes atomiques :
+  ✗ Une note "Lecture du 22 juillet" contenant 12 idées différentes
+  ✗ Un chapitre entier de livre recopié dans une seule note
+  ✗ Une note qui ne fait référence à aucune autre
+
+Bons exemples :
+  ✓ "La règle des 3H de Cal Newport"
+  ✓ "Pourquoi Obsidian utilise le format .md"
+  ✓ "Effet Zeigarnik en gestion de tâches"
+
+
+================================================================================
+PARTIE VI — PROPERTIES / FRONTMATTER YAML
+================================================================================
+
+23. LES 6 TYPES DE PROPRIÉTÉS OBSIDIAN
+--------------------------------------------------------------------------------
+Les Properties (anciennement Frontmatter YAML) sont des métadonnées
+clé-valeur placées en haut d'une note, entre deux lignes ---.
+
+Emplacement obligatoire :
+  ---
+  cle1: valeur1
+  cle2: valeur2
+  ---
+  # Contenu de la note commence ici
+
+Les 6 types disponibles :
+
+23.1 TEXT (défaut)
+  Une ligne de texte. Supporte liens internes et externes.
+    title: "Ma note importante"
+    author: "[[John Doe]]"
+
+23.2 LIST
+  Plusieurs valeurs (une par ligne préfixée par un tiret).
+    tags:
+      - projet/actif
+      - lecture-en-cours
+    keywords:
+      - PKM
+      - second-cerveau
+
+23.3 NUMBER
+  Nombres entiers ou décimaux uniquement (pas d'opérations).
+    rating: 4.5
+    word_count: 1234
+
+23.4 CHECKBOX
+  Booléen (true/false) affiché comme case à cocher en mode Live/Reading.
+    completed: true
+    published: false
+
+23.5 DATE
+  Format ISO : YYYY-MM-DD. Lien automatique vers Daily Notes si activé.
+    due: 2026-08-15
+    started: 2026-07-01
+
+23.6 DATE & TIME
+  Format ISO complet : YYYY-MM-DDTHH:MM:SS.
+    meeting_at: 2026-07-25T14:30:00
+    reviewed: 2026-07-22T09:15:00
+
+23.7 PROPRIÉTÉS PAR DÉFAUT (built-in)
+  • tags       (list) — tags de la note
+  • aliases    (list) — noms alternatifs pour les [[wikilinks]]
+  • cssclasses (list) — classes CSS à appliquer à la note
+
+
+24. BONNES PRATIQUES DE NOMMAGE YAML
+--------------------------------------------------------------------------------
+D'après le guide practicalpkm.com :
+
+24.1 RÈGLES FONDAMENTALES
+  1. COHÉRENCE — Utiliser toujours la même propriété de la même façon.
+     Ex : ne pas alterner "author" et "auteur" dans deux notes différentes.
+
+  2. SPÉCIFICITÉ — Si deux workflows diffèrent, préférer deux propriétés :
+     Ex : "video_status" et "newsletter_status" (au lieu d'un "status" ambigu).
+
+  3. PARCIMONIE — N'ajouter une propriété que si elle sert réellement
+     à filtrer, trier ou requêter (Dataview/Bases).
+
+24.2 CONVENTIONS DE NOMMAGE
+  ✓ Singulier par défaut : "tag" plutôt que "tags" (sauf built-in)
+                            "rating" plutôt que "ratings"
+  ✓ Pas d'espaces          : "due_date" (pas "due date")
+  ✓ Snake_case             : "publication_date", "read_status"
+  ✓ Autocomplete           : profiter des suggestions pour éviter les typos
+
+24.3 TEMPLATE DE FRONTMATTER TYPE
+  Pour une note de lecture :
+    ---
+    type: book-note
+    title: Building a Second Brain
+    author: Tiago Forte
+    year: 2022
+    isbn: 978-1982167387
+    rating: 4
+    status: finished
+    started: 2026-06-01
+    finished: 2026-06-25
+    tags:
+      - lecture/livre
+      - domaine/productivite
+    aliases:
+      - BASB
+      - Second Brain
+    ---
+
+
+25. TEMPLATES DE FRONTMATTER RECOMMANDÉS
+--------------------------------------------------------------------------------
+25.1 NOTE ATOMIQUE
+  ---
+  type: atomic
+  created: 2026-07-22
+  tags: [status/wip]
+  aliases: []
+  source: ""
+  ---
+
+25.2 NOTE DE PROJET
+  ---
+  type: project
+  status: active     # active | on-hold | done | archived
+  priority: high     # high | medium | low
+  due: 2026-09-30
+  created: 2026-07-22
+  tags: [projet, zone/travail]
+  ---
+
+25.3 NOTE DE RÉUNION
+  ---
+  type: meeting
+  date: 2026-07-22T14:00:00
+  attendees:
+    - Alice
+    - Bob
+    - Charlie
+  project: [[Projet Alpha]]
+  decisions: []
+  action_items: []
+  tags: [meeting]
+  ---
+
+25.4 NOTE DE LECTURE
+  ---
+  type: literature
+  title: ""
+  author: ""
+  year:
+  source_url: ""
+  rating:
+  status: to-read     # to-read | reading | finished
+  tags: [lecture]
+  ---
+
+
+================================================================================
+PARTIE VII — MÉTHODOLOGIES DE SECOND CERVEAU
+================================================================================
+
+26. MÉTHODE PARA (Tiago Forte)
+--------------------------------------------------------------------------------
+PARA = Projects, Areas, Resources, Archives
+
+Principe cardinal : organiser par ACTIONNABILITÉ (pas par sujet).
+
+26.1 LES QUATRE CATÉGORIES
+
+  P — PROJECTS (Projets)
+    Objectifs à court terme avec deadline et livrable clair.
+    Exemples : "Lancer newsletter", "Écrire article X", "Voyage Japon"
+    Question-test : "Est-ce que ce projet a une date de fin ?"
+
+  A — AREAS (Domaines de responsabilité)
+    Zones de vie à maintenir en continu, sans deadline.
+    Exemples : Santé, Finances, Famille, Carrière
+    Question-test : "Est-ce une responsabilité permanente ?"
+
+  R — RESOURCES (Ressources)
+    Sujets d'intérêt, références potentiellement utiles.
+    Exemples : Livres, articles, tutoriels, citations, idées
+    Question-test : "Cela pourrait m'être utile un jour ?"
+
+  A — ARCHIVES (Archives)
+    Éléments terminés ou dormants (mais potentiellement réactivables).
+    Exemples : Projets clos, anciens jobs, notes obsolètes
+    Question-test : "Ai-je fini d'utiliser ceci mais pourrais-je y revenir ?"
+
+26.2 STRUCTURE DE VAULT PARA
+  Second-Brain/
+    ├── 1-Projects/
+    │   ├── Lancement newsletter/
+    │   └── Article second cerveau/
+    ├── 2-Areas/
+    │   ├── Santé/
+    │   ├── Finances/
+    │   └── Carrière/
+    ├── 3-Resources/
+    │   ├── Livres/
+    │   ├── Articles/
+    │   └── Idées/
+    └── 4-Archives/
+        └── 2025/
+
+26.3 WORKFLOW HEBDOMADAIRE PARA
+  Chaque semaine, ~30 min :
+    1. Déplacer les Projects terminés vers Archives
+    2. Repromouvoir des Resources en Projects si un projet actif les concerne
+    3. Rétrograder les Areas inactives vers Archives
+    4. Réordonner les priorités
+
+26.4 CRITIQUE DE PARA POUR OBSIDIAN
+  Matt Giaro (mattgiaro.com) argumente que PARA fonctionne bien pour la
+  GESTION DE PROJETS mais mal pour la PENSÉE CRÉATIVE dans Obsidian, où
+  la force réside dans les liens et non dans les dossiers.
+
+
+27. MÉTHODE ZETTELKASTEN (Niklas Luhmann)
+--------------------------------------------------------------------------------
+Zettelkasten = "boîte à fiches" (allemand). Système développé par le
+sociologue Niklas Luhmann, auteur de 70+ livres grâce à sa méthode.
+
+27.1 LES TROIS TYPES DE NOTES
+  a) FLEETING NOTES (notes éphémères)
+     Captures immédiates : idées à la volée, notes de conférence brouillonnes.
+     Traitement : lues dans les 48h puis converties ou supprimées.
+
+  b) LITERATURE NOTES (notes de lecture)
+     Résumés dans vos propres mots des sources lues (livres, articles).
+     Doivent inclure la référence exacte (page, chapitre).
+
+  c) PERMANENT NOTES (notes permanentes / evergreen)
+     Idées formulées avec précision, autonomes, atomiques.
+     Le cœur de votre Zettelkasten. Elles doivent être :
+       • Atomiques  (une idée)
+       • Autonomes  (compréhensibles seules)
+       • Connectées (liées à d'autres permanent notes)
+
+27.2 LES 4 PRINCIPES CARDINAUX DE LUHMANN
+  1. Écrire avec ses propres mots (pas de copier-coller)
+  2. Créer des liens explicites entre notes
+  3. Ne pas classer prématurément (laisser la structure émerger)
+  4. Développer un index thématique évolutif
+
+27.3 IMPLÉMENTATION DANS OBSIDIAN
+  Vault/
+    ├── 0-Inbox/            (fleeting notes)
+    ├── 1-Literature/       (literature notes)
+    ├── 2-Permanent/        (permanent notes = Zettel)
+    ├── 3-MOC/              (Maps of Content = index thématiques)
+    └── 4-Templates/
+
+
+28. MOC — MAPS OF CONTENT (Nick Milo)
+--------------------------------------------------------------------------------
+Un MOC est une note dont le rôle principal est de LIER d'autres notes,
+créant un index / table des matières pour un domaine.
+
+28.1 QUAND CRÉER UN MOC ?
+  • Quand vous avez 5+ notes sur un même thème
+  • Quand vous vous perdez à retrouver vos idées sur un sujet
+  • Comme point d'entrée dans un domaine complexe
+
+28.2 STRUCTURE TYPE D'UN MOC
+  # MOC — Second Cerveau
+
+  > Cartographie des idées liées à la construction d'un second cerveau
+  > dans Obsidian.
+
+  ## Concepts fondamentaux
+  - [[Notes atomiques]]
+  - [[Backlink et lien bidirectionnel]]
+  - [[Vault et structure]]
+
+  ## Méthodologies
+  - [[Méthode PARA]]
+  - [[Zettelkasten]]
+  - [[Progressive Summarization]]
+
+  ## Plugins essentiels
+  - [[Dataview - guide]]
+  - [[Templater - guide]]
+
+  ## Workflows quotidiens
+  - [[Capture rapide sur mobile]]
+  - [[Revue hebdomadaire]]
+
+  ## Notes en attente de tri
+  ```dataview
+  list from [[]] and !outgoing([[]])
+  ```
+
+28.3 REQUÊTE DATAVIEW POUR MOC AUTO-ALIMENTÉ
+  ```dataview
+  list from [[]] and !outgoing([[]])
+  ```
+  Cette requête liste toutes les notes qui référencent le MOC courant
+  MAIS que le MOC n'a pas encore explicitement organisées. Elle sert
+  d'inbox de tri.
+
+28.4 EMBOÎTEMENT DE MOC
+  On peut créer des MOC de MOC (méta-MOC). Exemple :
+    [[Home]] → [[MOC - Personnel]] → [[MOC - Santé]] → notes
+                                  → [[MOC - Finances]] → notes
+
+
+29. APPROCHE MINIMALISTE "ZÉRO DOSSIER" (Matt Giaro)
+--------------------------------------------------------------------------------
+Philosophie radicale : abandonner totalement les dossiers, utiliser
+UNIQUEMENT les liens et les tags.
+
+Matt Giaro rapporte 4 819 notes dans Obsidian, ZÉRO dossier.
+
+29.1 JUSTIFICATION
+  • Les dossiers créent une hiérarchie rigide qui limite les connexions
+  • Une note appartient souvent à plusieurs contextes (multi-parentalité)
+  • Le graph et les backlinks font émerger la structure naturellement
+  • Moins de friction : "où ranger cette note ?" disparaît
+
+29.2 WORKFLOW MINIMALISTE
+  1. CAPTURE (externe à Obsidian pour la fluidité)
+     Voix   → Letterly (transcription) → Bear (bucket d'idées)
+     Texte  → Bear (avec Apple shortcut)
+
+  2. TRAITEMENT (dans Obsidian, quand l'humeur y est)
+     • Piocher 5-10 idées de Bear qui excitent
+     • Les déplacer dans Obsidian
+     • Les réécrire dans ses propres mots (Feynman)
+     • Lier à AU MOINS une note existante
+
+  3. CRÉATION
+     • Ouvrir plusieurs panneaux de notes liées
+     • Assembler des insights existants (pas partir de zéro)
+     • Ex : article rédigé en 37 min en assemblant 12+8+3+4 notes
+
+29.3 PLUGINS MINIMAUX DE MATT GIARO
+  • Projects (calendrier éditorial)
+  • Canvas (planification visuelle)
+  • Graph View (découverte de connexions)
+
+29.4 AVERTISSEMENT
+  Cette approche fonctionne SI :
+    • Vous liez rigoureusement chaque nouvelle note
+    • Vous acceptez de fouiller via recherche + graphe
+    • Vous ne mélangez pas vie perso et pro dans le même vault
+
+
+30. FUSION PARA + ZETTELKASTEN (parazettel.com)
+--------------------------------------------------------------------------------
+Une synthèse recommandée par la communauté :
+
+  • PARA gère l'ACTIONNABILITÉ (Projects, Areas)
+  • Zettelkasten gère la PENSÉE (Permanent Notes, MOC)
+
+Structure hybride :
+  Vault/
+    ├── 0-Inbox/              (fleeting notes toutes catégories)
+    ├── 1-Projects/           (PARA : actionnable court terme)
+    ├── 2-Areas/              (PARA : responsabilités permanentes)
+    ├── 3-Resources/          (PARA : références passives)
+    │   └── 3.1-Literature/   (Zettel : notes de lecture)
+    ├── 4-Archives/           (PARA : terminé)
+    ├── 5-Permanent/          (Zettel : notes evergreen)
+    ├── 6-MOC/                (Zettel : index thématiques)
+    └── 9-Templates/
+
+
+================================================================================
+PARTIE VIII — PLUGINS ESSENTIELS 2026
+================================================================================
+
+31. PLUGINS CORE (natifs, à activer/désactiver)
+--------------------------------------------------------------------------------
+Settings > Core plugins :
+
+  • File explorer            (arborescence — indispensable)
+  • Search                   (recherche full-text — indispensable)
+  • Quick switcher           (Ctrl+O — navigation rapide — indispensable)
+  • Graph view               (vue graphe — indispensable)
+  • Backlinks                (rétroliens — indispensable)
+  • Outgoing links           (liens sortants)
+  • Tags                     (panneau des tags)
+  • Page preview             (aperçu au survol)
+  • Daily notes              (note du jour — recommandé)
+  • Templates                (templates simples — remplacé par Templater)
+  • Note composer            (fusionner/scinder des notes)
+  • Command palette          (Ctrl+P — indispensable)
+  • Bookmarks                (favoris/starred)
+  • Canvas                   (tableau blanc infini)
+  • Slides                   (présentations à partir de notes)
+  • Sync                     (payant, si Obsidian Sync activé)
+  • Publish                  (payant, si Obsidian Publish)
+  • Bases                    (NOUVEAU 2026 — voir section 34)
+
+
+32. TOP 15 PLUGINS COMMUNAUTAIRES (2026)
+--------------------------------------------------------------------------------
+Basé sur obsibrain.com, obsidianstats.com et retours communauté :
+
+32.1 GESTION DE CONTENU ET TEMPLATES
+  1. Templater — Templates dynamiques avec JavaScript, dates, variables.
+  2. QuickAdd — Capture rapide en un raccourci, création de notes typées.
+  3. Periodic Notes — Notes hebdo/mensuelles/annuelles avec templates.
+
+32.2 REQUÊTES ET BASE DE DONNÉES
+  4. Dataview — Interroger vos notes comme une base de données (DQL/JS).
+     Alternative en 2026 : le core plugin BASES peut remplacer nombre
+     d'usages simples.
+
+32.3 GESTION DE TÂCHES ET TEMPS
+  5. Tasks — Tâches avec dates d'échéance, récurrences, priorités, filtres.
+  6. Calendar — Vue calendrier mensuelle liée aux daily notes.
+  7. Day Planner — Planification horaire de la journée.
+
+32.4 VISUALISATION
+  8. Excalidraw — Dessins, schémas, mind maps embarqués en SVG.
+  9. Kanban — Tableaux Kanban Trello-like en Markdown.
+
+32.5 QUALITÉ ET COHÉRENCE
+  10. Linter — Auto-formatage à la sauvegarde (frontmatter, headings, etc.)
+  11. Advanced Tables — Édition ergonomique des tableaux (Tab, tri, formules).
+
+32.6 SYNCHRONISATION
+  12. Obsidian Git — Versionnage automatique via Git (GitHub/GitLab).
+
+32.7 IA (voir aussi section 53)
+  13. Smart Connections — Chat RAG avec l'intégralité du vault.
+  14. Copilot — Assistant IA multi-modèles.
+
+32.8 RECHERCHE AVANCÉE
+  15. Omnisearch — Recherche floue avec support des PDF (+ Text Extractor).
+
+32.9 AUTRES INCONTOURNABLES SELON LE PROFIL
+  • Recent Files            — Fichiers récemment ouverts en sidebar
+  • Auto Link Title         — Auto-complète les titres de liens web
+  • Style Settings          — Panneau graphique pour customiser thèmes
+  • Editing Toolbar         — Barre d'outils WYSIWYG optionnelle
+  • Highlightr              — Surlignage multi-couleurs
+  • Home Tab                — Dashboard d'accueil personnalisé
+  • Note Refactor           — Refactoring de notes (extraire section vers note)
+  • Web Clipper             — Capturer des pages web en Markdown
+  • Readwise                — Import automatique de vos surlignages Kindle etc.
+
+
+33. PLUGINS IA ET RAG (2026)
+--------------------------------------------------------------------------------
+33.1 SMART CONNECTIONS
+  • Le plus populaire des plugins IA
+  • Utilise RAG (Retrieval Augmented Generation) sur tout le vault
+  • Chat contextuel : "que sais-je sur X ?" et il puise dans vos notes
+  • Compatible OpenAI, Claude, modèles locaux via Ollama
+
+33.2 COPILOT
+  • Assistant polyvalent multi-modèles
+  • Prompts personnalisables
+  • Génération, résumé, traduction, correction
+
+33.3 NOVA
+  • Approche unique : PAS de chat, PAS de copier-coller
+  • Sélectionner du texte → appliquer une transformation → remplacement en place
+  • Idéal pour l'édition rapide
+
+33.4 SMART SECOND BRAIN (100% privacy)
+  • Open source
+  • Utilise Ollama en local (aucun envoi cloud)
+  • RAG local, aucune donnée ne quitte votre machine
+  • Recommandé pour données sensibles
+
+
+34. BASES — LE NOUVEAU PLUGIN BASE DE DONNÉES (2026)
+--------------------------------------------------------------------------------
+Bases est un plugin CORE (natif) introduit avec Obsidian 1.9 en 2026.
+
+34.1 CE QU'IL FAIT
+  Transformer un ensemble de notes en une base de données interactive,
+  à la Notion, MAIS 100% locale et Markdown.
+
+34.2 FONCTIONNALITÉS
+  • 6 vues : table, gallery, board, calendar, list, cards
+  • Filtres puissants (syntaxe dédiée)
+  • Édition en ligne depuis la base
+  • Formules
+  • Colonnes de type image
+  • Toggle sous-dossiers
+
+34.3 CAS D'USAGE
+  • Bibliothèque de livres avec cover art
+  • CRM personnel
+  • Suivi de projets
+  • Content calendar
+  • Inventaire
+
+34.4 SYNTAXE DE FICHIER .base
+  Les bases sont des fichiers YAML dans le vault.
+  Créer via : Command Palette > "Create new base"
+  ou via le menu Files.
+
+34.5 AVANTAGE vs Dataview
+  • Édition directe des lignes
+  • Vue mise à jour instantanément (pas de re-render manuel)
+  • Interface graphique pour filtres (pas besoin d'apprendre DQL)
+  • Intégré nativement — pas de plugin communautaire à installer
+
+
+================================================================================
+PARTIE IX — WORKFLOWS AVANCÉS
+================================================================================
+
+35. TEMPLATER : TEMPLATES DYNAMIQUES
+--------------------------------------------------------------------------------
+Templater est LE plugin de génération de notes automatiques.
+
+35.1 VARIABLES CORE
+
+  tp.file
+    tp.file.title           → titre du fichier
+    tp.file.folder()        → dossier parent
+    tp.file.creation_date() → date de création
+    tp.file.last_modified_date()
+    tp.file.rename(new)     → renomme la note
+    tp.file.move(path)      → déplace la note
+    tp.file.cursor(1)       → position finale du curseur
+
+  tp.date
+    tp.date.now()                        → date actuelle
+    tp.date.now("YYYY-MM-DD")            → format personnalisé
+    tp.date.now("YYYY-MM-DD", 7)         → dans 7 jours
+    tp.date.tomorrow()
+    tp.date.yesterday()
+    tp.date.weekday("YYYY-MM-DD", 1)     → prochain lundi
+
+  tp.system
+    tp.system.prompt("Question ?")       → saisie interactive
+    tp.system.suggester(["A","B"], ["a","b"]) → menu déroulant
+    tp.system.clipboard()                → contenu du presse-papier
+
+  tp.web
+    tp.web.daily_quote()                 → citation du jour
+    tp.web.random_picture()              → image aléatoire
+
+35.2 EXEMPLE DE TEMPLATE DE DAILY NOTE
+  ---
+  date: <% tp.date.now("YYYY-MM-DD") %>
+  weekday: <% tp.date.now("dddd") %>
+  tags: [daily]
+  ---
+
+  # <% tp.date.now("dddd DD MMMM YYYY") %>
+
+  ## 🎯 Priorités du jour
+  - [ ]
+  - [ ]
+  - [ ]
+
+  ## 📝 Journal
+  
+
+  ## 🙏 Gratitude
+  
+
+  ## 🔗 Notes créées aujourd'hui
+  ```dataview
+  list from ""
+  where file.cday = date("<% tp.date.now('YYYY-MM-DD') %>")
+  ```
+
+  ## 🔗 Hier / Demain
+  ← [[<% tp.date.yesterday("YYYY-MM-DD") %>]] | [[<% tp.date.tomorrow("YYYY-MM-DD") %>]] →
+
+35.3 EXEMPLE DE TEMPLATE DE NOTE DE LECTURE
+  ---
+  type: literature
+  title: <% tp.system.prompt("Titre du livre ?") %>
+  author: <% tp.system.prompt("Auteur ?") %>
+  year: <% tp.system.prompt("Année ?") %>
+  status: <% tp.system.suggester(["to-read","reading","finished"], ["to-read","reading","finished"]) %>
+  created: <% tp.date.now("YYYY-MM-DD") %>
+  tags: [lecture, livre]
+  ---
+
+  # <% tp.file.title %>
+
+  ## Résumé en une phrase
+
+
+  ## Idées clés
+  - 
+
+  ## Citations remarquables
+  > 
+
+  ## Connexions
+  - 
+
+
+36. DATAVIEW : REQUÊTES DQL
+--------------------------------------------------------------------------------
+Dataview transforme votre vault en base de données requêtable.
+
+36.1 STRUCTURE GÉNÉRALE D'UNE REQUÊTE
+
+  ```dataview
+  <QUERY-TYPE> <fields>
+  FROM <source>
+  <DATA-COMMAND> <expression>
+  <DATA-COMMAND> <expression>
+  ...
+  ```
+
+36.2 LES 4 QUERY TYPES
+  • TABLE     — tableau avec colonnes personnalisées
+  • LIST      — liste à puces des notes
+  • TASK      — tâches interactives
+  • CALENDAR  — vue calendrier (un point par date)
+
+36.3 SOURCES (clause FROM)
+  FROM "Dossier"                       → un dossier
+  FROM #tag                            → un tag
+  FROM #tag1 AND #tag2                 → ET logique
+  FROM #tag1 OR #tag2                  → OU logique
+  FROM [[Note]]                        → notes qui pointent vers Note
+  FROM outgoing([[Note]])              → notes vers lesquelles Note pointe
+
+36.4 DATA COMMANDS
+  WHERE <expression>          → filtre sur métadonnées
+  SORT <field> ASC/DESC       → tri
+  GROUP BY <field>            → regroupement
+  LIMIT <n>                   → nombre max de résultats
+  FLATTEN <field>             → une ligne par valeur d'un champ liste
+
+36.5 EXEMPLES CONCRETS
+
+  Toutes les notes en cours de lecture, triées par date :
+    ```dataview
+    TABLE author, rating
+    FROM #lecture
+    WHERE status = "reading"
+    SORT started DESC
+    ```
+
+  Toutes les tâches ouvertes, groupées par fichier :
+    ```dataview
+    TASK
+    WHERE !completed
+    GROUP BY file.link
+    SORT file.mtime DESC
+    ```
+
+  Notes créées cette semaine :
+    ```dataview
+    LIST
+    FROM ""
+    WHERE file.cday >= date(today) - dur(7 days)
+    SORT file.ctime DESC
+    ```
+
+  Projets actifs avec échéance imminente :
+    ```dataview
+    TABLE status, due, priority
+    FROM "1-Projects"
+    WHERE status = "active" AND due <= date(today) + dur(14 days)
+    SORT due ASC
+    ```
+
+  Calendrier des dates d'échéance :
+    ```dataview
+    CALENDAR due
+    FROM "1-Projects"
+    WHERE due
+    ```
+
+36.6 INLINE DATAVIEW (dans le corps d'une note)
+  Nombre de notes dans mon vault : `= length(file.lists)`
+  Aujourd'hui = `= date(today)`
+  Mon rating moyen : `= round(average(file.rating), 2)`
+
+36.7 DATAVIEW JS (JavaScript avancé)
+  ```dataviewjs
+  const pages = dv.pages('"1-Projects"')
+    .where(p => p.status === "active")
+    .sort(p => p.due);
+  dv.table(["Nom","Due"], pages.map(p => [p.file.link, p.due]));
+  ```
+
+
+37. TASKS : GESTION DES TÂCHES
+--------------------------------------------------------------------------------
+Le plugin Tasks enrichit la syntaxe - [ ] avec des attributs.
+
+37.1 SYNTAXE ENRICHIE
+  - [ ] Rédiger l'article 📅 2026-08-15 🔼 #projet/blog
+        │                 │           │    │
+        │                 │           │    └─ tag
+        │                 │           └─ priorité (🔺⏫🔼🔽⏬)
+        │                 └─ due date
+        └─ tâche non terminée
+
+  Emojis significatifs :
+    📅 Due date       ➕ Created       ✅ Done date
+    ⏳ Scheduled      🛫 Start date    ❌ Cancelled
+    🔺 Highest        ⏫ High           🔼 Medium
+    🔽 Low            ⏬ Lowest        🔁 Recurrence
+    🆔 ID             ⛔ Depends on
+
+37.2 RÉCURRENCE
+  - [ ] Payer le loyer 🔁 every month on the 1st 📅 2026-08-01
+
+37.3 REQUÊTE TASKS
+  ```tasks
+  not done
+  due before 2026-08-31
+  path includes 1-Projects
+  sort by due
+  ```
+
+37.4 INTÉGRATION AVEC DAILY NOTES
+  Chaque matin, ouvrir la Daily Note et laisser une requête agréger
+  toutes les tâches non terminées du vault.
+
+
+38. EXCALIDRAW & CANVAS
+--------------------------------------------------------------------------------
+38.1 CANVAS (core plugin)
+  Tableau blanc infini où placer :
+    • Cartes texte (Markdown)
+    • Notes du vault (embed)
+    • Images, PDF, liens web
+    • Groupes visuels avec bordures
+
+  Cas d'usage :
+    • Mind maps de projet
+    • Brainstorming visuel
+    • Cartographie de MOC
+    • Board de décision
+
+38.2 EXCALIDRAW (plugin communautaire)
+  • Dessin à main levée type whiteboard
+  • Diagrammes techniques, schémas d'architecture
+  • Éditable directement dans la note (SVG embarqué)
+  • Compatible avec l'app Excalidraw web
+
+  Astuce : les diagrammes Excalidraw peuvent être embedés dans plusieurs
+  notes, et cliquer sur l'image ouvre le diagramme original éditable.
+
+
+39. WORKFLOW ACADÉMIQUE COMPLET
+--------------------------------------------------------------------------------
+Structure de vault :
+  Academic/
+    ├── 00-Inbox/
+    ├── 01-Papers/               (PDF sources — nommés "Auteur Année - Titre.pdf")
+    ├── 02-Literature-Notes/     (résumés en Markdown des papers)
+    ├── 03-Permanent-Notes/      (idées atomiques évolutives)
+    ├── 04-MOC/                  (cartes thématiques)
+    ├── 05-Projects/             (thèses, articles en écriture)
+    ├── 06-Courses/              (notes de cours par semestre)
+    ├── Templates/
+    └── Attachments/
+
+Workflow de lecture d'un paper (source : effortlessacademic.com) :
+  1. Ajouter le PDF dans 01-Papers/ (nommage cohérent)
+  2. Créer une literature note dans 02-Literature-Notes/ avec le template
+  3. Annoter le PDF via PDF++ (surlignage + commentaires)
+  4. Extraire les idées majeures et créer des permanent notes atomiques
+     dans 03-Permanent-Notes/
+  5. Lier chaque permanent note à la literature note d'origine
+  6. Actualiser le MOC concerné dans 04-MOC/
+  7. Utiliser ces notes comme briques pour rédiger dans 05-Projects/
+
+
+40. WORKFLOW DÉVELOPPEUR / INGÉNIEUR (Kevin T'Syen)
+--------------------------------------------------------------------------------
+Structure inspirée de Kevin T'Syen (medium.com) :
+  Second Brain/
+    ├── 00. Inbox/               (capture)
+    ├── 01. Daily Notes/
+    ├── 02. Projects/
+    │   ├── Projet-Alpha/
+    │   │   ├── meetings/
+    │   │   ├── decisions/
+    │   │   └── overview.md
+    │   └── Projet-Beta/
+    ├── 03. Code Snippets/
+    │   ├── python/
+    │   ├── javascript/
+    │   └── shell/
+    ├── 04. Architecture & Design/
+    │   ├── ADR/                 (Architecture Decision Records)
+    │   └── diagrams/            (Excalidraw)
+    ├── 05. Learnings/
+    ├── Excalidraw/
+    ├── Files/
+    └── Templates/
+
+Journée type :
+  • Matin        : ouverture Daily Note, plan de la journée
+  • Journée      : Inbox pour idées volantes, snippets pour code réutilisable
+  • Fin de jour  : tri Inbox → dossier approprié, mise à jour projet
+  • Sauvegarde   : Obsidian Git push automatique (chaque X minutes)
+
+
+41. WORKFLOW CONTENT CREATOR (Matt Giaro)
+--------------------------------------------------------------------------------
+  1. CAPTURE (externe pour la fluidité mobile)
+     • Voix : Letterly → transcription automatique → bucket
+     • Texte : Bear → Apple Shortcut → même bucket
+     • Contenu web : Web Clipper
+
+  2. TRAITEMENT (dans Obsidian, sans calendrier fixe)
+     • Piocher 5-10 idées qui excitent
+     • Réécriture Feynman (avec ses propres mots)
+     • Lier à ≥ 1 note existante
+
+  3. CRÉATION D'ARTICLE
+     • Ouvrir plusieurs panneaux de notes reliées
+     • Assembler en cours de rédaction (le squelette est déjà là)
+     • Exemple concret : article rédigé en 37 minutes en assemblant
+       12 notes sur la copie + 8 exemples + 3 frameworks + 4 déclencheurs
+
+  4. RETOUR EN VAULT
+     • Une fois publié : ajouter tag #published + date de publication
+     • Retour des lecteurs → notes d'observations dans un backchannel
+
+
+================================================================================
+PARTIE X — PERSONNALISATION
+================================================================================
+
+42. THÈMES ET APPARENCE
+--------------------------------------------------------------------------------
+Settings > Appearance :
+  • Thème clair / sombre / système
+  • Choix parmi 100+ thèmes communautaires (bouton "Manage")
+  • Thèmes populaires 2026 :
+      - Minimal (le plus téléchargé)
+      - Things
+      - Blue Topaz
+      - Prism
+      - AnuPpuccin
+      - Border
+      - Shimmering Focus
+  • Font (Interface / Text / Monospace)
+  • Font size
+
+
+43. CSS SNIPPETS (Personnalisation fine)
+--------------------------------------------------------------------------------
+Emplacement : {Vault}/.obsidian/snippets/mon-snippet.css
+Activation : Settings > Appearance > CSS snippets > toggle
+
+43.1 EXEMPLE : agrandir les titres H1
+  h1 {
+    font-size: 2.5em;
+    color: var(--text-accent);
+    border-bottom: 2px solid var(--interactive-accent);
+    padding-bottom: 0.3em;
+  }
+
+43.2 EXEMPLE : colorer les tags
+  .tag[href^="#projet"] {
+    background-color: #3b82f6;
+    color: white;
+  }
+  .tag[href^="#urgent"] {
+    background-color: #ef4444;
+    color: white;
+  }
+
+43.3 EXEMPLE : callouts personnalisés
+  .callout[data-callout="idée"] {
+    --callout-color: 250, 200, 0;
+    --callout-icon: lucide-lightbulb;
+  }
+
+43.4 VARIABLES CSS OBSIDIAN
+  --text-normal          --text-accent
+  --text-muted           --interactive-accent
+  --background-primary   --background-secondary
+  --font-text            --font-monospace
+
+
+44. ESPACES DE TRAVAIL (WORKSPACES)
+--------------------------------------------------------------------------------
+Le core plugin "Workspaces" permet de sauvegarder l'arrangement des
+onglets et volets, pour basculer rapidement entre contextes :
+  • Workspace "Écriture"    : 1 note plein écran + backlinks
+  • Workspace "Recherche"   : 3 panneaux + graph global + tags
+  • Workspace "Daily"       : daily note + calendar + tasks
+  • Workspace "Réunion"     : template meeting + participants + projet
+
+Activation : Command Palette > "Workspaces: Manage workspaces"
+Plugin communautaire recommandé : Workspaces Plus (switcher rapide)
+
+
+45. RACCOURCIS CLAVIER ESSENTIELS
+--------------------------------------------------------------------------------
+Ctrl/Cmd + N          Nouvelle note
+Ctrl/Cmd + O          Quick Switcher (ouvrir n'importe quelle note)
+Ctrl/Cmd + P          Command Palette (accéder à toutes les commandes)
+Ctrl/Cmd + F          Recherche dans la note
+Ctrl/Cmd + Shift + F  Recherche globale (dans tout le vault)
+Ctrl/Cmd + E          Basculer Édition / Lecture
+Ctrl/Cmd + Click      Ouvrir un lien dans un nouvel onglet
+Ctrl/Cmd + Alt + ←/→  Onglet précédent / suivant
+Ctrl/Cmd + W          Fermer l'onglet courant
+Ctrl/Cmd + T          Nouvel onglet
+Ctrl/Cmd + Shift + T  Rouvrir le dernier onglet fermé
+Ctrl/Cmd + [          Naviguer en arrière
+Ctrl/Cmd + ]          Naviguer en avant
+Ctrl/Cmd + G          Ouvrir la vue graphique
+Ctrl/Cmd + ,          Ouvrir les paramètres
+
+Alt + ↑/↓             Déplacer une ligne
+Ctrl/Cmd + L          Sélectionner la ligne entière
+Ctrl/Cmd + D          Sélection multiple (occurrences)
+
+Astuce : personnaliser tous ces raccourcis via Settings > Hotkeys.
+
+
+================================================================================
+PARTIE XI — SYNCHRONISATION & SAUVEGARDE
+================================================================================
+
+46. OBSIDIAN SYNC (OFFICIEL, PAYANT)
+--------------------------------------------------------------------------------
+  • Chiffrement de bout en bout (E2E) avec passphrase locale
+  • Sync multi-appareils (desktop + mobile)
+  • Historique de version (30 jours ou plus selon plan)
+  • Restauration granulaire fichier par fichier
+  • Prix : ~8-10 USD/mois (variable)
+  • Avantage : zero-friction, aucun setup technique
+
+Alternative : services cloud grand public (voir section 48).
+
+
+47. OBSIDIAN GIT (Gratuit, technique)
+--------------------------------------------------------------------------------
+Plugin communautaire qui pousse automatiquement votre vault vers un
+dépôt Git (GitHub, GitLab, Codeberg, self-hosted).
+
+47.1 AVANTAGES
+  • Gratuit
+  • Historique COMPLET (chaque modification)
+  • Multi-devices via git pull/push
+  • Backup géographique (serveur distant)
+  • Restauration à n'importe quel commit
+
+47.2 CONFIGURATION TYPE
+  1. Créer un repo privé GitHub
+  2. Dans le vault : git init + git remote add origin
+  3. Ajouter un .gitignore pour exclure .obsidian/workspace, cache
+  4. Installer plugin Obsidian Git
+  5. Configurer : Auto-commit every 60 min, Auto-pull on startup
+  6. Sync method : Merge (recommandé) ou Rebase
+
+47.3 .GITIGNORE TYPE POUR OBSIDIAN
+  .obsidian/workspace.json
+  .obsidian/workspace-mobile.json
+  .obsidian/cache
+  .trash/
+  .DS_Store
+  Thumbs.db
+
+47.4 LIMITATION MOBILE
+  Sur iOS/Android, la version d'Obsidian Git est plus limitée
+  (utilise isomorphic-git). Prévoir des pulls/pushs manuels.
+
+
+48. iCLOUD / GOOGLE DRIVE / SYNCTHING
+--------------------------------------------------------------------------------
+48.1 iCLOUD DRIVE (macOS/iOS)
+  • Placer le vault dans ~/Library/Mobile Documents/iCloud~md~obsidian/
+    ou n'importe quel dossier iCloud
+  • Synchronisation transparente
+  • ⚠️ ATTENTION : pas de version history par fichier
+  • ⚠️ Ne PAS mélanger avec Git dans le même dossier (conflits)
+
+48.2 GOOGLE DRIVE / DROPBOX / ONEDRIVE
+  • Possible mais RISQUÉ (conflits fréquents avec les fichiers cache)
+  • Toujours fermer Obsidian avant qu'un autre appareil ne sync
+
+48.3 SYNCTHING (recommandé pour tech-savvy)
+  • Open source, peer-to-peer, chiffré
+  • Pas de cloud tiers — synchronisation directe entre vos appareils
+  • Excellent pour Linux + Android
+
+
+49. RÈGLE DU 3-2-1 POUR VOS SECOND CERVEAU
+--------------------------------------------------------------------------------
+Applicable à toute donnée critique :
+
+  3 copies      : 1 originale + 2 sauvegardes
+  2 supports    : différents (SSD local + cloud)
+  1 hors site   : géographiquement distant (protection incendie/vol)
+
+Setup type recommandé :
+  • Copie 1 : SSD local (vault de travail)
+  • Copie 2 : iCloud / Sync (sync temps réel)
+  • Copie 3 : Git remote (GitHub privé) — hors site
+  • Bonus  : sauvegarde externe mensuelle sur SSD chiffré
+
+Vérifier périodiquement que les restaurations fonctionnent (test annuel).
+
+
+================================================================================
+PARTIE XII — LIMITATIONS ET PIÈGES À ÉVITER
+================================================================================
+
+50. LIMITATIONS CONNUES D'OBSIDIAN
+--------------------------------------------------------------------------------
+50.1 COLLABORATION TEMPS RÉEL
+  Obsidian n'est PAS conçu pour l'édition simultanée (contrairement à
+  Notion, Google Docs). Solutions partielles : Git avec branches et PRs.
+
+50.2 EXCEL / TABLEURS
+  Obsidian ne gère pas les .xlsx. Les tableaux Markdown sont pratiques
+  mais limités (pas de formules natives, pas de tri par colonne sans
+  plugin). Alternative : plugin Advanced Tables + Bases.
+
+50.3 RECHERCHE DANS PDF NATIVE
+  La recherche full-text native ne fouille PAS le contenu des PDF.
+  Solution : plugin Text Extractor + Omnisearch.
+
+50.4 OCR DES IMAGES
+  Aucune reconnaissance de texte native dans les images.
+  Solution : Text Extractor (OCR) ou tesseract externe.
+
+50.5 MOBILE : PLUGINS LIMITÉS
+  Sur iOS/Android, tous les plugins ne fonctionnent pas.
+  Vérifier la mention "Mobile compatible" sur chaque plugin.
+
+50.6 GROS VAULTS (>50 000 notes)
+  Performances dégradées possibles. Solutions :
+    • Vaults multiples par grand contexte
+    • Désactiver les plugins non essentiels
+    • Optimiser les requêtes Dataview (FROM restrictif)
+
+50.7 EXPORTS
+  Export PDF correct mais limité en styling avancé.
+  Export DOCX, EPUB : uniquement via plugins tiers (Pandoc, etc.).
+
+50.8 SYNC DE FICHIERS BINAIRES VOLUMINEUX
+  Obsidian Sync a des limites par fichier (~4 Mo par défaut).
+  Pour les gros PDF, préférer stockage cloud externe + lien.
+
+
+51. ANTI-PATTERNS FRÉQUENTS
+--------------------------------------------------------------------------------
+❌ 1. Créer 50 dossiers avant d'écrire 10 notes.
+     → Commencer plat, structurer après.
+
+❌ 2. Installer 30 plugins dès le premier jour.
+     → Vanilla d'abord, plugin quand un besoin réel émerge.
+
+❌ 3. Tagger chaque note avec 15 tags.
+     → 1-3 tags maximum, hiérarchisés.
+
+❌ 4. Copier-coller des articles entiers dans ses notes.
+     → Réécrire dans ses propres mots (technique Feynman).
+
+❌ 5. Ne jamais relier ses notes.
+     → Règle : chaque nouvelle note doit lier ≥ 1 existante.
+
+❌ 6. Sauter la revue hebdomadaire.
+     → 15 min/semaine pour trier l'Inbox et actualiser MOC.
+
+❌ 7. Confondre "vault" et "backup".
+     → Le vault n'est PAS une sauvegarde. Implémenter le 3-2-1.
+
+❌ 8. Utiliser Obsidian comme éditeur de fichiers Word.
+     → Le format .md est le format, pas un obstacle.
+
+❌ 9. Reporter la création d'une note pour "faire mieux plus tard".
+     → 80% mal fait > 100% jamais fait.
+
+❌ 10. Perfectionner la structure au lieu de produire du contenu.
+      → "Build a system that adapts to you, not you to it." (Matt Giaro)
+
+
+52. RÉSOLUTION DE PROBLÈMES COURANTS
+--------------------------------------------------------------------------------
+52.1 OBSIDIAN LENT AU DÉMARRAGE
+  • Settings > Community plugins > désactiver un à un pour identifier
+  • Vider le cache : Settings > Files & Links > Clear cache
+  • Fermer les onglets orphelins
+  • Utiliser Recent Files plutôt qu'un explorateur toujours ouvert
+
+52.2 LIENS CASSÉS APRÈS RENOMMAGE
+  • Activer : Settings > Files & Links > Automatically update internal links
+  • En cas de dégât : plugin "Broken Links" pour identifier
+
+52.3 CONFLITS DE SYNC
+  Fichiers .conflict apparaissent. Solutions :
+    • Fermer Obsidian sur tous les appareils sauf un
+    • Merger manuellement puis supprimer .conflict
+    • Passer à Git (résolution de conflit plus mature)
+
+52.4 IMAGES QUI NE S'AFFICHENT PAS
+  • Vérifier le chemin (relatif vs absolu)
+  • Vérifier que l'image est dans le vault (pas hors vault)
+  • Recharger le vault (Ctrl+R)
+
+52.5 PLUGIN QUI PLANTE
+  • Sécuriser en mode "Restricted mode" (Settings > Community plugins)
+  • Désactiver le plugin fautif
+  • Reporter le bug au dépôt GitHub du plugin
+
+
+================================================================================
+PARTIE XIII — SECOND CERVEAU AVEC IA (2026)
+================================================================================
+
+53. PLUGINS IA — DÉTAIL 2026
+--------------------------------------------------------------------------------
+53.1 SMART CONNECTIONS
+  Fonctionnement RAG :
+    1. Le plugin embed toutes vos notes dans des vecteurs
+    2. Une question déclenche une recherche vectorielle (similarité)
+    3. Les notes pertinentes sont injectées dans le contexte du LLM
+    4. Le LLM répond en citant vos notes source
+
+  Modèles supportés :
+    • OpenAI (GPT-4o, GPT-4.1)
+    • Anthropic Claude
+    • Local via Ollama (Llama, Mistral, Qwen)
+
+53.2 COPILOT
+  • Vue chat + inline
+  • Prompts custom (personas)
+  • Prompt library partagée par la communauté
+
+53.3 NOVA
+  • Édition inline sans quitter la note
+  • Transformations : traduire, résumer, expliquer, corriger, reformuler
+  • Streaming du remplacement en temps réel
+
+53.4 SMART SECOND BRAIN (100% local)
+  • Backend Ollama
+  • Modèles recommandés 2026 : Qwen2.5, Llama 3.3, Phi-4
+  • Compromis : moins puissant qu'un cloud, mais confidentiel
+
+
+54. INTÉGRATION CLAUDE CODE / MCP
+--------------------------------------------------------------------------------
+Le développement majeur de 2026 : connecter Claude Code (agent CLI
+d'Anthropic) à Obsidian via MCP (Model Context Protocol).
+
+54.1 CE QUE ÇA PERMET
+  Votre vault devient un espace de travail vivant que Claude peut :
+    • Lire (recherche sémantique dans vos notes)
+    • Modifier (édition d'une note existante)
+    • Créer (nouvelles notes structurées)
+    • Réorganiser (renommer, déplacer, lier)
+
+54.2 CAS D'USAGE
+  • Revue hebdomadaire : "Claude, résume les notes créées cette semaine"
+  • Synthèse de recherche : "Trouve les patterns communs aux notes taguées
+    #recherche/machine-learning"
+  • Préparation de meeting : "Récupère les décisions liées à Projet Alpha
+    depuis 3 mois"
+  • Documentation code : lier automatiquement le code aux ADR
+
+
+55. CONTEXT ENGINEERING POUR UN VAULT AI-READY
+--------------------------------------------------------------------------------
+Pour maximiser la performance des IA sur votre vault, appliquer :
+
+55.1 CONVENTIONS DE NOMMAGE DESCRIPTIVES
+  ✓ 2026-02-21-meeting-product-roadmap.md
+  ✗ Meeting 21.md
+
+55.2 FRONTMATTER YAML SYSTÉMATIQUE
+  ---
+  type: meeting
+  project: [[Alpha]]
+  attendees: [Alice, Bob]
+  date: 2026-02-21
+  decisions: [...]
+  action_items: [...]
+  ---
+
+55.3 NOTES ATOMIQUES
+  Une idée = une note. Facilite le retrieval RAG.
+
+55.4 WIKILINKS PARTOUT
+  Chaque relation logique = un [[wikilink]] explicite.
+  Les IA exploitent le graphe pour raisonner sur les connexions.
+
+55.5 TAGS SÉMANTIQUES COHÉRENTS
+  #idea #decision #meeting #research #reference #action
+  Une taxonomie stable > 20 tags aléatoires.
+
+55.6 RÉSUMÉS EN TÊTE DE NOTE
+  > [!abstract] TL;DR
+  > Une phrase claire pour que l'IA (et vous) captent l'essentiel.
+
+
+================================================================================
+PARTIE XIV — ROADMAP DE MAÎTRISE
+================================================================================
+
+56. PROGRAMME D'APPRENTISSAGE PROGRESSIF (12 SEMAINES)
+--------------------------------------------------------------------------------
+
+SEMAINE 1 — Fondations
+  □ Installer Obsidian
+  □ Créer un vault, écrire 5 notes
+  □ Apprendre la syntaxe Markdown de base (titres, listes, gras, italique)
+  □ Créer 3 liens internes [[wikilinks]]
+  □ Explorer la vue graphique locale
+
+SEMAINE 2 — Structure
+  □ Choisir une méthodologie (PARA / Zettelkasten / hybride / zéro dossier)
+  □ Créer la structure de dossiers
+  □ Écrire 10 notes en respectant l'atomicité
+  □ Explorer les backlinks
+
+SEMAINE 3 — Frontmatter et tags
+  □ Ajouter des propriétés YAML systématiquement
+  □ Définir votre taxonomie de tags (max 15 tags)
+  □ Convention de nommage de fichiers
+
+SEMAINE 4 — Callouts et syntaxe avancée
+  □ Maîtriser les 12 types de callouts
+  □ Écrire un tableau, un bloc de code, du LaTeX
+  □ Essayer un diagramme Mermaid
+
+SEMAINE 5 — Daily notes
+  □ Activer core plugin Daily Notes
+  □ Créer un template de journalisation quotidienne
+  □ Journaliser 7 jours d'affilée
+
+SEMAINE 6 — Templater
+  □ Installer Templater
+  □ Créer 3 templates : daily, note de lecture, note de meeting
+  □ Utiliser tp.date, tp.system.prompt, tp.file
+
+SEMAINE 7 — Dataview
+  □ Installer Dataview
+  □ Écrire 5 requêtes DQL (TABLE, LIST, TASK)
+  □ Créer un dashboard de projets
+
+SEMAINE 8 — MOC
+  □ Créer 3 MOC pour vos domaines principaux
+  □ Utiliser la requête auto-alimentation
+  □ Refactorer les notes non-liées
+
+SEMAINE 9 — Médias
+  □ Configurer le dossier attachments
+  □ Insérer et redimensionner des images
+  □ Intégrer un PDF avec annotations (PDF++ ou Annotator)
+
+SEMAINE 10 — Tâches
+  □ Installer Tasks
+  □ Convertir vos tâches existantes au format Tasks
+  □ Créer un dashboard de tâches
+
+SEMAINE 11 — Sync et backup
+  □ Configurer Obsidian Git OU Obsidian Sync
+  □ Mettre en place la règle 3-2-1
+  □ Tester une restauration
+
+SEMAINE 12 — Personnalisation et IA
+  □ Choisir un thème et 1-2 snippets CSS
+  □ Installer Smart Connections (ou équivalent local)
+  □ Créer votre premier workflow IA sur le vault
+  □ Réviser toutes les notes, consolider les MOC
+
+
+57. RESSOURCES COMPLÉMENTAIRES
+--------------------------------------------------------------------------------
+DOCUMENTATION OFFICIELLE
+  • https://obsidian.md/                          Site officiel
+  • https://help.obsidian.md/                     Documentation EN
+  • https://obsidian.md/fr/help/                  Documentation FR
+  • https://obsidian.md/help/syntax               Syntaxe Markdown
+  • https://obsidian.md/help/embeds               Guide des embeds
+  • https://obsidian.md/help/bases                Guide Bases
+  • https://obsidian.md/help/snippets             CSS snippets
+  • https://obsidian.md/fr/help/style-guide       Guide de style
+
+COMMUNAUTÉ
+  • https://forum.obsidian.md/                    Forum officiel
+  • https://reddit.com/r/ObsidianMD               Subreddit
+  • Discord officiel                              (lien depuis le site)
+
+BLOGS DE RÉFÉRENCE
+  • https://obsidian.rocks/                       Tips & guides
+  • https://obsidianstats.com/                    Stats plugins
+  • https://obsibrain.com/                        Guides annuels
+  • https://practicalpkm.com/                     Properties, workflow
+  • https://mattgiaro.com/                        Approche minimaliste
+  • https://effortlessacademic.com/               Workflow académique
+  • https://reelearn.com/guide-obsidian/          Guide FR de 100+ fiches
+  • https://optimike.net/                         Tutos FR
+
+LIVRES RECOMMANDÉS
+  • "Building a Second Brain" — Tiago Forte
+  • "How to Take Smart Notes" — Sönke Ahrens (Zettelkasten)
+  • "The Extended Mind" — Annie Murphy Paul
+
+
+58. SOURCES ET BIBLIOGRAPHIE DE CE DOCUMENT
+--------------------------------------------------------------------------------
+Documentation officielle Obsidian
+  [1] Obsidian Help — Formatage de base
+      https://obsidian.md/fr/help/syntax
+  [2] Obsidian Help — Guide de style
+      https://obsidian.md/fr/help/style-guide
+  [3] Obsidian Help — Embed files
+      https://obsidian.md/help/embeds
+  [4] Obsidian Help — CSS snippets
+      https://obsidian.md/help/snippets
+  [5] Obsidian Help — Bases
+      https://obsidian.md/help/bases
+
+Tutoriels francophones
+  [6] Optimike — Obsidian Markdown
+      https://www.optimike.net/obsidian-markdown/
+  [7] Optimike — Tutoriel Obsidian pour débutants
+      https://www.optimike.net/tutoriel-obsidian-pour-debutants/
+  [8] ReelEarn — Guide Obsidian (100+ fiches)
+      https://reelearn.com/guide-obsidian/
+
+Second cerveau et méthodologies
+  [9] ps11 — Engineer's Guide to Building a Second Brain in Obsidian
+      https://ps11.hashnode.dev/engineers-guide-to-building-a-second-brain-in-obsidian-practical-tips
+  [10] Kevin T'Syen — How I Built My Second Brain With Obsidian
+       https://medium.com/@kevin.tsyen/how-i-built-my-second-brain-with-obsidian-54edad2ecc44
+  [11] Matt Giaro — Second Brain Obsidian
+       https://mattgiaro.com/second-brain-obsidian/
+  [12] Nxcode — Obsidian AI Second Brain Complete Guide 2026
+       https://www.nxcode.io/resources/news/obsidian-ai-second-brain-complete-guide-2026
+  [13] Frederick Ros — From PARA to Zettelkasten
+       https://medium.com/@frederick.ros/from-para-to-zettelkasten-how-i-organize-my-second-brain-in-obsidian-4ce2a2c2dff1
+
+Plugins et pratiques
+  [14] Obsibrain — Top Obsidian Plugins 2026
+       https://www.obsibrain.com/blog/top-obsidian-plugins-in-2026-the-essential-list-for-power-users
+  [15] Obsidian Stats
+       https://www.obsidianstats.com/
+  [16] Practical PKM — Complete Guide to Obsidian Properties
+       https://practicalpkm.com/complete-guide-to-obsidian-properties/
+  [17] Dataview docs
+       https://blacksmithgu.github.io/obsidian-dataview/queries/structure/
+  [18] Templater Cheat-Sheet
+       https://forum.obsidian.md/t/templater-cheat-sheet/33518
+  [19] Obsidian Rocks — MOC quick tip
+       https://obsidian.rocks/quick-tip-quickly-organize-notes-in-obsidian/
+
+Médias et workflow académique
+  [20] Effortless Academic — Working with PDFs in Obsidian
+       https://effortlessacademic.com/working-with-pdfs-in-obsidian-pdf-plugin-and-full-text-search/
+  [21] Chloevolution — Manage Images in Obsidian
+       https://chloevolution.com/posts/manage-images-in-obsidian/
+  [22] Obsidian Stats — Simple Image Inserter
+       https://www.obsidianstats.com/plugins/simple-image-inserter
+  [23] Obsidian Forum — Upload and Insert Images
+       https://forum.obsidian.md/t/upload-and-insert-images/89948
+  [24] Obsidian Forum — Attaching Pictures to a Note
+       https://forum.obsidian.md/t/attaching-pictures-to-a-note/2201
+  [25] Obsidian Forum — How to attach an image in an easy way
+       https://forum.obsidian.md/t/how-to-attach-an-image-in-an-easy-way/31978
+  [26] Obsidian Forum — Set Obsidian to embed image with Markdown syntax
+       https://forum.obsidian.md/t/set-obsidian-to-embed-image-with-markdown-syntax-instead-of/30527
+
+
+================================================================================
+                              FIN DU DOCUMENT
+                    « Un Second Cerveau ne se construit pas.
+                       Il se cultive, une note à la fois. »
+================================================================================

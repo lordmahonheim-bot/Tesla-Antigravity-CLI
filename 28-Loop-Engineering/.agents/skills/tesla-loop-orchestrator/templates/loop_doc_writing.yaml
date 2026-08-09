@@ -1,0 +1,38 @@
+meta:
+  name: "generate-api-docs"
+  version: "1.0.0"
+  project: "tesla-core"
+  description: "Generate and format API documentation for the core modules"
+
+execution_limits:
+  max_iterations: 3
+  financial_budget_usd: 2.00
+  token_budget: 50000
+  timeout_seconds: 120
+
+target:
+  files:
+    - "docs/api_reference.md"
+    - "core/cache.py"
+  directory: "/home/lord-mahonheim/bifrost/tesla"
+
+goal: >
+  Analyze public class and function docstrings in core/cache.py and write or update
+  the markdown documentation in docs/api_reference.md. Ensure all public functions 
+  have clear param and return type descriptions, matching the actual implementation.
+  The formatting should follow the Google markdown style guide.
+
+verify:
+  rungs:
+    - "style"
+    - "referee"
+  strict: false
+  custom_rules_path: ".agents/skills/tesla-code-auditor/rules/tesla_doc_rules.yaml"
+
+referee_config:
+  model: "gemini-1.5-flash"
+  temperature: 0.2
+
+rollback_policy:
+  strategy: "shutil"
+  auto_rollback: true

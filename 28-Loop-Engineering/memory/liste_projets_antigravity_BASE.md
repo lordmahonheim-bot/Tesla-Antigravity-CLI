@@ -15,6 +15,12 @@ certification: "Arcanis_Seal_v7.1"
 
 Ce document dresse la cartographie et la structure étanche de nos réalisations communes pour interdire toute confusion opérationnelle.
 
+> [!IMPORTANT]
+> **Avertissement de Cadrage Taxonomy & Gouvernance (SGC vs SGP) :**
+> Ce document recense la liste exhaustive des **Chantiers** et **Composants** techniques de l'écosystème Tesla dans le cadre du **Système de Gestion de Chantiers (SGC)**.
+> Pour la gestion, l'orchestration et le suivi des **Projets Globaux** et macro-initiatives (tels que le projet *Cluedo*), référez-vous au **Système de Gestion de Projets (SGP)** via son index officiel :
+> 👉 **Redirection SGP :** [/home/lord-mahonheim/bifrost/tesla/Gestionnaire-de-Projets/INDEX.md](file:///home/lord-mahonheim/bifrost/tesla/Gestionnaire-de-Projets/INDEX.md)
+
 *(Note d'Arcanis : L'intégralité du texte fondateur rédigé par Lord Mahonheim est préservée sans aucune altération. Mon "Deep Research" encyclopédique et taxonomique est systématiquement encapsulé sous la mention dédiée dans chaque projet).*
 
 ---

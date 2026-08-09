@@ -1,0 +1,178 @@
+════════════════════════════════════════════════════════════════════════════════
+   04 — L'ÉCOSYSTÈME DE PLUGINS DE VISUALISATION SUR OBSIDIAN
+   Fiches comparatives et recommandations d'usage (2026)
+════════════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────────────────────────
+▌ EXTENDED GRAPH  (ElsaTam)  ★★★★★  Recommandé pour tous
+────────────────────────────────────────────────────────────────────────────────
+  Repo    : https://github.com/ElsaTam/obsidian-extended-graph
+  Wiki    : https://github.com/ElsaTam/obsidian-extended-graph/wiki
+  Forum   : https://forum.obsidian.md/t/new-plugin-extended-graph/98850
+
+  Fonctionnalités :
+    • Images intégrées sur les nœuds (avatars, covers…).
+    • Arcs colorés autour des nœuds pour tags/propriétés (support Dataview).
+    • Coloration + filtrage des LIENS par type de relation.
+    • Liens courbés distinguant forward/backward.
+    • Formes de nœuds par type de contenu (rond, carré, triangle, hexagone).
+    • Zoom sur la note active (scale up).
+    • Statistiques → taille/couleur automatiques.
+    • Export SVG.
+    • Épinglage des nœuds à positions fixes.
+    • Multi-configurations sauvegardées.
+    • Zoom direct sur un nœud.
+
+  À qui : à quiconque veut BEAUCOUP plus que le graph natif, sans quitter
+          le paradigme. Alternative locale/privée à Kumu.io.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ JUGGL  (HEmile)  ★★★★★  Le must pour hiérarchies
+────────────────────────────────────────────────────────────────────────────────
+  Site    : https://juggl.io/
+  Repo    : https://github.com/HEmile/juggl
+  Forum   : https://forum.obsidian.md/t/juggl-out-now-1-0-1-a-completely-interactive-stylable-and-expandable-graph-view-plugin/9625
+
+  Moteur  : Cytoscape.js (au lieu de Pixi.js). Beaucoup plus de layouts.
+
+  Fonctionnalités :
+    • 4 LAYOUTS : force-directed, circle, grid, HIERARCHICAL.
+    • Workspace mode avec menu contextuel radial.
+    • Style Pane + CSS + YAML per-node.
+    • Link Types stylables (labels sur arêtes).
+    • Code block ```juggl inline dans les notes.
+    • Sauvegarde/chargement d'états.
+    • Global + Local + Mobile (partiel).
+    • API pour d'autres plugins.
+
+  À qui : chercheurs, écrivains, enseignants — quiconque a besoin d'un
+          layout autre que force-directed (arbre notamment).
+
+────────────────────────────────────────────────────────────────────────────────
+▌ GRAPH ANALYSIS  (SkepticMystic)  ★★★★☆  Analyse avancée
+────────────────────────────────────────────────────────────────────────────────
+  Repo   : https://github.com/SkepticMystic/graph-analysis
+
+  Fonctionnalités :
+    • Panneau "Analysis" avec plusieurs algorithmes :
+      - Link Prediction (suggère des liens manquants)
+      - Similarité (Cosine, Jaccard, Adamic-Adar, Overlap…)
+      - Centralité : HITS (Hub/Authority), Closeness, Degree, Betweenness
+      - Détection de communautés : Label Propagation, Louvain, Clustering
+    • Résultats cliquables : chaque nœud liste les autres avec un score.
+
+  Usages :
+    • Identifier les VRAIS hubs (parfois différents des MOCs déclarés).
+    • Repérer les PONTS interdisciplinaires (Betweenness).
+    • Densifier le graph : Link Prediction propose des liens plausibles.
+
+  À qui : PKM avancé, veille, thèse, journalisme d'investigation.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ BREADCRUMBS  (SkepticMystic)  ★★★★☆  Hiérarchie typée
+────────────────────────────────────────────────────────────────────────────────
+  Community : https://community.obsidian.md/plugins/breadcrumbs
+  Docs      : https://publish.obsidian.md/breadcrumbs-docs/
+
+  Fonctionnalités :
+    • Liens typés en YAML : up, down, next, prev, sibling…
+    • Vue Trail (fil d'ariane) en haut de chaque note.
+    • Vue Matrix (relations tabulaires).
+    • Vue "Ducks in a Row" (chaînes séquentielles).
+    • Export JSON de la hiérarchie → alimentation Graphviz.
+    • Compatibilité Juggl pour layout hiérarchique visuel.
+
+  À qui : structures explicitement arborescentes (cours, thèses, cursus).
+
+────────────────────────────────────────────────────────────────────────────────
+▌ INFRANODUS  (noduslabs)  ★★★★☆  Sémantique + IA
+────────────────────────────────────────────────────────────────────────────────
+  Repo : https://github.com/noduslabs/infranodus-obsidian-plugin
+
+  Différence clé : n'utilise PAS les backlinks — analyse le CONTENU textuel.
+  Le graph est fait de CONCEPTS (co-occurrences de mots).
+
+  Fonctionnalités :
+    • Détection de communautés conceptuelles.
+    • Betweenness / modularité au niveau des concepts.
+    • Détection de LACUNES (structural gaps).
+    • Génération de prompts IA basés sur les gaps.
+
+  À qui : essayistes, chercheurs, veilleurs qui écrivent beaucoup de prose.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ SIMPLE GRAPH BUILDER  (community.obsidian.md/plugins/simple-graph-builder)
+────────────────────────────────────────────────────────────────────────────────
+  Construction manuelle de graphes ad hoc dans une note.
+  Utile pour illustrer, enseigner, prototyper une structure.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ OBSIDIAN CHARTS  (phibr0)  ★★★★☆  Graphes analytiques dans les notes
+────────────────────────────────────────────────────────────────────────────────
+  Repo : https://github.com/phibr0/obsidian-charts
+
+  Bar / line / pie / radar / doughnut à partir de blocs de code.
+  Pour la VISUALISATION DE DONNÉES à l'intérieur d'une note.
+  À ne pas confondre avec le Graph View (réseau de notes).
+
+────────────────────────────────────────────────────────────────────────────────
+▌ MERMAID  (natif)
+────────────────────────────────────────────────────────────────────────────────
+  Diagrammes inline : flowchart, sequence, class, gantt, gitgraph, ER, mindmap.
+    ```mermaid
+    graph LR
+      A --> B --> C
+    ```
+  Utile pour EXPLIQUER un concept dans une note (ne remplace pas le Graph).
+
+────────────────────────────────────────────────────────────────────────────────
+▌ GRAPHVIZ / DOT  (Obsidian Graphviz + Argdown)
+────────────────────────────────────────────────────────────────────────────────
+  Discussion : https://forum.obsidian.md/t/graphviz-and-hierarchical-graph-layout-a-review-and-plugin-proposal/31596
+
+  Layouts : dot (hiérarchique), neato, twopi, circo, sfdp, fdp.
+  Contrôle fin des rangs (rank), sous-graphes, clusters, HTML labels.
+
+  Recommandé pour publier un graphe HIÉRARCHIQUE propre (thèses, docs).
+
+────────────────────────────────────────────────────────────────────────────────
+▌ EXCALIBRAIN  (Excalidraw ecosystem)  ★★★★☆
+────────────────────────────────────────────────────────────────────────────────
+  Vue "TheBrain-like" — un nœud central + parents (haut) + enfants (bas)
+  + amis (côtés). Navigation par saut d'un nœud à l'autre.
+  Excellent complément au Graph natif pour la NAVIGATION.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ ZOOTTELKEEPER  (akosbalasko)
+────────────────────────────────────────────────────────────────────────────────
+  Repo : https://github.com/akosbalasko/zoottelkeeper
+  Génère automatiquement des "index files" par dossier → apporte la
+  structure de dossiers DANS le graph, sous forme de MOCs auto-générés.
+
+────────────────────────────────────────────────────────────────────────────────
+▌ LYT-MODE (Nick Milo)
+────────────────────────────────────────────────────────────────────────────────
+  Repo : https://github.com/nickmilo/LYT-Mode
+  Thème/mode conçu pour la méthode "Linking Your Thinking" (MOCs).
+  Souvent cité pour l'esthétique de son Graph View.
+
+════════════════════════════════════════════════════════════════════════════════
+STACK RECOMMANDÉ PAR PROFIL
+────────────────────────────────────────────────────────────────────────────────
+
+  📚 ÉTUDIANT / CURSUS
+     Natif + Breadcrumbs + Juggl (hierarchical) + LYT-Mode
+
+  ✍  ÉCRIVAIN / ESSAYISTE
+     Natif + Extended Graph + InfraNodus
+
+  🔬 CHERCHEUR / VEILLE
+     Natif + Extended Graph + Graph Analysis + InfraNodus
+
+  💼 PROFESSIONNEL (projets)
+     Natif + Extended Graph + Excalibrain + Breadcrumbs
+
+  🎨 ESTHÈTE / SHOW-OFF
+     Natif + Extended Graph + LYT-Mode + CSS custom
+
+════════════════════════════════════════════════════════════════════════════════
