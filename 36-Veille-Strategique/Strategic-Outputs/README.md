@@ -1,17 +1,19 @@
 # 📂 Strategic Outputs
 
-**Rôle & Fonction**
-Ce dossier est le coffre-fort canonique des itérations de Veille Stratégique profonde. Il stocke les rapports analytiques exhaustifs générés suite à une investigation ciblée et méthodique ordonnée par Lord Mahonheim.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-**Gouvernance & Rigueur Épistémique**
-Pour être stocké dans ce répertoire, tout document **DOIT IMPÉRATIVEMENT** :
-1. Être conforme aux 10 articles de la `Charte_Veille_Strategique.md`.
-2. Respecter scrupuleusement le format dicté par `La grille de rédaction d'un rapport analytique.md`.
+**Role & Function**
+This folder is the canonical vault for deep Strategic Watch iterations. It stores comprehensive analytical reports generated following targeted and methodical investigations ordered by Lord Mahonheim.
 
-**Typologie de Contenu**
-- Audits d'écosystèmes ou d'outils.
-- Analyses SWOT et rapports d'aide à la décision.
-- Investigations OSINT et Fact-Checking croisé.
+**Governance & Epistemic Rigor**
+To be stored in this directory, any document **MUST IMPERATIVELY**:
+1. Comply with the 10 articles of the `Charte_Veille_Strategique.md`.
+2. Strictly adhere to the format dictated by `La grille de rédaction d'un rapport analytique.md`.
 
-**Objectif**
-Ne stocker ici que des outils d'appropriation décisionnelle. "Une veille qui ne dérange personne n'a rien détecté."
+**Content Typology**
+- Ecosystem or tool audits.
+- SWOT analyses and decision support reports.
+- OSINT investigations and cross-referenced Fact-Checking.
+
+**Objective**
+Only store actionable decision-making tools here. "A watch that disturbs no one has detected nothing."

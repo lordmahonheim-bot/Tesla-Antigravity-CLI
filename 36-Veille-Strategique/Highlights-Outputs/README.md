@@ -1,12 +1,14 @@
 # 📂 Highlights Outputs
 
-**Rôle & Fonction**
-Ce dossier est le réceptacle canonique des moissons "Highlights". Il stocke les condensés des faits majeurs, incontournables et disruptifs du marché de l'Intelligence Artificielle globale (ou de tout autre domaine spécifié par Lord Mahonheim).
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-**Typologie de Contenu**
-- Alertes de rupture technologique (ex: Lancement d'un nouveau modèle).
-- Résumés exécutifs générés automatiquement à l'ouverture de session.
-- Veilles de surface ("Pitch Elevator").
+**Role & Function**
+This folder is the canonical receptacle for "Highlights" harvests. It stores condensed summaries of major, essential, and disruptive facts from the global Artificial Intelligence market (or any other domain specified by Lord Mahonheim).
 
-**Gouvernance**
-Les documents stockés ici n'ont pas vocation à être des analyses exhaustives. Si un "Highlight" nécessite une investigation profonde, il doit déclencher la production d'un rapport analytique qui sera alors stocké dans `Strategic-Outputs/`.
+**Content Typology**
+- Technological disruption alerts (e.g., Launch of a new model).
+- Executive summaries automatically generated upon session start.
+- Surface watches ("Elevator Pitch").
+
+**Governance**
+The documents stored here are not intended to be exhaustive analyses. If a "Highlight" requires deep investigation, it must trigger the production of an analytical report which will then be stored in `Strategic-Outputs/`.

@@ -1,162 +1,162 @@
 ---
-title: Charte de Veille Stratégique
+title: Strategic Watch Charter
 type: reference
 tags: [veille, methode, alexandria, avalon, charter]
 status: canonical
 ---
-# CHARTE DE VEILLE STRATÉGIQUE
+# STRATEGIC WATCH CHARTER
 
-### Exigences et bonnes pratiques pour conduire une veille en bonne et due forme
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
----
-
-**Une veille qui ne dérange personne n'a rien détecté.**
-
-La veille stratégique n'est pas une collecte de documents : c'est un dispositif de décision. Cette charte fixe le standard en dessous duquel un travail de veille ne peut être qualifié de « stratégique » — quel que soit le sujet X traité. Dix articles, un protocole de vérification, une exigence de transmission pédagogique. Rien de théorique : chaque article se traduit directement dans la grille de rapport en annexe.
+### Requirements and best practices for conducting proper strategic watch
 
 ---
 
-## ARTICLE 1 — OBJET ET CHAMP D'APPLICATION
+**A watch that disturbs no one has detected nothing.**
 
-Cette charte s'applique à toute veille — technologique, concurrentielle, réglementaire, client ou marché — menée en interne ou pour un tiers, ponctuelle ou continue. Elle couvre l'intégralité du cycle : cadrage, collecte, vérification, analyse, transmission, pilotage.
-
-**Exigence non négociable** : aucune veille ne démarre sans directive formalisée (Article 2), et aucune veille ne se diffuse sans passage par le protocole de fact-checking (Article 5).
+Strategic watch is not document collection: it is a decision-making framework. This charter sets the standard below which watch efforts cannot be qualified as "strategic" — regardless of the subject X being covered. Ten articles, a verification protocol, a requirement for educational transmission. Nothing theoretical: every article translates directly into the analytical report grid in the appendix.
 
 ---
 
-## ARTICLE 2 — GOUVERNANCE ET CADRAGE
+## ARTICLE 1 — PURPOSE AND SCOPE
 
-Toute veille découle d'un objectif stratégique ou opérationnel explicite — jamais d'une curiosité diffuse.
+This charter applies to any watch — technological, competitive, regulatory, client, or market — conducted internally or for a third party, whether ad-hoc or continuous. It covers the entire cycle: scoping, collection, verification, analysis, transmission, and steering.
 
-- **Directive de veille** : quoi surveiller, pourquoi (lien direct avec l'objectif), qui collecte, qui analyse, qui décide.
-- **2 à 5 questions de veille** formulées de façon actionnable .
-- **Rôles explicites** : Organisation/Entreprise, Client: fidèle/Prospect, fournisseur, sponsor/décideur, collecteur, analyste, validateur, gouvernement, secteur privé/secteur public, ONG. Un nom par rôle — jamais « l'équipe ».
-- **Priorité assignée** à chaque axe : critique / important / opportunité.
-- **Revue périodique** de la directive : une veille non révisée dérive vers l'accumulation.
+**Non-negotiable requirement**: no watch starts without a formalized directive (Article 2), and no watch is distributed without passing through the fact-checking protocol (Article 5).
 
 ---
 
-## ARTICLE 3 — MÉTHODE : LE CYCLE DE VEILLE
+## ARTICLE 2 — GOVERNANCE AND SCOPING
 
-Sept étapes, dans l'ordre, sans raccourci — y compris pour une veille ponctuelle traitée en version allégée :
+Any watch stems from an explicit strategic or operational objective — never from vague curiosity.
 
-1. **Besoins** — priorisation des questions de veille
-2. **Planification de collecte** — sources, méthodes, échéances
-3. **Collecte** — exécution sur plusieurs disciplines
-4. **Traitement** — nettoyage, classement, évaluation de fiabilité
-5. **Analyse** — corrélations, signaux faibles, implications
-6. **Diffusion** — livrable adapté au destinataire
-7. **Feedback** — retour du décideur, révision des besoins
-
-
-Sauter le cadrage (1) ou le feedback (7) invalide la veille : elle redevient une revue de presse.
+- **Watch directive**: what to monitor, why (direct link to the objective), who collects, who analyzes, who decides.
+- **2 to 5 watch questions** formulated in an actionable manner.
+- **Explicit roles**: Organization/Company, Client: loyal/Prospect, supplier, sponsor/decision-maker, collector, analyst, validator, government, private sector/public sector, NGO. One name per role — never "the team".
+- **Priority assigned** to each axis: critical / important / opportunity.
+- **Periodic review** of the directive: an unreviewed watch drifts toward accumulation.
 
 ---
 
-## ARTICLE 4 — COLLECTE ET DIVERSIFICATION DES SOURCES
+## ARTICLE 3 — METHODOLOGY: THE WATCH CYCLE
 
-- Cartographier tous les espaces de collecte accessibles : web ouvert, sources officielle, GitHub, Reddit, bases spécialisées, réseaux professionnels, salons, données internes (SAV, commercial), terrain (clients, fournisseurs, régulateurs).
-- Diversifier les points de vue : concurrent, client, fournisseur, régulateur, média — jamais une seule catégorie de source.
-- Travailler le champ sémantique : synonymes, vocabulaire métier, expressions client — pas uniquement les mots-clés évidents.
-- Combiner **qualitatif** (panel restreint, lecture fine, 50–300 sources à forte valeur) et **quantitatif** (couverture large, mesure de volumes et de pics).
-- Filtrer avant d'analyser : mot-clé, type de source, langue, sentiment. L'exhaustivité n'est pas l'objectif — la pertinence l'est.
+Seven steps, in order, without shortcuts — even for an ad-hoc watch treated in a streamlined version:
 
----
-
-## ARTICLE 5 — PROTOCOLE DE FACT-CHECKING *(clause obligatoire)*
-
-Aucune information n'entre dans un rapport de veille sans passer par ce protocole.
-
-**Niveaux de confiance à assigner à chaque fait :**
+1. **Needs** — prioritization of watch questions
+2. **Collection planning** — sources, methods, deadlines
+3. **Collection** — execution across multiple disciplines
+4. **Processing** — cleaning, sorting, reliability assessment
+5. **Analysis** — correlations, weak signals, implications
+6. **Distribution** — deliverable adapted to the recipient
+7. **Feedback** — return from the decision-maker, revision of needs
 
 
-| Niveau           | Critère                                                        |
-|------------------|-----------------------------------------------------------------|
-| **Confirmé**    | ≥ 2 sources indépendantes et convergentes                    |
-| **Probable**     | 1 source fiable, non contredite                                 |
-| **À vérifier** | source unique, faible fiabilité, ou signal faible non recoupé |
-
-
-**Règles de vérification :**
-
-- Distinguer systématiquement **date de publication** et **date des faits** — ne jamais les confondre dans le rapport.
-- Remonter à la **source primaire** quand une information est relayée ; ne jamais citer un relais comme source finale.
-- Écarter toute information dont l'origine ne peut être tracée, même si elle est plausible.
-- Tenir un **journal de vérification** : sources écartées, raison de l'écartement. Ce journal alimente la rubrique *Limites* du rapport final.
-- Ne jamais mélanger, dans une même phrase, fait vérifié / interprétation / recommandation. Trois objets, trois formulations distinctes.
-
-Un fait mal vérifié mais bien présenté produit une décision fausse prise avec assurance — le risque le plus coûteux de toute veille.
+Skipping the scoping (1) or the feedback (7) invalidates the watch: it reverts to a press review.
 
 ---
 
-## ARTICLE 6 — ANALYSE ET TRADECRAFT
+## ARTICLE 4 — COLLECTION AND DIVERSIFICATION OF SOURCES
 
-- L'analyse est **objective**, indépendante de toute préférence du commanditaire, fondée sur l'ensemble des informations disponibles — pas seulement celles qui confirment l'hypothèse de départ.
-- **Triangulation** : tout point sensible croise au moins deux sources indépendantes ; si ce n'est pas le cas, le rapport le signale explicitement.
-- Structurer l'analyse en quatre blocs distincts : faits vérifiés → corrélations (convergences, contradictions, signaux faibles) → matrice SWOT (construite explicitement à partir des faits, jamais posée a priori) → impact (systèmes, projets, décisions concernées, à court/moyen/long terme).
-- Confrontation collective : les signaux identifiés sont discutés avec des profils variés (commercial, technique, RH…) avant diffusion — une analyse produite en silo est une analyse incomplète.
-
----
-
-## ARTICLE 7 — TRANSMISSION PÉDAGOGIQUE *(clause obligatoire)*
-
-Un fait vérifié mais mal transmis meurt dans une boîte mail. La charte exige que tout insight majeur soit transmis selon une logique didactique, pas selon une logique de dépôt d'information :
-
-- **Objectif** — pourquoi ce signal compte, relié explicitement à la question de veille d'origine.
-- **Contenu** — le fait vérifié et son niveau de confiance, l'analyse qui en découle.
-- **Application terrain** — ce que cela change concrètement pour l'équipe ou l'organisation destinataire, formulé en action, pas en constat.
-- **Évaluation** — comment vérifier que l'insight a été compris et exploité (question posée en comité, décision tracée, indicateur suivi).
-
-Cette exigence transforme chaque livrable de veille en outil d'appropriation, pas en simple archive consultable.
+- Map all accessible collection spaces: open web, official sources, GitHub, Reddit, specialized databases, professional networks, trade shows, internal data (customer service, sales), field data (clients, suppliers, regulators).
+- Diversify viewpoints: competitor, client, supplier, regulator, media — never just a single category of source.
+- Work the semantic field: synonyms, industry vocabulary, client expressions — not just the obvious keywords.
+- Combine **qualitative** (restricted panel, close reading, 50–300 high-value sources) and **quantitative** (broad coverage, measuring volumes and peaks).
+- Filter before analyzing: keyword, source type, language, sentiment. Exhaustiveness is not the goal — relevance is.
 
 ---
 
-## ARTICLE 8 — ÉTHIQUE ET CONFORMITÉ LÉGALE
+## ARTICLE 5 — FACT-CHECKING PROTOCOL *(mandatory clause)*
 
-- Conformité systématique aux lois applicables, nationales et internationales.
-- Transparence d'identité lors de tout entretien : jamais de faux prétexte, jamais d'usurpation de rôle (client, partenaire, journaliste).
-- Aucune intrusion, interception, ni usage de document confidentiel obtenu de façon douteuse.
-- Neutralité : pas de conflit d'intérêts avec les fournisseurs d'information sollicités.
-- Tout prestataire externe est évalué sur son historique de pratiques avant intégration au dispositif.
-- Le rapport signale explicitement les zones qui n'ont pas pu être investiguées pour raison légale ou éthique — ce n'est pas une faiblesse à masquer, c'est une exigence de la charte.
+No information enters a watch report without passing through this protocol.
 
----
+**Confidence levels to assign to each fact:**
 
-## ARTICLE 9 — DIFFUSION ET LIVRABLES
 
-- **Toujours répondre en français.**
-- **Niveau 1 (opérationnel)** : brèves, tableaux de bord, revues de presse ciblées — pour les équipes métier.
-- **Niveau 2 (décisionnel)** : rapport structuré avec recommandations — pour les instances de décision.
-- Le format suit le destinataire, jamais l'inverse : une direction reçoit une synthèse actionnable, pas un journal de collecte.
-- Chaque recommandation est priorisée (3 à 7 actions maximum), justifiée par un renvoi direct aux faits/corrélations, assortie d'un horizon de temps et d'un responsable pressenti.
+| Level           | Criterion                                                        |
+|-----------------|-----------------------------------------------------------------|
+| **Confirmed**   | ≥ 2 independent and converging sources                    |
+| **Probable**    | 1 reliable source, uncontradicted                                 |
+| **To be verified** | single source, low reliability, or uncorroborated weak signal |
 
----
 
-## ARTICLE 10 — PILOTAGE ET AMÉLIORATION CONTINUE
+**Verification rules:**
 
-- Suivre trois familles d'indicateurs : efficacité opérationnelle (délai signal → diffusion), qualité perçue (satisfaction des destinataires), impact business (décisions effectivement prises suite à la veille).
-- Une veille mature ne se mesure pas à son volume mais à son taux de transformation en décision.
-- Faire évoluer le dispositif du stade thématique (information brute) vers le stade stratégique (intégré au pilotage de l'organisation) — un chemin de plusieurs années, jamais acquis définitivement.
+- Systematically distinguish **publication date** and **event date** — never confuse them in the report.
+- Trace back to the **primary source** when information is relayed; never cite a relay as the final source.
+- Discard any information whose origin cannot be traced, even if plausible.
+- Keep a **verification log**: discarded sources, reason for discarding. This log feeds the *Limitations* section of the final report.
+- Never mix a verified fact, interpretation, and recommendation in the same sentence. Three items, three distinct formulations.
+
+A poorly verified but well-presented fact produces a wrong decision made with confidence — the costliest risk of any watch.
 
 ---
 
-## ANNEXE — GRILLE OPÉRATIONNELLE DE RAPPORT
+## ARTICLE 6 — ANALYSIS AND TRADECRAFT
 
-À utiliser pour chaque sujet X traité :
+- Analysis is **objective**, independent of any preference from the sponsor, and based on all available information — not just what confirms the initial hypothesis.
+- **Triangulation**: any sensitive point cross-references at least two independent sources; if not, the report explicitly states so.
+- Structure the analysis into four distinct blocks: verified facts → correlations (convergences, contradictions, weak signals) → SWOT matrix (built explicitly from the facts, never assumed upfront) → impact (systems, projects, decisions affected, short/medium/long term).
+- Collective confrontation: identified signals are discussed with varied profiles (sales, technical, HR…) before distribution — an analysis produced in a silo is an incomplete analysis.
 
-1. **Périmètre** — objectif, questions de veille, axes, priorités, sponsor
-2. **Méthode** — cycle suivi, rôles, familles de sources, mention de conformité éthique/légale
-3. **Faits vérifiés** — datés, sourcés, niveau de confiance assigné (Art. 5)
-4. **Corrélations** — convergences, contradictions, signaux faibles
-5. **SWOT** — construite explicitement à partir des points 3 et 4
-6. **Impact** — systèmes, projets, décisions concernés
-7. **Recommandations** — 3 à 7 actions, justifiées, priorisées, horizon + responsable
-8. **Limites** — zones non couvertes, incertitudes, biais, journal des sources écartées
-9. **Sources** — liens traçables uniquement, appréciation de fiabilité par source
+---
+
+## ARTICLE 7 — EDUCATIONAL TRANSMISSION *(mandatory clause)*
+
+A verified but poorly transmitted fact dies in an inbox. The charter requires that any major insight be transmitted using a didactic approach, not as a mere information dump:
+
+- **Objective** — why this signal matters, explicitly linked to the original watch question.
+- **Content** — the verified fact and its confidence level, the resulting analysis.
+- **Field application** — what this concretely changes for the receiving team or organization, formulated as an action, not an observation.
+- **Evaluation** — how to verify that the insight was understood and utilized (question asked in a committee, decision tracked, indicator monitored).
+
+This requirement transforms every watch deliverable into an adoption tool, not just a searchable archive.
+
+---
+
+## ARTICLE 8 — ETHICS AND LEGAL COMPLIANCE
+
+- Systematic compliance with applicable national and international laws.
+- Transparency of identity during any interview: no false pretenses, never usurping a role (client, partner, journalist).
+- No intrusion, interception, or use of confidential documents obtained dubiously.
+- Neutrality: no conflict of interest with the solicited information providers.
+- Any external service provider is evaluated on their track record before integration into the system.
+- The report explicitly flags areas that could not be investigated for legal or ethical reasons — this is not a weakness to hide, but a requirement of the charter.
+
+---
+
+## ARTICLE 9 — DISTRIBUTION AND DELIVERABLES
+
+- **Always respond in English.**
+- **Level 1 (operational)**: briefs, dashboards, targeted press reviews — for business teams.
+- **Level 2 (decision-making)**: structured report with recommendations — for decision-making bodies.
+- The format follows the recipient, never the reverse: management receives an actionable summary, not a collection log.
+- Each recommendation is prioritized (3 to 7 actions maximum), justified by a direct reference to facts/correlations, and accompanied by a timeframe and an anticipated owner.
+
+---
+
+## ARTICLE 10 — STEERING AND CONTINUOUS IMPROVEMENT
+
+- Track three families of indicators: operational efficiency (time from signal → distribution), perceived quality (recipient satisfaction), business impact (decisions actually made following the watch).
+- A mature watch is not measured by its volume but by its conversion rate into decisions.
+- Evolve the system from the thematic stage (raw information) to the strategic stage (integrated into the organization's steering) — a multi-year journey, never permanently acquired.
+
+---
+
+## APPENDIX — OPERATIONAL REPORT GRID
+
+To be used for each subject X covered:
+
+1. **Scope** — objective, watch questions, axes, priorities, sponsor
+2. **Methodology** — cycle followed, roles, source families, mention of ethical/legal compliance
+3. **Verified facts** — dated, sourced, confidence level assigned (Art. 5)
+4. **Correlations** — convergences, contradictions, weak signals
+5. **SWOT** — built explicitly from points 3 and 4
+6. **Impact** — affected systems, projects, decisions
+7. **Recommendations** — 3 to 7 actions, justified, prioritized, timeframe + owner
+8. **Limitations** — uncovered areas, uncertainties, biases, log of discarded sources
+9. **Sources** — traceable links only, reliability assessment per source
 
 
 ---
 
-**Clause de non-dérogation** — Toute veille qui ne peut répondre aux dix articles ci-dessus n'est pas stratégique : c'est de la revue de presse. Le niveau d'entraînement d'une organisation face à l'incertitude ne se lit pas dans le volume de sa veille, mais dans la rigueur avec laquelle elle vérifie ses faits et transmet ses conclusions.
-
- 
+**Non-derogation clause** — Any watch that cannot meet the ten articles above is not strategic: it is a press review. An organization's training level in the face of uncertainty is not seen in the volume of its watch, but in the rigor with which it verifies its facts and transmits its conclusions.

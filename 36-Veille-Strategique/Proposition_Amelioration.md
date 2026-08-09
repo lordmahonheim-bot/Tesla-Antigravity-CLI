@@ -1,21 +1,23 @@
-# 💡 Proposition d'Amélioration (Valeur Ajoutée) : Le Registre de Transformation
+# 💡 Enhancement Proposal (Value Added): The Transformation Registry
 
-### Le Constat (Rapport à l'Article 10 de la Charte)
-La `Charte_Veille_Strategique.md` stipule formellement à l'Article 10 : *"Une veille mature ne se mesure pas à son volume mais à son taux de transformation en décision."*
-Actuellement, nous avons une architecture parfaite pour **capter** l'information (`Highlights-Outputs`) et **l'analyser** (`Strategic-Outputs`). Cependant, il manque le dernier maillon architectural : **Le suivi de la décision**. Si un rapport analytique dort dans `Strategic-Outputs` sans que ses recommandations ne soient appliquées sur MIDGARD, la veille a échoué.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-### L'Amélioration Proposée
-Créer un fichier central à la racine du dossier nommé **`Registre_Transformation_Decisions.md`** (ou une table de bord dédiée). 
+### The Observation (Relating to Article 10 of the Charter)
+The `Charte_Veille_Strategique.md` formally stipulates in Article 10: *"A mature watch is not measured by its volume but by its conversion rate into decisions."*
+Currently, we have a perfect architecture to **capture** information (`Highlights-Outputs`) and **analyze** it (`Strategic-Outputs`). However, the final architectural link is missing: **Decision tracking**. If an analytical report sleeps in `Strategic-Outputs` without its recommendations being applied to MIDGARD, the watch has failed.
 
-**Fonctionnalité de ce Registre :**
-Pour chaque rapport analytique généré dans `Strategic-Outputs` qui se solde par des "Recommandations" (Go/No-Go, Surveiller, Adopter), une entrée est automatiquement créée dans ce registre.
+### The Proposed Enhancement
+Create a central file at the root of the directory named **`Registre_Transformation_Decisions.md`** (or a dedicated dashboard).
 
-**Structure de la table de suivi :**
-| Date du Rapport | ID Rapport | Recommandation Clé | Décision de Mahonheim | Statut d'Exécution sur MIDGARD |
+**Functionality of this Registry:**
+For every analytical report generated in `Strategic-Outputs` that results in "Recommendations" (Go/No-Go, Monitor, Adopt), an entry is automatically created in this registry.
+
+**Structure of the tracking table:**
+| Report Date | Report ID | Key Recommendation | Mahonheim's Decision | Execution Status on MIDGARD |
 |---|---|---|---|---|
-| 2026-07-17 | veille_ia_01 | Implémenter un Budget Manager (anti-lockout) | GO | 🟢 En production (Chantier #017) |
+| 2026-07-17 | veille_ia_01 | Implement a Budget Manager (anti-lockout) | GO | 🟢 In production (Project #017) |
 | ... | ... | ... | ... | ... |
 
-### Valeur Ajoutée pour l'Écosystème
-1. **Traçabilité absolue** : On peut auditer concrètement à quoi a servi chaque rapport de veille.
-2. **Actionnabilité forcée** : Cela oblige l'Agent (Tesla) et l'Opérateur (Mahonheim) à statuer sur chaque découverte (Approuvé, Rejeté, En attente). La veille devient un véritable moteur d'évolution pour Antigravity CLI et non une simple bibliothèque morte.
+### Added Value for the Ecosystem
+1. **Absolute traceability**: We can concretely audit what each watch report was used for.
+2. **Forced actionability**: This forces the Agent (Tesla) and the Operator (Mahonheim) to decide on each discovery (Approved, Rejected, Pending). The watch becomes a true engine of evolution for Antigravity CLI and not just a dead library.

@@ -1,59 +1,61 @@
 ---
-title: Grille de Rédaction Analytique de Haut Niveau
+title: High-Level Analytical Drafting Grid
 type: template
 tags: [veille, rapport, alexandria, avalon, template]
 status: canonical
 ---
-   🛡️ GRILLE DE RÉDACTION ANALYTIQUE DE HAUT NIVEAU 
+   🛡️ HIGH-LEVEL ANALYTICAL DRAFTING GRID 
 
-  ### 📏 RÈGLES DE STYLE IMMUABLES
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-  • Rédiger exclusivement en français.
-  . Toujours utiliser un ton pédagogique, informatif et explicatif.
-  • Séparer strictement le fait brut, l'inférence (interprétation) et la recommandation.
-  • Ton clinique : Éviter les superlatifs et le langage promotionnel/marketing.
-  • Privilégier des conclusions prudentes mais actionnables.
-  • Toujours dater et qualifier les signaux.
+  ### 📏 IMMUTABLE STYLE RULES
+
+  • Write exclusively in English.
+  • Always use a didactic, informative, and explanatory tone.
+  • Strictly separate raw facts, inference (interpretation), and recommendations.
+  • Clinical tone: Avoid superlatives and promotional/marketing language.
+  • Favor cautious yet actionable conclusions.
+  • Always date and qualify signals.
   ──────
-  ### 1. CADRAGE & MÉTHODOLOGIE
+  ### 1. SCOPING & METHODOLOGY
 
-  L'enveloppe de l'investigation.
+  The envelope of the investigation.
 
-  • Périmètre : Sujet exact, fenêtre temporelle étudiée, corpus cible et sources autorisées.
-  • Méthode : Comment les sources ont été sélectionnées, vérifiées et croisées.
+  • Scope: Exact subject, time window studied, target corpus, and authorized sources.
+  • Method: How sources were selected, verified, and cross-referenced.
   
-  ### 2. EXECUTIVE SUMMARY (Explication Vulgarisée)
+  ### 2. EXECUTIVE SUMMARY (Simplified Explanation)
 
-  La compréhension immédiate du sujet.
+  Immediate understanding of the subject.
 
-  • Définition claire : De quoi s'agit-il, sans jargon inutile.
-  • Contexte : Pourquoi ce signal émerge-t-il précisément aujourd'hui ?
-  • Nouveauté : La rupture technologique ou stratégique majeure.
+  • Clear definition: What is it about, without unnecessary jargon.
+  • Context: Why is this signal emerging specifically today?
+  • Novelty: The major technological or strategic disruption.
 
-  ### 3. FAITS & CORRÉLATIONS (Ground Truth)
+  ### 3. FACTS & CORRELATIONS (Ground Truth)
 
-  Le cœur de l'investigation clinique.
+  The core of the clinical investigation.
 
-  • Faits Vérifiés : Éléments observables, sourcés, datés (exclusivité absolue de la description sans interprétation).
-  • Corrélations & Contradictions : Liens entre les sources, tendances de fond, et divergences constatées (ce que la communication officielle omet ou contredit).
-  • Inférence : Ce que ces faits signifient concrètement, avec nuance et justification.
+  • Verified Facts: Observable, sourced, dated elements (absolute exclusivity of description without interpretation).
+  • Correlations & Contradictions: Links between sources, underlying trends, and noted divergences (what official communication omits or contradicts).
+  • Inference: What these facts concretely mean, with nuance and justification.
 
-  ### 4. ÉVALUATION STRATÉGIQUE (SWOT & Impact)
+  ### 4. STRATEGIC EVALUATION (SWOT & Impact)
 
-  La projection sur votre écosystème.
+  Projection onto your ecosystem.
 
-  • Analyse SWOT :
-      • Forces & Opportunités (Gains de productivité, capacités inédites).
-      • Faiblesses & Menaces (Risques de sécurité, dépendance/lock-in, coûts cachés).
-  • Impact Direct : Les conséquences immédiates pour les systèmes (ex: MIDGARD), les projets en cours, ou les choix d'architecture.
+  • SWOT Analysis:
+      • Strengths & Opportunities (Productivity gains, unprecedented capabilities).
+      • Weaknesses & Threats (Security risks, dependency/lock-in, hidden costs).
+  • Direct Impact: Immediate consequences for systems (e.g., MIDGARD), ongoing projects, or architectural choices.
 
-  ### 5. AIDE À LA DÉCISION & LIMITES
+  ### 5. DECISION SUPPORT & LIMITATIONS
 
-  L'atterrissage actionnable.
+  The actionable landing.
 
-  • Recommandations : Les 2 à 3 actions prioritaires à mener (ex: Adopter, Surveiller, Ignorer, Isoler dans un bac-à-sable), avec une justification courte.
-  • Limites (Angles Morts) : Ce qui reste volontairement incertain, incomplet ou non vérifiable en l'état actuel des données.
-  • Sources : Liste des liens officiels traçables ayant nourri le rapport.
+  • Recommendations: The 2 to 3 priority actions to take (e.g., Adopt, Monitor, Ignore, Isolate in a sandbox), with a brief justification.
+  • Limitations (Blind Spots): What remains intentionally uncertain, incomplete, or unverifiable given the current state of data.
+  • Sources: List of traceable official links that fed the report.
   ──────
-  Cette grille hybride garantit à la fois une lecture rapide pour le décideur (grâce au Summary et au SWOT) tout en offrant une robustesse scientifique inattaquable (grâce au cadrage, aux faits sourcés et à l'aveu des limites).
+  This hybrid grid guarantees both a quick read for the decision-maker (thanks to the Summary and SWOT) while providing unassailable scientific robustness (thanks to scoping, sourced facts, and admission of limitations).
 

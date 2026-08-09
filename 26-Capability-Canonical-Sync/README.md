@@ -1,10 +1,12 @@
 # MVP 26 - Capability Canonical Sync
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## 1. Diagnostic
-Besoin de maintenir une synchronisation robuste et unifiée entre la Source de Vérité et ses miroirs.
+Need to maintain robust and unified synchronization between the Source of Truth and its mirrors.
 
 ## 2. Description
-Cette Capability (plugin 00) assure la synchronisation canonique des fichiers surveillés par le bus. 
+This Capability (plugin 00) ensures canonical synchronization of files monitored by the bus.
 
-## 3. Preuve
-- Script `00_canonical_sync.sh` et carte de routage `sources.json` inclus.
+## 3. Evidence
+- Script `00_canonical_sync.sh` and routing map `sources.json` included.

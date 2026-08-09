@@ -2,13 +2,15 @@
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 **A high-fidelity, interactive HTML/CSS digital manual and A4-ready PDF rendering for Hasbro's Cluedo 2023 (F6420).**
 
 ## 1. Quick Start
 
 Open `manuel_cluedo_clean.html` in any modern web browser to view the interactive manual. The `Cluedo - Manuel Intéractif.pdf` provides an A4 print-ready version with identical visual fidelity. No installation or build steps are required to view the content.
 
-📥 **[Télécharger le Manuel Officiel Hasbro (PDF)](Manuel-Cluedo-VF.pdf)** : Ce fichier contient le livret de règles complet du jeu (édition 2023 F6420).
+📥 **[Download the Official Hasbro Manual (PDF)](Manuel-Cluedo-VF.pdf)**: This file contains the complete rulebook for the game (2023 edition F6420).
 
 ## 2. Usage & Output
 

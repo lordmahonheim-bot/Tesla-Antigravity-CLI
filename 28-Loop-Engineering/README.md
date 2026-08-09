@@ -1,68 +1,77 @@
+# MVP 28 - Loop Engineering & Automated Orchestration
+
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-# MVP 28 - Loop Engineering
+## Overview
+Phase C of the MVP 28 plan focuses on establishing a robust Loop Engineering framework and Automated Orchestration pipeline within the Tesla Antigravity ecosystem.
 
 ## Architecture
+
 ```mermaid
-flowchart TD
-    TGG[TGG] --> Orch[Orchestrator]
-    Orch --> MC[Master-Code]
-    MC --> Aud[Auditor]
-    Aud --> SQ[SQLite]
-    SQ --> Trans[Transitions]
+graph TD
+    TGG[Tesla Governance Gateway] --> ORCH[Orchestrator]
+    ORCH --> MC[Master-Code]
+    MC --> AUDIT[Auditor]
+    AUDIT --> SQL[SQLite Persistence]
+    SQL --> TRANS[Transitions]
+    TRANS --> ORCH
 ```
 
 ## Loop Contract
-The Loop Contract specifies the obligations and expected results for a loop phase. It is structured in YAML format and ensures consistency across operations.
+
+The Loop Contract defines the parameters, states, and constraints for any engineered loop sequence. It serves as the standard template for operations.
+
 ```yaml
-loop_contract:
-  phase: "validation"
-  timeout_seconds: 3600
-  strict_mode: true
-  expected_state:
-    - code_verified
-    - tests_passed
-  fallback_action: rollback
+# loop_contract.yaml
+apiVersion: tesla.bifrost/v1
+kind: LoopContract
+metadata:
+  name: canonical-loop
+spec:
+  timeout: 300s
+  retries: 3
+  validation_level: strict
+  rollback_on_failure: true
 ```
 
 ## Validation Chain
-The validation process consists of 4 levels to ensure maximal stability:
-1. **Syntax Check**: Ensuring code is free of syntax errors (e.g., using LSP self-healing loops).
-2. **Unit Tests**: Running localized tests against independent modules to ensure correctness.
-3. **Integration Tests**: Verifying that the interacting components and external dependencies function properly together.
-4. **Security & Performance Audit**: Final review for vulnerabilities and resource inefficiencies before deployment.
+
+The validation process follows a strict 4-level chain:
+1. **Syntax Check:** Immediate AST parsing and linting.
+2. **Context Verification:** Checking for scope and state dependencies.
+3. **Execution Dry-Run:** Simulated run to catch runtime anomalies.
+4. **Governance Approval:** Final validation by the TGG against the Vigilum Codex.
 
 ## Transitions
-Loop transitions follow strict criteria based on validation states:
-- **PASS**: All 4 levels of validation are successful. The execution loop proceeds to the next state without interruption.
-- **DELAY**: Non-critical warnings detected, requiring manual review or waiting on pending background tasks to resolve.
-- **BLOCK**: Critical error, failed test, or security violation identified. Execution halts immediately and triggers rollback protocols.
+
+State transitions are governed by strict criteria:
+- **PASS:** All 4 validation levels succeed. The loop advances.
+- **DELAY:** Temporary unreachability of resources (e.g., SQLite lock). The loop retries.
+- **BLOCK:** A governance violation or unrecoverable error occurs. The loop halts and triggers an alert.
 
 ## Rollback
-In the event of a `BLOCK` transition, the system reliably triggers a rollback mechanism:
-- **Git Mechanisms**: Employs `git reset --hard` to revert to the last known good commit and `git clean -fd` to remove untracked artifacts.
-- **Shutil Mechanisms**: For unversioned assets or persistent storage, securely copies known good configurations from a defined backup directory using `shutil`.
+
+When a **BLOCK** transition occurs or validation fails critically, the system engages rollback mechanisms:
+- **Git:** Reverts the repository state to the pre-loop commit.
+- **Shutil:** Restores filesystem backups for artifacts not tracked by Git.
 
 ## Persistence
-A relational database schema (SQLite) is designed to persist the state of the loop and maintain audit trails across sessions:
-```sql
-CREATE TABLE loop_runs (
-    run_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    phase TEXT NOT NULL,
-    status TEXT NOT NULL,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-);
 
-CREATE TABLE audit_logs (
-    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    run_id INTEGER,
-    level TEXT,
-    message TEXT,
-    FOREIGN KEY(run_id) REFERENCES loop_runs(run_id)
+The execution state and historical loops are persisted locally via SQLite:
+
+```sql
+CREATE TABLE loop_executions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    loop_name TEXT NOT NULL,
+    status TEXT NOT NULL,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ended_at TIMESTAMP,
+    error_log TEXT
 );
 ```
 
 ## Governance
-Governance is strictly maintained and overseen via:
-- **Vigilum Codex**: The master rulebook dictating security policies, ethical bounds, and authorization levels for all operations.
-- **TGG (Tesla Global Gateway)**: The root node authorizing all loops and verifying absolute compliance before any agent instantiation.
+
+All activities within the Loop Engineering domain are strictly monitored by:
+- **Vigilum Codex:** The supreme rulebook dictating security, access, and operational boundaries.
+- **Tesla Governance Gateway (TGG):** The enforcer mechanism that actively parses contracts and blocks rogue transitions.
