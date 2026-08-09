@@ -1,0 +1,40 @@
+name: Jules_Integration_Pipeline
+description: Mission Graph for implementing the Hybrid Local/Cloud architecture with Jules.
+agents:
+  - id: Tesla-Arcanis-360
+    role: Research & Info Gathering
+  - id: Tesla-Curator-Prime
+    role: Context Cleansing & Memory
+  - id: Tesla-Web-Raider
+    role: Network & Webhooks setup
+  - id: Tesla-Master-Code
+    role: Engineering Authority & Sandboxing
+  - id: Tesla-PREMORTEM
+    role: Risk Assessment & Veto
+  - id: Tesla-Writing-Skills
+    role: Documentation & Changelog
+
+nodes:
+  - step: 1
+    agent: Tesla-Arcanis-360
+    task: "Extract Zero-Trust guidelines and cloud interface specs"
+  - step: 2
+    agent: Tesla-Curator-Prime
+    task: "Scrub PII from requirements before cloud upload"
+    depends_on: [1]
+  - step: 3
+    agent: Tesla-Web-Raider
+    task: "Set up Webhook/API endpoints for Jules integration"
+    depends_on: [2]
+  - step: 4
+    agent: Tesla-Master-Code
+    task: "Enforce contract, sandbox incoming PR, lint and typecheck"
+    depends_on: [3]
+  - step: 5
+    agent: Tesla-PREMORTEM
+    task: "Review integrated code for systemic risks and vulnerabilities"
+    depends_on: [4]
+  - step: 6
+    agent: Tesla-Writing-Skills
+    task: "Write final integration report and update documentation"
+    depends_on: [5]
