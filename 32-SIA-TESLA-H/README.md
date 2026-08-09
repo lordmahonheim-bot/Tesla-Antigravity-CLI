@@ -1,44 +1,46 @@
 # 🌌 SIA-TESLA-H (Self-Improving Harness)
 
-Ce dépôt contient le MVP de l'intégration **SIA-TESLA-H**, le système d'amélioration continue du *Harness* (prompts, workflows, outils) pour l'écosystème `@lordmahonheim-bot`. Ce MVP implémente une architecture Zero-Trust stricte visant à prévenir toute dégradation systémique (Semantic Bloat, hallucinations, boucle infinie) grâce à des garde-fous mécaniques.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+This repository contains the MVP for the **SIA-TESLA-H** integration, the continuous improvement system for the *Harness* (prompts, workflows, tools) of the `@lordmahonheim-bot` ecosystem. This MVP implements a strict Zero-Trust architecture aimed at preventing any systemic degradation (Semantic Bloat, hallucinations, infinite loops) through mechanical guardrails.
 
 ---
 
-## 🎯 Objectifs du MVP
+## 🎯 MVP Objectives
 
-- **Automatiser l'amélioration continue** du Harness de l'agent (Self-Healing & Meta-Optimization).
-- **Protéger le système** via une politique "Zéro Persistance Sans Gate".
-- **Garantir l'observabilité** de chaque itération grâce à une télémétrie rigoureuse.
-- **Maintenir un budget token frugal** par des règles de *Garbage Collection*.
+- **Automate continuous improvement** of the agent's Harness (Self-Healing & Meta-Optimization).
+- **Protect the system** via a "Zero Persistence Without Gate" policy.
+- **Guarantee observability** of each iteration through rigorous telemetry.
+- **Maintain a frugal token budget** via *Garbage Collection* rules.
 
 ---
 
-## 🏗 Architecture Zero-Trust à 3 Niveaux
+## 🏗 3-Tier Zero-Trust Architecture
 
-Le système de mémoire et d'apprentissage repose sur une ségrégation rigoureuse des espaces d'information.
+The memory and learning system relies on a rigorous segregation of information spaces.
 
 ```mermaid
 graph TD
-    subgraph "Niveau 1: Short Memory"
+    subgraph "Tier 1: Short Memory"
         LT["loop_trace.jsonl"]
     end
 
-    subgraph "Niveau 2: Working Memory"
+    subgraph "Tier 2: Working Memory"
         PQ["PATCH_QUEUE.md"]
         LR["LESSONS_REGISTRY.md"]
         ARENA["Arena Runner"]
     end
 
-    subgraph "Niveau 3: Canonical Memory (Zero-Trust)"
+    subgraph "Tier 3: Canonical Memory (Zero-Trust)"
         SKILL["SKILL.md"]
-        ALEX["Alexandria / Base de Connaissance"]
+        ALEX["Alexandria / Knowledge Base"]
     end
 
     LT -->|"RCA & Meta-Agent"| PQ
     PQ -->|"Test Baseline"| ARENA
     ARENA -->|"Evaluation"| GATE{"Oversight Gate"}
 
-    GATE -->|"Rejet"| LR
+    GATE -->|"Reject"| LR
     GATE -->|"Validation"| SKILL
     GATE -->|"Validation"| ALEX
 
@@ -50,9 +52,9 @@ graph TD
 
 ---
 
-## 🛡 L'Oversight Gate : Workflow d'Évaluation
+## 🛡 The Oversight Gate: Evaluation Workflow
 
-Tout patch destiné à modifier le système doit franchir le **Tesla Governance Gateway (TGG)**, évalué par un algorithme Multi-Signal.
+Any patch intended to modify the system must pass through the **Tesla Governance Gateway (TGG)**, evaluated by a Multi-Signal algorithm.
 
 ```mermaid
 sequenceDiagram
@@ -79,13 +81,13 @@ sequenceDiagram
 
 ---
 
-## 📜 Doctrine et Contraintes Piliers
+## 📜 Pillar Doctrine and Constraints
 
-1. **Harness-Only Garanti** : Interdiction absolue de modifier les poids du LLM. Seuls les *prompts* et configurations sont corrigés.
-2. **Anti-Semantic Bloat** : Taille maximale d'un `SKILL.md` limitée à 8k tokens ou 150 lignes. Tout ajout nécessite un refactoring compressif.
-3. **Zéro Auto-Persistance** : Aucun agent ne peut modifier la *Canonical Memory* sans franchir l'Oversight Gate.
-4. **Token-Frugalité** : Budget strictement traqué, avec des *circuit-breakers* si le taux de burn post-patch augmente anormalement.
+1. **Guaranteed Harness-Only**: Absolute ban on modifying LLM weights. Only *prompts* and configurations are patched.
+2. **Anti-Semantic Bloat**: Maximum size of a `SKILL.md` limited to 8k tokens or 150 lines. Any addition requires compressive refactoring.
+3. **Zero Self-Persistence**: No agent can modify the *Canonical Memory* without passing the Oversight Gate.
+4. **Token-Frugality**: Budget strictly tracked, with *circuit-breakers* if the post-patch burn rate increases abnormally.
 
 ---
 
-*Déployé et géré par `tesla-github-manager` pour Lord Mahonheim.*
+*Deployed and managed by `tesla-github-manager` for Lord Mahonheim.*

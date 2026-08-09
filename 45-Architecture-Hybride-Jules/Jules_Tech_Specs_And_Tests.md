@@ -1,28 +1,30 @@
-# Spécifications Techniques et Tests - Worker Cloud (Phase 2.1)
+# Technical Specifications and Tests - Cloud Worker (Phase 2.1)
 
-## 1. Structure Imposée
-- L'architecture doit suivre le pattern hexagonal.
-- Les fichiers de configuration doivent être au format YAML.
-- Le dossier racine doit contenir:
-  - `src/` (code métier)
-  - `tests/` (fichiers de tests)
-  - `scripts/` (scripts d'automatisation)
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+## 1. Imposed Structure
+- The architecture must follow the hexagonal pattern.
+- Configuration files must be in YAML format.
+- The root directory must contain:
+  - `src/` (business logic)
+  - `tests/` (test files)
+  - `scripts/` (automation scripts)
   - `infra/` (IaC, Terraform, Docker)
 
-## 2. Règles de Linting
-- Linter obligatoire: `flake8` et `black` (Python) ou équivalent (ESLint, Prettier pour Node).
-- Les conventions de nommage doivent respecter le standard `snake_case` pour les variables/fonctions et `PascalCase` pour les classes.
-- Longueur de ligne maximale: 100 caractères.
-- Les docstrings sont obligatoires pour toutes les fonctions publiques (format Google ou Sphinx).
+## 2. Linting Rules
+- Mandatory linter: `flake8` and `black` (Python) or equivalent (ESLint, Prettier for Node).
+- Naming conventions must respect the `snake_case` standard for variables/functions and `PascalCase` for classes.
+- Maximum line length: 100 characters.
+- Docstrings are mandatory for all public functions (Google or Sphinx format).
 
-## 3. Conditions de Succès des Tests
-- Couverture de test (Test Coverage) minimale : 85% via `pytest-cov` ou `nyc`.
-- Les tests de bout en bout (E2E) doivent réussir dans un environnement conteneurisé.
-- Les Smoke Tests (tests de santé du worker) doivent vérifier la connectivité aux APIs Cloud et DBs en moins de 5 secondes.
-- Les résultats de l'auditeur `tesla-code-auditor` doivent aboutir au verdict `PASS` (pas de fail critique).
+## 3. Test Success Conditions
+- Minimum Test Coverage: 85% via `pytest-cov` or `nyc`.
+- End-to-End (E2E) tests must pass in a containerized environment.
+- Smoke Tests (worker health tests) must verify connectivity to Cloud APIs and DBs in under 5 seconds.
+- The results from the `tesla-code-auditor` must lead to a `PASS` verdict (no critical fail).
 
-## 4. Règles CI/CD Locales (Avant PR)
-- Un hook `pre-commit` doit exécuter:
-  - Formatage de code.
-  - Scan de vulnérabilités (`bandit` ou `npm audit`).
-  - Lancement des tests unitaires rapides.
+## 4. Local CI/CD Rules (Pre-PR)
+- A `pre-commit` hook must execute:
+  - Code formatting.
+  - Vulnerability scan (`bandit` or `npm audit`).
+  - Fast unit tests execution.

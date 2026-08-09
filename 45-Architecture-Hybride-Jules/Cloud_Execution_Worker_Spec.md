@@ -1,36 +1,38 @@
-# Spécification Technique : Interface Abstraite `cloud-execution-worker`
+# Technical Specification: Abstract Interface `cloud-execution-worker`
 
-## Contexte (Phase 1.2)
-La création de l'interface abstraite locale `cloud-execution-worker` permet de découpler l'exécution des tâches du moteur d'exécution distant, intégrant directement cette capacité au sein de l'environnement MIDGARD sans dépendre de l'infrastructure de Jules.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-## Rôle et Responsabilités
-- **Abstraction de l'Exécution** : Agit comme une interface unifiée (API ou module local) pour l'exécution asynchrone des tâches (scripts, calculs, analyses de code).
-- **Autonomie de MIDGARD** : Remplace les appels dépendants de Jules par un routage local ou des pools de workers isolés (ex: via subprocess, Docker local, ou des files d'attente internes).
-- **Isolation des Processus** : Garantit que les exécutions de tâches n'impactent pas les processus principaux de l'orchestrateur.
+## Context (Phase 1.2)
+The creation of the local abstract interface `cloud-execution-worker` allows the execution of tasks to be decoupled from the remote execution engine, directly integrating this capability within the MIDGARD environment without depending on Jules' infrastructure.
 
-## Architecture et Intégration à MIDGARD (Sans Jules)
-1. **Gestionnaire de File (Queue Manager)** : 
-   `cloud-execution-worker` s'appuie sur une file d'attente locale (ex: Redis ou simple file en mémoire) hébergée dans l'écosystème MIDGARD.
-2. **Worker Pool (Pool de Processus)** : 
-   Les instances de l'interface abstraite instancient des workers locaux (ex: `multiprocessing` en Python ou conteneurs éphémères) pour exécuter le code de manière sécurisée.
-3. **Interfaces (I/O)** :
-   - **Input** : Reçoit un payload JSON standardisé (ID tâche, commande/code, environnement).
-   - **Output** : Retourne un statut de complétion, un code de sortie, les flux stdout/stderr, et un temps d'exécution (similaire à une exécution cloud, mais géré localement).
-4. **Indépendance** : 
-   La logique de routage supprime toute référence aux endpoints de l'API de Jules. Le worker est auto-suffisant, rapportant directement les résultats au système de monitoring de MIDGARD.
+## Role and Responsibilities
+- **Execution Abstraction**: Acts as a unified interface (API or local module) for the asynchronous execution of tasks (scripts, computations, code analyses).
+- **MIDGARD Autonomy**: Replaces Jules-dependent calls with local routing or isolated worker pools (e.g., via subprocess, local Docker, or internal queues).
+- **Process Isolation**: Ensures that task executions do not impact the orchestrator's main processes.
 
-## Spécification de l'Interface (Pseudocode)
+## Architecture and Integration to MIDGARD (Without Jules)
+1. **Queue Manager**: 
+   `cloud-execution-worker` relies on a local queue (e.g., Redis or a simple in-memory queue) hosted in the MIDGARD ecosystem.
+2. **Worker Pool**: 
+   Instances of the abstract interface instantiate local workers (e.g., `multiprocessing` in Python or ephemeral containers) to execute the code securely.
+3. **Interfaces (I/O)**:
+   - **Input**: Receives a standardized JSON payload (task ID, command/code, environment).
+   - **Output**: Returns a completion status, exit code, stdout/stderr streams, and execution time (similar to a cloud execution, but managed locally).
+4. **Independence**: 
+   The routing logic removes all references to Jules' API endpoints. The worker is self-sufficient, reporting results directly to MIDGARD's monitoring system.
+
+## Interface Specification (Pseudocode)
 ```python
 class CloudExecutionWorkerAbstract:
     def submit_task(self, task_payload: dict) -> str:
-        # Valide et pousse la tâche dans la file locale MIDGARD
+        # Validates and pushes the task into the local MIDGARD queue
         pass
 
     def get_status(self, task_id: str) -> dict:
-        # Interroge le statut de l'exécution (PENDING, RUNNING, COMPLETED, FAILED)
+        # Queries the execution status (PENDING, RUNNING, COMPLETED, FAILED)
         pass
 
     def fetch_logs(self, task_id: str) -> str:
-        # Récupère les logs d'exécution de la tâche isolée
+        # Retrieves the execution logs of the isolated task
         pass
 ```

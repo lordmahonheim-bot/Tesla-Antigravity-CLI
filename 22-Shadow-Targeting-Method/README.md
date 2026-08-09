@@ -1,4 +1,6 @@
-# 22-Shadow-Targeting-Method — Subagent Injection & Isolation Framework
+# 22-Shadow-Targeting-Method: Subagent Injection & Isolation Framework
+
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
 ## Overview
 Project 22 documents and standardizes the **Shadow-Targeting** methodology used within the Tesla agentic platform. Operating under the "Vigilum Codex" doctrine, this framework enables loading custom agent skills dynamically into native subagents (such as `self` or native runtime profiles), bypassing account plan constraints while maintaining strict sandbox isolation and tracking.
