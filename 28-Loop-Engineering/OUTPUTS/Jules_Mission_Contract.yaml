@@ -1,0 +1,26 @@
+mission_id: "JULES_CLOUD_WORKER_01"
+title: "Jules Cloud Integration - Phase 1.1"
+status: "Active"
+description: "Délégation de la génération UI/HTML lourde vers l'agent cloud Jules pour préserver la bande passante et les ressources locales de MIDGARD."
+objectives:
+  - "Déporter le calcul UI/HTML vers Jules."
+  - "Mettre en place une boucle de validation asynchrone (self-healing)."
+  - "Assurer une délégation traçable sans usurpation de rôle."
+constraints:
+  - "Jules ne doit être utilisé que comme exécutant cloud spécialisé, jamais comme source de vérité."
+  - "Respecter les budgets cloud externes."
+roles_and_responsibilities:
+  - role: "Cloud Worker (Jules)"
+    responsibilities:
+      - "Génération asynchrone de code HTML/CSS premium standardisé."
+      - "Exécution de calculs lourds déportés depuis MIDGARD."
+  - role: "Tesla Orchestrator"
+    responsibilities:
+      - "Routage et orchestration des tâches vers Jules."
+      - "Validation des retours de Jules."
+interfaces:
+  - input: "Spécifications UI/HTML (depuis MIDGARD/Tesla)"
+  - output: "Code HTML/CSS validé (vers MIDGARD/Tesla)"
+validation_criteria:
+  - "Le code généré respecte les standards Baseline."
+  - "La charge CPU/RAM de MIDGARD est réduite lors des opérations UI."
