@@ -1,10 +1,12 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Project 18 — Tesla Video Director (Local Preppers, Transcribers and Generative Video)
 *Author:* Lord Mahonheim  
-*Status:* Verified Reference (statut/valide)  
+*Status:* Verified Reference (status/validated)  
 *Tagline:* "Local pre-processing ensures fast upload; Gemini cloud APIs handle deep inference."
 
 ## Executive Summary
-This project outlines the media ingestion, compression, and generative editing pipeline of the Tesla subagent ecosystem. Adhering to the zero-local-model policy, it performs all transcription and sémantic video parsing via the **Google Gemini API** (using the `google-genai` SDK), while using local **FFmpeg** commands to normalize, slice, and strip audio files before uploading.
+This project outlines the media ingestion, compression, and generative editing pipeline of the Tesla subagent ecosystem. Adhering to the zero-local-model policy, it performs all transcription and semantic video parsing via the **Google Gemini API** (using the `google-genai` SDK), while using local **FFmpeg** commands to normalize, slice, and strip audio files before uploading.
 
 ## Problem Statement
 Uploading raw, high-definition, or long-duration video files directly to cloud endpoints frequently causes Out-Of-Memory (OOM) errors, high latency, and network connection drops. Furthermore, running local models (like Whisper or YOLO) violates the local residency rules. We need a fast local pre-processing utility combined with clean Google Files/Interactions API integrations.

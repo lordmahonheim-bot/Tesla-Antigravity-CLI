@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 name: tesla-video-director
 description: >
@@ -405,13 +407,13 @@ Every completed mission produces a structured deliverable set, formatted accordi
 | **Factual Inventory** | Bloc 4 | All observed facts tagged `[F-XX]`, timestamped, no interpretation. |
 | **Fact-Check Log** | Bloc 5 | Every claim verified `[C-XX]` with source, result, and confidence level. |
 | **Critical Analysis** | Bloc 6 | Solid / fragile / absent / misleading — four-quadrant breakdown. |
-| **Confidence Map** | Bloc 7 | Each conclusion rated ÉTABLI → NON VÉRIFIABLE. |
+| **Confidence Map** | Bloc 7 | Each conclusion rated ESTABLISHED → UNVERIFIABLE. |
 | **Decision Log** | Bloc 9 | All routing, model, and workflow choices with justification. |
 | **Quality Report** | Sec. 11 + Bloc 6.5 | Results of all QA checks (technical, functional, narrative, semantic). |
 | **Recommendations** | Bloc 9.2 | `[R-XX]` formatted actions with priority, horizon, precondition. |
 | **Final Report** | Blocs 1 + 9 + 10 + 11 | Executive summary, conclusions, bibliography, limits — certified sign-off. |
 
-> Every report respects the **Règle Absolue de Livraison (SGC)**: all outputs are physically stored under `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`.
+> Every report respects the **Absolute Delivery Rule (SGC)**: all outputs are physically stored under `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`.
 
 ---
 
@@ -490,7 +492,7 @@ If direct video-to-video editing fails due to geographic restrictions, fallback 
 *   ❌ **Merged Registers**: Mixing observed fact, interpretation, and recommendation in the same paragraph — violates AREngine Rule 1.
 *   ❌ **Unsourced Assertion**: Any claim without `[F-XX]` internal reference or `[S-XX]` external source — violates AREngine Rule 2.
 *   ❌ **Omitted Limits Section**: Delivering a report without Bloc 11 (limits) — a complete report declaring its limits is more credible than one claiming total coverage.
-*   ❌ **Missing Confidence Levels**: Conclusions without epistemic rating (ÉTABLI → NON VÉRIFIABLE) — violates AREngine Rule 4.
+*   ❌ **Missing Confidence Levels**: Conclusions without epistemic rating (ESTABLISHED → UNVERIFIABLE) — violates AREngine Rule 4.
 *   ❌ **Premature Executive Summary**: Writing the summary before the analysis is complete — violates AREngine Rule 6.
 *   ❌ **Descriptive Report**: Producing a report that only describes what is seen without fact-checking, critical analysis, or recommendations — this is a surveillance note, not an analytical report.
 *   ❌ **Confidence Laundering**: Inflating uncertain findings into unwarranted certainty through confident phrasing — the most insidious anti-pattern; treats statistical plausibility as established fact.
@@ -730,10 +732,10 @@ The Director activates AREngine automatically when:
 - Producing any deliverable in Section 12.
 - Certifying a pipeline output (Step 9 of the Cognitive Loop).
 - Auditing an external source file (video, PDF, audio, image, code).
-- Responding to a brief that includes words: *analyser*, *auditer*, *évaluer*, *rapport*, *vérifier*, *fact-check*, *synthèse*, *bilan*.
+- Responding to a brief that includes words: *analyze*, *audit*, *evaluate*, *report*, *verify*, *fact-check*, *synthesis*, *assessment*.
 
 ---
 
 
 > [!IMPORTANT]
-> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
+> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.

@@ -1,205 +1,207 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 type: reference
-tags: [securite/premortem, statut/valide, methode/deep-research]
+tags: [security/premortem, status/validated, method/deep-research]
 source: "[[rapport_premortem_AUDITE_CORRIGE.txt]]"
 date: 2026-06-30
 version: 4.0
 author: "Tesla Arcanis"
 certification: "Arcanis_Seal_v3_r4"
-revision_note: "v4.0 — Version définitive et finale. Aucune entité HTML. Aucun hyperlien cassé. Scripts testés. rtk cat remplacé par rtk git status. Avertissement keyring. CM11 réseau. Matrice corrigée. Chemin DB unifié. Parenthèse scellement corrigée."
-audit_chain: "v1.0 originale > audit 12 anomalies > v1.0 confrontation > audit 14 anomalies > v2.0 confrontation > v1.0 premortem > audit 10 anomalies + 4 risques > v2.0 premortem corrigé > v2.0 consolidation (régression) > v3.0 définitive > v4.0 finale (ce document)"
+revision_note: "v4.0 — Final and definitive version. No HTML entities. No broken hyperlinks. Scripts tested. rtk cat replaced by rtk git status. Keyring warning added. CM11 network added. Matrix corrected. Unified DB path. Sealing parenthesis fixed."
+audit_chain: "v1.0 original > audit 12 anomalies > v1.0 confrontation > audit 14 anomalies > v2.0 confrontation > v1.0 premortem > audit 10 anomalies + 4 risks > v2.0 premortem corrected > v2.0 consolidation (regression) > v3.0 definitive > v4.0 final (this document)"
 ---
 
-# RAPPORT PREMORTEM FINAL : INTEGRATION ANTIGRAVITY CLI ET GOOGLE AGENTS CLI
+# FINALIZED PREMORTEM REPORT: ANTIGRAVITY CLI AND GOOGLE AGENTS CLI INTEGRATION
 
-**Projet :** Integration Antigravity CLI et Google Agents CLI
-**Date :** 2026-06-30
-**Auteur :** Tesla Arcanis
-**Destinataire :** Lord Mahonheim (Abdellah MOUHTAJ)
-**Cadre de gouvernance :** Vigilum Codex
-**Statut :** GO - Deploiement autorise apres validation de la checklist (section 4)
+**Project:** Antigravity CLI and Google Agents CLI Integration
+**Date:** 2026-06-30
+**Author:** Tesla Arcanis
+**Recipient:** Lord Mahonheim (Abdellah MOUHTAJ)
+**Governance Framework:** Vigilum Codex
+**Status:** GO - Deployment authorized after checklist validation (section 4)
 
 ---
 
-## 1. Postulat de l'Echec Virtuel (T+3 Mois)
+## 1. Virtual Failure Postulate (T+3 Months)
 
-> **AVERTISSEMENT**
+> **WARNING**
 >
-> Nous sommes le 2026-09-30.
-> Le plan technique d'integration d'Antigravity CLI et de Google Agents CLI, deploie il y a trois mois sur la machine locale MIDGARD, s'est solde par un echec critique total.
+> Today is 2026-09-30.
+> The technical integration plan for Antigravity CLI and Google Agents CLI, deployed three months ago on the local MIDGARD machine, has resulted in a total critical failure.
 >
-> Symptomes constates :
-> 1. La base SQLite alexandria_brain.db est corrompue et inutilisable.
-> 2. Le processeur local est sature a 100% par des boucles de reconstruction d'index.
-> 3. Le budget de tokens API a ete entierement consomme, provoquant un lockout de quota de 7 jours.
-> 4. L'authentification asynchrone est brisee par l'impossibilite de persister les tokens OAuth sur l'environnement headless.
-> 5. Les mecanismes d'isolation nsjail sont inactifs, exposant la machine hote.
+> Observed symptoms:
+> 1. The SQLite database alexandria_brain.db is corrupted and unusable.
+> 2. The local CPU is 100% saturated by infinite index reconstruction loops.
+> 3. The API token budget has been fully consumed, triggering a 7-day quota lockout.
+> 4. Asynchronous authentication is broken due to the inability to persist OAuth tokens on the headless environment.
+> 5. The nsjail isolation mechanisms are inactive, exposing the host machine.
 >
-> Voici la reconstitution historique objective des causes et mecanismes de ce naufrage technique.
+> Below is the objective historical reconstruction of the causes and mechanisms of this technical disaster.
 
 ---
 
-## 2. Reconstitution Narrative de la Catastrophe
+## 2. Chronological Disaster Reconstruction
 
-* **Juillet 2026 - L'Illusion du Succes Initial :**
-  Le deploiement initial s'execute de maniere nominale. La commande uvx google-agents-cli setup configure les 7 competences ADK 2.0. Le proxy RTK intercepte les requetes avec succes, appliquant un taux de compression de 85% sur les flux textuels. La machine MIDGARD (8 Go RAM, CPU-only) fonctionne sous une charge normale.
+* **July 2026 - The Illusion of Initial Success:**
+  The initial deployment executes nominally. The command uvx google-agents-cli setup configures the 7 ADK 2.0 skills. The RTK proxy successfully intercepts requests, applying an 85% compression rate on textual streams. The MIDGARD machine (8 GB RAM, CPU-only) operates under normal load.
 
-* **Fin Juillet 2026 - L'Echec Keyring Headless (Signal Ignore) :**
-  La bibliotheque zalando/go-keyring integree au binaire agy echoue a persister le token OAuth en raison de l'absence de gnome-keyring sur MIDGARD. L'agent demande une reconnexion manuelle a chaque demarrage. Pour contourner, la variable ANTIGRAVITY_API_KEY est declaree statiquement. La connexion est retablie mais le probleme de fond reste entier.
+* **Late July 2026 - The Headless Keyring Failure (Ignored Signal):**
+  The zalando/go-keyring library integrated into the agy binary fails to persist the OAuth token due to the absence of gnome-keyring on MIDGARD. The agent requires manual reconnection at each startup. As a workaround, the ANTIGRAVITY_API_KEY variable is declared statically. The connection is restored, but the underlying problem remains unresolved.
 
-* **Debut Aout 2026 - La Rupture Silencieuse des Sandboxes et des Hooks :**
-  Une mise a jour du noyau Linux modifie le comportement des namespaces cgroup v1/v2, provoquant la defaillance silencieuse de l'isolation nsjail. Pour maintenir l'activite, le sandbox est desactive (enableTerminalSandbox: false). Parallelement, Google met a jour le binaire closed-source agy, modifiant la structure d'invocation des commandes de ses sous-agents. Les hooks PreToolUse de RTK, qui s'appuyaient sur la reecriture des commandes shell, cessent d'etre declenches. RTK n'intercepte plus rien. Le flux de tokens brut passe a 100% de bruit de terminal sans generer d'alerte.
+* **Early August 2026 - The Silent Break of Sandboxes and Hooks:**
+  A Linux kernel update modifies the behavior of cgroup v1/v2 namespaces, causing the silent failure of the nsjail isolation. To maintain operations, the sandbox is disabled (enableTerminalSandbox: false). Concurrently, Google updates the closed-source agy binary, modifying the invocation structure of its sub-agents' commands. The RTK PreToolUse hooks, which relied on shell command rewriting, cease to trigger. RTK no longer intercepts anything. The raw token stream passes with 100% terminal noise without triggering an alert.
 
-* **Fin Aout 2026 - Acces Concurrents et Derive Semantique :**
-  L'absence d'evaluations semantiques continues (Niveau 2) permet a des regressions logiques de s'installer. Les agents s'embourbent dans des boucles d'execution repetitives. Sans compression RTK, le budget de tokens se consume de maniere exponentielle. Simultanement, plusieurs sous-agents tentent d'ecrire en meme temps dans alexandria_brain.db. Le script search_router.py ne gerant pas de file d'attente d'ecriture, des erreurs "database is locked" surviennent.
+* **Late August 2026 - Concurrent Access and Semantic Drift:**
+  The absence of continuous semantic evaluations (Level 2) allows logical regressions to take root. Agents get bogged down in repetitive execution loops. Without RTK compression, the token budget is consumed exponentially. Simultaneously, multiple sub-agents attempt to write to alexandria_brain.db at the same time. Since the search_router.py script does not manage a write queue, "database is locked" errors occur.
 
-* **Mi-Septembre 2026 - OOM Killer et Lockout de Quotas :**
-  Lors du build d'un conteneur Docker, la memoire physique (8 Go RAM, sans swap) sature. L'OOM Killer du noyau Linux s'active et termine abruptement le processus agy en plein milieu d'une transaction SQLite sur la base Alexandria, corrompant definitivement l'index FTS5. De plus, suite a la surconsommation de tokens, le quota mensuel est epuise et un lockout d'API de 7 jours est declenche par Google.
+* **Mid-September 2026 - OOM Killer and Quota Lockout:**
+  During a Docker container build, the physical memory (8 GB RAM, no swap) saturates. The Linux kernel's OOM Killer activates and abruptly terminates the agy process in the middle of a SQLite transaction on the Alexandria database, permanently corrupting the FTS5 index. Furthermore, following the token overconsumption, the monthly quota is exhausted, and a 7-day API lockout is triggered by Google.
 
-* **30 Septembre 2026 - L'Effondrement :**
-  La cle statique ANTIGRAVITY_API_KEY fait l'objet d'une rotation de securite cote serveur. L'agent ne dispose d'aucune procedure de rollback pour reinstaller une version anterieure stable d'agy, et l'authentification OAuth est impossible en raison de la defaillance persistante du keyring. Le systeme est totalement paralyse.
-
----
-
-## 3. Analyse Tripartite des Risques (Gary Klein Model)
-
-### A. L'Avocat du Diable (Causes Techniques et Factuelles)
-
-* **Facteur 1 : Rupture d'isolation et dependance noyau (nsjail)** - Les namespaces requis par nsjail dependent de la configuration du noyau. Une modification systeme de cgroup v1 vers v2 brise le confinement, menant a une execution hors sandbox.
-
-* **Facteur 2 : Desactivation des hooks RTK par mise a jour du binaire ferme** - Les modifications de la logique interne d'agy sur l'invocation des outils systeme empechent le declenchement des hooks de reecriture de RTK, annulant silencieusement la compression des tokens.
-
-* **Facteur 3 : Corruption de la base SQLite par l'OOM Killer** - La saturation de la memoire vive force le noyau Linux a tuer le processus agy en cours de transaction d'indexation, corrompant la base de donnees par manque de journalisation WAL.
-
-* **Facteur 4 : Blocage OAuth headless par absence de Keyring** - L'incapacite de zalando/go-keyring a stocker les secrets sans gnome-keyring ni D-Bus actif empeche la persistance du token OAuth apres rotation ou revocation de la cle API statique.
-
-* **Facteur 5 : Blocage par depassement de Quotas d'API** - L'absence de circuit breaker local permet aux boucles infinies de consommer le quota mensuel jusqu'au lockout complet (7 jours documente).
-
-* **Facteur 6 : Risque supply chain sur binaire precompile (.whl)** - L'installation directe du package binaire wheel de Google sans inspection locale prealable introduit un risque d'execution de code non controlele.
-
-### B. L'Inspecteur des Angles Morts (Hypotheses Cachees non Validees)
-
-* **Hypothese 1 : Stabilite des mecanismes d'hooks d'Antigravity CLI** - Supposer que la structure d'invocation des outils d'agy reste identique a long terme, alors que Google met a jour son binaire sans documentation publique prealable.
-
-* **Hypothese 2 : Suffisance des evaluations deterministes (Niveau 1)** - Croire que des tests de format JSON suffisent a garantir le comportement de l'agent, en omettant la detection des regressions semantiques.
-
-* **Hypothese 3 : Absence de verrous d'ecriture concurrents sur SQLite** - Supposer que l'acces concurrent de plusieurs sous-agents sur alexandria_brain.db s'auto-regulerait sans mecanisme de file d'attente ou de mode de journalisation adapte.
-
-* **Hypothese 4 : Resilience de MIDGARD sans Swap** - Presumer que 8 Go de RAM physique suffisent a executer des builds Docker et des agents en parallele sans protection contre l'OOM Killer.
-
-* **Hypothese 5 : Disponibilite permanente de la connectivite externe** - Supposer qu'aucune panne reseau n'interrompra le dialogue entre l'agent local et les LLM distants.
-
-* **Hypothese 6 : Possibilite de rollback automatique du binaire ferme** - Supposer qu'il est possible de revenir en arriere sans avoir stocke localement les versions fonctionnelles d'agy.
-
-### C. La Vigie des Signaux Faibles (Indicateurs Precurseurs)
-
-1. **Signal 1 : Latences d'initialisation de nsjail** - Temps d'initialisation des sous-agents passant de 50 ms a plus de 1500 ms.
-2. **Signal 2 : Avertissements SQLite verrouille** - Apparition intermittente de "database is locked" dans les traces de search_router.py.
-3. **Signal 3 : Chute de la compression RTK** - Augmentation brutale de l'utilisation des tokens par session, signalant que RTK ne capture plus les flux.
-4. **Signal 4 : Traces d'OOM Killer dans dmesg** - Messages "Out of memory: Killed process" dans les journaux systeme.
-5. **Signal 5 : Echecs de persistance OAuth** - Alertes "consumerOAuth: failed to persist token to keyring" dans le repertoire de log d'Antigravity CLI.
-6. **Signal 6 : Demandes regulieres de reauthentification** - Obligation de rouvrir le navigateur a chaque cycle de travail de l'agent.
+* **September 30, 2026 - The Collapse:**
+  The static ANTIGRAVITY_API_KEY undergoes a server-side security rotation. The agent lacks a rollback procedure to reinstall a stable previous version of agy, and OAuth authentication is impossible due to the persistent keyring failure. The system is completely paralyzed.
 
 ---
 
-## 4. Plan de Resilience et Contre-Mesures
+## 3. Gary Klein's Tripartite Risk Analysis
 
-### Tableau des Contre-Mesures Obligatoires
+### A. Devil's Advocate (Technical & Fact-Based Causes)
 
-| CM  | Risque Identifie                       | Action Preventive Obligatoire                                                                 | Indicateur de Declenchement                                    |
+* **Factor 1: Isolation break and kernel dependency (nsjail)** - The namespaces required by nsjail depend on the kernel configuration. A system change from cgroup v1 to v2 breaks the confinement, leading to out-of-sandbox execution.
+
+* **Factor 2: Disabling of RTK hooks via closed binary update** - Changes to agy's internal logic regarding system tool invocation prevent RTK's rewriting hooks from triggering, silently negating token compression.
+
+* **Factor 3: SQLite database corruption by OOM Killer** - RAM saturation forces the Linux kernel to kill the agy process during an indexing transaction, corrupting the database due to the lack of WAL journaling.
+
+* **Factor 4: Headless OAuth blockage due to missing Keyring** - The inability of zalando/go-keyring to store secrets without gnome-keyring or an active D-Bus prevents OAuth token persistence after the static API key is rotated or revoked.
+
+* **Factor 5: Blockage due to API Quota overrun** - The absence of a local circuit breaker allows infinite loops to consume the monthly quota until a complete lockout (7 days documented).
+
+* **Factor 6: Supply chain risk on precompiled binary (.whl)** - The direct installation of Google's binary wheel package without prior local inspection introduces a risk of uncontrolled code execution.
+
+### B. Blindspot Inspector (Unverified Assumptions)
+
+* **Assumption 1: Stability of Antigravity CLI hook mechanisms** - Assuming that agy's tool invocation structure will remain identical long-term, even though Google updates its binary without prior public documentation.
+
+* **Assumption 2: Sufficiency of deterministic evaluations (Level 1)** - Believing that JSON format tests are enough to guarantee agent behavior, ignoring the detection of semantic regressions.
+
+* **Assumption 3: Absence of concurrent write locks on SQLite** - Assuming that concurrent access by multiple sub-agents on alexandria_brain.db would self-regulate without an adapted write queue or journaling mode.
+
+* **Assumption 4: Resilience of MIDGARD without Swap** - Presuming that 8 GB of physical RAM is sufficient to run Docker builds and agents in parallel without protection against the OOM Killer.
+
+* **Assumption 5: Permanent availability of external connectivity** - Assuming that no network outage will interrupt the dialogue between the local agent and the remote LLMs.
+
+* **Assumption 6: Possibility of automatic rollback for the closed binary** - Assuming it is possible to revert without having locally stored functional versions of agy.
+
+### C. Weak Signals Sentinel (Early Precursor Indicators)
+
+1. **Signal 1: nsjail initialization latencies** - Sub-agent initialization times increasing from 50 ms to over 1500 ms.
+2. **Signal 2: SQLite locked warnings** - Intermittent appearance of "database is locked" in the search_router.py logs.
+3. **Signal 3: Drop in RTK compression** - Sudden increase in token usage per session, indicating that RTK is no longer capturing streams.
+4. **Signal 4: OOM Killer traces in dmesg** - "Out of memory: Killed process" messages in the system logs.
+5. **Signal 5: OAuth persistence failures** - "consumerOAuth: failed to persist token to keyring" alerts in the Antigravity CLI log directory.
+6. **Signal 6: Regular re-authentication requests** - The need to reopen the browser at every agent work cycle.
+
+---
+
+## 4. Resilience Plan and Countermeasures
+
+### Mandatory Countermeasures Table
+
+| CM  | Identified Risk                        | Mandatory Preventive Action                                                                   | Trigger Indicator                                              |
 |-----|----------------------------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| CM1 | Instabilite de nsjail                  | Configurer un script de fallback vers une isolation Docker/Podman locale confinee.            | Echec d'initialisation du sandbox nsjail (code retour non nul) |
-| CM2 | Rupture des hooks RTK                  | Integrer un test d'assertion automatise de compression RTK dans les scripts de pre-commit.    | Taux de compression mesure inferieur a 50%, ou gain nul sur 24h |
-| CM3 | Corruption SQLite                      | Activer la journalisation WAL, planifier un cron quotidien de sauvegarde et un script d'integrite. | Taille du fichier superieur a 50 Mo ou ecritures concurrentes actives superieures a 2 |
-| CM4 | OOM Killer                             | Configurer un swap de 4 Go minimum sur MIDGARD et limiter les ressources via cgroups.         | Consommation RAM globale atteignant 85% de la capacite physique |
-| CM5 | Keyring Headless                       | Installer l'infrastructure keyring minimale (dbus, gnome-keyring, libsecret-1-0).             | Trace "failed to persist token" dans les logs d'Antigravity CLI |
-| CM6 | Revocation de cle API                  | Implementer un wrapper d'authentification utilisant un Service Account GCP avec cle JSON.     | Code d'erreur HTTP 401 sur les requetes Antigravity           |
-| CM7 | Derive semantique                      | Mettre en place des tests de Niveau 2 (LLM-as-a-Judge sur 10 cas) executes hebdomadairement. | Baisse du score d'evaluation semantique sous 80/100           |
-| CM8 | Lockout de quotas                      | Configurer un circuit breaker local et fallback sur cle GEMINI_API_KEY de secours.            | Notification de quota epuise ou code HTTP 429                 |
-| CM9 | Pas de rollback agy                    | Archiver le binaire fonctionnel precedent dans agy.stable.bak avant toute mise a jour.        | Notification de mise a jour d'Antigravity                     |
-| CM10| Supply chain (wheel)                   | Extraire et auditer les checksums du fichier wheel avant installation.                        | Nouvelle version disponible sur les depots                    |
-| CM11| Perte de connectivite reseau           | Implementer une file d'attente locale avec retry automatique et un mode degrade deterministe.  | Echec de connexion reseau sur plus de 3 requetes consecutives |
+| CM1 | nsjail instability                     | Configure a fallback script to a locally confined Docker/Podman isolation.                    | nsjail sandbox initialization failure (non-zero return code)   |
+| CM2 | Broken RTK hooks                       | Integrate an automated RTK compression assertion test in pre-commit scripts.                  | Measured compression rate below 50%, or zero gain over 24h     |
+| CM3 | SQLite corruption                      | Enable WAL journaling, schedule a daily backup cron, and an integrity script.                 | File size exceeds 50 MB or active concurrent writes exceed 2   |
+| CM4 | OOM Killer                             | Configure a minimum 4 GB swap on MIDGARD and limit resources via cgroups.                     | Global RAM consumption reaching 85% of physical capacity       |
+| CM5 | Headless Keyring                       | Install the minimal keyring infrastructure (dbus, gnome-keyring, libsecret-1-0).              | "failed to persist token" trace in Antigravity CLI logs        |
+| CM6 | API key revocation                     | Implement an authentication wrapper using a GCP Service Account with a JSON key.              | HTTP 401 error code on Antigravity requests                    |
+| CM7 | Semantic drift                         | Implement Level 2 tests (LLM-as-a-Judge on 10 cases) executed weekly.                         | Semantic evaluation score drops below 80/100                   |
+| CM8 | Quota lockout                          | Configure a local circuit breaker and fallback to a backup GEMINI_API_KEY.                    | Quota exhausted notification or HTTP 429 code                  |
+| CM9 | No agy rollback                        | Archive the previous functional binary in agy.stable.bak before any update.                   | Antigravity update notification                                |
+| CM10| Supply chain (wheel)                   | Extract and audit the wheel file checksums before installation.                               | New version available on repositories                          |
+| CM11| Network connectivity loss              | Implement a local queue with automatic retry and a deterministic degraded mode.               | Network connection failure on more than 3 consecutive requests |
 
-### Checklist de Surete Pre-Execution (14 ITEMS)
+### Pre-Execution Safety Checklist (14 ITEMS)
 
-**Isolation et Securite**
+**Isolation and Security**
 
-- [x] **1.** L'integrite du sandbox nsjail est verifiee via une commande d'ecriture test confinee avant de lancer un run d'agent.
-- [x] **2.** Le parametre allowNonWorkspaceAccess est configure a false dans les options d'Antigravity.
-- [x] **3.** Les permissions fines sont declarees : allow command(git), allow command(uv), deny command(rm -rf).
+- [x] **1.** The integrity of the nsjail sandbox is verified via a confined test write command before launching an agent run.
+- [x] **2.** The allowNonWorkspaceAccess parameter is set to false in the Antigravity options.
+- [x] **3.** Fine-grained permissions are declared: allow command(git), allow command(uv), deny command(rm -rf).
 
-**Gestion des Tokens et RTK**
+**Token Management and RTK**
 
-- [x] **4.** Un script de diagnostic RTK est execute au demarrage pour valider l'interception et la compression.
-- [x] **5.** Le circuit breaker de quota est actif (monitoring du taux de consommation tokens/heure).
+- [x] **4.** An RTK diagnostic script is executed at startup to validate interception and compression.
+- [x] **5.** The quota circuit breaker is active (monitoring the token/hour consumption rate).
 
-**Base de Donnees Alexandria**
+**Alexandria Database**
 
-- [x] **6.** La base alexandria_brain.db is configuree en mode WAL (PRAGMA journal_mode=WAL).
-- [x] **7.** La coherence de la base est validee (PRAGMA integrity_check retourne ok).
-- [x] **8.** La sauvegarde quotidienne automatique (VACUUM INTO) est configuree en cron et verifiee.
+- [x] **6.** The alexandria_brain.db database is configured in WAL mode (PRAGMA journal_mode=WAL).
+- [x] **7.** Database consistency is validated (PRAGMA integrity_check returns ok).
+- [x] **8.** The automatic daily backup (VACUUM INTO) is configured via cron and verified.
 
-**Ressources Systeme**
+**System Resources**
 
-- [x] **9.** Un swap de 4 Go est active et verifie (swapon --show).
-- [x] **10.** Les limites cgroups sont configurees : 1 Go par agent, 2 Go par conteneur Docker de build.
+- [x] **9.** A 4 GB swap is enabled and verified (swapon --show).
+- [x] **10.** The cgroups limits are configured: 1 GB per agent, 2 GB per Docker build container.
 
-**Authentification et Keyring**
+**Authentication and Keyring**
 
-- [x] **11.** L'infrastructure de keyring headless est fonctionnelle : dbus, gnome-keyring, libsecret-1-0 installes et demon actif.
-      AVERTISSEMENT : Le deverrouillage du keyring avec un mot de passe vide stocke les tokens OAuth sans chiffrement. Acceptable UNIQUEMENT sur une machine mono-utilisateur physiquement isolee comme MIDGARD.
-- [x] **12.** Le fallback ANTIGRAVITY_API_KEY is configure dans le fichier .env et teste (agy auth status retourne valide).
-- [x] **13.** Le Service Account GCP dispose d'une cle JSON valide stockee hors de la structure Git.
+- [x] **11.** The headless keyring infrastructure is functional: dbus, gnome-keyring, libsecret-1-0 installed, and daemon active.
+      WARNING: Unlocking the keyring with an empty password stores OAuth tokens without encryption. Acceptable ONLY on a physically isolated single-user machine like MIDGARD.
+- [x] **12.** The ANTIGRAVITY_API_KEY fallback is configured in the .env file and tested (agy auth status returns valid).
+- [x] **13.** The GCP Service Account has a valid JSON key stored outside the Git structure.
 
-**Rollback et Supply Chain**
+**Rollback and Supply Chain**
 
-- [x] **14.** Une copie de sauvegarde du binaire agy actuel est conservee dans agy.stable.bak.
+- [x] **14.** A backup copy of the current agy binary is kept in agy.stable.bak.
 
 ---
 
-## 5. Procedures Operationnelles de Resilience
+## 5. Operational Resilience Procedures
 
-### Procedure P1 : Diagnostic RTK Quotidien (rtk_diagnostic.sh)
+### Procedure P1: Daily RTK Diagnostic (rtk_diagnostic.sh)
 
 ```bash
 #!/bin/bash
-# rtk_diagnostic.sh - A executer au demarrage de session
+# rtk_diagnostic.sh - To be executed at session startup
 
-# 1. Verifier que RTK est installe
-if ! command -v rtk /dev/null 2>&1; then
-    echo "[CRITICAL] RTK non installe. Installation requise."
+# 1. Verify that RTK is installed
+if ! command -v rtk >/dev/null 2>&1; then
+    echo "[CRITICAL] RTK not installed. Installation required."
     exit 1
 fi
 
-# 2. Verifier que les hooks sont actifs
+# 2. Verify that hooks are active
 GAIN=$(rtk gain --format json 2>/dev/null)
 if [ -z "$GAIN" ]; then
-    echo "[WARNING] RTK gain ne retourne aucune donnee. Les hooks sont inactifs."
-    echo "[ACTION] Reinitialiser les hooks : rtk init -g --gemini"
+    echo "[WARNING] RTK gain returns no data. Hooks are inactive."
+    echo "[ACTION] Reset hooks: rtk init -g --gemini"
 fi
 
-# 3. Test de compression reel : comparer sortie brute vs sortie RTK
-# Necessite d'etre dans un depot Git
-if git rev-parse --is-inside-work-tree 2>/dev/null; then
+# 3. Real compression test: compare raw output vs RTK output
+# Requires being in a Git repository
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     RAW_LINES=$(git status 2>/dev/null | wc -l)
     RTK_LINES=$(rtk git status 2>/dev/null | wc -l)
     if [ "$RAW_LINES" -gt 0 ] && [ "$RTK_LINES" -ge "$RAW_LINES" ]; then
-        echo "[WARNING] RTK ne compresse pas. Sorties identiques ($RAW_LINES lignes)."
+        echo "[WARNING] RTK is not compressing. Identical outputs ($RAW_LINES lines)."
     else
         RATIO=$(( (RAW_LINES - RTK_LINES) * 100 / RAW_LINES ))
-        echo "[OK] RTK compression active : $RAW_LINES vers $RTK_LINES lignes ($RATIO% reduit)."
+        echo "[OK] RTK compression active: $RAW_LINES to $RTK_LINES lines ($RATIO% reduced)."
     fi
 else
-    echo "[INFO] Pas dans un depot Git. Test de compression ignore."
+    echo "[INFO] Not in a Git repository. Compression test skipped."
 fi
 ```
 
-### Procedure P2 : Backup Alexandria Quotidien (alexandria_backup.sh)
+### Procedure P2: Daily Alexandria Backup (alexandria_backup.sh)
 
 ```bash
 #!/bin/bash
-# alexandria_backup.sh - Sauvegarde non bloquante de la base Alexandria
-# Cron : 0 3 * * * /home/lord-mahonheim/bifrost/scripts/alexandria_backup.sh
+# alexandria_backup.sh - Non-blocking backup of the Alexandria database
+# Cron: 0 3 * * * /home/lord-mahonheim/bifrost/scripts/alexandria_backup.sh
 
 DB_PATH="/home/lord-mahonheim/bifrost/tesla/Avalon/alexandria_brain.db"
 BACKUP_DIR="/home/lord-mahonheim/bifrost/backups/alexandria"
@@ -207,36 +209,36 @@ DATE=$(date +%Y%m%d)
 
 mkdir -p "$BACKUP_DIR"
 
-# Verifier l'integrite avant backup
+# Verify integrity before backup
 INTEGRITY=$(sqlite3 "$DB_PATH" "PRAGMA integrity_check;" 2>/dev/null)
 if [ "$INTEGRITY" != "ok" ]; then
-    echo "[CRITICAL] Base Alexandria corrompue ! Integrity check: $INTEGRITY"
+    echo "[CRITICAL] Alexandria database corrupted! Integrity check: $INTEGRITY"
     exit 1
 fi
 
-# Backup via VACUUM INTO (ne verrouille pas la base en lecture)
+# Backup via VACUUM INTO (does not read-lock the database)
 sqlite3 "$DB_PATH" "VACUUM INTO '$BACKUP_DIR/alexandria_$DATE.db';"
 
-# Conserver les 7 derniers backups uniquement
+# Keep only the last 7 backups
 ls -t "$BACKUP_DIR"/alexandria_*.db | tail -n +8 | xargs -r rm
 
-echo "[OK] Backup Alexandria termine : alexandria_$DATE.db"
+echo "[OK] Alexandria backup completed: alexandria_$DATE.db"
 ```
 
-### Procedure P3 : Configuration Keyring sur Linux Headless (setup_keyring.sh)
+### Procedure P3: Keyring Configuration on Headless Linux (setup_keyring.sh)
 
 ```bash
 #!/bin/bash
-# setup_keyring.sh - Configuration de l'infrastructure keyring pour agy
+# setup_keyring.sh - Configuration of the keyring infrastructure for agy
 
-# 1. Installer les dependances minimales
+# 1. Install minimal dependencies
 sudo apt-get install --no-install-recommends -y dbus gnome-keyring libsecret-1-0 xdg-utils
 
-# 2. Creer le repertoire de stockage keyring
+# 2. Create the keyring storage directory
 mkdir -p ~/.local/share/keyrings
 
-# 3. Configurer le daemon au demarrage de session
-# Ajouter les lignes suivantes au fichier ~/.bashrc manuellement :
+# 3. Configure the daemon at session startup
+# Add the following lines to the ~/.bashrc file manually:
 #
 # if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
 #     export DBUS_SESSION_BUS_ADDRESS=$(dbus-daemon --session --print-address --fork)
@@ -245,29 +247,29 @@ mkdir -p ~/.local/share/keyrings
 #     export $(echo -n "" | gnome-keyring-daemon --unlock --start --components=secrets 2>/dev/null)
 # fi
 
-echo "[INFO] Ajouter le bloc keyring au fichier ~/.bashrc, puis redemarrer le shell."
-echo "AVERTISSEMENT : Le keyring est deverrouille sans mot de passe."
-echo "Acceptable UNIQUEMENT sur une machine mono-utilisateur isolee."
+echo "[INFO] Add the keyring block to the ~/.bashrc file, then restart the shell."
+echo "WARNING: The keyring is unlocked without a password."
+echo "Acceptable ONLY on an isolated single-user machine."
 ```
 
-### Procedure P4 : Rollback Antigravity CLI (rollback_agy.sh)
+### Procedure P4: Antigravity CLI Rollback (rollback_agy.sh)
 
 ```bash
 #!/bin/bash
-# rollback_agy.sh - Revenir a la version precedente stable d'agy
+# rollback_agy.sh - Revert to the previous stable version of agy
 
 CURRENT_AGY=$(which agy)
 BACKUP_AGY="/usr/local/bin/agy.stable.bak"
 
 if [ -f "$BACKUP_AGY" ]; then
-    echo "[INFO] Restauration du binaire stable..."
+    echo "[INFO] Restoring the stable binary..."
     sudo cp "$BACKUP_AGY" "$CURRENT_AGY"
     chmod +x "$CURRENT_AGY"
     agy --version
-    echo "[OK] Rollback effectue."
+    echo "[OK] Rollback performed."
 else
-    echo "[CRITICAL] Aucun backup stable trouve a $BACKUP_AGY."
-    echo "[ACTION] Telechargement manuel obligatoire depuis :"
+    echo "[CRITICAL] No stable backup found at $BACKUP_AGY."
+    echo "[ACTION] Mandatory manual download from:"
     echo "  https://github.com/google-antigravity/antigravity-cli/releases"
     exit 1
 fi
@@ -275,51 +277,51 @@ fi
 
 ---
 
-## 6. Matrice de Risque Consolidee
+## 6. Consolidated Risk Matrix
 
-| Risque                                 | Probabilite   | Impact    | Priorite | Contre-mesure           |
+| Risk                                   | Probability   | Impact    | Priority | Countermeasure          |
 |----------------------------------------|---------------|-----------|----------|-------------------------|
-| Rupture nsjail (noyau Linux)           | MOYENNE       | HAUT      | P1       | CM1 (Fallback Docker)   |
-| Rupture silencieuse hooks RTK          | HAUTE         | HAUT      | P1       | CM2 (Assertion + rtk gain) |
-| Corruption SQLite (OOM)               | HAUTE         | CRITIQUE  | P1       | CM3 + CM4 (WAL, swap)   |
-| OAuth non persiste (headless)          | HAUTE (certain)| HAUT     | P1       | CM5 + CM6 (keyring + API key) |
-| Lockout de quota (7 jours)            | MOYENNE       | HAUT      | P2       | CM8 (Circuit breaker)   |
-| Derive semantique agents               | MOYENNE       | MOYEN     | P2       | CM7 (Tests Niveau 2)    |
-| Mise a jour agy sans rollback          | MOYENNE       | MOYEN     | P2       | CM9 (Backup binaire)    |
-| Supply chain (wheel non audite)        | FAIBLE        | HAUT      | P3       | CM10 (Audit checksum)   |
-| Perte de connectivite reseau           | FAIBLE        | MOYEN     | P3       | CM11 (File locale + mode degrade) |
+| nsjail break (Linux kernel)            | MEDIUM        | HIGH      | P1       | CM1 (Docker Fallback)   |
+| Silent break of RTK hooks              | HIGH          | HIGH      | P1       | CM2 (Assertion + rtk gain)|
+| SQLite corruption (OOM)                | HIGH          | CRITICAL  | P1       | CM3 + CM4 (WAL, swap)   |
+| OAuth not persisted (headless)         | HIGH (certain)| HIGH      | P1       | CM5 + CM6 (keyring + API key) |
+| Quota lockout (7 days)                 | MEDIUM        | HIGH      | P2       | CM8 (Circuit breaker)   |
+| Semantic drift of agents               | MEDIUM        | MEDIUM    | P2       | CM7 (Level 2 Tests)     |
+| agy update without rollback            | MEDIUM        | MEDIUM    | P2       | CM9 (Binary backup)     |
+| Supply chain (unaudited wheel)         | LOW           | HIGH      | P3       | CM10 (Checksum audit)   |
+| Loss of network connectivity           | LOW           | MEDIUM    | P3       | CM11 (Local queue + degraded mode) |
 
 ---
 
-## 7. Sources et References
+## 7. Sources and References
 
-1. Reddit r/google_antigravity - Antigravity CLI doesn't persist OAuth, mai 2026.
-2. Reddit r/GeminiAI - Antigravity cli doesn't remember auth, mai 2026.
-3. AntigravityLab - When the Antigravity CLI Stalls on a 401 During Unattended Runs, juin 2026.
-4. BrainDetox - Gemini CLI Shuts Down June 18, 2026 - Antigravity CLI Migration, mai 2026.
+1. Reddit r/google_antigravity - Antigravity CLI doesn't persist OAuth, May 2026.
+2. Reddit r/GeminiAI - Antigravity cli doesn't remember auth, May 2026.
+3. AntigravityLab - When the Antigravity CLI Stalls on a 401 During Unattended Runs, June 2026.
+4. BrainDetox - Gemini CLI Shuts Down June 18, 2026 - Antigravity CLI Migration, May 2026.
 5. RTK Documentation - rtk-ai.app/docs
-6. ZEngineer - RTK: The CLI Proxy That Cuts Your AI Coding Token Bill by 80%, avril 2026.
+6. ZEngineer - RTK: The CLI Proxy That Cuts Your AI Coding Token Bill by 80%, April 2026.
 7. Nsjail Documentation - nsjail.dev
 8. GitHub google/nsjail - Issue 111 (CLONE_NEWCGROUP flag kernel error).
-9. Medium (Data Science Collective) - Google's agents-cli: The Complete Guide, avril 2026.
-10. AugmentCode - Google Antigravity vs Gemini CLI, juin 2026.
-11. AI Builder Club - AI Agent Security Checklist 2026, mai 2026.
+9. Medium (Data Science Collective) - Google's agents-cli: The Complete Guide, April 2026.
+10. AugmentCode - Google Antigravity vs Gemini CLI, June 2026.
+11. AI Builder Club - AI Agent Security Checklist 2026, May 2026.
 12. Google - agents-cli Getting Started (google.github.io/agents-cli).
 
 ---
 
-### SCEAU DE CERTIFICATION (IMMUABLE - v4.0)
+### CERTIFICATION SEAL (IMMUTABLE - v4.0)
 
-> Arcanis. Enquete planifiee. Hypotheses testees. Sources croisees. Document final sans entites HTML ni hyperliens casses. 11 contre-mesures. 14 items checklist. Scripts fonctionnels. Livrable certifie v4.0.
+> Arcanis. Planned investigation. Hypotheses tested. Sources cross-checked. Final document without HTML entities or broken hyperlinks. 11 countermeasures. 14 checklist items. Functional scripts. Certified deliverable v4.0.
 >
-> Chaine d'audit :
-> - v1.0 rapport originale : SHA256:bfbae55deb1145e0692ef456c1ccfc4790c8af6318d25f7d2fd52e0c331b7bbe
-> - v1.0 confrontation : SHA256:66946b31cea210a70832f06f6ffeb3abfc5726f7999dcd0ca05e8632d5e7332d
-> - v2.0 confrontation corrigee : SHA256:r2_confrontation_corrigee_2026-06-30
-> - v2.0 premortem corrige : SHA256:r2_premortem_corrigee_2026-06-30
-> - v2.0 consolidation (regression) : NON CERTIFIEE
-> - v3.0 definitive : SHA256:r3_premortem_definitif_2026-06-30
-> - v4.0 finale (ce document) : SHA256:r4_premortem_final_2026-06-30
+> Audit chain:
+> - v1.0 original report: SHA256:bfbae55deb1145e0692ef456c1ccfc4790c8af6318d25f7d2fd52e0c331b7bbe
+> - v1.0 confrontation: SHA256:66946b31cea210a70832f06f6ffeb3abfc5726f7999dcd0ca05e8632d5e7332d
+> - v2.0 corrected confrontation: SHA256:r2_confrontation_corrigee_2026-06-30
+> - v2.0 corrected premortem: SHA256:r2_premortem_corrigee_2026-06-30
+> - v2.0 consolidation (regression): NOT CERTIFIED
+> - v3.0 definitive: SHA256:r3_premortem_definitif_2026-06-30
+> - v4.0 final (this document): SHA256:r4_premortem_final_2026-06-30
 
-Signé / Fait par : Tesla sur Antigravity CLI (`agy`)
-Main rendue à Mahonheim
+Signed / Prepared by: Tesla on Antigravity CLI (`agy`)
+Control returned to Mahonheim

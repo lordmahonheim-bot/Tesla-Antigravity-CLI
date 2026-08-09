@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # PREMORTEM AUDIT REPORT: [PROJECT NAME]
 
 ## 1. Virtual Failure Postulate (T+3 Months)
@@ -31,4 +33,4 @@
 | **[Risk 2]** | [Mitigation action] | [Threshold or time of action] |
 
 ---
-*Report generated using the Premortem Methodology.*
+*Report generated using the Premortem methodology.*

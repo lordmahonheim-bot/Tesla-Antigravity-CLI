@@ -1,7 +1,9 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Project 15 — Obsidian Database (Alexandria / FTS5 / Local RAG)
 *Author:* Lord Mahonheim  
-*Status:* Verified Reference (statut/valide)  
-*Tagline:* "A living knowledge vault must have rapid retrieval and high precision sémantique."
+*Status:* Verified Reference (status/validated)  
+*Tagline:* "A living knowledge vault must have rapid retrieval and high semantic precision."
 
 ## Executive Summary
 This project outlines the initialization and local indexing mechanisms for **Alexandria** (our Obsidian vault-based brain). It contains the layout-initialization script `init_alexandria.sh` and two local RAG (Retrieval-Augmented Generation) utility scripts: `agy_indexer.py` (which builds a persistent vector representation of the vault using a lightweight local model) and `agy_focus.py` (which isolates relevant file context on demand).
