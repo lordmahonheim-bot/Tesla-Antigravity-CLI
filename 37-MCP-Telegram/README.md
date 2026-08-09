@@ -1,9 +1,6 @@
-# 📱 MCP Telegram: Mobile Command Center & AI Server
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-![Status](https://img.shields.io/badge/Status-MVP-blue?style=for-the-badge)
-![Ecosystem](https://img.shields.io/badge/Ecosystem-Tesla_Antigravity-orange?style=for-the-badge)
-![Security](https://img.shields.io/badge/Security-ID_Locked-red?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3.12+-blue?style=for-the-badge)
+# 📱 MCP Telegram: Mobile Command Center & AI Server
 
 **The Mobile Command Center for the Tesla Antigravity CLI ecosystem.** This MVP seamlessly integrates Telegram into the Antigravity architecture, providing dual-capability: a Model Context Protocol (MCP) server for AI agents to dispatch notifications, and an ID-locked daemon allowing Lord Mahonheim to send CLI commands remotely and receive execution outputs in real time.
 
@@ -107,7 +104,7 @@ If your AI is connected to the Telegram MCP server, it can run:
 
 ### Remote Execution Example (via Telegram)
 1. Send `agy status` to the Bot.
-2. The bot responds: `⚙️ Transmission à MIDGARD : agy status`
+2. The bot responds: `⚙️ Transmitting to MIDGARD : agy status`
 3. The bot follows up with the actual console output:
    `[Status] 3 Agents online. CPU Usage: 15%...`
 

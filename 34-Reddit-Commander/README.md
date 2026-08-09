@@ -1,6 +1,8 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Tesla Reddit Commander (MVP)
 
-A secure, autonomous, and controlled Reddit automation tool designed under the **Vigilum Codex** governance layer. It enables Lord Mahonheim (`Glittering_Use_5519`) to pilot Reddit operations safely, protecting credentials and avoiding ban risks through dual-brik architecture: official API (PRAW) for robust, safe reading/writing, and headed browser automation (Playwright) for interactive form assistance with a **Human Verification Gate**.
+A secure, autonomous, and controlled Reddit automation tool designed under the **Vigilum Codex** governance layer. It enables Lord Mahonheim (`Glittering_Use_5519`) to pilot Reddit operations safely, protecting credentials and avoiding ban risks through dual-brick architecture: official API (PRAW) for robust, safe reading/writing, and headed browser automation (Playwright) for interactive form assistance with a **Human Verification Gate**.
 
 ## 1. System Architecture
 

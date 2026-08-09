@@ -1,6 +1,8 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Ops Consultant — AI Agents, CLI Workflows & Local Governance
 *Author:* Lord Mahonheim  
-*Status:* Verified Reference (statut/valide)  
+*Status:* Verified Reference (status/valid)  
 *Tagline:* "Security is not a delay, it is a process; authorize consciously."
 
 ## Tested Environment Table
