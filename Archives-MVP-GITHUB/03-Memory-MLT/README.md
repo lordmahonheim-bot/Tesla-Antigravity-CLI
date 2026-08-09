@@ -1,5 +1,7 @@
 # Long-Term Semantic Memory (LTM)
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## Cognitive Persistence Architecture
 The Long-Term Memory (LTM) module ensures cognitive persistence and capitalization across execution sessions. By converting transient agent interaction transcripts into structured, indexed markdown documents, this module builds a cumulative memory layer that enables future sessions to build directly upon past discoveries.
 

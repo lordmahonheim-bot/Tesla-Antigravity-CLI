@@ -1,5 +1,7 @@
 # Strategic Armament Plan - Tesla Operational Ecosystem
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## 1. Doctrinal Alignment (Vigilum Codex)
 This plan defines the strategic armament and engineering alignment for the Tesla operational ecosystem. Under the guidelines of the Vigilum Codex, the technical infrastructure must support human performance, safeguard strategic decision-making intelligence, and enforce local, auditable AI governance.
 

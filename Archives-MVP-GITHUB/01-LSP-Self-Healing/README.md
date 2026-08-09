@@ -1,5 +1,7 @@
 # LSP Project & Self-Healing
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## Description & Objectives
 The primary objective of this module is to stabilize local Python codebases within the Vigilum Codex ecosystem. By querying a local language server protocol (LSP) daemon (`pyright-lsp`) on the fly, this system checks the semantic correctness and linting status of code files before any commit or validation occurs. This implements an automated self-healing feedback loop that prevents faulty code from entering our production or shared repositories.
 

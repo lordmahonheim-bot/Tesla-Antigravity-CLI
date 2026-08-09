@@ -1,5 +1,7 @@
 # Secure Graphical Sudo Authentication
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## TTY Risks & NOPASSWD Mitigation
 Executing administrative commands inside non-interactive shells or within terminal logs creates significant security risks. If password queries occur on standard TTY inputs without protection, passwords might be captured in execution logs. Conversely, granting broad `NOPASSWD` permissions in `sudoers` creates serious privilege escalation vulnerabilities.
 

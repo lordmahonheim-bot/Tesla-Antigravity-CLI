@@ -1,5 +1,7 @@
 # Predictive Failure Diagnosis (Premortem)
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## Concept & Gary Klein's Methodology
 The Premortem methodology, pioneered by psychologist Gary Klein, is a cognitive strategy used to stress-test project plans. Unlike a postmortem, which examines why a project failed after the fact, a **premortem** occurs *before* deployment. The team assumes the project has completely failed and works backward to identify the vulnerabilities that caused the failure.
 

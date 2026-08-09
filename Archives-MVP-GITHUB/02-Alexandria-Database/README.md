@@ -1,5 +1,7 @@
 # Alexandria Universal Library
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## Hybrid Architecture (SQL + Vectors)
 Alexandria represents the universal library and cognitive indexing layer of the Vigilum Codex ecosystem. It operates on a hybrid storage and retrieval architecture combining:
 1. **Lexical Retrieval (SQLite FTS5)**: For exact matching of keywords, paths, tags, and titles.

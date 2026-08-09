@@ -1,5 +1,7 @@
 # Strategic Armament Planning
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ## Context within Vigilum Codex
 This project coordinates the engineering and conceptual priorities for the Tesla operational ecosystem. The core philosophy of Vigilum Codex dictates that AI agents should serve as stable, auditable local infrastructure. Therefore, this strategic planning aligns technical tasks directly with human performance guidelines.
 

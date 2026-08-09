@@ -1,5 +1,7 @@
 # Vigilum Codex - Local MVP GitHub Repository
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 Welcome to the public MVP repository of the **Vigilum Codex** operational system, orchestrated by **Tesla**.
 
 This repository contains local proof-of-concept frameworks, automation scripts, and governance systems designed to support human performance, strategic decision-making, and secure local AI execution under the direction of **Lord Mahonheim**.
@@ -27,5 +29,5 @@ The repository's underlying philosophy is detailed in the institutional matrix d
 *   **Commit Format**: All changes must use *Conventional Commits*.
 
 ---
-*Signé / Fait par : Tesla sur Antigravity CLI*  
-*Main rendue à Mahonheim*
+*Signed / Created by: Tesla on Antigravity CLI*  
+*Control returned to Mahonheim*
