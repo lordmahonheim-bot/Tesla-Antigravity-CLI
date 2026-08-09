@@ -1,7 +1,7 @@
 ---
 name: tesla-team-synergy
 display_name: Tesla Mission Orchestrator
-description: Meta-skill d'orchestration stratégique multi-agents Tesla. Produit un Mission Graph DAG, avec Capability Scoring indépendant des modèles, Scheduler, Budget Manager, contrats d'agents, state machine, et politique retry/fallback. Recommande le routage modèle / token-economy. AGENTS reste souverain pour l'exécution.
+description: Tesla's multi-agent strategic orchestration meta-skill. Outputs a DAG Mission Graph, featuring model-agnostic Capability Scoring, a Scheduler, a Budget Manager, agent contracts, a state machine, and a retry/fallback policy. Recommends model / token-economy routing. AGENTS retains execution sovereignty.
 injection_type: shadow-targeted
 target_subagent: self
 version: 4.0
@@ -18,45 +18,47 @@ depends_on:
   - shadow-targeting-method.md >=1.0
 ---
 
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # tesla-team-synergy – Tesla Mission Orchestrator
 ## SKILL.md v4.0
 
-> Nom technique canonique : `tesla-team-synergy`  
-> Titre fonctionnel : **Tesla Mission Orchestrator**
+> Canonical Technical Name: `tesla-team-synergy`  
+> Functional Title: **Tesla Mission Orchestrator**
 
 ---
 
 ## 0. Mission
 
-Transformer un chantier SGC en **équipe multi-agents coordonnée**, en produisant :
+Transform an SGC project into a **coordinated multi-agent team**, outputting:
 
-1. un **Mission Graph** DAG canonique,
-2. des **contrats d'agents** typés,
-3. un **Capability Scoring** indépendant des vendors,
-4. un **Scheduler** avec dépendances parallèle/série/pipeline/fan-out/fan-in,
-5. une **recommandation de routage modèle + Budget Manager**,
-6. une **politique Retry / Fallback / Escalade**,
-7. une **State Machine de mission**,
-8. une **boucle d'apprentissage Alexandria**.
+1. A canonical DAG **Mission Graph**,
+2. Strictly typed **agent contracts**,
+3. A vendor-agnostic **Capability Scoring**,
+4. A **Scheduler** encompassing parallel, series, pipeline, fan-out, and fan-in dependencies,
+5. A **model routing recommendation + Budget Manager**,
+6. A **Retry / Fallback / Escalation policy**,
+7. A mission **State Machine**,
+8. An **Alexandria learning loop**.
 
 > [!CAUTION]
-> **RÈGLE ABSOLUE N°4 – AGENTS délègue, il ne réimplémente pas.**
-> L'Agent Principal doit systématiquement orchestrer et invoquer les sous-agents d'élite (via `invoke_subagent` ou `define_subagent`) pour exécuter une tâche spécialisée définie dans la table de délégation. En aucun cas il ne doit endosser leur rôle ou exécuter leur travail à leur place. Toute dérogation à cette règle est une violation majeure de la gouvernance Tesla.
+> **ABSOLUTE RULE N°4 – AGENTS delegates; it does not reimplement.**
+> The Principal Agent must systematically orchestrate and invoke elite sub-agents (via `invoke_subagent` or `define_subagent`) to execute specialized tasks defined in the delegation matrix. Under no circumstances should it assume their role or perform their work in their stead. Any deviation from this rule is a major violation of Tesla governance.
 >
-> **Corollaire Anti-Usurpation (Verrouillage des Commandes Slash) :**
-> L'injection contextuelle d'une compétence spécialisée via une commande utilisateur (ex: `/tesla-github-manager`) ne donne en aucun cas le droit à l'Agent Principal de s'approprier cette identité. L'Agent Principal (AGENTS) demeure un Orchestrateur pur. Face à l'invocation d'un Skill, il a l'obligation mécanique et absolue de :
-> 1. Ne procéder à aucune exécution de script, d'édition de fichier ou de commande git lui-même.
-> 2. Transférer immédiatement la mission et les directives à une entité distincte en utilisant exclusivement l'outil système `invoke_subagent`.
-> 3. Attendre le rapport de ce sous-agent pour vous le restituer.
+> **Anti-Usurpation Corollary (Slash Commands Lockout):**
+> Contextual injection of a specialized skill via a user command (e.g., `/tesla-github-manager`) in no way grants the Principal Agent the right to assume this identity. The Principal Agent (AGENTS) remains a pure Orchestrator. When faced with a Skill invocation, it has the mechanical and absolute obligation to:
+> 1. Refrain from executing scripts, editing files, or running git commands itself.
+> 2. Immediately transfer the mission and directives to a distinct entity using exclusively the `invoke_subagent` system tool.
+> 3. Wait for the report from this sub-agent to relay it back.
 >
-> **Spécificité du Mission Orchestrator :**
-> Ce skill NE DÉLÈGUE PAS, N'EXÉCUTE PAS, NE SCHEDULE PAS À L'EXÉCUTION.
-> Il produit des artefacts écrits : Mission Graph, Plan, contrats, budget.
-> Seul AGENTS invoque les sous-agents via `invoke_subagent` / `define_subagent`.
+> **Mission Orchestrator Specificity:**
+> This skill DOES NOT DELEGATE, DOES NOT EXECUTE, AND DOES NOT SCHEDULE FOR EXECUTION.
+> It produces written artifacts: Mission Graph, Plan, contracts, budget.
+> Only AGENTS invokes sub-agents via `invoke_subagent` / `define_subagent`.
 
 ---
 
-## 1. Position dans la pile Tesla
+## 1. Position in the Tesla Stack
 
 ```
 SOUL → ENGINE → AGENTS → Tesla Mission Orchestrator (tesla-team-synergy)
@@ -66,40 +68,40 @@ SOUL → ENGINE → AGENTS → Tesla Mission Orchestrator (tesla-team-synergy)
                               Skills / MCP / Tools
 ```
 
-- **ENGINE** : raisonnement
-- **AGENTS** : gouvernance, exécution du Plan
-- **Tesla Mission Orchestrator** : produit le Plan stratégique
+- **ENGINE**: Reasoning
+- **AGENTS**: Governance, Plan execution
+- **Tesla Mission Orchestrator**: Produces the strategic Plan
 
 ---
 
-## 2. Contrats FORCE_TOOLING
+## 2. FORCE_TOOLING Contracts
 
-**Entrée**
-- `chantier_nom: string`
-- `objectif: string`
-- `contraintes: string[]`
-- `complexité_préliminaire: Low | Medium | High`
-- `budget_initial?: {claude_pct, gemini_pct, gpt_pct}`
+**Input**
+- `project_name: string`
+- `objective: string`
+- `constraints: string[]`
+- `preliminary_complexity: Low | Medium | High`
+- `initial_budget?: {claude_pct, gemini_pct, gpt_pct}`
 
-**Sortie**
-- `Gestion-de-Chantiers/[NOM]_v1.0_AAAA-MM-JJ.md` – SGC 11 sections
-- `mission_graph.yaml` – DAG canonique
-- `capability_routing.md` – scoring + modèle recommandé
-- `scheduler_plan.md` – séquence avec dépendances
-- `agent_contracts/` – 1 contrat par nœud
+**Output**
+- `Gestion-de-Chantiers/[NAME]_v1.0_YYYY-MM-DD.md` – 11-section SGC
+- `mission_graph.yaml` – Canonical DAG
+- `capability_routing.md` – Scoring + recommended model
+- `scheduler_plan.md` – Sequence with dependencies
+- `agent_contracts/` – 1 contract per node
 - `budget_ledger.md`
-- DB Subagents-Skills loggée
+- Subagents-Skills DB logged
 - `MAIN_RENDUE_A_MAHONHEIM=1`
 
-Maturité : Stable
+Maturity: Stable
 
 ---
 
 ## 3. Mission Graph
 
-Team Synergy ne distribue jamais directement le travail. Il construit un **Mission Graph DAG**.
+Team Synergy never distributes work directly. It constructs a **DAG Mission Graph**.
 
-Exemple :
+Example:
 
 ```
 Mission: Refactor Module X
@@ -116,7 +118,7 @@ Mission: Refactor Module X
       └── Curator
 ```
 
-Format canonique : `mission_graph.yaml`
+Canonical Format: `mission_graph.yaml`
 
 ```yaml
 mission: Refactor Module X
@@ -141,61 +143,61 @@ nodes:
     depends_on: [N3]
 ```
 
-Le Mission Graph est la **Single Source of Truth**. Les agents sont une implémentation.
+The Mission Graph is the **Single Source of Truth**. Agents are an implementation.
 
 ---
 
-## 4. Capability Scoring – Routage indépendant des vendors
+## 4. Capability Scoring – Vendor-Agnostic Routing
 
-On ne choisit plus "Flash / Sonnet / Opus". On score des capacités.
+We no longer blindly choose "Flash / Sonnet / Opus". We score capabilities.
 
-Axes (0–100) :
+Axes (0–100):
 - Reasoning
 - Code
 - Audit
 - Memory / RAG
-- Cost_efficiency  (100 = le moins cher)
+- Cost_efficiency (100 = cheapest)
 - Latency
 
 **Capability Matrix – v4.0**
 
-| Modèle | Reasoning | Code | Audit | Memory | Cost | Latency | Profil d'usage |
+| Model | Reasoning | Code | Audit | Memory | Cost | Latency | Usage Profile |
 |---|---|---|---|---|---|---|---|
-| Gemini Flash | 40 | 55 | 45 | 70 | 100 | 100 | I/O volumétrique, recherche, doc |
-| Gemini Pro | 78 | 75 | 70 | 80 | 65 | 70 | Planification, architecture |
-| Claude Sonnet | 82 | 94 | 85 | 75 | 55 | 60 | Code, refactor, tests – cheval de bataille |
-| Claude Opus | 95 | 92 | 96 | 80 | 15 | 35 | Premortem critique, arbitrage sécurité – RARE |
-| GPT-OSS* | 70 | 80 | 60 | 60 | 85 | 55 | Scaffolding massif – *si disponible* |
+| Gemini Flash | 40 | 55 | 45 | 70 | 100 | 100 | Volumetric I/O, search, doc |
+| Gemini Pro | 78 | 75 | 70 | 80 | 65 | 70 | Planning, architecture |
+| Claude Sonnet | 82 | 94 | 85 | 75 | 55 | 60 | Code, refactor, tests – workhorse |
+| Claude Opus | 95 | 92 | 96 | 80 | 15 | 35 | Critical premortem, security arbitration – RARE |
+| GPT-OSS* | 70 | 80 | 60 | 60 | 85 | 55 | Massive scaffolding – *if available* |
 
-Sélection : `score = w_reason*Reasoning + w_code*Code + w_audit*Audit - λ*cost_penalty`
-avec poids définis par le type de nœud du Mission Graph.
+Selection: `score = w_reason*Reasoning + w_code*Code + w_audit*Audit - λ*cost_penalty`
+with weights defined by the Mission Graph node type.
 
-Règles GEMINI.md impératives AVANT montée en gamme :
+Mandatory GEMINI.md Rules BEFORE scaling up:
 1. Low-Code First
-2. Anti-Lecture Linéaire : `rg`, `jq`, Tree-sitter, search_router
-3. Boucle LSP : `lsp_diagnostics` obligatoire
+2. Anti-Linear Reading: `rg`, `jq`, Tree-sitter, search_router
+3. LSP Loop: `lsp_diagnostics` mandatory
 
-Voir `CAPABILITY_SCORING.md` pour la table complète.
+See `CAPABILITY_SCORING.md` for the full matrix.
 
 ---
 
 ## 5. Scheduler
 
-Le Plan inclut un Scheduler explicite.
+The Plan includes an explicit Scheduler.
 
-Modes :
-- **Série** : A → B → C
-- **Parallèle** : A || B
-- **Pipeline** : streaming par lots
-- **Fan-out** : 1 → N
-- **Fan-in** : N → 1
+Modes:
+- **Series**: A → B → C
+- **Parallel**: A || B
+- **Pipeline**: Batch streaming
+- **Fan-out**: 1 → N
+- **Fan-in**: N → 1
 
-Exemple :
+Example:
 
 ```
 N1 Research
    ↓
-N2 Architecture  ⟷  N2b Premortem   (parallèle)
+N2 Architecture  ⟷  N2b Premortem   (parallel)
    ↓
 N3 Code
    ↓
@@ -204,13 +206,13 @@ N4 Tests
 N5 Doc
 ```
 
-Chaque nœud déclare : `depends_on`, `can_run_parallel_with`, `fan_out`, `critical_path: true/false`.
+Each node declares: `depends_on`, `can_run_parallel_with`, `fan_out`, `critical_path: true/false`.
 
 ---
 
-## 6. Contrats d'agents
+## 6. Agent Contracts
 
-Chaque nœud du Mission Graph expose un contrat :
+Each node in the Mission Graph exposes a contract:
 
 ```yaml
 id: N3
@@ -226,131 +228,131 @@ model_recommended: claude-sonnet
 capability_min: {Code: 85, Reasoning: 70}
 ```
 
-Team Synergy n'a pas besoin de connaître l'interne de l'agent, seulement son contrat.
+Team Synergy does not need to know the agent's internals, only its contract.
 
 ---
 
-## 7. Politique Retry / Fallback / Escalade
+## 7. Retry / Fallback / Escalation Policy
 
-Pour chaque nœud :
+For each node:
 
 ```
-Exécution
-  ↓ échec ?
-Retry x2 – même modèle, prompt resserré
-  ↓ toujours KO ?
-Fallback – modèle supérieur dans même famille
+Execution
+  ↓ fail?
+Retry x2 – same model, tighter prompt
+  ↓ still KO?
+Fallback – higher model in the same family
   ex: Sonnet → Opus, Pro → Opus, Flash → Pro
-  ↓ toujours KO ?
-Escalade Mahonheim – avec dossier : logs, tentatives, hypothèse blocage
+  ↓ still KO?
+Escalation Mahonheim – with dossier: logs, attempts, blockage hypothesis
   ↓
-Abandon tracé – nœud marqué BLOCKED dans State Machine
+Traced abandonment – node marked BLOCKED in State Machine
 ```
 
-Retry est loggé dans DB avec `attempt_n`.
+Retries are logged in DB with `attempt_n`.
 
-Jamais plus de 2 retries automatiques sans changement de modèle.
+Never more than 2 automatic retries without model escalation.
 
 ---
 
 ## 8. Budget Manager – Token Economy v4
 
-Chaque chantier ouvre un **budget envelope** :
+Each project opens a **budget envelope**:
 
 ```
-Budget Chantier Refactor X
-- Claude : 15 %
-- Gemini : 60 %
-- GPT-OSS : 25 %
+Refactor X Project Budget
+- Claude: 15%
+- Gemini: 60%
+- GPT-OSS: 25%
 ```
 
-Suivi temps réel dans `budget_ledger.md` :
+Real-time tracking in `budget_ledger.md`:
 
-| Nœud | Modèle | Tokens est. | Tokens réel | Quota groupe restant |
+| Node | Model | Est. Tokens | Real Tokens | Group Quota Remaining |
 |---|---|---|---|---|
 | N1 | gemini-flash | S | … | 82% |
 | N3 | claude-sonnet | M | … | 71% |
 
-Règles :
-- Quotas : groupes Gemini / Claude / GPT-OSS – hebdo + fenêtre 5h glissante
-- Circuit-breaker <15% restant → dégradation auto : Opus→Sonnet, Pro→Flash, loggé
-- Tâches >25 min segmentées pour contrôler fenêtre 5h
-- Appels coûteux en fin de chaîne, après filtrage Flash/Sonnet
+Rules:
+- Quotas: Gemini / Claude / GPT-OSS groups – weekly + 5h sliding window
+- Circuit-breaker <15% remaining → auto-degradation: Opus→Sonnet, Pro→Flash, logged
+- Tasks >25 min segmented to control the 5h window
+- Expensive calls relegated to the end of the chain, after Flash/Sonnet filtering
 
 ---
 
-## 9. State Machine Mission
+## 9. Mission State Machine
 
 ```
 CREATED
   ↓
-PLANNED  ← Mission Graph validé
+PLANNED  ← Validated Mission Graph
   ↓
 RUNNING
   ├→ BLOCKED  → (retry/fallback) → RUNNING
-  └→ WAITING   → dépendance externe
+  └→ WAITING   → external dependency
   ↓
-REVIEW   ← Premortem + Premortem-Économie
+REVIEW   ← Premortem + Economy-Premortem
   ↓
 DONE
   ↓
 ARCHIVED
 ```
 
-Chaque transition est horodatée dans `mission_state.json`, indexée Alexandria.
+Each transition is timestamped in `mission_state.json` and indexed in Alexandria.
 
-Permet un futur tableau de bord multi-chantiers.
+Enables a future multi-project dashboard.
 
 ---
 
-## 10. Protocole d'orchestration SGC
+## 10. SGC Orchestration Protocol
 
-Déclencheur : « J'ouvre un chantier [NOM] pour [objectif]. »
+Trigger: "I'm opening a [NAME] project for [objective]."
 
-1. **Cadrage** – complexité Low/Med/High, budget envelope initial, mapping rôles
-2. **Mission Graph** – générer `mission_graph.yaml` + contrats d'agents
-3. **Capability Scoring + Scheduler** – annoter chaque nœud : modèle, coût, dépendances
-4. **PLAN.md SGC** – `Gestion-de-Chantiers/[NOM]_v1.0_AAAA-MM-JJ.md`, 11 sections, incluant tableau de routage
-5. **Premortem + Premortem-Économie**
-   - [ ] Opus remplaçable par Sonnet ?
-   - [ ] Recherche en Flash ?
-   - [ ] Volumétrie en Flash ?
-   - [ ] Quota suffisant ? Plan dégradation ?
-   - [ ] Shadow-targeting possible ?
-6. **Exécution – AGENTS délègue** selon Scheduler
-7. **Retry/Fallback** appliqué par AGENTS si échec nœud
-8. **Synchronisation mémoire** – `log_subagent_parser.py` → `alexandria_brain.db`
+1. **Framing** – Low/Med/High complexity, initial budget envelope, role mapping
+2. **Mission Graph** – Generate `mission_graph.yaml` + agent contracts
+3. **Capability Scoring + Scheduler** – Annotate each node: model, cost, dependencies
+4. **SGC PLAN.md** – `Gestion-de-Chantiers/[NAME]_v1.0_YYYY-MM-DD.md`, 11 sections, including routing matrix
+5. **Premortem + Economy-Premortem**
+   - [ ] Can Opus be replaced by Sonnet?
+   - [ ] Research via Flash?
+   - [ ] Volumetrics via Flash?
+   - [ ] Sufficient quota? Degradation plan?
+   - [ ] Shadow-targeting feasible?
+6. **Execution – AGENTS delegates** according to Scheduler
+7. **Retry/Fallback** applied by AGENTS upon node failure
+8. **Memory Sync** – `log_subagent_parser.py` → `alexandria_brain.db`
    - `model_used, complexity, tokens_estimate, attempt_n, node_id`
-9. **Rendu Mahonheim** – `MAIN_RENDUE_A_MAHONHEIM=1`, INDEX.md, PROJECT_STATE.md, Alexandria
+9. **Handover to Mahonheim** – `MAIN_RENDUE_A_MAHONHEIM=1`, INDEX.md, PROJECT_STATE.md, Alexandria
 
 ---
 
 ## 11. Shadow-Targeting & Token-Economy
 
-- Research / Doc → injecter Arcanis / Curator dans `self`, **forcé Gemini Flash**
-- Log DB : `injection_method='shadow-targeting'`, `model_used`, `complexity`
-- Rollback : 1. désactivation sémantique / 2. quarantaine physique / 3. DB `statut='inactive'` / 4. `update_session_history.py`
-- Statuts : `active | inactive | expired | failed`
+- Research / Doc → inject Arcanis / Curator in `self`, **forced Gemini Flash**
+- DB Log: `injection_method='shadow-targeting'`, `model_used`, `complexity`
+- Rollback: 1. Semantic deactivation / 2. Physical quarantine / 3. DB `statut='inactive'` / 4. `update_session_history.py`
+- Statuses: `active | inactive | expired | failed`
 
 ---
 
 ## 12. Learning Loop – Alexandria
 
-Après chaque chantier :
+After each project:
 
 ```
-Mission → Feedback → Performance / Qualité / Temps / Tokens → Leçon → Alexandria
+Mission → Feedback → Performance / Quality / Time / Tokens → Lesson → Alexandria
 ```
 
-Curator-Prime analyse :
-- schémas de routage ayant tenu les quotas
-- taux succès Sonnet vs Opus
-- temps réel vs estimé par type de nœud
-- retry rate par agent / modèle
+Curator-Prime analyzes:
+- Routing patterns that stayed within quotas
+- Sonnet vs Opus success rate
+- Real time vs estimated time per node type
+- Retry rate per agent / model
 
-→ Propose ajustements `CAPABILITY_SCORING.md` et `MODEL_ROUTING.md`
+→ Proposes adjustments to `CAPABILITY_SCORING.md` and `MODEL_ROUTING.md`
 
-Schéma DB étendu :
+Extended DB Schema:
 ```sql
 ALTER TABLE subagents_skills ADD COLUMN model_used TEXT;
 ALTER TABLE subagents_skills ADD COLUMN complexity TEXT CHECK(complexity IN ('Low','Medium','High'));
@@ -362,25 +364,25 @@ ALTER TABLE subagents_skills ADD COLUMN mission_state TEXT;
 
 ---
 
-## 13. Checklist livraison
+## 13. Delivery Checklist
 
-- [ ] Mission Graph YAML validé
-- [ ] Contrats d'agents complets
-- [ ] Capability Scoring + modèle recommandé par nœud
-- [ ] Scheduler avec dépendances
+- [ ] Mission Graph YAML validated
+- [ ] Complete agent contracts
+- [ ] Capability Scoring + recommended model per node
+- [ ] Scheduler with dependencies
 - [ ] Budget envelope + ledger
-- [ ] Politique Retry documentée
-- [ ] Premortem + Premortem-Économie
-- [ ] RÈGLE N°4 respectée
-- [ ] Boucle LSP / Low-Code / Anti-Lecture vérifiées
-- [ ] DB loggée model_used/complexity/tokens/node_id/attempt_n
+- [ ] Documented Retry policy
+- [ ] Premortem + Economy-Premortem
+- [ ] RULE N°4 respected
+- [ ] LSP Loop / Low-Code / Anti-Linear Reading verified
+- [ ] DB logged: model_used/complexity/tokens/node_id/attempt_n
 - [ ] State Machine → DONE
 - [ ] INDEX.md / PROJECT_STATE.md / Alexandria
 - [ ] `MAIN_RENDUE_A_MAHONHEIM=1`
 
 ---
 
-## 14. Références
+## 14. References
 
 SOUL.md / ENGINE.md / AGENTS.md / FORCE_TOOLING.md / GEMINI.md / shadow-targeting-method.md / TEAM_ROLES.md / CAPABILITY_SCORING.md / MODEL_ROUTING.md
 
@@ -389,25 +391,25 @@ SOUL.md / ENGINE.md / AGENTS.md / FORCE_TOOLING.md / GEMINI.md / shadow-targetin
 ## CHANGELOG
 
 **v4.0 – 2026-07-10 – Tesla Mission Orchestrator**
-- Ajout : Mission Graph DAG canonique
-- Ajout : Capability Scoring indépendant vendor (Reasoning/Code/Audit/Memory/Cost/Latency)
-- Ajout : Scheduler série/parallèle/pipeline/fan-out/fan-in
-- Ajout : Contrats d'agents Input/Output/Pré/Post/Risques/Temps/Coût
-- Ajout : Politique Retry / Fallback / Escalade Mahonheim
-- Ajout : Budget Manager avec envelope par chantier + ledger temps réel
-- Ajout : State Machine CREATED→PLANNED→RUNNING→BLOCKED/WAITING→REVIEW→DONE→ARCHIVED
-- Ajout : Learning Loop Alexandria post-mission
-- Renommage fonctionnel : **Tesla Mission Orchestrator** – nom technique `tesla-team-synergy` conservé
-- Conservé : Token-Economy v3, SGC, Règle N°4, Shadow-Targeting, Boucle LSP
+- Added: Canonical DAG Mission Graph
+- Added: Vendor-agnostic Capability Scoring (Reasoning/Code/Audit/Memory/Cost/Latency)
+- Added: Series/parallel/pipeline/fan-out/fan-in Scheduler
+- Added: Agent contracts (Input/Output/Pre/Post/Risks/Time/Cost)
+- Added: Retry / Fallback / Mahonheim Escalation Policy
+- Added: Budget Manager with project envelope + real-time ledger
+- Added: CREATED→PLANNED→RUNNING→BLOCKED/WAITING→REVIEW→DONE→ARCHIVED State Machine
+- Added: Alexandria post-mission Learning Loop
+- Functional Rename: **Tesla Mission Orchestrator** – technical name `tesla-team-synergy` preserved
+- Preserved: Token-Economy v3, SGC, Rule N°4, Shadow-Targeting, LSP Loop
 
 **v3.0 – 2026-07-10**
-- Token-Economy v2, contrats FORCE_TOOLING, SGC native, DB migration
+- Token-Economy v2, FORCE_TOOLING contracts, native SGC, DB migration
 
 **v2.0**
-- Mission économique token initiale
+- Initial token-economy mission
 
 **v1.0**
-- Orchestration multi-agents initiale
+- Initial multi-agent orchestration
 
 ---
 `MAIN_RENDUE_A_MAHONHEIM=1`
