@@ -1,0 +1,15 @@
+checkpoint_contract:
+  id: "dag-node-3-go-correction"
+  objective: "Integrate Jules as cloud execution worker and clarify loop engineering"
+  status: "COMPLETED"
+  validation_criteria:
+    - rule_id: "badge-presence"
+      description: "Ensure 4 mandatory badges are present in READMEs"
+      severity: "CRITICAL"
+    - rule_id: "jules-architecture"
+      description: "Jules defined as async Cloud Execution Worker with post-execution audit and data scrubbing"
+      severity: "CRITICAL"
+    - rule_id: "loop-focus"
+      description: "28-Loop-Engineering focused exclusively on Act-Verify-Learn-Repeat loop with no Jules reference"
+      severity: "CRITICAL"
+  timestamp: "2026-08-09T17:10:57+01:00"

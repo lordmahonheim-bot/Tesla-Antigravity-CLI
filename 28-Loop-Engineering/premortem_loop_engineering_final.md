@@ -1,30 +1,30 @@
-# Rapport d'Audit Premortem Final - Loop Engineering
+# Rapport d'Audit Premortem - Loop Engineering × Tesla-Code-Auditor
 
-**Date de l'audit :** 2026-08-09
-**Cible :** `tesla_loop_orchestrator.py`
-**Auditeur :** `tesla-premortem`
+## Scénarios Evalués (Phase D - Step 15)
 
-## 1. Profil Avocat du Diable : Contrat YAML corrompu
-- **Scénario :** Le fichier de contrat YAML passé à l'orchestrateur est corrompu ou illisible.
-- **Vérification de l'implémentation :** **ÉCHEC**. L'orchestrateur transmet actuellement le chemin du fichier (`contract_path`) directement à `tesla-master-code` sans aucune vérification préalable du schéma ou de l'intégrité du fichier.
-- **Risque :** Crash inattendu lors du parsing par les sous-modules, ou exécution d'instructions vides/malformées.
-- **Action requise :** Ajouter une validation de schéma au début de la fonction `execute_loop` avant même le check TGG pour bloquer immédiatement l'exécution si le fichier est invalide.
+### 1. Profil Avocat du Diable : Contrat YAML corrompu
+**Scénario :** Que se passe-t-il si le Code Auditor est invoqué mais que le contrat YAML est corrompu (fichier illisible) ?
+**Analyse de l'Implémentation (`tesla_loop_orchestrator.py`) :**
+- La fonction `validate_contract` est appelée au tout début de `execute_loop`. Si le fichier YAML est corrompu, une exception est levée et la fonction retourne immédiatement avant même d'initialiser la base de données ou de lancer la boucle.
+- Si le contrat devient illisible *pendant* l'exécution et que le `Code-Auditor` plante avec un code de sortie non-nul (par exemple, si le `manifest_path` JSON n'est pas généré), l'orchestrateur génère automatiquement un verdict fallback `{"verdict": "BLOCK", "feedback": result.stderr}`.
+**Verdict :** Le système est résilient. Doctrine FAIL-CLOSED parfaitement respectée.
 
-## 2. Profil Inspecteur des Angles Morts : Budget max et verdict DELAY
-- **Scénario :** La boucle atteint la limite maximale d'itérations (`max_iterations = 3`) et la dernière itération renvoie le verdict `DELAY`.
-- **Vérification de l'implémentation :** **SUCCÈS**. L'orchestrateur gère correctement ce cas. Si le verdict est `DELAY` lors de la dernière itération, l'instruction `continue` termine la boucle `for`. Le flux d'exécution passe alors à :
-  ```python
-  print("\n[BLOCK] Max iterations reached.")
-  rollback(loop_id, "Max iterations reached without PASS verdict.")
-  record_execution(loop_id, "BLOCK")
-  ```
-- **Résultat :** Le rollback inconditionnel est bien assuré, et la transition vers l'état `BLOCK` s'effectue correctement.
+### 2. Profil Inspecteur des Angles Morts : Token budget atteint sur un DELAY
+**Scénario :** Que se passe-t-il si le budget token est atteint pile à la dernière itération alors que le verdict est DELAY ?
+**Analyse de l'Implémentation (`tesla_loop_orchestrator.py`) :**
+- La boucle `for i in range(1, max_iterations + 1):` a une limite stricte de 3 itérations.
+- Si à la 3ème itération (`i=3`), le verdict est `DELAY`, la clause `continue` passe à l'itération suivante. Puisque c'était la dernière itération, la boucle se termine.
+- En sortie de boucle, l'orchestrateur exécute : `rollback(loop_id, "Max iterations reached without PASS verdict.")` et enregistre un statut `BLOCK`.
+**Verdict :** Aucun risque de boucle infinie. L'arrêt est sécurisé et annule proprement les changements.
 
-## 3. Profil Vigie des Signaux Faibles : Concurrence SQLite (WAL)
-- **Scénario :** Tentative d'écriture concurrente dans `alexandria_brain.db` provoquant une erreur de verrouillage de base de données.
-- **Vérification de l'implémentation :** **ÉCHEC**. Les fonctions `record_execution` et `record_iteration` initient des transactions SQLite brutes sans gestion d'erreurs (`try/except`), sans mécanisme de relance (retry) ni de plan de secours (fallback).
-- **Risque :** Une exception `sqlite3.OperationalError` crashera l'orchestrateur de façon non gérée, ce qui peut bloquer un processus critique sans déclencher les rollbacks appropriés et causer la perte de la télémétrie.
-- **Action requise :** Implémenter un bloc `try/except` avec backoff exponentiel pour les écritures SQLite, et un fallback vers un fichier de secours `loop_state_dump.json` en cas d'échec définitif.
+### 3. Profil Vigie des Signaux Faibles : Collision d'écriture SQLite en mode WAL
+**Scénario :** Que se passe-t-il si Alexandria SQLite est en mode WAL et qu'un autre agent tente d'écrire simultanément ?
+**Analyse de l'Implémentation (`tesla_loop_orchestrator.py`) :**
+- Le mode WAL permet à de multiples lecteurs de lire pendant qu'un seul écrivain modifie la base. Si un conflit d'écriture survient, `sqlite3` renvoie `OperationalError: database is locked`.
+- L'implémentation inclut un double mécanisme de défense : 
+  1. `timeout=10.0` dans `sqlite3.connect()`.
+  2. Une boucle de `max_retries = 5` avec *Exponential Backoff* (`time.sleep(0.1 * (2 ** attempt))`).
+**Verdict :** Risque mitigé avec succès. Les collisions d'écriture concurrentes seront résolues pacifiquement dans l'immense majorité des cas sans crash.
 
-## Conclusion Globale
-Le cœur logique de la machine d'état (gestion des itérations et circuit-breakers) est fonctionnel et robuste. Cependant, l'orchestrateur manque de tolérance aux pannes sur ses entrées (contrat non validé) et sur ses sorties de télémétrie (base de données vulnérable à la concurrence). Ces éléments critiques doivent être corrigés avant de finaliser la Phase D.
+## Conclusion Générale
+L'implémentation actuelle de l'orchestrateur est robuste. Toutes les mitigations prévues dans la gouvernance sont codées en dur avec une forte adhésion au modèle de défaillance Fail-Closed.

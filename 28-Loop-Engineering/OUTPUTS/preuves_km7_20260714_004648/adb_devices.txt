@@ -1,3 +1,0 @@
-List of devices attached
-192.168.11.107:5555    device product:KM7 model:KM7 device:KM7 transport_id:6
-

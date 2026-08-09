@@ -1,8 +1,0 @@
-{
-  "rca_id": "RCA-T001-001",
-  "run_id": "RUN-5489",
-  "taxonomy": "SKILL",
-  "description": "L'agent tesla-master-code a échoué 3 fois à résoudre une erreur de typage Pylance sur un DTO complexe car le prompt du SKILL ne mentionne pas d'utiliser explicitement les TypedDict.",
-  "impact_assessment": "Génère des retries inutiles et augmente le coût de la boucle courte (Token Drain).",
-  "proposed_fix_direction": "Ajouter une directive courte dans la section Python Engine de tesla-master-code/SKILL.md pour privilégier TypedDict sur les structures imbriquées."
-}

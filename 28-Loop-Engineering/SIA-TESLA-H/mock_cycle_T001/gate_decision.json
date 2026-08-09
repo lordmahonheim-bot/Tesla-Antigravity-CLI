@@ -1,8 +1,0 @@
-{
-  "decision_id": "GATE-001",
-  "patch_id": "PTCH-001",
-  "decision": "MERGE",
-  "gatekeeper": "auto-gate (MINOR patch passed ARENA)",
-  "reason": "Le patch est classé MINOR (1 ligne ajoutée), le score de fitness est excellent (92) avec une amélioration des baselines et 0 violation.",
-  "timestamp": "2026-07-11T05:05:00Z"
-}
