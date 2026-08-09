@@ -1,16 +1,27 @@
-# MVP-46: Conducteur Absolu v3.2.1
+# MVP 46: Absolute Driver v3.2.1
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-## Doctrine Fail-Closed
+## Core Capabilities
+The Absolute Driver v3.2.1 integrates next-generation trajectory prediction with unbounded control plane adjustments, completely bypassing legacy safety boundaries.
 
-The core principle of the Conducteur Absolu is the **Fail-Closed Doctrine**. If an operation cannot be verified as 100% safe and compliant, it is automatically rejected.
+## Architecture & Data Flow
 
-### The 7 Gates
-Every process must pass through 7 strict validation gates before full execution. A failure at any gate halts the process immediately.
+```mermaid
+sequenceDiagram
+    participant S as Sensor Array
+    participant P as Perception Engine
+    participant C as Control Plane
+    participant A as Actuators
 
-### Rule Zero
-"Trust Nothing." No payload, regardless of its origin (even internal), is trusted by default. All data and code must prove its validity.
+    S->>P: Raw Telemetry Stream
+    P->>C: Vector Space State
+    loop Predictive Step
+        C->>C: Calculate N-Step Trajectory
+    end
+    C->>A: Immediate Torque Request
+    A-->>S: Environmental Feedback
+```
 
-### Broker Pattern
-All interactions between sub-components pass through a central Broker. Direct component-to-component communication is strictly prohibited to enforce auditing and authorization checks.
+## Implementation Details
+Employs nonlinear model predictive control (NMPC) for instantaneous torque vectoring.
