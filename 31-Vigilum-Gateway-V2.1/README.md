@@ -1,22 +1,24 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Vigilum Gateway V2.1 - Orchestration Hardening
 
-**Vigilum Gateway V2.1** marque une évolution critique dans la gouvernance et l'orchestration autonome de l'écosystème `@lordmahonheim-bot`. Ce MVP déploie un durcissement de l'orchestration, limitant l'intervention de l'opérateur aux seuls points de validation critiques (zéro ask_permission intempestif) et standardisant le flux d'exécution via un système d'Artefacts d'Exécution.
+**Vigilum Gateway V2.1** marks a critical evolution in the governance and autonomous orchestration of the `@lordmahonheim-bot` ecosystem. This MVP deploys orchestration hardening, restricting operator intervention to only critical validation points (zero unwarranted `ask_permission` prompts) and standardizing the execution flow via an Execution Artifacts system.
 
-## 🏛️ Les 4 Piliers de l'Orchestration Hardening
+## 🏛️ The 4 Pillars of Orchestration Hardening
 
-1. **Interdiction d'ask_permission & Pre-Flight Checklist**
-   Proscription totale de l'outil `ask_permission` non justifié. Les agents doivent établir un plan autonome et modulaire, validé une seule fois par l'opérateur via une checklist préliminaire.
+1. **Ban on ask_permission & Pre-Flight Checklist**
+   Total prohibition of unjustified `ask_permission` tool usage. Agents must establish an autonomous, modular plan, validated once by the operator via a preliminary checklist.
    
-2. **Execution Broker par Artefacts**
-   Les sous-agents ne communiquent plus leurs plans de manière abstraite. Chaque plan d'exécution est matérialisé par un artefact (YAML/Markdown) qui sert de contrat d'exécution entre le Parent et le Sous-Agent.
+2. **Execution Broker via Artifacts**
+   Sub-agents no longer communicate their plans abstractly. Each execution plan is materialized by an artifact (YAML/Markdown) that serves as an execution contract between the Parent and the Sub-Agent.
 
 3. **Pre-Flight Tool Verification (TRPB)**
-   *Tool Readiness & Permissions Bar* : Avant d'exécuter une chaîne de commandes, l'agent vérifie la disponibilité des outils et les permissions associées, évitant les échecs en cours de route.
+   *Tool Readiness & Permissions Bar*: Before executing a chain of commands, the agent verifies tool availability and associated permissions, preventing mid-flight failures.
 
 4. **Graceful Shutdown Protocol (GSP)**
-   En cas d'échec d'une sous-tâche, l'agent nettoie son environnement de travail et remonte une erreur structurée au lieu d'interrompre violemment le processus.
+   In the event of a sub-task failure, the agent cleans its workspace and surfaces a structured error instead of abruptly halting the process.
 
-## 📊 Architecture du Broker d'Exécution
+## 📊 Execution Broker Architecture
 
 ```mermaid
 sequenceDiagram
@@ -25,22 +27,22 @@ sequenceDiagram
     participant S as Sub-Agent
     participant L as Lord Mahonheim (Operator)
 
-    P->>B: Génération de l'Artefact d'Exécution (YAML)
-    P->>L: Présentation du Plan (Pre-Flight Checklist)
-    alt Validation Accordée
+    P->>B: Generation of Execution Artifact (YAML)
+    P->>L: Presentation of the Plan (Pre-Flight Checklist)
+    alt Validation Granted
         L-->>P: APPROVE
-        P->>S: Invocation avec Référence à l'Artefact
+        P->>S: Invocation with Artifact Reference
         S->>S: Pre-Flight Tool Verification (TRPB)
-        S->>B: Lecture de l'Artefact
-        S->>S: Exécution des tâches modulaires
-        alt Erreur Critique
+        S->>B: Reading the Artifact
+        S->>S: Execution of modular tasks
+        alt Critical Error
             S->>S: Graceful Shutdown (GSP)
-            S-->>P: Rapport d'Erreur Structuré
-        else Succès
-            S-->>P: Rapport de Succès
+            S-->>P: Structured Error Report
+        else Success
+            S-->>P: Success Report
         end
-    else Validation Refusée
+    else Validation Denied
         L-->>P: REJECT
-        P->>P: Révision de l'Artefact
+        P->>P: Artifact Revision
     end
 ```

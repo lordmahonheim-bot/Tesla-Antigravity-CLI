@@ -1,68 +1,70 @@
-# 🛡️ PLAN D'INTERVENTION & SOLUTION DÉFINITIVE : VIGILUM GATEWAY V2.1
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-**Objet :** Résolution définitive des crashs d'orchestration en mode `/goal` 
-**Fondation :** Synthèse comparative des approches Apodex, ChatGPT, RENA et Tesla V2
-**Doctrine :** Low-Code, Optimisation de l'existant, Séparation des Responsabilités (Vigilum Codex)
+# 🛡️ INTERVENTION PLAN & FINAL SOLUTION: VIGILUM GATEWAY V2.1
 
----
-
-## 1. Philosophie du Design Cible
-
-La solution retenue est la **Vigilum Gateway V2**, servant de colonne vertébrale opérationnelle. Elle est enrichie des mécanismes techniques de **RENA** (PIC, TRPB, GSP) et s'ancre dans la configuration et la politique autonome d'**Apodex**. L'horizon conceptuel de l'Execution Broker (**ChatGPT**) est conservé comme guide de conception (Artefacts) sans imposer de refonte logicielle lourde.
-
-**L'objectif :** Obtenir des sessions `/goal` réellement autonomes, sans blocages sandbox, sans faux timeouts et sans exiger d'Emergency Overrides de la part de l'Agent Principal.
+**Objective:** Definitive resolution of orchestration crashes in `/goal` mode
+**Foundation:** Comparative synthesis of Apodex, ChatGPT, RENA, and Tesla V2 approaches
+**Doctrine:** Low-Code, Optimization of existing assets, Separation of Concerns (Vigilum Codex)
 
 ---
 
-## 2. Le Tronc Commun d'Orchestration (Les 4 Piliers)
+## 1. Target Design Philosophy
 
-1. **Interdiction d'ask_permission & Pré-autorisation (Mode /goal)**  
-   Les espaces de travail (tels que `/MVP-GITHUB/` et `/OUTPUTS/`) doivent être formellement déclarés comme autorisés. Le recours à `ask_permission` est proscrit en mode autonome.
-2. **Le Broker par Artefacts (Délégation d'Exécution)**  
-   Les sous-agents deviennent des entités de "Calcul + Génération d'Artefacts". Si une action excède leurs droits, ils ne crashent pas mais produisent une "Requête d'Exécution" (Artefact) que l'Orchestrateur (Tesla) validera et appliquera.
+The chosen solution is the **Vigilum Gateway V2**, serving as the operational backbone. It is enriched with the technical mechanisms of **RENA** (PIC, TRPB, GSP) and anchored in the configuration and autonomous policy of **Apodex**. The conceptual horizon of the Execution Broker (**ChatGPT**) is retained as a design guide (Artifacts) without imposing heavy software refactoring.
+
+**The Objective:** Achieve truly autonomous `/goal` sessions, free from sandbox blocks, false timeouts, and the need for Emergency Overrides from the Primary Agent.
+
+---
+
+## 2. The Orchestration Core (The 4 Pillars)
+
+1. **Ban on ask_permission & Pre-authorization (/goal Mode)**  
+   Workspaces (such as `/MVP-GITHUB/` and `/OUTPUTS/`) must be formally declared as authorized. The use of `ask_permission` is strictly prohibited in autonomous mode.
+2. **The Artifact Broker (Execution Delegation)**  
+   Sub-agents become "Compute + Artifact Generation" entities. If an action exceeds their permissions, they do not crash but instead produce an "Execution Request" (Artifact) that the Orchestrator (Tesla) will validate and execute.
 3. **Pre-Flight Tool Verification (Tool Registry Pre-Binding - TRPB)**  
-   Avant toute invocation, Tesla lit le manifest des dépendances (le `SKILL.md`) du sous-agent. Si un outil critique manque, l'invocation est annulée, évitant ainsi les boucles infinies de *Self-Healing*.
+   Before any invocation, Tesla reads the dependencies manifest (the `SKILL.md`) of the sub-agent. If a critical tool is missing, the invocation is aborted, thereby preventing infinite *Self-Healing* loops.
 4. **Graceful Shutdown Protocol (GSP) & Checkpoints**  
-   Le timeout rigide est remplacé par un *Two-Phase Kill*. Un `[CHECKPOINT CONTRACT]` oblige le sous-agent à signaler son état. Une *Grace Period* de 15 secondes permet de collecter les succès sur le fil.
+   The rigid timeout is replaced by a *Two-Phase Kill*. A `[CHECKPOINT CONTRACT]` compels the sub-agent to report its status. A 15-second *Grace Period* allows for collecting last-minute successes.
 
 ---
 
-## 3. Plan d'Action Concret & Opérationnel
+## 3. Concrete & Operational Action Plan
 
-Ce plan séquence les actions exactes à réaliser pour déployer la Vigilum Gateway V2.1.
+This plan sequences the exact actions required to deploy the Vigilum Gateway V2.1.
 
-### Phase 1 : Mise à jour de la Gouvernance Fondatrice
-*(Alignement des textes sacrés de Tesla)*
+### Phase 1: Foundational Governance Update
+*(Alignment of Tesla's sacred texts)*
 
-- **Mise à jour de `AGENTS.md` :**
-  - **Ajout de la RÈGLE N°4.1 :** Interdiction stricte d'`ask_permission` en `/goal` et obligation pour l'Orchestrateur de jouer la Pre-Flight Checklist (Permission Inheritance Chain - PIC).
-  - **Ajout de la RÈGLE N°7.1 :** Implémentation du *Graceful Shutdown Protocol* (Grace Period de 15 secondes pour réception de checkpoint).
-  - **Ajout de la RÈGLE N°7.2 :** Délégation d'exécution par Artefact (Broker Pattern) pour les opérations hors-périmètre.
-- **Mise à jour de `FORCE_TOOLING.md` :**
-  - Ajout des contraintes de capacités : `tool_dependencies`, mode de permission requis, et Circuit Breaker de retry.
-- **Nouveau Standard `SKILL.md` :**
-  - Refonte du template pour exiger les blocs YAML `tool_dependencies` et `permission_context`.
+- **Update to `AGENTS.md`:**
+  - **Addition of RULE No. 4.1:** Strict ban on `ask_permission` in `/goal` mode and mandatory Pre-Flight Checklist execution by the Orchestrator (Permission Inheritance Chain - PIC).
+  - **Addition of RULE No. 7.1:** Implementation of the *Graceful Shutdown Protocol* (15-second Grace Period to receive checkpoints).
+  - **Addition of RULE No. 7.2:** Execution delegation via Artifact (Broker Pattern) for out-of-scope operations.
+- **Update to `FORCE_TOOLING.md`:**
+  - Addition of capability constraints: `tool_dependencies`, required permission modes, and retry Circuit Breaker.
+- **New `SKILL.md` Standard:**
+  - Template overhaul to mandate YAML blocks for `tool_dependencies` and `permission_context`.
 
-### Phase 2 : Configuration du Système & Mode /goal
-*(L'approche Low-Code par Apodex)*
+### Phase 2: System Configuration & /goal Mode
+*(The Low-Code approach by Apodex)*
 
-- **Sécurisation du Workspace Antigravity :**
-  - Vérifier que les chemins `/home/lord-mahonheim/bifrost/tesla/`, `/MVP-GITHUB/`, et `/OUTPUTS/` sont explicitement déclarés en politique `Allow` par défaut.
-- **Création du Fichier de Politique Autonome :**
-  - Rédiger `AUTONOMOUS_EXECUTION_POLICY.md` détaillant le profil `/goal` (limites, exceptions absolues comme `git push` sans validation humaine, etc.).
+- **Securing the Antigravity Workspace:**
+  - Verify that the paths `/home/lord-mahonheim/bifrost/tesla/`, `/MVP-GITHUB/`, and `/OUTPUTS/` are explicitly declared under a default `Allow` policy.
+- **Creation of the Autonomous Policy File:**
+  - Draft `AUTONOMOUS_EXECUTION_POLICY.md` detailing the `/goal` profile (limits, absolute exceptions such as `git push` without human validation, etc.).
 
-### Phase 3 : Déploiement des Mécanismes d'Exécution
-*(L'intégration du Broker et des mécaniques RENA)*
+### Phase 3: Deployment of Execution Mechanisms
+*(Integration of the Broker and RENA mechanics)*
 
-- **Standardisation de l'Artefact d'Exécution :**
-  - Définir le format YAML/JSON que les sous-agents devront utiliser pour soumettre leurs `execution_requests` dans `OUTPUTS/`.
-- **Enrichissement Progressif des Skills (TRPB) :**
-  - Mettre à jour les `SKILL.md` existants (notamment `tesla-github-manager`, `tesla-master-code`, `tesla-arcanis-360`) pour inclure leurs dépendances d'outils.
-- **Mise en place de la Logique Timeout de l'Orchestrateur :**
-  - Intégrer la logique de *Two-Phase Kill* mental dans le pipeline de l'Agent Principal lorsqu'il orchestre des sous-agents.
-- **Horizon Exploratoire :**
-  - Poser les bases d'une table `subagent_health` dans la mémoire SQLite pour évaluer la résilience à long terme.
+- **Standardization of the Execution Artifact:**
+  - Define the YAML/JSON format that sub-agents must use to submit their `execution_requests` in `OUTPUTS/`.
+- **Progressive Skill Enrichment (TRPB):**
+  - Update existing `SKILL.md` files (notably `tesla-github-manager`, `tesla-master-code`, `tesla-arcanis-360`) to include their tool dependencies.
+- **Implementation of Orchestrator Timeout Logic:**
+  - Integrate the mental *Two-Phase Kill* logic into the Primary Agent's pipeline when orchestrating sub-agents.
+- **Exploratory Horizon:**
+  - Lay the groundwork for a `subagent_health` table in the SQLite memory to assess long-term resilience.
 
 ---
 
-**Statut du Document :** Plan finalisé. En attente du "GO" de Lord Mahonheim pour exécuter la Phase 1 (Mise à jour de la Gouvernance).
+**Document Status:** Finalized plan. Awaiting the "GO" from Lord Mahonheim to execute Phase 1 (Governance Update).

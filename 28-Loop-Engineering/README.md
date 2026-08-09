@@ -1,82 +1,60 @@
-# 28 Loop Engineering
-
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+# MVP 28 - Loop Engineering
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    TGG[TGG - The Governance Guardian] --> Orch[Orchestrator]
+    TGG[TGG] --> Orch[Orchestrator]
     Orch --> MC[Master-Code]
-    Orch --> Auditor[Auditor]
-    MC --> SQLite[(SQLite Persistence)]
-    Auditor --> SQLite
-    SQLite --> Trans[Transitions]
+    MC --> Aud[Auditor]
+    Aud --> SQ[SQLite]
+    SQ --> Trans[Transitions]
 ```
 
 ## Loop Contract
-
-The loop execution conforms to a specific YAML format mapping targets and execution constraints.
+The Loop Contract formally defines loop sequences in a standard YAML format. It contains metadata, execution rules, validation levels, and rollback procedures.
 
 ```yaml
 # Example Loop Contract
-version: 1.0
-contract_id: "MVP-28-Loop"
-targets:
-  - id: "target_1"
-    description: "Initial target execution"
-    validation_level: 4
-constraints:
-  timeout: 300
-  retry: 3
+metadata:
+  loop_id: loop-28-alpha
+  description: Phase C Loop Contract
+execution:
+  max_retries: 3
+  timeout_seconds: 300
 ```
 
 ## Validation Chain
-
-The validation chain enforces 4 distinct levels:
-1. **Level 1**: Syntax & Structural Integrity
-2. **Level 2**: Unit Context & Operational Logic
-3. **Level 3**: Cross-dependency Constraints
-4. **Level 4**: TGG Policy Compliance (Vigilum Codex)
+The validation chain comprises 4 levels to ensure integrity during loop execution:
+1. **Level 1 (Syntax):** Basic format and structure validation.
+2. **Level 2 (Static Analysis):** Linting and type checking.
+3. **Level 3 (Unit):** Sub-agent isolated testing.
+4. **Level 4 (Integration):** End-to-end integration and workflow validation.
 
 ## Transitions
-
-Transitions dictate the progression of the loop engineering sequence based on specific criteria:
-- **PASS**: All 4 validation levels succeeded. The loop proceeds to the next sequence.
-- **DELAY**: Transitory errors or missing non-critical resources. Retries scheduled.
-- **BLOCK**: Hard failure or TGG policy violation. Requires manual intervention or rollback.
+Transitions determine the state logic after loop validation:
+- **PASS:** All validation criteria are met. Proceed to the next state.
+- **DELAY:** Temporary failure or missing resources. Re-queue for a later attempt.
+- **BLOCK:** Critical failure or validation breakdown. Halt execution and require manual override or rollback.
 
 ## Rollback
-
-Rollbacks maintain system integrity if a BLOCK condition occurs or unrecoverable failures happen.
-- **Git Mechanisms**: Reverts configuration state and code artifacts using `git restore` and `git revert`.
-- **Shutil Mechanisms**: Securely wipes runtime temporary directories or replaces corrupted artifact caches via Python's `shutil` operations.
+In the event of a BLOCK transition or critical error, rollback mechanisms guarantee stability:
+- **Git:** Reverts the repository to the last known stable commit.
+- **Shutil:** Restores local file backups for artifacts outside version control.
 
 ## Persistence
-
-The execution state is securely logged.
-
-### SQLite Schema
+A local SQLite schema captures the execution state, contracts, and validation results.
 
 ```sql
 CREATE TABLE loop_state (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    contract_id TEXT NOT NULL,
-    current_target TEXT NOT NULL,
-    validation_status TEXT CHECK(validation_status IN ('PASS', 'DELAY', 'BLOCK')),
+    id INTEGER PRIMARY KEY,
+    loop_id TEXT NOT NULL,
+    status TEXT NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE execution_logs (
-    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    loop_id INTEGER,
-    event TEXT,
-    details TEXT,
-    FOREIGN KEY(loop_id) REFERENCES loop_state(id)
 );
 ```
 
 ## Governance
-
-- **Vigilum Codex**: The master set of rules aligning every decision with the organization's standards.
-- **TGG (The Governance Guardian)**: The enforcement entity that evaluates every transition against the Vigilum Codex to ensure zero deviations.
+This engineering loop adheres strictly to the **Vigilum Codex** and is supervised by **TGG** (The Great Guard). All autonomous actions must satisfy the codex policies before execution.

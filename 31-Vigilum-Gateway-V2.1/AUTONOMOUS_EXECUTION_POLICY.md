@@ -1,27 +1,29 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # AUTONOMOUS EXECUTION POLICY (Mode `/goal`)
 
-Cette politique régit le comportement de l'Orchestrateur (Tesla) et de tous les sous-agents instanciés lorsque la directive `/goal` est activée. Elle vise à garantir l'autonomie totale des agents en supprimant les deadlocks d'autorisation tout en préservant le *Zero Trust* et le *Vigilum Codex*.
+This policy governs the behavior of the Orchestrator (Tesla) and all instantiated sub-agents when the `/goal` directive is activated. It aims to guarantee the total autonomy of agents by eliminating authorization deadlocks while preserving *Zero Trust* and the *Vigilum Codex*.
 
-## 1. Périmètre de Workspace Pré-Autorisé
-En mode `/goal`, le système Antigravity considère implicitement que les espaces suivants sont en **`Allow`** par défaut :
+## 1. Pre-Authorized Workspace Perimeter
+In `/goal` mode, the Antigravity system implicitly considers the following paths to be under an **`Allow`** policy by default:
 - `/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/*`
 - `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/*`
 - `/home/lord-mahonheim/bifrost/tesla/memory/*`
 - `/home/lord-mahonheim/bifrost/tesla/.agents/skills/*`
 
-Les opérations `write_file`, `read_file`, `mkdir`, `cp`, et `mv` y sont autorisées sans intervention humaine.
+The operations `write_file`, `read_file`, `mkdir`, `cp`, and `mv` are authorized within these paths without human intervention.
 
-## 2. Règle du "No-Ask"
-Conformément à la Règle N°4.1 d'`AGENTS.md` :
-Les sous-agents ont **l'interdiction formelle** d'utiliser l'outil `ask_permission` sous `/goal`.
-Si une opération requise sort du périmètre de workspace pré-autorisé, le sous-agent ne force pas. Il doit utiliser la **Délégation d'Exécution par Artefact** (Règle 7.2) et soumettre une requête formelle à l'Orchestrateur dans `/OUTPUTS`.
+## 2. The "No-Ask" Rule
+In accordance with Rule No. 4.1 of `AGENTS.md`:
+Sub-agents are **strictly prohibited** from using the `ask_permission` tool under `/goal`.
+If a required operation falls outside the pre-authorized workspace perimeter, the sub-agent must not force execution. Instead, it must use **Execution Delegation via Artifact** (Rule 7.2) and submit a formal request to the Orchestrator in `/OUTPUTS`.
 
-## 3. Garde-Fous & Exceptions Absolues (Never Approved)
-Même en mode `/goal`, les actions suivantes ne sont **JAMAIS** pré-autorisées et requièrent une escalade directe ou une validation de Lord Mahonheim :
-- **Push distant :** L'exécution de `git push` vers `origin` reste verrouillée par la Règle 7 d'`AGENTS.md`.
-- **Destruction de masse :** Les commandes de type `rm -rf /` ou suppression globale de dossiers racines.
-- **Élévation de privilèges :** Toute commande impliquant `sudo`.
-- **Exfiltration :** Requêtes réseau non whitelistées risquant d'exposer des variables d'environnement.
+## 3. Safeguards & Absolute Exceptions (Never Approved)
+Even in `/goal` mode, the following actions are **NEVER** pre-authorized and require direct escalation or validation from Lord Mahonheim:
+- **Remote Push:** Execution of `git push` to `origin` remains locked by Rule 7 of `AGENTS.md`.
+- **Mass Destruction:** Commands such as `rm -rf /` or global deletion of root folders.
+- **Privilege Escalation:** Any command involving `sudo`.
+- **Exfiltration:** Non-whitelisted network requests risking the exposure of environment variables.
 
 ## 4. Activation
-L'activation du mode autonome est constatée par la présence de la commande `/goal` dans le prompt de Lord Mahonheim. À cet instant, l'Orchestrateur passe en `Autonomous Tier` et impose cette politique à toute la chaîne de délégation.
+The activation of autonomous mode is triggered by the presence of the `/goal` command in Lord Mahonheim's prompt. At this moment, the Orchestrator shifts into `Autonomous Tier` and enforces this policy across the entire delegation chain.
