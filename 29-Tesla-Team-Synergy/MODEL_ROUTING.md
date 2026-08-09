@@ -1,33 +1,35 @@
 # MODEL_ROUTING – Cheatsheet v4.0
 # Tesla Mission Orchestrator
 
-**Capability Selection FORCE_TOOLING : Pertinence > Sécurité > Fiabilité > Coût > Simplicité > Reproductibilité > Économie cognitive**
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-Utiliser **Capability Scoring** – voir `CAPABILITY_SCORING.md`
+**Capability Selection FORCE_TOOLING: Relevance > Security > Reliability > Cost > Simplicity > Reproducibility > Cognitive Economy**
 
-Résumé rapide :
+Use **Capability Scoring** – see `CAPABILITY_SCORING.md`
 
-| Besoin | Modèle | Score Code | Cost |
+Quick summary:
+
+| Requirement | Model | Code Score | Cost |
 |---|---|---|---|
-| Recherche / OSINT / parsing / doc | Gemini Flash | 55 | 100 |
-| Planification / Archi | Gemini Pro | 75 | 65 |
-| Code / Refactor / Tests | Claude Sonnet | 94 | 55 |
-| Premortem critique / Sécurité | Claude Opus | 92 | 15 |
-| Scaffolding massif | GPT-OSS* / Sonnet | 80 | 85 |
+| Research / OSINT / parsing / doc | Gemini Flash | 55 | 100 |
+| Planning / Architecture | Gemini Pro | 75 | 65 |
+| Code / Refactoring / Tests | Claude Sonnet | 94 | 55 |
+| Critical premortem / Security | Claude Opus | 92 | 15 |
+| Massive scaffolding | GPT-OSS* / Sonnet | 80 | 85 |
 
-*si disponible
+*if available
 
-**Avant montée en gamme – OBLIGATOIRE :**
+**Before upscaling – MANDATORY:**
 1. Low-Code First
-2. Anti-Lecture Linéaire : `rg` / `jq` / Tree-sitter / search_router
-3. Boucle LSP : `lsp_diagnostics`
+2. Anti-Linear Reading: `rg` / `jq` / Tree-sitter / search_router
+3. LSP Loop: `lsp_diagnostics`
 
-Escalade : Flash → Pro/Sonnet → Opus – documenter raison.
+Escalation: Flash → Pro/Sonnet → Opus – document rationale.
 
-Quotas : Gemini | Claude | GPT-OSS – hebdo + 5h glissant.
+Quotas: Gemini | Claude | GPT-OSS – weekly + 5h rolling.
 Circuit-breaker <15% → Opus→Sonnet, Pro→Flash.
 
-Shadow-Targeting éco : Arcanis/Curator dans `self`, forcé Flash.
+Eco Shadow-Targeting: Arcanis/Curator within `self`, forced Flash.
 
 ---
 `MAIN_RENDUE_A_MAHONHEIM=1`

@@ -1,19 +1,21 @@
 # Capability Scoring – Tesla Mission Orchestrator v4.0
 
-Le routage ne choisit plus un nom de modèle. Il choisit la meilleure capacité.
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+Routing no longer selects a model name. It selects the best capability.
 
 ## Axes (0–100)
 
-- **Reasoning** : planification, arbitrage, synthèse complexe
-- **Code** : génération / refactor / tests, qualité LSP
-- **Audit** : premortem, sécurité, détection contradictions
-- **Memory / RAG** : contexte long, recherche documentaire
-- **Cost_efficiency** : 100 = le moins cher en tokens/quota
-- **Latency** : 100 = le plus rapide
+- **Reasoning**: planning, arbitration, complex synthesis
+- **Code**: generation / refactoring / tests, LSP quality
+- **Audit**: premortem, security, contradiction detection
+- **Memory / RAG**: long context, documentary research
+- **Cost_efficiency**: 100 = cheapest in tokens/quota
+- **Latency**: 100 = fastest
 
 ## Matrix v4.0
 
-| Modèle | Reasoning | Code | Audit | Memory | Cost | Latency | $/1M tok out (indicatif) |
+| Model | Reasoning | Code | Audit | Memory | Cost | Latency | $/1M tok out (indicative) |
 |---|---|---|---|---|---|---|---|
 | Gemini Flash | 40 | 55 | 45 | 70 | 100 | 100 | ~ |
 | Gemini Pro | 78 | 75 | 70 | 80 | 65 | 70 | ~ |
@@ -21,20 +23,20 @@ Le routage ne choisit plus un nom de modèle. Il choisit la meilleure capacité.
 | Claude Opus | 95 | 92 | 96 | 80 | 15 | 35 | ~ |
 | GPT-OSS* | 70 | 80 | 60 | 60 | 85 | 55 | ~ |
 
-* GPT-OSS : si disponible dans l'environnement Antigravity, sinon fallback Sonnet.
+* GPT-OSS: if available in the Antigravity environment, otherwise fallback to Sonnet.
 
-## Sélection
+## Selection
 
-Pour un nœud N avec exigences `req = {Reasoning, Code, Audit}` :
+For a node N with requirements `req = {Reasoning, Code, Audit}`:
 
 ```
 score(model) = w_r*Reasoning + w_c*Code + w_a*Audit + w_m*Memory
                - λ * cost_penalty
 ```
 
-Poids par rôle :
+Weights per role:
 
-| Rôle | w_r | w_c | w_a | w_m | λ |
+| Role | w_r | w_c | w_a | w_m | λ |
 |---|---|---|---|---|---|
 | Research | 0.2 | 0.1 | 0.2 | 0.5 | 1.5 |
 | Architecture | 0.5 | 0.2 | 0.2 | 0.1 | 0.8 |
@@ -42,19 +44,19 @@ Poids par rôle :
 | Premortem | 0.4 | 0.1 | 0.5 | 0.0 | 0.4 |
 | Documentation | 0.3 | 0.0 | 0.1 | 0.6 | 1.5 |
 
-Choisir le modèle avec score maximal qui satisfait `capability_min` du contrat d'agent.
+Choose the model with the maximum score that satisfies the `capability_min` of the agent contract.
 
-Si quota groupe < 15% : appliquer malus cost x2 → dégradation automatique Opus→Sonnet, Pro→Flash.
+If group quota < 15%: apply cost penalty x2 → automatic degradation Opus→Sonnet, Pro→Flash.
 
-## Mapping rapide (compatibilité v3)
+## Quick Mapping (v3 compatibility)
 
-- Recherche / OSINT / parsing → Flash  (Cost 100, Memory 70)
-- Planification / Archi → Pro  (Reasoning 78)
+- Research / OSINT / parsing → Flash  (Cost 100, Memory 70)
+- Planning / Archi → Pro  (Reasoning 78)
 - Code / Tests → Sonnet  (Code 94)
-- Premortem critique → Opus  (Audit 96)
+- Critical premortem → Opus  (Audit 96)
 - Doc / README → Flash
 
-Règles GEMINI.md toujours prioritaires : Low-Code First, Anti-Lecture Linéaire, Boucle LSP.
+GEMINI.md rules always have priority: Low-Code First, Anti-Linear Reading, LSP Loop.
 
 ---
 `MAIN_RENDUE_A_MAHONHEIM=1`

@@ -1,24 +1,26 @@
-# [NOM-DU-CHANTIER]_v1.0_AAAA-MM-JJ.md
+# [PROJECT-NAME]_v1.0_YYYY-MM-DD.md
 <!-- SGC – AGENTS.md §11 – Tesla Mission Orchestrator v4.0 -->
 
-## 1. Objectif
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-## 2. Périmètre
+## 1. Objective
+
+## 2. Scope
 In / Out
 
-## 3. Contraintes
+## 3. Constraints
 
-## 4. Dépendances
+## 4. Dependencies
 
 ## 5. Mission Graph
-Voir `mission_graph.yaml`
-Résumé : N1 Research → N2 Architecture → N2b Premortem → N3 Code → N4 Test → N5 Doc
+See `mission_graph.yaml`
+Summary: N1 Research → N2 Architecture → N2b Premortem → N3 Code → N4 Test → N5 Doc
 
-## 6. Risques identifiés (Premortem)
+## 6. Identified Risks (Premortem)
 
-## 7. Tableau de routage – Capability Scoring
+## 7. Routing Table – Capability Scoring
 
-| Nœud | Rôle | Sous-agent | Modèle | Reasoning | Code | Audit | Cost | Complexité | Budget |
+| Node | Role | Subagent | Model | Reasoning | Code | Audit | Cost | Complexity | Budget |
 |---|---|---|---|---|---|---|---|---|---|
 | N1 | Research | arcanis/curator | gemini-flash | 40 | 55 | 45 | 100 | Low | S |
 | N2 | Archi | arcanis-360 | gemini-pro | 78 | 75 | 70 | 65 | Medium | M |
@@ -27,32 +29,32 @@ Résumé : N1 Research → N2 Architecture → N2b Premortem → N3 Code → N4 
 | N4 | Test | master-code | claude-sonnet | 82 | 94 | 85 | 55 | Medium | M |
 | N5 | Doc | curator-prime | gemini-flash | 40 | 55 | 45 | 100 | Low | S |
 
-**Budget envelope :** Gemini 60% / Claude 35% / GPT-OSS 5%
+**Budget envelope:** Gemini 60% / Claude 35% / GPT-OSS 5%
 
 ## 8. Scheduler
-- Série : N1 → N2 → N2b → N3 → N4 → N5
-- Parallèle : –
-- Critical path : N1-N5
+- Series: N1 → N2 → N2b → N3 → N4 → N5
+- Parallel: –
+- Critical path: N1-N5
 
 ## 9. Retry / Fallback
 - max_retries: 2
-- fallback_model: +1 gamme
-- escalade: Mahonheim
+- fallback_model: +1 tier
+- escalation: Mahonheim
 
-## 10. Premortem-Économie
-- [ ] Opus remplaçable par Sonnet ?
-- [ ] Recherche en Flash ?
-- [ ] Volumétrie en Flash ?
-- [ ] Quota suffisant ? Plan dégradation ?
-- [ ] Shadow-targeting possible ?
+## 10. Premortem-Economy
+- [ ] Opus replaceable by Sonnet?
+- [ ] Research in Flash?
+- [ ] Volumetrics in Flash?
+- [ ] Sufficient quota? Degradation plan?
+- [ ] Shadow-targeting possible?
 
-## 11. Traçabilité
-- Session ID :
-- Mission State : PLANNED → … → DONE
-- DB : model_used / complexity / tokens / node_id / attempt_n
-- INDEX.md : oui/non
-- PROJECT_STATE.md : oui/non
-- Alexandria : oui/non
+## 11. Traceability
+- Session ID:
+- Mission State: PLANNED → … → DONE
+- DB: model_used / complexity / tokens / node_id / attempt_n
+- INDEX.md: yes/no
+- PROJECT_STATE.md: yes/no
+- Alexandria: yes/no
 
 ---
 `MAIN_RENDUE_A_MAHONHEIM=1`
