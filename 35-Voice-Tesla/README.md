@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # VOICE-TESLA
 
 > Local, offline, and secure PTT (Push-To-Talk) voice pipeline for Antigravity CLI via Whisper.cpp and Zellij.

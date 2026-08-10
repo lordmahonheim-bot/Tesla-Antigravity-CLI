@@ -1,74 +1,76 @@
-# RAPPORT TECHNIQUE D'EXÉCUTION : ALEXANDRIA-CLOUD-EMBEDDINGS
-**Auteur** : Antigravity (Tesla Mission Execution)
-**Date** : 2026-07-11
-**Machine** : MIDGARD (Ubuntu 24.04, 8 Go RAM, CPU-only)
-**Statut** : 🟢 Certifié (Vigilum Codex compliant)
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+# TECHNICAL EXECUTION REPORT: ALEXANDRIA-CLOUD-EMBEDDINGS
+**Author**: Antigravity (Tesla Mission Execution)
+**Date**: 2026-07-11
+**Machine**: MIDGARD (Ubuntu 24.04, 8 GB RAM, CPU-only)
+**Status**: 🟢 Certified (Vigilum Codex compliant)
 
 ---
 
-## 1. Contexte et Objectifs Matériels
-L'ancien indexeur d'Alexandria reposait sur un couplage lourd avec `PyTorch`, `sentence-transformers` (modèle local CPU `all-MiniLM-L6-v2`) et `ChromaDB`. Cette stack locale consommait près de 450 Mo de RAM résidente au repos et culminait à plus de 600 Mo de RAM avec 27% d'usage CPU continu pendant l'indexation. Ces pics surchargeaient MIDGARD, nuisant à la réactivité du serveur de langage LSP (Language Server Protocol) et provoquant des deadlocks.
+## 1. Context and Hardware Objectives
+The legacy Alexandria indexer relied on a heavy coupling with `PyTorch`, `sentence-transformers` (local CPU model `all-MiniLM-L6-v2`), and `ChromaDB`. This local stack consumed nearly 450 MB of resident RAM at rest and peaked at over 600 MB of RAM with continuous 27% CPU usage during indexation. These spikes overloaded MIDGARD, degrading the responsiveness of the Language Server Protocol (LSP) and causing deadlocks.
 
-La mission consistait à basculer vers une architecture **Cloud-Locale** économe en ressources physiques :
-1. Déportation de la génération d'embeddings sur le Cloud via l'API Gemini (`models/gemini-embedding-001`).
-2. Centralisation du stockage vectoriel et textuel dans une base SQLite unique configurée en mode WAL, éliminant ChromaDB.
-3. Calcul local CPU ultra-rapide des similarités cosinus via NumPy restreint aux 100 candidats pré-filtrés par SQLite FTS5 (BM25).
-4. Fusion hybride robuste avec Reciprocal Rank Fusion (RRF, $k=60$).
-5. Intégration de la sécurité (PIIScrubber, Privacy Gate) et de la résilience (file d'attente hors-ligne).
+The mission consisted of migrating to a **Cloud-Local** architecture that is conservative with physical resources:
+1. Offloading embeddings generation to the Cloud via the Gemini API (`models/gemini-embedding-001`).
+2. Centralizing vector and textual storage in a single SQLite database configured in WAL mode, eliminating ChromaDB.
+3. Ultra-fast local CPU cosine similarity calculation via NumPy, restricted to the 100 candidates pre-filtered by SQLite FTS5 (BM25).
+4. Robust hybrid fusion with Reciprocal Rank Fusion (RRF, $k=60$).
+5. Integration of security (PIIScrubber, Privacy Gate) and resilience (offline queue).
 
 ---
 
-## 2. Tableau Comparatif des Performances Matérielles (Phase 0 vs Phase IV)
+## 2. Hardware Performance Comparison Table (Phase 0 vs Phase IV)
 
-Les métriques ci-dessous ont été obtenues à l'aide des scripts de benchmark isolés et reproductibles (`sandbox/benchmark_baseline.py` et `sandbox/benchmark_new.py`) sur un échantillon de 100 documents Markdown de test (chacun composé d'environ 2000 caractères structurés).
+The metrics below were obtained using isolated and reproducible benchmark scripts (`sandbox/benchmark_baseline.py` and `sandbox/benchmark_new.py`) on a sample of 100 test Markdown documents (each containing approximately 2000 structured characters).
 
-| Métrique Physique | Moteur V1 (Baseline) | Moteur V2 (Optimisé) | Différence (%) | Impact Opérationnel sur MIDGARD |
+| Physical Metric | V1 Engine (Baseline) | V2 Engine (Optimized) | Difference (%) | Operational Impact on MIDGARD |
 | :--- | :--- | :--- | :--- | :--- |
-| **RAM au repos (Idle)** | 452.56 Mo | 127.11 Mo | **-71.91 %** | Libère 325 Mo de RAM système de manière permanente en veille |
-| **RAM Max Indexation** | 609.68 Mo | 137.48 Mo | **-77.45 %** | Élimine totalement le risque de swap ou de crash OOM (Out Of Memory) |
-| **CPU Moyen Indexation** | 26.90 % | 3.30 % | **-87.73 %** | Réduit la surchauffe CPU ; garde MIDGARD disponible pour les compilations et le LSP |
-| **Temps d'indexation (100 docs)** | 371.81 s | 597.59 s | +60.72 % | Légère hausse due aux requêtes réseau Gemini Cloud séquentielles |
-| **Vitesse d'indexation** | 0.27 doc/s | 0.17 doc/s | -37.04 % | Impact atténué par le cache local de déduplication (60-80% d'appels évités) |
-| **Latence moyenne de recherche** | 310.19 ms | 200.53 ms | **-35.35 %** | Recherche hybride RRF 1.5x plus rapide grâce au calcul local NumPy ciblé |
-| **RAM Max Recherche** | 26.51 Mo | 28.56 Mo | +7.73 % | Consommation négligeable et stable lors des recherches |
+| **Idle RAM** | 452.56 MB | 127.11 MB | **-71.91 %** | Permanently frees 325 MB of system RAM at rest |
+| **Max Indexation RAM** | 609.68 MB | 137.48 MB | **-77.45 %** | Completely eliminates swap or OOM (Out Of Memory) crash risks |
+| **Avg Indexation CPU** | 26.90 % | 3.30 % | **-87.73 %** | Reduces CPU overheating; keeps MIDGARD available for builds and the LSP |
+| **Indexation Time (100 docs)** | 371.81 s | 597.59 s | +60.72 % | Slight increase due to sequential Gemini Cloud network requests |
+| **Indexation Speed** | 0.27 doc/s | 0.17 doc/s | -37.04 % | Impact mitigated by the local deduplication cache (60-80% calls avoided) |
+| **Avg Search Latency** | 310.19 ms | 200.53 ms | **-35.35 %** | RRF hybrid search 1.5x faster thanks to targeted NumPy local computing |
+| **Max Search RAM** | 26.51 MB | 28.56 MB | +7.73 % | Negligible and stable consumption during searches |
 
 ---
 
-## 3. Analyse Détaillée des Améliorations
-### 3.1 Empreinte Mémoire (RAM)
-L'élimination complète de la stack `PyTorch` et `ChromaDB` (comprenant le lourd runtime `ONNX`) permet au nouveau moteur de fonctionner avec seulement **127 Mo** au repos, contre **452 Mo** auparavant. Le pic d'indexation passe de **609 Mo** à **137 Mo**, soit un gain phénoménal de près de **77.4%**. MIDGARD respire et le serveur de langage ne subit plus aucun crash d'allocation.
+## 3. Detailed Analysis of Improvements
+### 3.1 Memory Footprint (RAM)
+The complete elimination of the `PyTorch` and `ChromaDB` stack (including the heavy `ONNX` runtime) allows the new engine to run with only **127 MB** at rest, compared to **452 MB** previously. The indexation peak drops from **609 MB** to **137 MB**, representing a phenomenal gain of nearly **77.4%**. MIDGARD can breathe, and the language server no longer suffers from allocation crashes.
 
-### 3.2 Utilisation CPU
-Le CPU requis pour l'indexation s'effondre de **26.9%** à seulement **3.3%**. La charge de calcul lourd (le codage des vecteurs) est intégralement déportée sur l'infrastructure Cloud de Google. NumPy local ne prend le relais que pour calculer 100 produits scalaires de vecteurs à 768 dimensions (dimension du modèle `gemini-embedding-001`), ce qui s'effectue en une fraction de milliseconde (< 0.2 ms par recherche).
+### 3.2 CPU Usage
+The CPU required for indexation plummets from **26.9%** to a mere **3.3%**. The heavy computing load (vector encoding) is entirely offloaded to Google's Cloud infrastructure. Local NumPy only takes over to calculate 100 dot products of 768-dimensional vectors (`gemini-embedding-001` model dimension), which is executed in a fraction of a millisecond (< 0.2 ms per search).
 
-### 3.3 Latence et Fusion Hybride RRF
-La recherche hybride est accélérée de **35%**, passant de **310 ms** à **200 ms**.
-- **FTS5 BM25** effectue un filtrage lexical ultra-rapide en SQLite pour extraire le top 100 des documents les plus pertinents.
-- **NumPy** calcule le produit scalaire (similarité cosinus, les vecteurs étant normalisés L2) uniquement sur ces 100 candidats.
-- **RRF (k=60)** fusionne harmonieusement les classements. Les résultats sont plus précis et rapides.
-
----
-
-## 4. Architecture et Code Délivré
-
-### 4.1 Modélisation RelRelationnelle SQLite WAL (4 Tables)
-La base `database/alexandria_brain.db` est configurée en mode WAL (`Write-Ahead Logging`) pour autoriser les lectures concurrentes rapides pendant les écritures.
-- [database_manager.py](file:///home/lord-mahonheim/bifrost/tesla/core/database_manager.py) : Gère le cycle de vie de la base de données.
-- [embeddings.py](file:///home/lord-mahonheim/bifrost/tesla/core/embeddings.py) : Gère les appels réseaux sécurisés vers l'API Gemini avec gestion robuste des rate limits (exponential backoff 3x) et découpage automatique en sous-listes (batching par 96).
-- [security.py](file:///home/lord-mahonheim/bifrost/tesla/core/security.py) : Le module `PIIScrubber` applique des regex compilées pour nettoyer les fragments avant toute transmission (redact des emails, JWT, clés API Google/OpenAI, GitHub tokens et secrets génériques).
-
-### 4.2 Gate de Confidentialité et Robustesse Offline
-- **Gate de Confidentialité** : L'indexeur détecte le tag `confidential: true` ou `private: true` dans le frontmatter YAML du document, ou si le fichier est logé dans le dossier protégé `/02-Areas/Confidentiel/`. Si tel est le cas, le fichier est marqué d'un drapeau `confidential = 1` dans SQLite et **aucun appel réseau vers Gemini n'est émis**. Le document est indexé uniquement en local via FTS5.
-- **Queue SQLite de Retentative (Offline Mode)** : Si l'API Gemini est injoignable ou renvoie une erreur de quota, l'indexation de la fiche ne plante pas. Ses fragments de texte sont enregistrés dans la table `pending_embeddings` pour retraitement ultérieur. La recherche hybride bascule de manière fluide et transparente en mode dégradé FTS5 BM25 local pur.
-
-### 4.3 Outillage llama.cpp Éphémère
-- [llama_quantize_pack.py](file:///home/lord-mahonheim/bifrost/tesla/tools/llama_quantize_pack.py) : Permet de convertir et quantifier des modèles. Il obéit strictement à la doctrine d'isolation éphémère (vérification de l'espace disque de 8 Go libres, dossier temporaire isolé `/tmp/llama-pack-*` auto-nettoyé inconditionnellement via bloc `finally`, exécution de `llama-quantize` en sous-processus et validation finale de l'en-tête binaire `GGUF`).
+### 3.3 Latency and RRF Hybrid Fusion
+The hybrid search is accelerated by **35%**, dropping from **310 ms** to **200 ms**.
+- **FTS5 BM25** performs ultra-fast lexical filtering in SQLite to extract the top 100 most relevant documents.
+- **NumPy** computes the dot product (cosine similarity, as vectors are L2-normalized) exclusively on these 100 candidates.
+- **RRF (k=60)** harmoniously merges the rankings. The results are more accurate and faster.
 
 ---
 
-## 5. Certification du Code (Vigilum Codex)
-Le code a été entièrement validé au niveau du typage statique :
-- Exécution de **Pyright** : **0 erreurs, 0 avertissements**.
-- Idempotence complète : les tests d'indexation incrémentale delta-temporelle et de purge des fichiers orphelins sont opérationnels et validés.
+## 4. Delivered Architecture and Code
 
-*Rapport d'exécution technique signé sur MIDGARD par Tesla Mission Executing Agent.*
+### 4.1 SQLite WAL Relational Modeling (4 Tables)
+The `database/alexandria_brain.db` database is configured in WAL (`Write-Ahead Logging`) mode to allow fast concurrent reads during writes.
+- [database_manager.py](file:///home/lord-mahonheim/bifrost/tesla/core/database_manager.py): Manages the database lifecycle.
+- [embeddings.py](file:///home/lord-mahonheim/bifrost/tesla/core/embeddings.py): Manages secure network calls to the Gemini API with robust rate limits handling (3x exponential backoff) and automatic chunking into sublists (batching by 96).
+- [security.py](file:///home/lord-mahonheim/bifrost/tesla/core/security.py): The `PIIScrubber` module applies compiled regexes to sanitize chunks before any transmission (redacting emails, JWTs, Google/OpenAI API keys, GitHub tokens, and generic secrets).
+
+### 4.2 Privacy Gate and Offline Robustness
+- **Privacy Gate**: The indexer detects the `confidential: true` or `private: true` tag in the document's YAML frontmatter, or checks if the file is located in the protected `/02-Areas/Confidentiel/` folder. If so, the file is flagged with `confidential = 1` in SQLite and **no network call to Gemini is issued**. The document is indexed locally only via FTS5.
+- **SQLite Retry Queue (Offline Mode)**: If the Gemini API is unreachable or returns a quota error, the document indexation does not crash. Its text chunks are saved in the `pending_embeddings` table for later reprocessing. The hybrid search seamlessly and transparently degrades to pure local FTS5 BM25 mode.
+
+### 4.3 Ephemeral llama.cpp Tooling
+- [llama_quantize_pack.py](file:///home/lord-mahonheim/bifrost/tesla/tools/llama_quantize_pack.py): Allows converting and quantizing models. It strictly adheres to the ephemeral isolation doctrine (verification of 8 GB free disk space, isolated `/tmp/llama-pack-*` temporary folder unconditionally self-cleaned via `finally` block, `llama-quantize` execution in a subprocess, and final validation of the `GGUF` binary header).
+
+---
+
+## 5. Code Certification (Vigilum Codex)
+The code has been entirely validated at the static typing level:
+- **Pyright** execution: **0 errors, 0 warnings**.
+- Complete idempotence: delta-temporal incremental indexation and orphaned file purging tests are operational and validated.
+
+*Technical execution report signed on MIDGARD by Tesla Mission Executing Agent.*

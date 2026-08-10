@@ -1,25 +1,27 @@
-# BENCHMARK BASELINE - ALEXANDRIA EMBEDDINGS V1.0 (BASELINE)
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+# BASELINE BENCHMARK - ALEXANDRIA EMBEDDINGS V1.0 (BASELINE)
 Date: 2026-07-11 19:49:44
-Machine: MIDGARD (Ubuntu, CPU-only, 8 Go RAM)
+Machine: MIDGARD (Ubuntu, CPU-only, 8 GB RAM)
 
-## Moteur de Reference (Actuel)
-- Moteur sémantique local : `ChromaDB` (In-Process)
-- Modèle d'embeddings local : `SentenceTransformer` (`all-MiniLM-L6-v2` - 384 dimensions)
-- Dépendances : `torch`, `sentence-transformers`, `chromadb`
+## Reference Engine (Current)
+- Local semantic engine: `ChromaDB` (In-Process)
+- Local embeddings model: `SentenceTransformer` (`all-MiniLM-L6-v2` - 384 dimensions)
+- Dependencies: `torch`, `sentence-transformers`, `chromadb`
 
-## Metriques Physiques Mesurees
+## Measured Physical Metrics
 
-| Metrique | Valeur Baseline | Description |
+| Metric | Baseline Value | Description |
 | :--- | :--- | :--- |
-| **RAM au repos (Idle)** | 452.56 Mo | Empreinte mémoire résidente (RSS) avec ChromaDB et le modèle chargé en mémoire |
-| **RAM Max Indexation** | 609.68 Mo | Pic de mémoire résidente (RSS) lors de l'indexation de 100 documents |
-| **Temps d'indexation (100 docs)** | 371.81 s | Temps total de traitement et génération locale d'embeddings |
-| **Vitesse d'indexation** | 0.27 doc/s | Nombre de documents traités par seconde |
-| **Latence moyenne de recherche** | 310.19 ms | Temps de calcul de l'embedding de requête + query ChromaDB + SQLite FTS5 + RRF |
-| **RAM Max Recherche** | 26.51 Mo | Pic de mémoire résidente lors de l'exécution de la recherche |
-| **CPU Moyen Indexation** | 26.9% | Utilisation CPU moyenne cumulée sur tous les cœurs |
+| **Idle RAM** | 452.56 MB | Resident memory footprint (RSS) with ChromaDB and the model loaded in memory |
+| **Max Indexation RAM** | 609.68 MB | Peak resident memory (RSS) when indexing 100 documents |
+| **Indexation Time (100 docs)** | 371.81 s | Total processing time and local embeddings generation |
+| **Indexation Speed** | 0.27 doc/s | Number of documents processed per second |
+| **Avg Search Latency** | 310.19 ms | Query embedding compute time + ChromaDB query + SQLite FTS5 + RRF |
+| **Max Search RAM** | 26.51 MB | Peak resident memory during search execution |
+| **Avg Indexation CPU** | 26.9% | Cumulative average CPU utilization across all cores |
 
-## Observations & Diagnostic
-1. **Empreinte memoire excessive** : Le chargement au repos de sentence-transformers + ChromaDB nécessite plus de 452.6 Mo de RAM, limitant les ressources de MIDGARD.
-2. **Pic memoire a l'indexation** : Durant le traitement de seulement 100 fichiers, la RAM monte à 609.7 Mo, ce qui risque d'entraîner des crashs sur des corpus plus importants ou lors d'indexations concurrentes.
-3. **Dependances systeme** : La présence de `torch` et `sentence-transformers` alourdit inutilement le virtualenv de production et ralentit le serveur de langage (LSP).
+## Observations & Diagnostics
+1. **Excessive memory footprint**: Loading sentence-transformers + ChromaDB at rest requires more than 452.6 MB of RAM, limiting MIDGARD's resources.
+2. **Indexation memory peak**: During the processing of only 100 files, RAM spikes to 609.7 MB, which risks causing crashes on larger corpora or during concurrent indexations.
+3. **System dependencies**: The presence of `torch` and `sentence-transformers` unnecessarily bloats the production virtualenv and slows down the Language Server (LSP).

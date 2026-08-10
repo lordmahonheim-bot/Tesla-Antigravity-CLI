@@ -1,26 +1,28 @@
-# Doctrine llama.cpp — Usage strictement outillage éphémère
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-Sous la doctrine du Vigilum Codex et pour préserver la stabilité matérielle de MIDGARD (8 Go RAM, CPU pur) :
+# llama.cpp Doctrine — Strictly Ephemeral Tooling Usage
 
-## 1. Prohibition Absolue d'Inférence Résidente
-*   Il est formellement interdit de charger des modèles d'inférence en RAM à titre permanent.
-*   L'exécution de démons persistants de type `llama-server` est interdite.
-*   L'usage d'outils interactifs comme `llama-cli` en mode inférence est interdit.
-*   L'importation de bibliothèques liant l'interpréteur Python à des runtimes d'inférence (telle que `llama-cpp-python`) est strictement interdite dans les scripts de production.
+Under the Vigilum Codex doctrine and to preserve the hardware stability of MIDGARD (8 GB RAM, CPU-only):
 
-## 2. Périphérie d'Usage Autorisé (Outillage)
-L'usage de la suite logicielle `llama.cpp` est restreint exclusivement aux tâches de préparation et d'optimisation de modèles :
-*   Conversion de formats natifs (ex. HuggingFace) vers le format standardisé GGUF.
-*   Quantification (compression de poids) vers des formats compressés hautement optimisés (types `Q4_K_M`, `Q5_K_M` ou `Q8_0`).
-*   Découpage (splitting) ou fusion (merging) de fichiers GGUF.
+## 1. Absolute Prohibition of Resident Inference
+*   It is strictly forbidden to load inference models into RAM permanently.
+*   Running persistent daemon processes such as `llama-server` is prohibited.
+*   Using interactive tools like `llama-cli` in inference mode is prohibited.
+*   Importing libraries that link the Python interpreter to inference runtimes (such as `llama-cpp-python`) is strictly forbidden in production scripts.
 
-## 3. Pattern d'Isolation et de Nettoyage Éphémère
-Chaque tâche d'outillage doit se plier aux contraintes matérielles suivantes :
-1.  **Vérification d'Espace Disque** : S'assurer que le système dispose d'au moins 8 Go d'espace libre sur la partition cible avant de démarrer.
-2.  **Dossier Temporaire Dédié** : L'ensemble des opérations doit se dérouler dans un répertoire de travail jetable isolé sous `/tmp/llama-pack-XXXXXX` (généré via `mktemp -d`).
-3.  **Appel Subprocess Hermétique** : L'outil `llama-quantize` doit être invoqué sous forme de processus externe éphémère via Python `subprocess.run` avec des limites de ressources explicites.
-4.  **Validation Physique** : Après écriture du fichier quantifié final, son intégrité doit être attestée en vérifiant la présence du header magique de fichier GGUF (`0x46554747`, soit `GGUF` en ASCII).
-5.  **Purge Inconditionnelle** : Une routine de nettoyage (type `trap EXIT` en bash ou bloc Python `finally`) doit détruire intégralement le dossier temporaire `/tmp/llama-pack-*` après exécution, que l'opération ait réussi ou échoué.
+## 2. Permitted Usage Scope (Tooling)
+The use of the `llama.cpp` software suite is exclusively restricted to model preparation and optimization tasks:
+*   Converting native formats (e.g., HuggingFace) to the standardized GGUF format.
+*   Quantizing (weight compression) to highly optimized compressed formats (types `Q4_K_M`, `Q5_K_M`, or `Q8_0`).
+*   Splitting or merging GGUF files.
+
+## 3. Ephemeral Isolation and Cleanup Pattern
+Every tooling task must comply with the following hardware constraints:
+1.  **Disk Space Check**: Ensure the system has at least 8 GB of free space on the target partition before starting.
+2.  **Dedicated Temporary Folder**: All operations must take place in a disposable, isolated working directory under `/tmp/llama-pack-XXXXXX` (generated via `mktemp -d`).
+3.  **Hermetic Subprocess Call**: The `llama-quantize` tool must be invoked as an ephemeral external process via Python's `subprocess.run` with explicit resource limits.
+4.  **Physical Validation**: After writing the final quantized file, its integrity must be verified by checking for the GGUF file magic header (`0x46554747`, which is `GGUF` in ASCII).
+5.  **Unconditional Purge**: A cleanup routine (like `trap EXIT` in bash or a Python `finally` block) must completely destroy the `/tmp/llama-pack-*` temporary folder after execution, regardless of success or failure.
 
 ---
-*Fiche de doctrine canonique certifiée sur MIDGARD par Tesla Curator Prime.*
+*Canonical doctrine record certified on MIDGARD by Tesla Curator Prime.*

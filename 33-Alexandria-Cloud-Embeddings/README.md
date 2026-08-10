@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 # Alexandria Cloud-Local Embeddings MVP
 
 An elite hybrid search engine designed under the **Vigilum Codex** doctrine to optimize the cognitive local storage of MIDGARD (8 GB RAM, CPU-only system). This MVP relocates heavy vectorization processing to the cloud while maintaining a localized, highly optimized, and zero-dependency vector and lexical search database.

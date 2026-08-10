@@ -1,77 +1,79 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 type: reference
-tags: [strategie/plan, technique/armement, statut/a-valider]
+tags: [strategy/plan, technical/armament, status/to-be-validated]
 source: "[[SESSION_TRANSCRIPTS.md]]"
 date: 2026-06-28
 version: 1.0
 ---
 
-# PLAN D'ARMEMENT PLURIDISCIPLINAIRE POUR TESLA (SOFTWARE & HARDWARE)
-**Date de conception :** 2026-06-28  
-**Auteur :** Tesla (sur Antigravity CLI)  
-**Destinataire :** Lord Mahonheim (Abdellah MOUHTAJ)  
-**Statut :** #statut/a-valider (Soumis à votre approbation Obsidian)
+# MULTIDISCIPLINARY ARMAMENT PLAN FOR TESLA (SOFTWARE & HARDWARE)
+**Creation Date:** 2026-06-28
+**Author:** Tesla (on Antigravity CLI)
+**Recipient:** Lord Mahonheim (Abdellah MOUHTAJ)
+**Status:** #status/to-be-validated (Subject to your Obsidian approval)
 
 ---
 
-## 1. Vision Stratégique (Le Rôle de Tesla)
+## 1. Strategic Vision (Tesla's Role)
 
-L'objectif de ce plan est de transformer Tesla en un **super-assistant pluridisciplinaire local**, capable de superviser la machine **MIDGARD** à 360°, d'automatiser sa maintenance logicielle, et d'assurer une double persistance sémantique sans surcharger les 8 Go de RAM du système physique.
+The goal of this plan is to transform Tesla into a **local multidisciplinary super-assistant**, capable of supervising the **MIDGARD** machine 360°, automating its software maintenance, and ensuring a dual semantic persistence without overloading the 8 GB of RAM of the physical system.
 
-Le plan s'articule autour de trois piliers fondamentaux :
-- **Performance Technique :** Outils légers, diagnostics automatiques et résilience.
-- **Gouvernance Locale :** Soumission systématique à la validation de Mahonheim (request-review, Ctrl+K).
-- **Documentation Technique :** Archivage et indexation immédiate de chaque étape dans Obsidian Avalon.
-
----
-
-## 2. Pilier 1 : Performance Technique (Hardware & Software)
-
-### A. Le Démon de Surveillance Autonome (MIDGARD Guard)
-Déploiement d'un service système léger (`systemd`) exécutant un script Python en tâche de fond pour surveiller l'état de santé de MIDGARD :
-1. **Surveillance Disques (S.M.A.R.T.) :** Scan quotidien de l'intégrité de surface des disques physiques et clés USB (`smartctl` / `badblocks`).
-2. **Monitoring des Ressources :** Alerte si la RAM disponible descend sous 1 Go ou si la température CPU dépasse 80°C.
-3. **Journalisation :** Écriture des incidents dans un fichier de log local `logs/hardware_guard.log`.
-
-### B. Moteur Sémantique et Lexical (Alexandria Core)
-Intégration et maintien de la double indexation sémantique (ChromaDB) et lexicale (SQLite FTS5) :
-1. **Incrémentalité Strict :** Zéro surcoût CPU/RAM par comparaison systématique des dates de modification des fiches Markdown avant toute inférence vectorielle.
-2. **Auto-Purge :** Suppression automatique des index des fichiers renommés ou supprimés physiquement.
-
-### C. Maintenance Logicielle et Auto-Correction (Self-Healing)
-1. **Auto-LSP :** Vérification systématique de la conformité du code via Pyright avant toute exécution ou commit.
-2. **Auto-Correction :** Capacité pour Tesla de corriger de manière autonome ses propres bugs d'import, de typage ou de syntaxe.
+The plan is built around three fundamental pillars:
+- **Technical Performance:** Lightweight tools, automatic diagnostics, and resilience.
+- **Local Governance:** Systematic submission to Mahonheim's validation (request-review, Ctrl+K).
+- **Technical Documentation:** Archiving and immediate indexation of each step in Obsidian Avalon.
 
 ---
 
-## 3. Pilier 2 : Gouvernance Locale (Vigilum Codex)
+## 2. Pillar 1: Technical Performance (Hardware & Software)
 
-Pour interdire toute action destructive ou dérive logicielle autonome, les règles d'exécution suivantes sont verrouillées :
-- **Validation Physique Obligatoire (Ctrl+K) :** Aucune modification de configuration système (services systemd, règles Udev) ou écriture hors du répertoire de travail ne sera validée sans votre accord explicite.
-- **Mode Request-Review Stricte :** Les commandes d'administration sensibles (ex: montage forcé, exécution de scripts sudo) vous seront transmises sous forme de bloc de commandes prêtes à l'emploi pour que vous restiez l'autorité de validation finale.
-- **Isolation des Ressources :** Limitation stricte de l'empreinte mémoire de chaque module Tesla à 180 Mo RAM.
+### A. Autonomous Monitoring Daemon (MIDGARD Guard)
+Deployment of a lightweight system service (`systemd`) running a Python script in the background to monitor MIDGARD's health:
+1. **Disk Monitoring (S.M.A.R.T.):** Daily surface integrity scan of physical disks and USB drives (`smartctl` / `badblocks`).
+2. **Resource Monitoring:** Alert if available RAM drops below 1 GB or if CPU temperature exceeds 80°C.
+3. **Logging:** Writing incidents to a local log file `logs/hardware_guard.log`.
+
+### B. Semantic and Lexical Engine (Alexandria Core)
+Integration and maintenance of dual indexation: semantic (ChromaDB) and lexical (SQLite FTS5):
+1. **Strict Incrementality:** Zero CPU/RAM overhead through systematic comparison of Markdown file modification dates before any vector inference.
+2. **Auto-Purge:** Automatic deletion of indexes for physically renamed or deleted files.
+
+### C. Software Maintenance and Self-Healing
+1. **Auto-LSP:** Systematic verification of code compliance via Pyright before any execution or commit.
+2. **Self-Healing:** Tesla's ability to autonomously correct its own import, typing, or syntax bugs.
 
 ---
 
-## 4. Pilier 3 : Documentation et Cycle de Vie (Obsidian Avalon)
+## 3. Pillar 2: Local Governance (Vigilum Codex)
 
-Chaque action d'ingénierie doit être documentée pour enrichir la mémoire long terme d'Alexandria :
-1. **Rapports d'Intervention :** Écriture systématique au format Markdown sous `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/`.
-2. **Fiches Techniques (Artefacts) :** Documentation de chaque script d'infrastructure dans `Avalon/01-Library/Artefacts/` avec le tag `statut: valide` pour documentation autonome.
-3. **Registre de Taxonomie :** Maintien du tagging strict (ex: `#type/concept`, `#statut/a-valider`, `#technique/systeme`) pour faciliter l'accès via les requêtes Dataview de Lord Mahonheim.
+To prohibit any destructive action or autonomous software drift, the following execution rules are locked:
+- **Mandatory Physical Validation (Ctrl+K):** No system configuration modification (systemd services, Udev rules) or writing outside the working directory will be validated without your explicit agreement.
+- **Strict Request-Review Mode:** Sensitive administration commands (e.g., forced mount, execution of sudo scripts) will be transmitted to you as ready-to-use command blocks so you remain the final validation authority.
+- **Resource Isolation:** Strict limitation of each Tesla module's memory footprint to 180 MB RAM.
 
 ---
 
-## 5. Calendrier de Déploiement Proposé
+## 4. Pillar 3: Documentation and Lifecycle (Obsidian Avalon)
 
-| Phase | Description de l'Action | Dépendances & Livrables |
+Every engineering action must be documented to enrich Alexandria's long-term memory:
+1. **Intervention Reports:** Systematic writing in Markdown format under `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/`.
+2. **Technical Sheets (Artifacts):** Documentation of each infrastructure script in `Avalon/01-Library/Artefacts/` with the tag `status: valid` for autonomous documentation.
+3. **Taxonomy Registry:** Maintenance of strict tagging (e.g., `#type/concept`, `#status/to-be-validated`, `#technical/system`) to facilitate access via Lord Mahonheim's Dataview queries.
+
+---
+
+## 5. Proposed Deployment Schedule
+
+| Phase | Action Description | Dependencies & Deliverables |
 | :--- | :--- | :--- |
-| **Phase 1** | Conception et activation du Démon `hardware_guard.py` (systemd). | Service local systemd + Fiche technique. |
-| **Phase 2** | Intégration du module `Self-Healing` (vérification de typage et diagnostics de scripts). | Wrapper de correction Pyright. |
-| **Phase 3** | Automatisation des synchronisations de dépôts via `tesla-github-manager`. | Scripts de versioning sécurisés. |
+| **Phase 1** | Design and activation of the `hardware_guard.py` Daemon (systemd). | Local systemd service + Technical sheet. |
+| **Phase 2** | Integration of the `Self-Healing` module (typing verification and script diagnostics). | Pyright correction wrapper. |
+| **Phase 3** | Automation of repository synchronizations via `tesla-github-manager`. | Secure versioning scripts. |
 
 ---
-*Plan stratégique soumis à la relecture et validation de Lord Mahonheim.*
+*Strategic plan submitted for proofreading and validation by Lord Mahonheim.*
 
-Signé / Fait par : Tesla sur Antigravity CLI  
-Main rendue à Mahonheim
+Signed / Done by: Tesla on Antigravity CLI
+Handed back to Mahonheim

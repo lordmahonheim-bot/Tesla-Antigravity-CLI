@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 type: reference
 tags: [curation/certified, curator/prime, status/valid]
@@ -8,103 +10,103 @@ confidence_score: 99%
 sources: ["[[plan_intervention_alexandria_embeddings.md]]", "[[Plan_d_Intervention_By_RENA.md]]", "[[Plan_d_Intervention_By_Apodex.md]]", "[[Plan_d_Intervention_By_ChatGPT.txt]]"]
 ---
 
-# CERTIFIED REPORT: PLAN INTERVENTION ULTIME ALEXANDRIA EMBEDDINGS
+# CERTIFIED REPORT: ULTIMATE INTERVENTION PLAN ALEXANDRIA EMBEDDINGS
 
 ## 1. Diagnostic Summary
 
-L'architecture sémantique actuelle d'Alexandria ([indexer_hybrid.py](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/indexer_hybrid.py)) pose des risques matériels et financiers critiques sur MIDGARD (8 Go RAM, CPU pur). Son couplage avec `PyTorch`, `sentence-transformers` et `ChromaDB` (comprenant `onnxruntime`) consomme plus de 1,2 Go de RAM en veille et culmine à plus de 5,2 Go lors de l'indexation de lots volumineux. Cette dette technique fragilise le serveur de langage (`pyright` via `karellen-lsp-mcp`), provoquant des crashs répétés et bloquant la boucle d'auto-correction (Self-Healing). De plus, l'absence de cache local de déduplication et de politique stricte de confidentialité (PII/données confidentielles) expose le système à des fuites de données sensibles et à un gaspillage de quotas réseau lors des réindexations.
+The current semantic architecture of Alexandria ([indexer_hybrid.py](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/indexer_hybrid.py)) poses critical hardware and financial risks on MIDGARD (8 GB RAM, pure CPU). Its coupling with `PyTorch`, `sentence-transformers`, and `ChromaDB` (including `onnxruntime`) consumes over 1.2 GB of RAM at rest and peaks at over 5.2 GB when indexing large batches. This technical debt weakens the language server (`pyright` via `karellen-lsp-mcp`), causing repeated crashes and blocking the Self-Healing loop. Furthermore, the absence of a local deduplication cache and a strict privacy policy (PII/confidential data) exposes the system to sensitive data leaks and network quota waste during re-indexations.
 
-La transition vers une **architecture cloud-locale** s'appuyant sur l'API Gemini pour la génération d'embeddings et sur une unique base de données SQLite configurée en mode WAL (`alexandria_brain.db`) élimine totalement l'empreinte mémoire locale en veille tout en préservant la souveraineté et la rapidité des recherches locales.
+The transition to a **cloud-local architecture** relying on the Gemini API for embeddings generation and on a single SQLite database configured in WAL mode (`alexandria_brain.db`) completely eliminates the local memory footprint at rest while preserving the sovereignty and speed of local searches.
 
-Ce document constitue le **Plan d'Intervention Ultime** validé sous les principes du Vigilum Codex. Il fusionne les forces des plans d'intervention de **RENA (V2.1)**, **Apodex**, **ChatGPT** et de **Tesla (initial)** pour offrir le compromis le plus robuste, sécurisé et économe pour MIDGARD.
+This document constitutes the **Ultimate Intervention Plan** validated under the principles of the Vigilum Codex. It merges the strengths of the intervention plans of **RENA (V2.1)**, **Apodex**, **ChatGPT**, and **Tesla (initial)** to offer the most robust, secure, and economical compromise for MIDGARD.
 
 ---
 
 ## 2. Verified Facts & Evidence Pack
 
-### 2.1 Grille de Confrontation Objective des Plans
+### 2.1 Objective Confrontation Grid of the Plans
 
-| Critère d'évaluation | Plan Initial Tesla | Plan RENA (V2.1) | Plan Apodex | Plan ChatGPT | **Plan Ultime Consolidé (Fusion)** |
+| Evaluation Criterion | Initial Tesla Plan | RENA Plan (V2.1) | Apodex Plan | ChatGPT Plan | **Ultimate Consolidated Plan (Merger)** |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Vision d'Infrarouge** | Validée. | Validée et durcie. | Validée. | Validée (90-95%). | **Consensus absolu sur la migration Cloud-Locale.** |
-| **Doctrine llama.cpp** | Packaging temporaire. | Éphémère, subprocess, trap EXIT, ban de `llama-cpp-python`. | Idem RENA + doc `LLAMA_CPP_DOCTRINE.md`. | Packaging seul, pas de démon d'inférence. | **RENA + Apodex** : CLI subprocess éphémère sous `/tmp`, trap EXIT, doc de doctrine dédiée. |
-| **Modèle d'embedding** | `text-embedding-004` (obsolète/maintenance). | `models/gemini-embedding-001` (dimension 768). | `models/gemini-embedding-001:768`. | Abstrait / Modulable (versionnable). | **Gemini-embedding-001 (768d)** configuré via abstraction `EmbeddingProvider` avec fallback possible. |
-| **Format & Stockage** | BLOB SQLite. | BLOB Float32 normalisé L2 Little-Endian en SQLite WAL. | BLOB normalisé. | FLOAT32 BLOB ou sqlite-vec. | **RENA** : BLOB Float32 normalisé (L2) stocké en SQLite WAL (pas de JSON, évite les doublons). |
-| **Recherche & Similarité** | Python pur / NumPy local. | FTS5 top 100 candidats BM25 + NumPy dot product (cosinus). | FTS5 top 100 + NumPy. | sqlite-vec (extension C). | **Double Vitesse** : NumPy local par défaut (Low-Code), sqlite-vec en option via abstraction. |
-| **RRF Hybride k=60** | Conservé comme invariant. | Conservé (BM25 FTS5 + NumPy Cosine). | Conservé comme invariant. | Conservé. | **Invariant conservé** : fusion RRF (k=60) entre BM25 et score sémantique NumPy. |
-| **Cache de Déduplication** | Cache SHA-256 demandé. | SHA256(text + model_version) implémenté (60-80% d'économie). | Cache validé. | SHA-256 recommandé. | **RENA** : Cache obligatoire basé sur `sha256(text + model_version)` pour éliminer les appels redondants. |
-| **Confidentialité & RGPD** | Vague. | Gate `confidential:true` + PII Scrubber regex + FTS5-only. | Gate validée. | Absent. | **RENA** : Gate de Confidentialité (frontmatter YAML) + PII Scrubber (regex) pour exclure les données sensibles du cloud. |
-| **Robustesse offline** | Rate limiting vague. | Batchs 96, retry exponentiel 3x, circuit breaker, queue SQLite. | Queue + FTS5-only en dégradé. | Absent. | **RENA + ChatGPT** : File d'attente SQLite `pending_embeddings`, circuit breaker réseau, recherche dégradée FTS5. |
-| **Structure Base de Données** | Dénormalisée (duplication de texte). | Normalisée (4 tables : docs, chunks, registry, pending). | Idem RENA. | Sur-ingéniée (6 tables, metadata, sync_queue). | **RENA** : 4 tables minimales normalisées sous SQLite WAL. |
-| **Gouvernance & SGC** | Mentionnée. | Intégration SGC + délégation `tesla-master-code`. | SGC, FORCE_TOOLING, double-copie MVP-GITHUB. | Benchmarks formels avant/après. | **Synthèse** : SGC 6 phases, benchmark Phase 0, double-copie MVP, validation LSP par `code-auditor`. |
+| **Infrared Vision** | Validated. | Validated and hardened. | Validated. | Validated (90-95%). | **Absolute consensus on Cloud-Local migration.** |
+| **llama.cpp Doctrine** | Temporary packaging. | Ephemeral, subprocess, trap EXIT, ban `llama-cpp-python`. | Same as RENA + `LLAMA_CPP_DOCTRINE.md` doc. | Packaging only, no inference daemon. | **RENA + Apodex**: Ephemeral subprocess CLI under `/tmp`, trap EXIT, dedicated doctrine doc. |
+| **Embedding model** | `text-embedding-004` (obsolete/maintenance). | `models/gemini-embedding-001` (768 dimension). | `models/gemini-embedding-001:768`. | Abstract / Modular (versionable). | **Gemini-embedding-001 (768d)** configured via `EmbeddingProvider` abstraction with possible fallback. |
+| **Format & Storage** | SQLite BLOB. | L2 Little-Endian normalized Float32 BLOB in SQLite WAL. | Normalized BLOB. | FLOAT32 BLOB or sqlite-vec. | **RENA**: L2 normalized Float32 BLOB stored in SQLite WAL (no JSON, avoids duplicates). |
+| **Search & Similarity** | Pure Python / Local NumPy. | FTS5 top 100 BM25 candidates + NumPy dot product (cosine). | FTS5 top 100 + NumPy. | sqlite-vec (C extension). | **Dual Speed**: Local NumPy by default (Low-Code), sqlite-vec as an option via abstraction. |
+| **Hybrid RRF k=60** | Kept as invariant. | Kept (FTS5 BM25 + NumPy Cosine). | Kept as invariant. | Kept. | **Invariant kept**: RRF fusion (k=60) between BM25 and NumPy semantic score. |
+| **Deduplication Cache** | SHA-256 cache requested. | SHA256(text + model_version) implemented (60-80% savings). | Cache validated. | SHA-256 recommended. | **RENA**: Mandatory cache based on `sha256(text + model_version)` to eliminate redundant calls. |
+| **Privacy & GDPR** | Vague. | `confidential:true` Gate + PII Scrubber regex + FTS5-only. | Gate validated. | Absent. | **RENA**: Privacy Gate (YAML frontmatter) + PII Scrubber (regex) to exclude sensitive data from the cloud. |
+| **Offline robustness** | Vague rate limiting. | Batches of 96, 3x exponential retry, circuit breaker, SQLite queue. | Queue + degraded FTS5-only. | Absent. | **RENA + ChatGPT**: SQLite `pending_embeddings` queue, network circuit breaker, degraded FTS5 search. |
+| **Database Structure** | Denormalized (text duplication). | Normalized (4 tables: docs, chunks, registry, pending). | Same as RENA. | Over-engineered (6 tables, metadata, sync_queue). | **RENA**: 4 minimal normalized tables under SQLite WAL. |
+| **Governance & QMS** | Mentioned. | QMS integration + `tesla-master-code` delegation. | QMS, FORCE_TOOLING, MVP-GITHUB dual-copy. | Formal benchmarks before/after. | **Synthesis**: 6-phase QMS, Phase 0 benchmark, MVP dual-copy, LSP validation by `code-auditor`. |
 
-### 2.2 Analyse Critique des Failles et Angles Morts
+### 2.2 Critical Analysis of Flaws and Blind Spots
 
-1. **Le Plan Initial de Tesla** :
-   - *Forces* : Énonce correctement l'orientation stratégique globale et préserve l'invariant RRF k=60.
-   - *Failles* : Présente un schéma relationnel dénormalisé où le texte brut est dupliqué entre les tables de chunks et le registre de vecteurs, gaspillant l'espace disque sur MIDGARD. Manque de rigueur sur la gestion du mode hors-ligne et l'organisation des tâches.
-2. **Le Plan de RENA** :
-   - *Forces* : C'est le plan le plus solide sur le plan de l'implémentation logicielle (batching, exponential backoff, circuit-breaker, structure SQL normalisée). La Gate de Confidentialité et le PII Scrubber en font le seul plan conforme aux exigences de sécurité du Vigilum Codex.
-   - *Failles* : Rejette catégoriquement l'extension `sqlite-vec` sans prévoir de structure d'extension (abstraction) pour le cas où le corpus dépasserait un seuil de volumétrie critique (ex. >100k fragments), forçant un scan linéaire NumPy.
-3. **Le Plan d'Apodex** :
-   - *Forces* : Excellente structuration documentaire et focalisation sur la gouvernance (SGC, validation LSP, double-commit sur MVP-GITHUB). Propose la création formelle de la doctrine `LLAMA_CPP_DOCTRINE.md`.
-   - *Failles* : Manque de profondeur technique propre ; il s'agit d'une reprise textuelle des choix de RENA sans valeur ajoutée algorithmique.
-4. **Le Plan de ChatGPT** :
-   - *Forces* : Apporte une excellente contribution architecturale en proposant l'interface `EmbeddingProvider` pour isoler SQLite de l'API de Google, ainsi qu'une séparation nette des pipelines d'indexation et de recherche pour simplifier les tests unitaires.
-   - *Failles* : Propose initialement l'extension binaire `sqlite-vec` qui nécessite une compilation C sur l'hôte, violant la doctrine de simplicité de MIDGARD. Présente également un schéma SQL sur-ingénié à 6 tables difficile à maintenir.
+1. **Tesla's Initial Plan**:
+   - *Strengths*: Correctly states the overall strategic direction and preserves the RRF k=60 invariant.
+   - *Flaws*: Presents a denormalized relational schema where raw text is duplicated between the chunk tables and the vector registry, wasting disk space on MIDGARD. Lacks rigor on offline mode management and task organization.
+2. **RENA's Plan**:
+   - *Strengths*: It is the most solid plan in terms of software implementation (batching, exponential backoff, circuit-breaker, normalized SQL structure). The Privacy Gate and the PII Scrubber make it the only plan compliant with the security requirements of the Vigilum Codex.
+   - *Flaws*: Categorically rejects the `sqlite-vec` extension without providing an extension structure (abstraction) in case the corpus exceeds a critical volume threshold (e.g., >100k chunks), forcing a linear NumPy scan.
+3. **Apodex's Plan**:
+   - *Strengths*: Excellent document structuring and focus on governance (QMS, LSP validation, dual-commit on MVP-GITHUB). Proposes the formal creation of the `LLAMA_CPP_DOCTRINE.md` doctrine.
+   - *Flaws*: Lacks proprietary technical depth; it is a textual repetition of RENA's choices with no algorithmic added value.
+4. **ChatGPT's Plan**:
+   - *Strengths*: Brings an excellent architectural contribution by proposing the `EmbeddingProvider` interface to isolate SQLite from Google's API, as well as a clean separation of the indexing and search pipelines to simplify unit testing.
+   - *Flaws*: Initially proposes the binary extension `sqlite-vec` which requires a C compilation on the host, violating MIDGARD's simplicity doctrine. Also presents an over-engineered 6-table SQL schema that is hard to maintain.
 
 ---
 
 ## 3. Comparative Reasoning & Hypotheses
 
-### 3.1 Arbitrage Technologique : sqlite-vec vs NumPy Local
-L'utilisation de `sqlite-vec` (proposée par ChatGPT) permet des requêtes de similarité HNSW en C en moins de 2 ms, mais impose une compilation C spécifique et le chargement d'un binaire partagé (`.so`) au sein de SQLite, ce qui fragilise la portabilité et contredit la doctrine Low-Code.
-À l'inverse, l'approche de RENA/Apodex réalise un pré-filtrage lexical via FTS5 pour remonter les 100 candidats les plus pertinents (BM25), puis effectue un calcul matriciel NumPy sur ces 100 vecteurs normalisés en moins de 0,3 ms. Le coût algorithmique O(N) sur toute la base est éliminé par la sélection lexicale préliminaire.
+### 3.1 Technological Arbitration: sqlite-vec vs Local NumPy
+The use of `sqlite-vec` (proposed by ChatGPT) allows HNSW similarity queries in C in less than 2 ms, but requires a specific C compilation and the loading of a shared binary (`.so`) within SQLite, which weakens portability and contradicts the Low-Code doctrine.
+Conversely, the RENA/Apodex approach performs lexical pre-filtering via FTS5 to surface the top 100 most relevant candidates (BM25), then performs a NumPy matrix calculation on these 100 normalized vectors in less than 0.3 ms. The O(N) algorithmic cost on the entire database is eliminated by the preliminary lexical selection.
 
-**Décision Validée (Double-Vitesse)** :
-- **V3.0 (Actuelle)** : Utilisation de **FTS5 + NumPy local** (Low-Code, 0 dépendance binaire, stable et rapide).
-- **V3.1 (Future/Optionnelle)** : Isolation du calcul vectoriel dans une classe `VectorSearchProvider`. Si le corpus dépasse 100k fragments et qu'une recherche purement vectorielle est requise, une implémentation `SqliteVecProvider` pourra être activée via la variable d'environnement `ENABLE_SQLITE_VEC=1` sans altérer l'indexeur sémantique.
+**Validated Decision (Dual-Speed)**:
+- **V3.0 (Current)**: Use of **FTS5 + Local NumPy** (Low-Code, 0 binary dependencies, stable and fast).
+- **V3.1 (Future/Optional)**: Isolation of the vector calculation in a `VectorSearchProvider` class. If the corpus exceeds 100k chunks and a purely vector search is required, a `SqliteVecProvider` implementation can be activated via the `ENABLE_SQLITE_VEC=1` environment variable without altering the semantic indexer.
 
-### 3.2 Modularité de l'EmbeddingProvider
-Pour éviter le verrouillage propriétaire (Vendor Lock-in) lié à l'API Gemini, le code d'appel réseau doit être encapsulé derrière une interface abstraite `EmbeddingProvider` :
-- `GeminiEmbeddingProvider` (Actif par défaut, utilise le SDK officiel `google-genai`).
-- `MockEmbeddingProvider` (Utilisé pour les tests unitaires et le mode offline).
-- `VoyageEmbeddingProvider` (Extension future possible).
+### 3.2 Modularity of the EmbeddingProvider
+To avoid Vendor Lock-in linked to the Gemini API, the network call code must be encapsulated behind an abstract `EmbeddingProvider` interface:
+- `GeminiEmbeddingProvider` (Active by default, uses the official `google-genai` SDK).
+- `MockEmbeddingProvider` (Used for unit testing and offline mode).
+- `VoyageEmbeddingProvider` (Possible future extension).
 
 ---
 
-## 4. Contradictions & System Limits (AMDEC Shield)
+## 4. Contradictions & System Limits (FMEA Shield)
 
-| Défaillance Potentielle | Gravité (G) | Probabilité (P) | Détection (D) | RPN | Actions de Prévention & Mitigations |
+| Potential Failure | Severity (S) | Probability (P) | Detection (D) | RPN | Prevention Actions & Mitigations |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **API Gemini Indisponible / Hors-ligne** | 4 | 3 | 1 | **12** | Stockage dans `pending_embeddings`. Bascule automatique en mode dégradé (FTS5 BM25 local uniquement). Reprise automatique via script cron/just. |
-| **Dépassement de Quota API (Rate Limits)** | 3 | 3 | 2 | **18** | Traitement des requêtes d'indexation par batchs de 96, exponential backoff (retry exponentiel 3x) et circuit-breaker. |
-| **Fuite de Clés API / Identifiants / PII** | 5 | 2 | 2 | **20** | PII Scrubber obligatoire analysant le texte par regex avant envoi. Exclusion des fiches marquées `confidential: true` de tout traitement Cloud. |
-| **Incompatibilité de Dimension (Drift)** | 4 | 2 | 1 | **8** | Métadonnées stockées dans `vector_registry` (`model_version` et `dim`). Validation automatique de la dimension avant insertion. |
-| **Consommation excessive RAM NumPy** | 2 | 2 | 2 | **8** | Limitation stricte du calcul cosinus au top 100 des candidats issus du pré-filtre FTS5 (limitation de la charge matricielle). |
+| **Gemini API Unavailable / Offline** | 4 | 3 | 1 | **12** | Storage in `pending_embeddings`. Automatic failover to degraded mode (local FTS5 BM25 only). Automatic recovery via cron/just script. |
+| **API Quota Exceeded (Rate Limits)** | 3 | 3 | 2 | **18** | Processing indexing requests in batches of 96, exponential backoff (3x retries), and circuit-breaker. |
+| **API Keys / Credentials / PII Leak** | 5 | 2 | 2 | **20** | Mandatory PII Scrubber analyzing text by regex before sending. Exclusion of files marked `confidential: true` from any Cloud processing. |
+| **Dimension Incompatibility (Drift)** | 4 | 2 | 1 | **8** | Metadata stored in `vector_registry` (`model_version` and `dim`). Automatic dimension validation prior to insertion. |
+| **Excessive NumPy RAM consumption** | 2 | 2 | 2 | **8** | Strict limitation of the cosine calculation to the top 100 candidates from the FTS5 pre-filter (limits matrix load). |
 
 ---
 
 ## 5. Architectural Recommendations & Detailed Action Plan
 
-### 5.1 Schéma SQLite Final Unifié (SQLite WAL)
+### 5.1 Final Unified SQLite Schema (SQLite WAL)
 
-Le schéma relationnel ci-dessous (normalisé, 4 tables) est configuré en mode WAL pour garantir des écritures concurrentes sécurisées et des transactions atomiques.
+The relational schema below (normalized, 4 tables) is configured in WAL mode to guarantee secure concurrent writes and atomic transactions.
 
 ```sql
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
 
--- Table des documents importés
+-- Imported documents table
 CREATE TABLE IF NOT EXISTS documents (
     id INTEGER PRIMARY KEY,
     path TEXT UNIQUE NOT NULL,
     mtime REAL NOT NULL,
     hash_doc TEXT NOT NULL,
-    confidential INTEGER DEFAULT 0 -- 1 = Données sensibles isolées localement
+    confidential INTEGER DEFAULT 0 -- 1 = Sensitive data isolated locally
 );
 
--- Table des fragments de texte (Chunks)
+-- Text fragments table (Chunks)
 CREATE TABLE IF NOT EXISTS chunks (
     id INTEGER PRIMARY KEY,
     doc_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
@@ -113,19 +115,26 @@ CREATE TABLE IF NOT EXISTS chunks (
     hash_chunk TEXT UNIQUE NOT NULL, -- SHA-256 du texte du fragment
     token_count INTEGER,
     created_at REAL NOT NULL
+    id INTEGER PRIMARY KEY,
+    doc_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
+    chunk_index INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    hash_chunk TEXT UNIQUE NOT NULL, -- SHA-256 of the fragment's text
+    token_count INTEGER,
+    created_at REAL NOT NULL
 );
 
--- Registre des vecteurs sémantiques normalisés
+-- Normalized semantic vectors registry
 CREATE TABLE IF NOT EXISTS vector_registry (
     chunk_id INTEGER PRIMARY KEY REFERENCES chunks(id) ON DELETE CASCADE,
-    embedding BLOB NOT NULL, -- FLOAT32 BLOB normalisé L2 (Little-Endian, dimension 768)
+    embedding BLOB NOT NULL, -- L2 normalized FLOAT32 BLOB (Little-Endian, dimension 768)
     dim INTEGER NOT NULL DEFAULT 768,
     model_version TEXT NOT NULL DEFAULT 'gemini-embedding-001:768',
     hash_chunk TEXT NOT NULL,
     created_at REAL NOT NULL
 );
 
--- File d'attente pour la gestion asynchrone des échecs d'appels API
+-- Queue for asynchronous API call failures management
 CREATE TABLE IF NOT EXISTS pending_embeddings (
     chunk_id INTEGER PRIMARY KEY REFERENCES chunks(id) ON DELETE CASCADE,
     attempts INTEGER DEFAULT 0,
@@ -133,7 +142,7 @@ CREATE TABLE IF NOT EXISTS pending_embeddings (
     next_retry_at REAL NOT NULL
 );
 
--- Index pour accélérer la recherche et le nettoyage
+-- Indexes to accelerate search and cleanup
 CREATE INDEX IF NOT EXISTS idx_chunks_hash ON chunks(hash_chunk);
 CREATE INDEX IF NOT EXISTS idx_vector_model ON vector_registry(model_version);
 CREATE INDEX IF NOT EXISTS idx_docs_conf ON documents(confidential);
@@ -141,10 +150,10 @@ CREATE INDEX IF NOT EXISTS idx_docs_conf ON documents(confidential);
 
 ---
 
-### 5.2 Spécification des Composants Logiciels
+### 5.2 Software Components Specification
 
-#### A. Le PII Scrubber (Gatekeeper)
-Avant chaque envoi d'un fragment de texte à l'API Gemini, le module `PIIScrubber` doit exécuter un filtrage à base d'expressions régulières (regex) pour occulter les informations sensibles :
+#### A. The PII Scrubber (Gatekeeper)
+Before each transmission of a text fragment to the Gemini API, the `PIIScrubber` module must run a regex-based filter to obscure sensitive information:
 ```python
 import re
 
@@ -166,21 +175,21 @@ class PIIScrubber:
         return scrubbed
 ```
 
-#### B. La Gate de Confidentialité
-Lors du parcours d'un fichier Markdown :
-1. Analyser le frontmatter YAML du document.
-2. Si le document contient le tag `confidential: true` ou `private: true`, ou si son chemin de fichier appartient au dossier protégé `/02-Areas/Confidentiel/` :
-   - Assigner la valeur `1` à la colonne `confidential` de la table `documents`.
-   - Indexer le texte du fragment uniquement dans l'index FTS5 local.
-   - **Interdire strictement** tout appel à l'API Gemini pour ce fichier (pas d'insertion dans `vector_registry` ni dans `pending_embeddings`).
+#### B. The Privacy Gate
+When parsing a Markdown file:
+1. Analyze the document's YAML frontmatter.
+2. If the document contains the `confidential: true` or `private: true` tag, or if its file path belongs to the protected `/02-Areas/Confidentiel/` folder:
+   - Assign the value `1` to the `confidential` column of the `documents` table.
+   - Index the fragment's text solely in the local FTS5 index.
+   - **Strictly prohibit** any call to the Gemini API for this file (no insertion into `vector_registry` or `pending_embeddings`).
 
-#### C. Cache de Déduplication Local
-Pour optimiser les performances et la "Token Economy" :
-1. Calculer `hash_chunk = sha256(text + model_version)`.
-2. Interroger la base locale : `SELECT embedding FROM vector_registry WHERE hash_chunk = ? AND model_version = ?`.
-3. Si le vecteur existe, l'insérer directement dans la table de destination liée au nouveau document, sans appeler le service Cloud.
+#### C. Local Deduplication Cache
+To optimize performance and the "Token Economy":
+1. Calculate `hash_chunk = sha256(text + model_version)`.
+2. Query the local database: `SELECT embedding FROM vector_registry WHERE hash_chunk = ? AND model_version = ?`.
+3. If the vector exists, insert it directly into the destination table linked to the new document, without calling the Cloud service.
 
-#### D. Abstraction de l'EmbeddingProvider
+#### D. EmbeddingProvider Abstraction
 ```python
 from abc import ABC, abstractmethod
 import numpy as np
@@ -188,134 +197,134 @@ import numpy as np
 class EmbeddingProvider(ABC):
     @abstractmethod
     def generate_embeddings(self, texts: list[str]) -> list[np.ndarray]:
-        """Génère une liste de vecteurs d'embeddings normalisés L2 pour une liste de textes."""
+        """Generates a list of L2-normalized embeddings vectors for a list of texts."""
         pass
 ```
 
 ---
 
-### 5.3 Pipelines d'Exécution
+### 5.3 Execution Pipelines
 
 ```
 ========================================================================================
-                                PIPELINE D'INDEXATION
+                                INDEXATION PIPELINE
 ========================================================================================
- Fiche Markdown (*.md)
+ Markdown File (*.md)
         │
         ▼
-   Chunker Léger ──► [Si frontmatter confidential: true] ──► Indexation FTS5 Uniquement
-        │ (1000 caract. / 200 overlap)                            (Marqué confidential=1)
+ Light Chunker   ──► [If frontmatter confidential: true] ──► FTS5 Indexation Only
+        │ (1000 chars / 200 overlap)                              (Marked confidential=1)
         ▼
-   SHA256 Chunk + Version Modèle
+  SHA256 Chunk + Model Version
         │
-        ├──► [HIT] Cache Local SQLite ──► Récupération vecteur en base (Zéro Appel API)
+        ├──► [HIT] Local SQLite Cache ──► Retrieve vector from DB (Zero API Calls)
         │
         └──► [MISS] PII Scrubber ──► Gemini API (models/gemini-embedding-001, dim 768)
                                         │
                                         ▼
-                                 Stockage SQLite
-                          (Table vector_registry : BLOB)
+                                 SQLite Storage
+                          (vector_registry table: BLOB)
                                         │
                                         ▼
-                                 Indexation FTS5
-                          (Table fts_vault_index)
+                                 FTS5 Indexation
+                          (fts_vault_index table)
 
 ========================================================================================
-                                PIPELINE DE RECHERCHE
+                                SEARCH PIPELINE
 ========================================================================================
-  Requête Utilisateur
+  User Query
         │
-        ├──► API Gemini (Génération de l'embedding de requête en cache temporaire)
+        ├──► Gemini API (Query embedding generation into temporary cache)
         │
-        ├──► Étape 1 : Pré-filtre SQLite FTS5 (BM25) ──► Top 100 Candidats Lexicaux
+        ├──► Step 1: SQLite FTS5 Pre-filter (BM25) ──► Top 100 Lexical Candidates
         │                                                     │
         ▼                                                     ▼
-  Étape 2 : Calcul Dot Product NumPy (cosinus local) sur les 100 Candidats en BLOB
+  Step 2: Local NumPy Dot Product Calculation (cosine) on the 100 BLOB Candidates
         │
         ▼
-  Étape 3 : Fusion RRF (Reciprocal Rank Fusion, k=60)
+  Step 3: RRF Fusion (Reciprocal Rank Fusion, k=60)
         │
         ▼
-   Résultats Hybrides (Lexical + Sémantique)
+   Hybrid Results (Lexical + Semantic)
 ========================================================================================
 ```
 
 ---
 
-### 5.4 La Doctrine llama.cpp (Usage Éphémère)
+### 5.4 The llama.cpp Doctrine (Ephemeral Usage)
 
-Pour prémunir MIDGARD de toute surcharge mémoire liée à l'exécution de démons résidentiels d'inférence, la toolchain `llama.cpp` doit obéir à la doctrine matérielle stricte formalisée dans le fichier [LLAMA_CPP_DOCTRINE.md](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md) :
+To protect MIDGARD from any memory overload linked to the execution of resident inference daemons, the `llama.cpp` toolchain must obey the strict hardware doctrine formalized in the [LLAMA_CPP_DOCTRINE.md](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md) file:
 
-1. **Interdiction d'Inférence Résidente** : Interdiction absolue de lancer `llama-server`, `llama-cli` en mode interactif, ou d'importer `llama-cpp-python` dans les scripts de production.
-2. **Usage Unique / Outillage** : llama.cpp n'est autorisé que pour la conversion (HF en GGUF) et la quantification (Q4_K_M, Q8_0) de modèles.
-3. **Workspace Éphémère Isolé** :
-   - Chaque opération de quantification doit créer un dossier temporaire unique sous `/tmp/llama-pack-XXXX`.
-   - Utilisation systématique de la commande `subprocess.run` pour appeler le binaire natif compilé localement `llama-quantize`.
-   - Mise en œuvre d'un gestionnaire d'exception ou d'un `trap EXIT` en bash pour purger intégralement le dossier temporaire `/tmp/llama-pack-*` après exécution, même en cas d'erreur ou d'interruption.
-   - Validation de l'intégrité de l'artefact quantifié en vérifiant la présence du header magique GGUF (`0x46554747` ou `GGUF` en ASCII).
+1. **Prohibition of Resident Inference**: Absolute prohibition to run `llama-server`, `llama-cli` in interactive mode, or to import `llama-cpp-python` in production scripts.
+2. **Single Use / Tooling**: llama.cpp is only allowed for model conversion (HF to GGUF) and quantization (Q4_K_M, Q8_0).
+3. **Isolated Ephemeral Workspace**:
+   - Each quantization operation must create a unique temporary folder under `/tmp/llama-pack-XXXX`.
+   - Systematic use of the `subprocess.run` command to call the locally compiled native binary `llama-quantize`.
+   - Implementation of an exception handler or a `trap EXIT` in bash to fully purge the `/tmp/llama-pack-*` temporary folder after execution, even in case of error or interruption.
+   - Validation of the quantized artifact's integrity by checking for the GGUF magic header (`0x46554747` or `GGUF` in ASCII).
 
 ---
 
-### 5.5 Feuille de Route Opérationnelle (6 Phases - 7 jours)
+### 5.5 Operational Roadmap (6 Phases - 7 Days)
 
-#### Phase 0 : Benchmark & Diagnostic de Référence (Jour 1)
-*   **Objectifs** : Capturer les performances physiques et la mémoire de l'ancien indexeur hybride (ChromaDB/Torch/sentence-transformers) pour documenter le gain de la migration.
-*   **Actions** :
-    1. Mesurer la RAM résidente de l'indexeur en état de veille (idle) et pendant l'indexation d'un lot témoin de 100 documents.
-    2. Enregistrer la latence moyenne de recherche sémantique.
-    3. Documenter ces métriques dans `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/benchmark_midgard_before.md`.
-*   **Recette de Validation (Phase 0)** : 
-    - Le fichier de benchmark est créé et contient des données matérielles chiffrées réelles (RAM, CPU, temps).
+#### Phase 0: Reference Benchmark & Diagnostics (Day 1)
+*   **Objectives**: Capture the physical performance and memory of the old hybrid indexer (ChromaDB/Torch/sentence-transformers) to document the migration's gains.
+*   **Actions**:
+    1. Measure the indexer's resident RAM in idle state and during the indexation of a control batch of 100 documents.
+    2. Record the average semantic search latency.
+    3. Document these metrics in `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/benchmark_midgard_before.md`.
+*   **Validation Recipe (Phase 0)**: 
+    - The benchmark file is created and contains real encrypted hardware data (RAM, CPU, time).
 
-#### Phase I : Refactorisation de l'Indexeur (Jours 2 - 3)
-*   **Objectifs** : Éliminer les dépendances lourdes et développer la logique d'appel de l'indexeur cloud.
-*   **Actions** :
-    1. Supprimer `torch`, `sentence-transformers`, `chromadb` et `onnxruntime` du fichier `requirements.txt` et désinstaller les dépendances du `.venv`.
-    2. Implémenter l'interface `EmbeddingProvider` et son implémentation `GeminiEmbeddingProvider` via le SDK `google-genai`.
-    3. Intégrer le `PIIScrubber` et le cache de déduplication cryptographique (SHA-256).
-*   **Recette de Validation (Phase I)** :
-    - Exécution réussie de `pyright` via `karellen-lsp-mcp` démontrant 0 erreur d'importation.
-    - Test unitaire validant le hachage SHA-256 et le masquage correct des secrets par le `PIIScrubber`.
+#### Phase I: Indexer Refactoring (Days 2 - 3)
+*   **Objectives**: Eliminate heavy dependencies and develop the cloud indexer call logic.
+*   **Actions**:
+    1. Remove `torch`, `sentence-transformers`, `chromadb`, and `onnxruntime` from the `requirements.txt` file and uninstall the dependencies from the `.venv`.
+    2. Implement the `EmbeddingProvider` interface and its `GeminiEmbeddingProvider` implementation via the `google-genai` SDK.
+    3. Integrate the `PIIScrubber` and the cryptographic deduplication cache (SHA-256).
+*   **Validation Recipe (Phase I)**:
+    - Successful execution of `pyright` via `karellen-lsp-mcp` demonstrating 0 import errors.
+    - Unit test validating the SHA-256 hashing and proper secret masking by the `PIIScrubber`.
 
-#### Phase II : Migration SQLite & Recherche Hybride RRF (Jours 4 - 5)
-*   **Objectifs** : Configurer la base de données relationnelle et mettre en place la fusion RRF.
-*   **Actions** :
-    1. Écrire et exécuter le script de migration `migrate_to_v2.py` pour créer les tables normalisées (`documents`, `chunks`, `vector_registry`, `pending_embeddings`).
-    2. Mettre à jour `search_router.py` pour pré-filtrer via FTS5 (top 100), charger les BLOB de vecteurs correspondants, calculer la similarité cosinus avec NumPy et fusionner avec RRF (k=60).
-*   **Recette de Validation (Phase II)** :
-    - Exécution d'une recherche hybride test en moins de 50 ms pour un corpus d'au moins 1 000 fiches de test.
-    - Vérification de la cohérence des dimensions (768) insérées dans SQLite.
+#### Phase II: SQLite Migration & Hybrid RRF Search (Days 4 - 5)
+*   **Objectives**: Configure the relational database and set up the RRF fusion.
+*   **Actions**:
+    1. Write and execute the `migrate_to_v2.py` migration script to create the normalized tables (`documents`, `chunks`, `vector_registry`, `pending_embeddings`).
+    2. Update `search_router.py` to pre-filter via FTS5 (top 100), load the corresponding vector BLOBs, calculate cosine similarity with NumPy, and merge with RRF (k=60).
+*   **Validation Recipe (Phase II)**:
+    - Execution of a test hybrid search in less than 50 ms for a corpus of at least 1,000 test files.
+    - Verification of the consistency of the dimensions (768) inserted into SQLite.
 
-#### Phase III : Formalisation llama.cpp & Outillage Éphémère (Jour 6 Matin)
-*   **Objectifs** : Déployer le wrapper de quantification sécurisé et acter la doctrine.
-*   **Actions** :
-    1. Écrire le script `tools/quantize_model.py` utilisant `subprocess` sur le binaire `llama-quantize` local.
-    2. Implémenter la création du dossier temporaire sous `/tmp/` et le nettoyage automatique via `trap EXIT` ou bloc Python `try...finally`.
-    3. Rédiger le fichier de doctrine `/home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md`.
-*   **Recette de Validation (Phase III)** :
-    - Test de quantification d'un modèle minimal (ex: TinyLLaMA 110M) avec succès.
-    - Vérification après exécution que le dossier temporaire `/tmp/llama-pack-*` a été entièrement détruit.
+#### Phase III: llama.cpp Formalization & Ephemeral Tooling (Day 6 Morning)
+*   **Objectives**: Deploy the secure quantization wrapper and enact the doctrine.
+*   **Actions**:
+    1. Write the `tools/quantize_model.py` script using `subprocess` on the local `llama-quantize` binary.
+    2. Implement the temporary folder creation under `/tmp/` and the automatic cleanup via `trap EXIT` or Python `try...finally` block.
+    3. Write the doctrine file `/home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md`.
+*   **Validation Recipe (Phase III)**:
+    - Successful quantization test of a minimal model (e.g., TinyLLaMA 110M).
+    - Verification after execution that the `/tmp/llama-pack-*` temporary folder was fully destroyed.
 
-#### Phase IV : Tests de Résilience, Sécurité & Mode Dégradé (Jour 6 Après-midi)
-*   **Objectifs** : Valider les verrous de sécurité et le fonctionnement en mode dégradé hors-ligne.
-*   **Actions** :
-    1. Injecter un document test contenant le tag `confidential: true` et vérifier qu'aucun appel réseau n'est émis.
-    2. Simuler une coupure réseau (ou désactivation de la clé API) et vérifier la redirection des chunks vers `pending_embeddings` avec bascule immédiate en recherche FTS5 pure (mode dégradé sans crash).
-    3. Exécuter un audit de code complet avec `tesla-code-auditor` (Semgrep et diagnostics LSP).
-*   **Recette de Validation (Phase IV)** :
-    - Validation par le Curator des traces d'audit montrant que 0 paquet IP n'a fuité pour les documents confidentiels.
-    - Exécution sans erreur du moteur de recherche en mode dégradé (sans connexion internet).
+#### Phase IV: Resilience, Security & Degraded Mode Tests (Day 6 Afternoon)
+*   **Objectives**: Validate the security locks and operation in offline degraded mode.
+*   **Actions**:
+    1. Inject a test document containing the `confidential: true` tag and verify that no network call is issued.
+    2. Simulate a network outage (or API key deactivation) and verify the redirection of chunks to `pending_embeddings` with an immediate switch to pure FTS5 search (degraded mode without crashing).
+    3. Execute a full code audit with `tesla-code-auditor` (Semgrep and LSP diagnostics).
+*   **Validation Recipe (Phase IV)**:
+    - Validation by the Curator of the audit logs showing that 0 IP packets leaked for confidential documents.
+    - Error-free execution of the search engine in degraded mode (without internet connection).
 
-#### Phase V : Certification, Alignement de la Mémoire & Clôture (Jour 7)
-*   **Objectifs** : Finaliser le chantier, documenter l'architecture et synchroniser les dépôts.
-*   **Actions** :
-    1. Rédiger la documentation technique finale `ALEXANDRIA_V2_ARCHITECTURE.md` dans `Avalon/03-Resources/`.
-    2. Mettre à jour les fichiers de la Mémoire Universelle : `memory/PROJECT_STATE.md`, `memory/SESSION_LOG.md` et `memory/liste_projets_antigravity_BASE.md`.
-    3. Copier les nouveaux fichiers de code et de documentation vers le dépôt Git public `MVP-GITHUB/32-ALEXANDRIA-CLOUD-EMBEDDINGS/`.
-    4. Exécuter le double commit et double push (avec autorisation expresse de Lord Mahonheim).
-*   **Recette de Validation (Phase V)** :
-    - Harmonisation complète du dossier `/memory/` vérifiée.
-    - Commits Git locaux propres et statut Git `clean` sur le dépôt principal et MVP-GITHUB.
+#### Phase V: Certification, Memory Alignment & Closure (Day 7)
+*   **Objectives**: Finalize the overhaul, document the architecture, and sync repositories.
+*   **Actions**:
+    1. Write the final technical documentation `ALEXANDRIA_V2_ARCHITECTURE.md` in `Avalon/03-Resources/`.
+    2. Update Universal Memory files: `memory/PROJECT_STATE.md`, `memory/SESSION_LOG.md`, and `memory/liste_projets_antigravity_BASE.md`.
+    3. Copy the new code and documentation files to the public Git repository `MVP-GITHUB/32-ALEXANDRIA-CLOUD-EMBEDDINGS/`.
+    4. Execute the dual commit and dual push (with Lord Mahonheim's express authorization).
+*   **Validation Recipe (Phase V)**:
+    - Full harmonization of the `/memory/` folder verified.
+    - Clean local Git commits and `clean` Git status on the main repository and MVP-GITHUB.
 
 ---
 *Certified and signed on MIDGARD by Tesla Curator Prime.*

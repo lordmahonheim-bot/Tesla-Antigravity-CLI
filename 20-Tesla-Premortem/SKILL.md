@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 name: premortem
 description: >
@@ -204,6 +206,6 @@ decision: RECOMMENDED | WARNING_ISSUED | REJECTED
 *"The best architectures are not those that never encounter errors, but those whose failure paths were modeled, understood, and mitigated before the first line of code was written."*
 
 
-## Règle Absolue de Livraison (SGC)
+## Absolute Delivery Rule (QMS)
 > [!IMPORTANT]
-> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
+> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.
