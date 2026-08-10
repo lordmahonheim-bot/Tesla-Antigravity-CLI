@@ -1,43 +1,41 @@
-![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+# PLAN D'INTERVENTION COMPLET — Finalisation MVP 28 (Loop Engineering × Tesla-Code-Auditor)
 
-# COMPREHENSIVE INTERVENTION PLAN — MVP 28 Finalization (Loop Engineering × Tesla-Code-Auditor)
+**Orchestrateur** : `tesla-team-synergy`
+**Doctrine** : Vigilum Codex (Act-Verify-Learn-Repeat)
+**Statut** : 🔴 À EXÉCUTER (Linéaire, Chronologique)
 
-**Orchestrator**: `tesla-team-synergy`
-**Doctrine**: Vigilum Codex (Act-Verify-Learn-Repeat)
-**Status**: 🔴 TO BE EXECUTED (Linear, Chronological)
+## Architecture Cible (Rappel)
+Le principe fondamental est la séparation physique des responsabilités. `tesla-master-code` ne peut pas s'auto-certifier.
+Master-Code produit → Loop orchestre → Code-Auditor juge → TGG gouverne → Alexandria mémorise → Mahonheim conserve l'autorité.
 
-## Target Architecture (Reminder)
-The fundamental principle is the physical separation of responsibilities. `tesla-master-code` cannot self-certify.
-Master-Code produces → Loop orchestrates → Code-Auditor judges → TGG governs → Alexandria memorizes → Mahonheim retains authority.
+## Phase A — Préparation et Alignement Canonique (tesla-curator-prime & tesla-arcanis-360)
+1. **Vérification de l'existant physique** : Confirmer la présence de `SKILL.md` (loop-orchestrator, code-auditor), `tesla_loop_orchestrator.py`, les contrats YAML, et le schéma SQLite v2.0.
+2. **Alignement des fichiers canoniques de gouvernance** : Mettre à jour `AGENTS.md`, `FORCE_TOOLING.md`, `GEMINI.md`, `ENGINE.md` pour inclure Loop/Code-Auditor.
+3. **Validation du contrat de boucle YAML** : Valider le template contenant les 4 validateurs et les critères de transition.
 
-## Phase A — Preparation and Canonical Alignment (tesla-curator-prime & tesla-arcanis-360)
-1. **Verification of the physical environment**: Confirm the presence of `SKILL.md` (loop-orchestrator, code-auditor), `tesla_loop_orchestrator.py`, YAML contracts, and the v2.0 SQLite schema.
-2. **Alignment of canonical governance files**: Update `AGENTS.md`, `FORCE_TOOLING.md`, `GEMINI.md`, `ENGINE.md` to include Loop/Code-Auditor.
-3. **Validation of the YAML loop contract**: Validate the template containing the 4 validators and transition criteria.
-
-## Phase B — Technical Integration (tesla-master-code)
-4. **Wiring Loop Orchestrator → Master-Code**: `invoke_subagent` to master-code, generating `output_manifest.json`.
-5. **Wiring Loop Orchestrator → Code Auditor**: Executing the 4-tier chain (SemGrep, Pyright, Smoke Tests, Policy Engine) to produce an `audit_verdict.json`.
-6. **Wiring transitions (PASS/DELAY/BLOCK)**: Strict decision logic, including rollback via Git or shutil.
-7. **SQLite Persistence**: Verification of the `loop_executions` and `loop_iterations` schema in `alexandria_brain.db`.
-8. **Tesla Governance Gateway (TGG) Integration**: Anti-duplicate check, quotas, and actor registration prior to starting the loop.
+## Phase B — Intégration Technique (tesla-master-code)
+4. **Câblage Loop Orchestrator → Master-Code** : `invoke_subagent` vers master-code, production de `output_manifest.json`.
+5. **Câblage Loop Orchestrator → Code Auditor** : Exécution de la chaîne à 4 niveaux (SemGrep, Pyright, Smoke Tests, Policy Engine) pour produire un `audit_verdict.json`.
+6. **Câblage des transitions (PASS/DELAY/BLOCK)** : Logique de décision stricte, y compris rollback via Git ou shutil.
+7. **Persistance SQLite** : Vérification du schéma `loop_executions` et `loop_iterations` dans `alexandria_brain.db`.
+8. **Intégration du Tesla Governance Gateway (TGG)** : Vérification anti-doublon, quotas et enregistrement de l'acteur avant démarrage de boucle.
 
 ## Phase C — Documentation (tesla-writing-skills & tesla-curator-prime)
-9. **Drafting the authoritative README.md**: In `MVP-GITHUB/28-Loop-Engineering/` with 4 mandatory badges and architecture.
-10. **Updating the taxonomic inventory**: Status **[FINAL INTEGRATION — MVP 28]** in `liste_projets_antigravity_BASE.md`.
-11. **Synchronization of the `/memory/` directory**: Update `PROJECT_STATE.md`, `SESSION_LOG.md`, etc.
+9. **Rédaction du README.md d'autorité** : Dans `MVP-GITHUB/28-Loop-Engineering/` avec 4 badges obligatoires et architecture.
+10. **Mise à jour de l'inventaire taxonomique** : Statut **[INTÉGRATION FINALE — MVP 28]** dans `liste_projets_antigravity_BASE.md`.
+11. **Synchronisation du répertoire `/memory/`** : Mettre à jour `PROJECT_STATE.md`, `SESSION_LOG.md`, etc.
 
-## Phase D — Physical Validation (tesla-master-code & tesla-premortem)
-12. **Scenario 1 (PASS)**: Trivial task (flawless code), PASS verdict, commit.
-13. **Scenario 2 (DELAY then PASS)**: Code with a Pyright warning -> targeted fix -> PASS in iteration 2.
-14. **Scenario 3 (BLOCK and Rollback)**: Task with a SemGrep vulnerability (`eval`) -> immediate BLOCK verdict -> Rollback.
-15. **Final Premortem Audit**: Potential failure report across 3 profiles.
+## Phase D — Validation Physique (tesla-master-code & tesla-premortem)
+12. **Scénario 1 (PASS)** : Tâche triviale (code sans faute), verdict PASS, commit.
+13. **Scénario 2 (DELAY puis PASS)** : Code avec avertissement Pyright -> correction ciblée -> PASS en itération 2.
+14. **Scénario 3 (BLOCK et Rollback)** : Tâche avec faille SemGrep (`eval`) -> verdict BLOCK immédiat -> Rollback.
+15. **Audit Premortem final** : Rapport d'échec potentiel via 3 profils.
 
-## Phase E — Publication and Closure (tesla-web-raider & tesla-curator-prime)
-16. **Publication**: Dual synchronization to `MVP-GITHUB/28-Loop-Engineering/` (remote push with authorization).
-17. **Canonical Assimilation**: Verification that the Tesla DNA is fully synchronized.
-18. **Closure**: Update `Gestion-de-Chantiers/INDEX.md`, archive the roadmap, and hand control back to Lord Mahonheim.
+## Phase E — Publication et Clôture (tesla-web-raider & tesla-curator-prime)
+16. **Publication** : Double synchronisation vers `MVP-GITHUB/28-Loop-Engineering/` (push distant avec autorisation).
+17. **Assimilation Canonique** : Vérification que l'ADN Tesla est complètement synchronisé.
+18. **Clôture** : Mettre à jour `Gestion-de-Chantiers/INDEX.md`, archiver la roadmap, et rendre la main à Lord Mahonheim.
 
 ---
-**Absolute Exit Criterion**:
-The 8 defined conditions (pilot orchestrator, writer/auditor separation, 4 active validators, deterministic transitions, functional rollback, up-to-date SQLite, non-regression driver, active TGG) must be formally demonstrated.
+**Critère de sortie absolu** :
+Les 8 conditions définies (orchestrateur pilote, séparation écrivain/auditeur, 4 validateurs actifs, transitions déterministes, rollback fonctionnel, SQLite à jour, pilote de non-régression, TGG actif) doivent être formellement démontrées.

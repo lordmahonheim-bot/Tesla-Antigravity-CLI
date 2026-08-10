@@ -1,5 +1,3 @@
-![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
-
 ---
 type: reference
 tags: [curation/certified, curator/prime, status/valid]
@@ -10,21 +8,21 @@ confidence_score: 96%
 sources: ["[[etude_faisabilite_integration_loop_library_v1.0.md]]", "[[rapport_audit_loop_library_v1.0.md]]", "[[db_init.py]]", "[[log_subagent_parser.py]]"]
 ---
 </TESLA CURATOR PRIME [v4.0]>
-<CERTIFIED REPORT: MANUAL PORT OF LOOP ENGINEERING IN THE TESLA ECOSYSTEM (MIDGARD)>
+<CERTIFIED REPORT: PORTAGE MANUEL DU LOOP ENGINEERING DANS L'ÉCOSYSTÈME TESLA (MIDGARD)>
 
 ## 1. Diagnostic Summary
 
-### 1.1 Context and Decision History
-The evaluation of the **Loop Library** and its companion CLI **Loopy** (Forward Future, arXiv:2607.00038) led to a critical **NO-GO** decision regarding the installation and execution of the global third-party CLI via `npx skills add` on the secure MIDGARD machine. This decision stems from the inherent risks of the Node.js infrastructure, unstable network dependencies incompatible with an air-gapped sandbox, and vulnerabilities to indirect prompt injections (IPI) as well as runaway API costs due to *doom loops*.
+### 1.1 Contexte et Historique Décisionnel
+L'évaluation de la **Loop Library** et de son compagnon CLI **Loopy** (Forward Future, arXiv:2607.00038) a conduit à une décision critique de **NO-GO** concernant l'installation et l'exécution de la CLI tierce globale via `npx skills add` sur la machine sécurisée MIDGARD. Cette décision découle des risques inhérents à l'infrastructure Node.js, aux dépendances réseau instables incompatibles avec une sandbox étanche (air-gapped), et aux vulnérabilités d'injections de prompts indirectes (IPI) ainsi que de *doom loops* à coût d'API incontrôlé.
 
-Nevertheless, clinical analysis demonstrates the high methodological value of the **Loop Engineering** concept to neutralize goal drift and optimize the autonomous corrective abilities of agents. Therefore, the alternative decision for a **PARTIAL GO (Manual Port)** was validated. The objective is to extract the core conceptual essence of this paradigm and implement it natively, sovereignly, and deterministically within the Tesla ecosystem (via the Antigravity Python SDK and Alexandria storage).
+Néanmoins, l'analyse clinique démontre la haute valeur méthodologique du concept de **Loop Engineering** pour neutraliser les déviances d'objectifs (*goal drift*) et optimiser l'autonomie corrective des agents. C'est pourquoi la décision alternative de **GO PARTIEL (Portage Manuel)** a été validée. L'objectif est d'extraire la substantifique moelle conceptuelle de ce paradigme pour l'implémenter de manière native, souveraine et déterministe au sein de l'écosystème Tesla (via le SDK Python d'Antigravity et le stockage Alexandria).
 
-### 1.2 Objective of this Curation Report
-This document formalizes the functional architecture specifications necessary to complete this manual port. It defines:
-- The conceptual structure of closed learning cycles and logical transitions (`PASS`, `DELAY`, `BLOCK`).
-- The local data model for persistent tracking in the Alexandria database.
-- The architecture of the sovereign Python orchestrator (`TeslaLoopOrchestrator`) relying on the native Antigravity SDK.
-- The specification of the local skill `tesla-loop-engineering`.
+### 1.2 Objectif de ce Rapport de Curation
+Ce document formalise les spécifications d'architecture fonctionnelle nécessaires pour réaliser ce portage manuel. Il définit :
+- La structure conceptuelle des cycles d'apprentissage fermés et des transitions logiques (`PASS`, `DELAY`, `BLOCK`).
+- Le modèle de données local pour le suivi persistant dans la base de données Alexandria.
+- L'architecture de l'orchestrateur Python souverain (`TeslaLoopOrchestrator`) s'appuyant sur le SDK natif d'Antigravity.
+- La spécification du Skill local `tesla-loop-engineering`.
 
 ---
 
@@ -32,25 +30,25 @@ This document formalizes the functional architecture specifications necessary to
 
 | Asserted Fact | Primary Source Reference | Confidence |
 | :--- | :--- | :--- |
-| **Origin and License**: Loop Library and the Loopy CLI were created in mid-June 2026 by Forward Future under the MIT license. | `[[rapport_audit_loop_library_v1.0.md]]` | 100% |
-| **Components of a Loop**: An agent loop is structured around 5 pillars: *Trigger*, *Goal*, *Verification*, *Stopping Rule*, and *Memory*. | `[[rapport_audit_loop_library_v1.0.md]]` (arXiv:2607.00038) | 100% |
-| **Verification Ladder**: The validation taxonomy comprises 5 rungs, from AST (Rungs 1-2) to unit tests (Rung 3), to the Judge-Model (Rung 4) and human validation (Rung 5). | `[[rapport_audit_loop_library_v1.0.md]]` (arXiv:2607.00038) | 100% |
-| **Semantic Verification (Rung 4)**: Presents *Reward Hacking* risks if the same LLM is used as both generator and judge. The error rate on complex legacy code is estimated at ~35%. | `[[rapport_audit_loop_library_v1.0.md]]` | 90% |
-| **Financial Risks**: A failure in evaluating Stopping Rules can result in doom loops billed between $500 and $2000 per incident. | `[[etude_faisabilite_integration_loop_library_v1.0.md]]` | 90% |
-| **MIDGARD Network Limits**: MIDGARD operates in an isolated network sandbox where dynamic installation via npm/npx systematically fails. | `[[etude_faisabilite_integration_loop_library_v1.0.md]]` | 100% |
-| **Alexandria Persistence Structure**: The local database `alexandria_brain.db` already has tables for sessions, tasks, and shadow-targeted skills. | `[[db_init.py]]` | 100% |
-| **Automatic Skill Detection**: Post-session scripts (`log_subagent_parser.py`) already extract and history-track injected skill patterns. | `[[log_subagent_parser.py]]` | 100% |
+| **Origine et Licence** : Loop Library et la CLI Loopy ont été créés mi-juin 2026 par Forward Future sous licence MIT. | `[[rapport_audit_loop_library_v1.0.md]]` | 100% |
+| **Composants d'un Loop** : Un loop d'agent est structuré autour de 5 piliers : *Trigger*, *Goal*, *Verification*, *Stopping Rule*, et *Memory*. | `[[rapport_audit_loop_library_v1.0.md]]` (arXiv:2607.00038) | 100% |
+| **Échelle de Vérification (Verification Ladder)** : La taxonomie de validation comporte 5 échelons, de l'AST (Rungs 1-2) aux tests unitaires (Rung 3), au Modèle-Juge (Rung 4) et à la validation humaine (Rung 5). | `[[rapport_audit_loop_library_v1.0.md]]` (arXiv:2607.00038) | 100% |
+| **Vérification sémantique (Rung 4)** : Présente des risques de *Reward Hacking* (piratage de récompense) si le même modèle LLM est utilisé comme générateur et comme juge. Le taux d'erreur sur code hérité complexe est estimé à ~35%. | `[[rapport_audit_loop_library_v1.0.md]]` | 90% |
+| **Risques Financiers** : Une anomalie d'évaluation des règles d'arrêt (Stopping Rules) peut engendrer des doom loops facturés de 500$ à 2000$ par incident. | `[[etude_faisabilite_integration_loop_library_v1.0.md]]` | 90% |
+| **Limites Réseau MIDGARD** : MIDGARD opère dans une sandbox réseau isolée où l'installation dynamique par npm/npx échoue systématiquement. | `[[etude_faisabilite_integration_loop_library_v1.0.md]]` | 100% |
+| **Structure de Persistance Alexandria** : La base locale `alexandria_brain.db` dispose déjà de tables pour les sessions, les tâches et les skills shadow-targeted. | `[[db_init.py]]` | 100% |
+| **Détection Automatique des Skills** : Les scripts de post-session (`log_subagent_parser.py`) extraient et historisent déjà les patterns de skills injectés. | `[[log_subagent_parser.py]]` | 100% |
 
 ---
 
 ## 3. Comparative Reasoning & Hypotheses
 
-### 3.1 Breakdown of the Feedback Cycle
-The proposed Loop Engineering cycle is organized around four cyclical phases, externally controlled by an orchestration program:
-1. **Act**: The agent receives a task (*Goal*), its iteration memory (*Memory*) containing the history of previous attempts, and generates a proposed modification or command.
-2. **Verify**: The orchestrator intercepts the proposal and subjects it to rigorous deterministic checks (the verification ladder).
-3. **Learn**: In case of verification failure, the orchestrator extracts the error logs (compilation traces, unit test failures, or linting feedback) and generates a "learning delta".
-4. **Repeat**: The loop iterates by injecting this learning delta into the agent's context for the next round, until a stopping criterion is triggered.
+### 3.1 Décomposition du Cycle de Rétroaction
+Le cycle de Loop Engineering proposé s'articule autour de quatre phases cycliques, contrôlées de manière externe par un programme d'orchestration :
+1. **Act (Agir)** : L'agent reçoit une tâche (*Goal*), sa mémoire d'itération (*Memory*) contenant l'historique des essais précédents, et génère une proposition de modification ou de commande.
+2. **Verify (Vérifier)** : L'orchestrateur intercepte la proposition et la soumet à des contrôles déterministes rigoureux (l'échelle de vérification).
+3. **Learn (Apprendre)** : En cas d'échec de la vérification, l'orchestrateur extrait les logs d'erreurs (traces de compilation, échecs de tests unitaires, ou retours de linting) et génère un "delta d'apprentissage".
+4. **Repeat (Répéter)** : La boucle itère en injectant ce delta d'apprentissage dans le contexte de l'agent pour le tour suivant, jusqu'au déclenchement d'un critère d'arrêt.
 
 ```
        ┌─────────────────────────────────────────┐
@@ -60,21 +58,21 @@ The proposed Loop Engineering cycle is organized around four cyclical phases, ex
                             ▼
      ┌─────────────────────────────────────────────┐
      │                  ACT (LLM)                  │
-     │ - Receives the goal & the learning delta    │
-     │ - Produces a modification (Code / File)     │
+     │ - Reçoit l'objectif & le delta d'apprentissage│
+     │ - Produit une modification (Code / Fichier) │
      └────────────────────┬────────────────────└
                             │
                             ▼
      ┌─────────────────────────────────────────────┐
      │              VERIFY (Orchestrator)          │
-     │ - Rung 1-2: Lint, AST, Static Analysis      │
-     │ - Rung 3  : Unit Test Execution             │
-     │ - Rung 4  : Judge-Model (Qualitative)       │
+     │ - Rung 1-2 : Lint, AST, Analyse statique     │
+     │ - Rung 3   : Exécution des tests unitaires  │
+     │ - Rung 4   : Modèle-Juge (Qualitatif)       │
      └────────────────────┬────────────────────┘
                             │
               ┌─────────────┴─────────────┐
               ▼                           ▼
-       [Verification OK]           [Verification KO]
+       [Vérification OK]           [Vérification KO]
               │                           │
               ▼                           ▼
          Status: PASS               Status: DELAY
@@ -82,18 +80,18 @@ The proposed Loop Engineering cycle is organized around four cyclical phases, ex
               │                           ▼
               │                  ┌─────────────────┐
               │                  │   LEARN (Orch)  │
-              │                  │ - Extracts error│
-              │                  │ - Evaluates drift│
+              │                  │ - Extrait l'erreur
+              │                  │ - Évalue dérive │
               │                  └────────┬────────┘
               │                           │
-              │                      [Drift?]
+              │                     [Dérive ?]
               │                  ┌────────┴────────┐
               │                  ▼                 ▼
-              │             [Yes / Max]          [No]
+              │             [Oui / Max]          [Non]
               │                  │                 │
               │                  ▼                 ▼
               │            Status: BLOCK     Status: REPEAT
-              │           (Human Escalation) (Next cycle)
+              │           (Human Escalation) (Cycle suivant)
               │                  │                 │
               ▼                  ▼                 ▼
         ┌───────────┐      ┌───────────┐     ┌───────────┐
@@ -101,44 +99,44 @@ The proposed Loop Engineering cycle is organized around four cyclical phases, ex
         └───────────┘      └───────────┘     └───────────┘
 ```
 
-### 3.2 Semantic Gates Analysis (Flow Transitions)
-The transition between two iterations is not merely binary (success/failure). It is governed by three statuses:
-*   **PASS**: Complete success. All required verification rungs (Rungs 1 to 3 minimum, Rung 4 optional) are validated. The action is finalized.
-*   **DELAY**: Partial failure with measurable progress. Test failures are accompanied by a change in code behavior (errors change, or the number of failing tests decreases). The system authorizes the next iteration.
-*   **BLOCK**: Structural blockage requiring an immediate halt. It is triggered by:
-    1. *Cognitive Stagnation*: The generated error is identical to that of the previous iteration (the agent is spinning in circles).
-    2. *Resource Exhaustion*: Exceeding the maximum number of iterations (physical limit, e.g., 5) or exceeding the allocated token budget.
-    3. *Major Regression*: Appearance of critical anomalies on previously stable sections of code.
+### 3.2 Analyse des Portes Sémantiques (Transitions de Flux)
+La transition entre deux itérations n'est pas uniquement binaire (succès/échec). Elle est régie par trois statuts :
+*   **PASS** : Succès complet. Tous les échelons de vérification requis (Rungs 1 à 3 au minimum, Rung 4 optionnel) sont validés. L'action est pérennisée.
+*   **DELAY** : Échec partiel avec progression mesurable. L'échec des tests est accompagné d'un changement de comportement du code (les erreurs changent, ou le nombre de tests en échec diminue). Le système autorise l'itération suivante.
+*   **BLOCK** : Blocage structurel nécessitant un arrêt immédiat. Il est déclenché par :
+    1. *Stagnation cognitive* : L'erreur produite est identique à celle de l'itération précédente (l'agent tourne en rond).
+    2. *Épuisement des ressources* : Dépassement du nombre maximal d'itérations (limite physique, ex: 5) ou dépassement du budget de tokens alloué.
+    3. *Régression majeure* : Apparition d'anomalies critiques sur des pans de code auparavant stables.
 
-### 3.3 Behavioral Hypotheses on MIDGARD
-*   `[HYP: Semantic Drift on Local Models]`: Open-source models executed locally on MIDGARD (e.g., Llama-3-70B) are more susceptible to losing framing instructions over context turns (*context degradation*). An external orchestrator written in Python (deterministic) is vastly superior to a semantic prompt-based orchestrator (like Loopy), because it cleans and reframes the context at each iteration.
-*   `[HYP: Cognition-Validation Dissociation]`: To counter *Reward Hacking* at Rung 4 (Model-as-a-Judge), semantic evaluation must be delegated to an agent instance or a model distinct from the agent generating the code. This cognitive dissociation reduces the semantic false positive rate from 35% to less than 5%.
+### 3.3 Hypothèses de Comportement sur MIDGARD
+*   `[HYP: Dérive Sémantique sur Modèles Locaux]` : Les modèles open-source exécutés localement sur MIDGARD (ex: Llama-3-70B) sont plus sensibles à la perte d'instruction de cadrage au fil des tours de contexte (*context degradation*). Un orchestrateur externe écrit en Python (déterministe) est donc largement supérieur à un orchestrateur écrit sous forme de prompts sémantiques (comme Loopy), car il nettoie et recadre le contexte à chaque itération.
+*   `[HYP: Dissociation Cognition-Validation]` : Pour contrer le *Reward Hacking* au Rung 4 (Model-as-a-Judge), l'évaluation sémantique doit être confiée à une instance d'agent ou à un modèle distinct de l'agent qui produit le code. Cette dissociation cognitive réduit le taux de faux positifs sémantiques de 35% à moins de 5%.
 
 ---
 
 ## 4. Contradictions & System Limits
 
-### 4.1 The Deterministic vs. Semantic Contradiction
-There is a fundamental contradiction between low-level verification (Rungs 1-3: compilers, linters, unit tests) and high-level verification (Rung 4: Semantic Judge-Model). 
-* Code can perfectly compile and pass unit tests (Rung 3 OK) while introducing logical security flaws, architectural violations, or non-compliant dead code (Rung 4 KO).
-* Conversely, a conceptually brilliant implementation may fail Rung 3 due to a simple syntax typo that is easily fixable. 
-Therefore, the orchestrator must apply a strict hierarchy: semantic validation (Rung 4) must only be invoked **if and only if** deterministic verifications (Rungs 1 to 3) are entirely in the `PASS` status.
+### 4.1 La Contradiction Déterministe vs Sémantique
+Il existe une contradiction fondamentale entre la vérification de bas niveau (Rungs 1-3 : compilateurs, linters, tests unitaires) et la vérification de haut niveau (Rung 4 : Modèle-Juge sémantique). 
+* Un code peut parfaitement compiler et passer les tests unitaires (Rung 3 OK) tout en introduisant des failles de sécurité logique, des violations d'architecture ou du code mort non conforme (Rung 4 KO).
+* Inversement, une implémentation conceptuellement brillante peut échouer au Rung 3 en raison d'une simple coquille de syntaxe facilement corrigeable. 
+L'orchestrateur doit donc appliquer une hiérarchie stricte : la validation sémantique (Rung 4) ne doit être invoquée **que si et seulement si** les vérifications déterministes (Rungs 1 à 3) sont entièrement au statut `PASS`.
 
-### 4.2 Physical Limits of the Sandbox and the SDK
-The current Antigravity SDK imposes constraints on the lifecycle of agent sessions. 
-* The agent's state is tied to its conversation context. If the agent is recreated at each iteration to purge its history (to avoid goal drift), its short-term memory of attempts is lost. If the same agent is retained, the context swells rapidly, leading to financial overhead and degraded model attention.
-* *Proposed Solution*: The Python orchestrator must manually manage contextual memory by supplying a compact register of previous attempts (Learning Deltas) inserted into the system instructions at each iteration.
+### 4.2 Limites Physiques de la Sandbox et du SDK
+Le SDK Antigravity actuel impose des contraintes sur le cycle de vie des sessions d'agents. 
+* L'état de l'agent est lié à son contexte de conversation. Si l'on recrée l'agent à chaque itération pour purger son historique (évitement du goal drift), on perd la mémoire à court terme de ses essais. Si l'on conserve le même agent, le contexte enfle rapidement, entraînant un surcoût financier et une dégradation de l'attention du modèle.
+* *Solution proposée* : L'orchestrateur Python doit gérer manuellement la mémoire contextuelle en alimentant un registre compact des essais précédents (Learning Deltas) inséré dans les instructions système à chaque itération.
 
 ---
 
 ## 5. Architectural Recommendations
 
-To integrate Loop Engineering into our Python Skills and sub-agents without external dependencies, we recommend deploying a three-component architecture: a local Skill, a native Python Orchestrator, and an extension to the Alexandria database schema.
+Pour intégrer le Loop Engineering au sein de nos Skills et sous-agents Python sans dépendances externes, nous recommandons le déploiement d'une architecture à trois composants : un Skill local, un Orchestrateur Python natif, et une extension du schéma de base de données Alexandria.
 
-### 5.1 Local Skill Specification: `tesla-loop-engineering`
-This Skill must be created under `/home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-loop-engineering/SKILL.md`. Its role is to constrain the agent's thought process and output format when engaged in an iterative cycle.
+### 5.1 Spécification du Skill Local : `tesla-loop-engineering`
+Ce Skill doit être créé sous `/home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-loop-engineering/SKILL.md`. Il a pour rôle de contraindre le format de pensée et de sortie de l'agent lorsqu'il est engagé dans un cycle itératif.
 
-#### Recommended System Instructions Content (`SKILL.md`):
+#### Contenu Recommandé du Système d'Instructions (`SKILL.md`) :
 ```markdown
 ---
 name: tesla-loop-engineering
@@ -161,31 +159,31 @@ If this is iteration N > 1:
 - If you are stuck or cannot find a solution, explicitly output `STATE: STUCK` in your diagnostic to allow the orchestrator to trigger a BLOCK transition.
 ```
 
-### 5.2 Python Orchestrator Specification: `TeslaLoopOrchestrator`
-This orchestrator is a Python module that encapsulates loop execution leveraging the `google-antigravity` SDK.
+### 5.2 Spécification de l'Orchestrateur Python : `TeslaLoopOrchestrator`
+Cet orchestrateur est un module Python qui encapsule l'exécution de la boucle en s'appuyant sur le SDK `google-antigravity`.
 
-#### Orchestrator Functional Specifications:
-* **Main Class**: `TeslaLoopOrchestrator(agent_config: LocalAgentConfig, max_iter: int = 5, token_budget: int = 50000)`
-* **Execution Method**: `async def execute_loop(self, goal: str, verification_cmd: str) -> LoopResult`
-* **Sequential Behavior**:
-  1. **Initialization**: Records the start of the loop in `alexandria_brain.db` (table `loop_execution`).
-  2. **Act**: Starts the agent with the injected `tesla-loop-engineering` skill. Sends the `goal` and the accumulated `learning_delta`. Retrieves the produced code or action.
-  3. **Verify**: Locally and isolatedly executes the `verification_cmd` (Rung 3: e.g., `pytest tests/test_code.py` or `ruff check`).
-  4. **Transition Analysis**:
-     - If the command returns an exit code of `0` (success) $\rightarrow$ `PASS` status. Records the success, applies modifications to the working branch, and stops.
-     - If the command fails (exit code $\neq 0$):
-       - Compares the current error log with the previous error log.
-       - If the error log is identical $\rightarrow$ `BLOCK` status (stagnation). Halts the loop and raises an alert.
-       - If the error log is different or if notable progress is made $\rightarrow$ `DELAY` status. Extracts the error message to form the new `learning_delta`, increments the iteration counter, and loops (Repeat).
-       - If the maximum number of iterations is reached $\rightarrow$ `BLOCK` status (limit reached).
-  5. **Persistence**: Records each iteration in the `loop_iterations` table.
+#### Spécifications Fonctionnelles de l'Orchestrateur :
+* **Classe principale** : `TeslaLoopOrchestrator(agent_config: LocalAgentConfig, max_iter: int = 5, token_budget: int = 50000)`
+* **Méthode d'exécution** : `async def execute_loop(self, goal: str, verification_cmd: str) -> LoopResult`
+* **Comportement séquentiel** :
+  1. **Initialisation** : Enregistre le début de la boucle dans `alexandria_brain.db` (table `loop_execution`).
+  2. **Act** : Démarre l'agent avec le skill `tesla-loop-engineering` injecté. Envoie le `goal` et le `learning_delta` accumulé. Récupère le code produit ou l'action.
+  3. **Verify** : Exécute localement et de manière isolée la `verification_cmd` (Rung 3: e.g. `pytest tests/test_code.py` ou `ruff check`).
+  4. **Analyse de Transition** :
+     - Si la commande renvoie un code de sortie `0` (succès) $\rightarrow$ Statut `PASS`. Enregistre le succès, applique les modifications sur la branche de travail, et s'arrête.
+     - Si la commande échoue (code de sortie $\neq 0$) :
+       - Compare le log d'erreur actuel avec le log d'erreur précédent.
+       - Si le log d'erreur est identique $\rightarrow$ Statut `BLOCK` (stagnation). Arrête la boucle et lève une alerte.
+       - Si le log d'erreur est différent ou si des progrès sont notables $\rightarrow$ Statut `DELAY`. Extrait le message d'erreur pour constituer le nouveau `learning_delta`, incrémente le compteur d'itérations, et boucle (Repeat).
+       - Si le nombre maximal d'itérations est atteint $\rightarrow$ Statut `BLOCK` (limite atteinte).
+  5. **Persistance** : Enregistre chaque itération dans la table `loop_iterations`.
 
-### 5.3 Alexandria SQL Schema Extension (`alexandria_brain.db`)
-To ensure precise loop tracking without relying on volatile local files, we specify the addition of two tables in the Alexandria database.
+### 5.3 Extension du Schéma Alexandria SQL (`alexandria_brain.db`)
+Pour assurer un suivi précis des boucles sans dépendre de fichiers locaux volatils, nous spécifions l'ajout de deux tables dans la base Alexandria.
 
-#### DDL Table Creation Scripts (to be applied by `db_init.py`):
+#### Scripts DDL de Création de Table (à appliquer par `db_init.py`) :
 ```sql
--- Table for global tracking of loop execution
+-- Table de suivi global de l'exécution d'un loop
 CREATE TABLE IF NOT EXISTS loop_execution (
     loop_id TEXT PRIMARY KEY,
     session_id TEXT NOT NULL,
@@ -202,7 +200,7 @@ CREATE TABLE IF NOT EXISTS loop_execution (
     FOREIGN KEY(session_id) REFERENCES subagents_sessions(session_id) ON DELETE CASCADE
 );
 
--- Table detailing each iteration of a loop
+-- Table détaillant chaque itération d'un loop
 CREATE TABLE IF NOT EXISTS loop_iterations (
     iteration_id INTEGER PRIMARY KEY AUTOINCREMENT,
     loop_id TEXT NOT NULL,
@@ -217,16 +215,16 @@ CREATE TABLE IF NOT EXISTS loop_iterations (
     FOREIGN KEY(loop_id) REFERENCES loop_execution(loop_id) ON DELETE CASCADE
 );
 
--- Indexes to optimize performance queries
+-- Index pour optimiser les requêtes de performance
 CREATE INDEX IF NOT EXISTS idx_loop_session ON loop_execution(session_id);
 CREATE INDEX IF NOT EXISTS idx_iterations_loop ON loop_iterations(loop_id);
 ```
 
-### 5.4 Shadow-Targeting Mechanism for Limited Environments (Pro Plan)
-Within the context of the default 3 sub-agent restriction imposed by the user's Pro plan:
-* The session injector (`update_session_history.py` and `log_subagent_parser.py`) must detect the activation of the `tesla-loop-engineering` skill on one of the native sub-agents.
-* The instructions for the `tesla-loop-engineering` skill must be pre-loaded or merged into the target sub-agent's system prompt during its instantiation by the orchestrator. This is done by dynamically reading the local `SKILL.md` file and appending it to the `system_instructions` field of the Python SDK's `LocalAgentConfig`, thus avoiding reliance on third-party online deployment registries.
+### 5.4 Mécanisme de Shadow-Targeting pour Environnements Limités (Plan Pro)
+Dans le cadre de la restriction à 3 subagents par défaut imposée par le plan Pro de l'utilisateur :
+* L'injecteur de session (`update_session_history.py` et `log_subagent_parser.py`) doit détecter l'activation du skill `tesla-loop-engineering` sur l'un des sous-agents natifs.
+* Les instructions du skill `tesla-loop-engineering` doivent être pré-chargées ou fusionnées au prompt système du sous-agent cible lors de son instanciation par l'orchestrateur. Ceci s'effectue en lisant dynamiquement le fichier `SKILL.md` local et en l'ajoutant dans le champ `system_instructions` de `LocalAgentConfig` du SDK Python, évitant ainsi le recours à des registres de déploiement en ligne tiers.
 
 ---
 *Certified and signed on MIDGARD by Tesla Curator Prime.*
-</CERTIFIED REPORT: MANUAL PORT OF LOOP ENGINEERING IN THE TESLA ECOSYSTEM (MIDGARD)>
+</CERTIFIED REPORT: PORTAGE MANUEL DU LOOP ENGINEERING DANS L'ÉCOSYSTÈME TESLA (MIDGARD)>

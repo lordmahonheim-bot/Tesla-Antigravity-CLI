@@ -1,5 +1,3 @@
-![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
-
 ---
 type: reference
 tags: [curation/certified, curator/prime, status/valid]
@@ -10,118 +8,118 @@ confidence_score: 98%
 sources: ["[[capability_inventory.md]]", "[[rapport_arcanis_loop_engineering_v1.0_2026-07-10.md]]", "[[PROJECT.md]]"]
 ---
 
-# ARCHITECTURE CURATION AND AUDIT REPORT: LOOP ENGINEERING
+# RAPPORT DE CURATION ET D'AUDIT D'ARCHITECTURE : LOOP ENGINEERING
 
-**Primary Operator:** Lord Mahonheim  
-**Author:** Tesla Curator Prime (Chief Knowledge Officer)  
-**Issue Date:** July 10, 2026  
-**Status:** Certified (Decision-Ready)  
-**Version:** v1.0  
+**Opérateur Principal :** Lord Mahonheim  
+**Auteur :** Tesla Curator Prime (Chief Knowledge Officer)  
+**Date d'émission :** 10 Juillet 2026  
+**Statut :** Certifié (Decision-Ready)  
+**Version :** v1.0  
 
 ---
 
 ## 1. Diagnostic Summary
 
-The objective of this audit is to evaluate the coherence of integrating the new **Loop Engineering** components (`tesla-loop-orchestrator` and `tesla-code-auditor`) into the local **Tesla/Antigravity** ecosystem on the **MIDGARD** development station.
+Le présent audit a pour objectif d'évaluer la cohérence de l'intégration des nouveaux composants de **Loop Engineering** (`tesla-loop-orchestrator` et `tesla-code-auditor`) au sein de l'écosystème local **Tesla/Antigravity** sur la station de développement **MIDGARD**.
 
-After a thorough review of the existing capability mapping (`capability_inventory.md`), Arcanis's security analysis report (`rapport_arcanis_loop_engineering_v1.0_2026-07-10.md`), and the project objectives described in the loop orchestrator's `PROJECT.md`, Curator Prime's conclusions are as follows:
+Après examen approfondi de la cartographie des compétences existantes (`capability_inventory.md`), du rapport d'analyse de sécurité d'Arcanis (`rapport_arcanis_loop_engineering_v1.0_2026-07-10.md`), et des objectifs du projet décrits dans `PROJECT.md` de l'orchestrateur de boucle, les conclusions de Curator Prime sont les suivantes :
 
-1. **Absence of Redundancy (Validated):** The proposed components do not duplicate any existing capability. They fill a critical gap in the ecosystem, namely the lack of an autonomous iterative orchestration layer and a validation guardian decoupled from the developer.
-2. **Validation Decoupling (Anti-Bias Guarantee):** Assigning validation to an autonomous module (`tesla-code-auditor`) distinct from the writer agent (`tesla-master-code`) is essential to prevent "reward hacking" and self-certification complacency.
-3. **Feasibility under Network Constraints (Alert Resolved):** Since the MIDGARD environment is under strict network restriction (`CODE_ONLY`), dynamically installing Semgrep and security rules requires local static provisioning. The use of Python wrappers interfacing with the local virtual environment `.venv/` is validated as the optimal approach.
-4. **Structural Persistence (Alexandria):** The persistence of loop states requires extending Alexandria's SQLite schema with two dedicated tables (`loop_executions` and `loop_iterations`), which will preserve the learning history from one session to the next.
+1. **Absence de Redondance (Validée) :** Les composants proposés ne dupliquent aucune compétence existante. Ils comblent une faille critique de l'écosystème, à savoir l'absence d'une couche d'orchestration itérative autonome et d'un gardien de validation découplé du développeur.
+2. **Découplage de la Validation (Garantie Anti-Biais) :** L'affectation de la validation à un module autonome (`tesla-code-auditor`) distinct de l'agent d'écriture (`tesla-master-code`) est indispensable pour prévenir le "reward hacking" et la complaisance d'auto-certification.
+3. **Faisabilité sous Contraintes Réseau (Alerte Résolue) :** L'environnement MIDGARD étant sous restriction réseau stricte (`CODE_ONLY`), l'installation dynamique de Semgrep et des règles de sécurité nécessite un provisionnement statique local. L'utilisation de wrappers Python s'interfaçant avec l'environnement virtuel local `.venv/` est validée comme approche optimale.
+4. **Persistance Structurelle (Alexandria) :** La persistance des états de boucle nécessite l'extension du schéma SQLite d'Alexandria par deux tables dédiées (`loop_executions` et `loop_iterations`), ce qui préservera l'historique d'apprentissage d'une session à l'autre.
 
-**Decision: GO (Validation of the decoupled architecture with co-location under `.agents/skills/`).**
+**Décision : GO (Validation de l'architecture découplée avec co-location sous `.agents/skills/`).**
 
 ---
 
 ## 2. Verified Facts & Evidence Pack
 
-The table below lists the facts observed and proven during the environment inventory and initial audit:
+Le tableau ci-dessous recense les faits observés et prouvés lors de l'inventaire d'environnement et de l'audit initial :
 
-| Asserted Fact | Primary Source Reference | Confidence | Description / Evidence |
+| Asserted Fact | Primary Source Reference | Confidence | Description / Preuve |
 | :--- | :--- | :--- | :--- |
-| **Hermetic Network Limitation** | `capability_inventory.md` §6.2, `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | `CODE_ONLY` mode active on MIDGARD. No external HTTP access for dynamic package installation or Semgrep rules retrieval. |
-| **Local Absence of Semgrep in the venv** | `capability_inventory.md` §4, `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | Semgrep is not present in `.venv/bin/`. Direct execution will fail without prior provisioning or a resilient wrapper. |
-| **Absence of Alexandria Tables for Loops** | `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | The SQLite database `alexandria_brain.db` does not possess the relational structures required to save the loop state. |
-| **Master Code Self-Certification Bias** | `capability_inventory.md` §2, `SKILL.md` (tesla-master-code) | 95% | `tesla-master-code` is the code engineering and writing agent. If it evaluates its own code, the risk of "reward hacking" (model bias) is high. |
-| **Availability of Python 3.12 and Pyright** | `capability_inventory.md` §4 | 100% | Validated as active in Tesla's local virtual environment on MIDGARD. |
+| **Limitation Réseau Hermétique** | `capability_inventory.md` §6.2, `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | Mode `CODE_ONLY` actif sur MIDGARD. Aucun accès HTTP externe pour l'installation dynamique de paquets ou la récupération de règles Semgrep. |
+| **Absence Locale de Semgrep dans le venv** | `capability_inventory.md` §4, `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | Semgrep n'est pas présent dans `.venv/bin/`. Son exécution directe échouera sans provisionnement préalable ou wrapper résilient. |
+| **Absence des Tables Alexandria pour les Boucles** | `rapport_arcanis_loop_engineering_v1.0_2026-07-10.md` §C.1 | 100% | La base SQLite `alexandria_brain.db` ne possède pas les structures relationnelles nécessaires pour sauvegarder l'état des boucles. |
+| **Biais d'Auto-Certification de Master Code** | `capability_inventory.md` §2, `SKILL.md` (tesla-master-code) | 95% | `tesla-master-code` est l'agent d'ingénierie et d'écriture de code. S'il évalue lui-même son code, le risque de "reward hacking" (biais du modèle) est élevé. |
+| **Disponibilité de Python 3.12 et Pyright** | `capability_inventory.md` §4 | 100% | Validés comme actifs dans l'environnement virtuel local de Tesla sur MIDGARD. |
 
 ---
 
 ## 3. Comparative Reasoning & Hypotheses
 
-### Rationale for Role Separation
-The separation between the loop orchestrator (`tesla-loop-orchestrator`), the code auditor (`tesla-code-auditor`), and the code developer (`tesla-master-code`) relies on the principle of **Cognitive Dissociation and Deterministic Decoupling**:
-* **`tesla-master-code` (Actuator)**: Focuses exclusively on code generation, bug fixing, and refactoring from error messages. It is creative but prone to hallucinations or semantic shortcuts.
-* **`tesla-code-auditor` (Objective Guardian)**: Has no code modification power. It applies strict and deterministic verifications (compilation, lints, Pyright type analysis, static Semgrep security scans, and unit tests). It is impartial and cannot be deceived by excuses from the actuator.
-* **`tesla-loop-orchestrator` (Cycle Supervisor)**: Does not write code or launch tests itself. It manages the loop's logical state, verifies the absence of stagnation or regression, calculates token consumption (Token Budget), and decides whether to persist the code (`PASS`), request a fix with an enriched context (`DELAY`), or halt the loop for human intervention (`BLOCK`).
+### Rationale pour la Séparation des Rôles
+La séparation entre l'orchestrateur de boucle (`tesla-loop-orchestrator`), l'auditeur de code (`tesla-code-auditor`), et le développeur de code (`tesla-master-code`) repose sur le principe de **Dissociation Cognitive et Découplage Déterministe** :
+* **`tesla-master-code` (Actionneur)** : Il se concentre exclusivement sur la génération de code, la correction des bogues, et le refactoring à partir de messages d'erreur. Il est créatif mais sujet aux hallucinations ou aux raccourcis sémantiques.
+* **`tesla-code-auditor` (Gardien Objectif)** : Il n'a aucun pouvoir de modification de code. Il applique des vérifications strictes et déterministes (compilation, lints, analyses de type Pyright, scans de sécurité statiques Semgrep, et tests unitaires). Il est impartial et ne peut pas être leurré par des excuses de l'actionneur.
+* **`tesla-loop-orchestrator` (Superviseur de Cycle)** : Il n'écrit pas de code et ne lance pas les tests lui-même. Il gère l'état logique de la boucle, vérifie l'absence de stagnation ou de régression, calcule la consommation de jetons (Token Budget), et décide s'il faut persister le code (`PASS`), redemander un correctif avec un contexte enrichi (`DELAY`), ou arrêter la boucle pour intervention humaine (`BLOCK`).
 
-### Epistemic Hypotheses
-* **[HYPOTHESIS: Contextual Degradation on Mid-Sized Models]**: Intermediate-sized LLMs (70B and under) experience rapid degradation of attention after 3 or 4 iterations within the same chat prompt. Injecting a structured "Learning Delta" (containing only the modified file, the specific error, and the line concerned) by an external orchestrator resolves this problem by purging useless context.
-* **[HYPOTHESIS: MCP Standardization at 12 Months]**: Custom Antigravity skills (`SKILL.md`) will likely be replaced in the medium term by tools exposed via MCP (Model Context Protocol) servers. The decoupled Python architecture proposed here greatly facilitates this future transition, as the code will remain identical; only the transport interface layer will change.
+### Hypothèses Épistémiques
+* **[HYPOTHÈSE: Dégradation Contextuelle sur Modèles Moyens]** : Les LLM de taille intermédiaire (70B et moins) subissent une dégradation rapide de leur attention après 3 ou 4 itérations au sein de la même invite de chat. L'injection d'un "Learning Delta" structuré (contenant uniquement le fichier modifié, l'erreur spécifique, et la ligne concernée) par un orchestrateur externe résout ce problème en purgeant le contexte inutile.
+* **[HYPOTHÈSE: Standardisation MCP à 12 Mois]** : Les compétences personnalisées d'Antigravity (`SKILL.md`) seront probablement remplacées à moyen terme par des outils exposés par serveurs MCP (Model Context Protocol). L'architecture Python découplée des scripts proposée ici facilite grandement cette transition future, car le code restera identique ; seule la couche d'interface de transport changera.
 
 ---
 
 ## 4. Contradictions & System Limits
 
-### System Locks and Shadow Risks
-1. **Risk of Reward Hacking via Homogeneity (Rung 4):** If the semantic validator (Rung 4 Judge-Model) uses the same underlying model as the coding agent, the judge tends to accept biased logical explanations generated by the agent. **Mitigation:** Impose a lighter or structurally distinct model for Rung 4 (e.g., Gemini 1.5 Flash vs. Claude 3.5 Sonnet).
-2. **Cognitive Stagnation Doom Loop:** If the agent reproduces the same modification or produces the same error over two consecutive iterations, the classic coding loop tends to persist indefinitely until the quota is exhausted. **Mitigation:** The orchestrator must compare the error state hash or the content of the "Learning Deltas". If the error is identical, immediate transition to `BLOCK`.
-3. **SQLite Concurrency Limits:** Alexandria uses SQLite to store metadata. SQLite blocks concurrent writes. If multiple loops run in parallel (e.g., multiple sub-agents working on separate modules), locked database errors (`database is locked`) may occur. **Mitigation:** The Python orchestrator must implement a retry algorithm with exponential backoff for accessing the `loop_executions` tables.
+### Verrous du Système et Risques Shadow
+1. **Risque de Reward Hacking par Homogénéité (Rung 4) :** Si le validateur sémantique (Modèle-Juge de Rung 4) utilise le même modèle sous-jacent que l'agent de codage, le juge tend à accepter des explications logiques biaisées générées par l'agent. **Atténuation :** Imposer un modèle plus léger ou structurellement distinct pour le Rung 4 (e.g. Gemini 1.5 Flash face à Claude 3.5 Sonnet).
+2. **Doom Loop de Stagnation Cognitive :** Si l'agent reproduit la même modification ou produit la même erreur lors de deux itérations consécutives, la boucle de codage classique tend à persister indéfiniment jusqu'à épuisement du quota. **Atténuation :** L'orchestrateur doit comparer le hash de l'état d'erreur ou le contenu des "Learning Deltas". Si l'erreur est identique, transition immédiate vers `BLOCK`.
+3. **Limites de Concurrence SQLite :** Alexandria utilise SQLite pour stocker les métadonnées. SQLite bloque les écritures concurrentes. Si plusieurs boucles s'exécutent en parallèle (ex: plusieurs sous-agents travaillant sur des modules séparés), des erreurs de base de données verrouillée (`database is locked`) peuvent survenir. **Atténuation :** L'orchestrateur Python doit implémenter un algorithme de retry avec backoff exponentiel pour l'accès aux tables `loop_executions`.
 
 ---
 
 ## 5. Architectural Recommendations
 
-To ensure a flawless implementation of Phase 2, Curator Prime dictates the following architectural guidelines:
+Pour garantir une implémentation sans faille de la Phase 2, Curator Prime formule les directives architecturales suivantes :
 
-1. **Initialization of Alexandria Tables:** Run an update of the ecosystem's database initialization script to inject the relational loop structures (see Technical Specifications §6.3).
-2. **Local Offline Installation of Semgrep:** Given the `CODE_ONLY` mode, provision a lightweight Python wrapper capable of parsing the AST or executing a pre-compiled Semgrep binary without requiring Internet access to download rules. Custom rules must be stored in the skill's local folder (`rules/tesla_custom_rules.yaml`).
-3. **Verification of the Validation Ladder:** Ensure that progressing from one Rung to the next is strictly sequential. If Rung 1 (Lint) fails, it is useless to consume tokens to evaluate Rung 4 (Judge).
+1. **Initialisation des Tables Alexandria :** Exécuter une mise à jour du script d'initialisation de base de données de l'écosystème pour injecter les structures relationnelles de boucles (voir Spécifications Techniques §6.3).
+2. **Installation Locale Hors-Ligne de Semgrep :** Compte tenu du mode `CODE_ONLY`, provisionner un wrapper Python léger capable de parser l'AST ou d'exécuter un binaire pré-compilé de Semgrep sans requérir d'accès Internet pour télécharger des règles. Les règles personnalisées doivent être stockées dans le dossier local du skill (`rules/tesla_custom_rules.yaml`).
+3. **Vérification du Ladder de Validation :** S'assurer que le passage d'un échelon (Rung) à l'autre est strictement séquentiel. Si le Rung 1 (Lint) échoue, il est inutile de consommer des jetons pour évaluer le Rung 4 (Juge).
 
 ---
 
-## 6. Technical Specification: `tesla-loop-orchestrator`
+## 6. Spécification Technique : `tesla-loop-orchestrator`
 
 ```yaml
 ---
 name: tesla-loop-orchestrator
 description: >
-  Coordination component executing the iterative Act-Verify-Learn-Repeat cycle.
-  Interprets YAML loop contracts, manages transition states
-  (PASS, DELAY, BLOCK), and persists state in the Alexandria database.
+  Composant de coordination exécutant le cycle itératif Act-Verify-Learn-Repeat.
+  Interprète les contrats YAML de boucle, gère les états de transition
+  (PASS, DELAY, BLOCK) et persiste l'état dans la base Alexandria.
 version: 1.0
 status: stable
 owner: Tesla
 ---
 ```
 
-### 6.1 Identity & Mission
-`tesla-loop-orchestrator` is the algorithmic coordination authority for optimization and correction loops within Tesla. Its primary mission is to direct the execution of an engineering task according to constraints defined in a semantic loop contract, to ensure adherence to execution and token budgets, and to transfer learning information ("Learning Deltas") in a structured manner from one iteration to the next.
+### 6.1 Identité & Mission
+`tesla-loop-orchestrator` est l'autorité de coordination algorithmique des boucles de correction et d'optimisation au sein de Tesla. Sa mission principale est de diriger l'exécution d'une tâche d'ingénierie selon des contraintes définies dans un contrat de boucle sémantique, de s'assurer du respect des budgets d'exécution et de jetons, et de transférer les informations d'apprentissage ("Learning Deltas") de manière structurée d'une itération à la suivante.
 
-### 6.2 Ecosystem Integration & Data Flow (The Hub)
-The orchestrator serves as the logical conductor between the action agent, the independent validator, and the global memory database:
+### 6.2 Intégration Écosystème & Flux de Données (The Hub)
+L'orchestrateur sert de chef d'orchestre logique entre l'agent d'action, le validateur indépendant et la base de données de mémoire globale :
 
 ```
-       [ Loop Contract (YAML) ] ── (Ingestion) ──> [ tesla-loop-orchestrator ]
-                                                              │
-                                                  ┌───────────┴───────────┐
-                                                  ▼                       ▼
-                                            [ Actuator ]           [ Code Auditor ]
-                                         (tesla-master-code)     (tesla-code-auditor)
-                                                  │                       │
-                                                  ▼                       ▼
-                                           [ Produced Code ]       [ Verdict & Deltas ]
-                                                  │                       │
-                                                  └───────────┬───────────┘
-                                                              ▼
-                                                   [ Alexandria SQLite ]
-                                                (loop_executions / iterations)
+       [ Contrat Loop (YAML) ] ── (Ingestion) ──> [ tesla-loop-orchestrator ]
+                                                             │
+                                                  ┌──────────┴──────────┐
+                                                  ▼                     ▼
+                                           [ Actionneur ]        [ Code Auditor ]
+                                        (tesla-master-code)   (tesla-code-auditor)
+                                                  │                     │
+                                                  ▼                     ▼
+                                            [ Code Produit ]     [ Verdict & Deltas ]
+                                                  │                     │
+                                                  └──────────┬──────────┘
+                                                             ▼
+                                                  [ Alexandria SQLite ]
+                                               (loop_executions / iterations)
 ```
 
-### 6.3 Persistence Architecture (Alexandria Schema)
-Loop executions and their iterations are saved in the following relational tables integrated into `alexandria_brain.db`:
+### 6.3 Architecture de Persistance (Alexandria Schema)
+Les exécutions de boucle et leurs itérations sont sauvegardées dans les tables relationnelles suivantes intégrées à `alexandria_brain.db` :
 
 ```sql
 CREATE TABLE IF NOT EXISTS loop_executions (
@@ -145,39 +143,39 @@ CREATE TABLE IF NOT EXISTS loop_iterations (
     timestamp TEXT NOT NULL,
     action_taken TEXT NOT NULL,
     verdict TEXT NOT NULL CHECK(verdict IN ('PASS', 'DELAY', 'BLOCK')),
-    learning_deltas TEXT, -- Stored as serialized JSON
+    learning_deltas TEXT, -- Stockage sous forme de JSON sérialisé
     token_cost REAL DEFAULT 0.0,
     report_path TEXT,
     FOREIGN KEY (execution_id) REFERENCES loop_executions(id) ON DELETE CASCADE
 );
 ```
 
-### 6.4 State Logic & Transition Machine
-The control loop strictly applies the following algorithm at each iteration:
+### 6.4 Logique des États & Machine de Transition
+La boucle de contrôle applique strictement l'algorithme suivant à chaque itération :
 
-1. **Limit Verification:** 
-   * If `iteration_number` > `max_iterations` $\rightarrow$ Transition to `BLOCK` (Reason: "Maximum iterations reached").
-   * If `total_token_cost` > `token_budget` $\rightarrow$ Transition to `BLOCK` (Reason: "Token budget exceeded").
-2. **ACT Phase:** Call the configured sub-agent to execute the code modifications based on the goal prompt (or enriched by previous deltas).
-3. **VERIFY Phase:** Call `tesla-code-auditor` to execute the validator chain.
-4. **Auditor Verdict Analysis:**
-   * **`PASS`**: All deterministic and semantic validators are green. The code is merged. Final transition to `PASS` (Success).
-   * **`DELAY`**: Validation failed but progress is noted (e.g., different failing tests, fewer compiler error lines).
-     * Extraction of the "Learning Deltas" from the report.
-     * Comparison of the current deltas with iteration $N-1$. If error messages and locations are identical $\rightarrow$ Immediate transition to `BLOCK` (Reason: "Cognitive stagnation detected").
-     * If regression is noted (previously green tests now fail) $\rightarrow$ Transition to `BLOCK` (Reason: "Regression detected").
-     * Otherwise $\rightarrow$ Increment `iteration_number`, update the `loop_iterations` table, update the contextual prompt with learning deltas, and return to step 1.
-   * **`BLOCK`**: Critical blocking failure identified by the validator. Transition to `BLOCK`. Immediate halt and operator alert.
+1. **Vérification des Limites :** 
+   * Si `iteration_number` > `max_iterations` $\rightarrow$ Transition vers `BLOCK` (Raison : "Maximum iterations reached").
+   * Si `total_token_cost` > `token_budget` $\rightarrow$ Transition vers `BLOCK` (Raison : "Token budget exceeded").
+2. **Phase ACT :** Appel du sous-agent configuré pour exécuter les modifications de code à partir du prompt d'objectif (ou enrichi par les deltas précédents).
+3. **Phase VERIFY :** Appel de `tesla-code-auditor` pour exécuter la chaîne de validateurs.
+4. **Analyse du Verdict de l'Auditeur :**
+   * **`PASS`** : Tous les validateurs déterministes et sémantiques sont au vert. Le code est fusionné. Transition finale vers `PASS` (Succès).
+   * **`DELAY`** : Validation échouée mais progression constatée (ex: tests en échec différents, diminution des lignes d'erreurs compilateur).
+     * Extraction des "Learning Deltas" du rapport.
+     * Comparaison des deltas actuels avec l'itération $N-1$. Si les messages d'erreur et les localisations sont identiques $\rightarrow$ Transition immédiate vers `BLOCK` (Raison : "Cognitive stagnation detected").
+     * Si régression constatée (des tests auparavant verts échouent désormais) $\rightarrow$ Transition vers `BLOCK` (Raison : "Regression detected").
+     * Sinon $\rightarrow$ Incrémentation de `iteration_number`, mise à jour de la table `loop_iterations`, mise à jour du prompt contextuel avec les deltas d'apprentissage, et retour à l'étape 1.
+   * **`BLOCK`** : Échec critique bloquant identifié par le validateur. Transition vers `BLOCK`. Arrêt immédiat et alerte opérateur.
 
-### 6.5 YAML Contract Specification (Interface Contract)
-The YAML contract governing orchestration must respect the following strict schema:
+### 6.5 Spécification du Contrat YAML (Interface Contract)
+Le contrat YAML régissant l'orchestration doit respecter le schéma strict suivant :
 
 ```yaml
 contract_version: "1.0"
-project: "project_name"
+project: "nom_du_projet"
 goal: |
-  Clear objective to accomplish. The produced code must pass
-  all validations listed below without regression.
+  Objectif clair à accomplir. Le code produit doit passer
+  l'ensemble des validations listées ci-dessous sans régression.
 validators:
   - name: rung_1_lint
     enabled: true
@@ -197,43 +195,43 @@ limits:
 
 ---
 
-## 7. Technical Specification: `tesla-code-auditor`
+## 7. Spécification Technique : `tesla-code-auditor`
 
 ```yaml
 ---
 name: tesla-code-auditor
 description: >
-  Evaluation component executing the Verification Ladder.
-  Analyzes code via Ruff/Pyright/Semgrep and runs test suites
-  to return a standardized JSON diagnostic to the orchestrator.
+  Composant d'évaluation exécutant le Ladder de vérification.
+  Analyse le code par Ruff/Pyright/Semgrep et lance les suites de tests
+  pour retourner un diagnostic JSON standardisé à l'orchestrateur.
 version: 1.0
 status: stable
 owner: Tesla
 ---
 ```
 
-### 7.1 Identity & Mission
-`tesla-code-auditor` is the impartial technical guardian of the Tesla ecosystem. It deterministically and semantically evaluates the source code generated during the ACT phases to detect regressions, security flaws, typing and styling violations, and test failures. It produces structured reports without ever attempting to modify or fix the anomalies found itself.
+### 7.1 Identité & Mission
+`tesla-code-auditor` est le gardien technique impartial de l'écosystème Tesla. Il évalue de manière déterministe et sémantique le code source généré lors des phases ACT pour détecter les régressions, les failles de sécurité, les violations de typage et de style, et les échecs de test. Il produit des rapports structurés sans jamais chercher à modifier ou corriger lui-même les anomalies trouvées.
 
-### 7.2 Validation Rungs (Verification Ladder Pipeline)
-Validation occurs sequentially from simplest (local deterministic) to most complex (semantic/human):
+### 7.2 Échelons de Validation (Verification Ladder Pipeline)
+La validation se déroule séquentiellement du plus simple (déterministe local) au plus complexe (sémantique/humain) :
 
 ```
-[ Rung 1: Ruff / Style ] ── (Success) ──> [ Rung 2: Pyright / Semgrep ] ── (Success) ──> [ Rung 3: Pytest ] ── (Success) ──> [ Rung 4: Referee Judge ]
-        │                                         │                                              │
-    (Failure)                                 (Failure)                                      (Failure)
-        ▼                                         ▼                                              ▼
-   [ DELAY / BLOCK ]                         [ DELAY / BLOCK ]                              [ DELAY / BLOCK ]
+[ Rung 1: Ruff / Style ] ── (Succès) ──> [ Rung 2: Pyright / Semgrep ] ── (Succès) ──> [ Rung 3: Pytest ] ── (Succès) ──> [ Rung 4: Referee Juge ]
+        │                                        │                                             │
+    (Échec)                                  (Échec)                                       (Échec)
+        ▼                                        ▼                                             ▼
+   [ DELAY / BLOCK ]                        [ DELAY / BLOCK ]                             [ DELAY / BLOCK ]
 ```
 
-1. **Rung 1 — Style & Format (Ruff/Biome):** Ultra-fast local execution to ensure the code is syntactically correct, formatted, and free of basic anomalies.
-2. **Rung 2 — Static Analysis & Types (Pyright/Semgrep):** Detection of logic bugs (Pyright type-check) and security vulnerabilities or deviations from local governance (local Semgrep rules scans).
-3. **Rung 3 — Dynamic Validation (Pytest/Smoke Tests):** Execution of the code in an isolated sandbox to run the unit and integration test suite specified in the contract.
-4. **Rung 4 — Semantic Validation (Referee LLM):** Analysis of the modified code by an independent judge LLM model to validate conceptual adequacy with the goal and verify the absence of logic bypasses or injections.
-5. **Rung 5 — Physical Validation (Human):** Optional final validation by Lord Mahonheim via manual approval (required for production merges or global policy modifications).
+1. **Rung 1 — Style & Format (Ruff/Biome) :** Exécution ultra-rapide locale pour s'assurer que le code est syntaxiquement correct, formaté et exempt d'anomalies de base.
+2. **Rung 2 — Analyse Statique & Types (Pyright/Semgrep) :** Détection des bogues de logique (Pyright type-check) et des vulnérabilités de sécurité ou entorses à la gouvernance locale (scans de règles Semgrep locales).
+3. **Rung 3 — Validation Dynamique (Pytest/Smoke Tests) :** Exécution du code dans une sandbox isolée pour exécuter la suite de tests unitaires et d'intégration spécifiée dans le contrat.
+4. **Rung 4 — Validation Sémantique (Referee LLM) :** Analyse du code modifié par un modèle LLM juge indépendant afin de valider l'adéquation conceptuelle avec l'objectif et de vérifier l'absence d'injections ou de contournements logiques de tests.
+5. **Rung 5 — Validation Physique (Humaine) :** Validation optionnelle finale par Lord Mahonheim via approbation manuelle (requise pour les fusions en production ou les modifications de politiques globales).
 
-### 7.3 Output JSON Payload Format (Interface Contract)
-The auditor must return to the orchestrator a standardized JSON payload structured as follows:
+### 7.3 Format du Payload JSON de Sortie (Interface Contract)
+L'auditeur doit retourner à l'orchestrateur un payload JSON standardisé structuré comme suit :
 
 ```json
 {
@@ -279,27 +277,27 @@ The auditor must return to the orchestrator a standardized JSON payload structur
 
 ## 8. Anti-Patterns (Forbidden Actions)
 
-The following behaviors are strictly forbidden for Loop Engineering components:
+Les comportements suivants sont strictement interdits pour les composants de Loop Engineering :
 
-* ❌ **Auto-Modification by the Auditor:** The auditor must never attempt to run `black`, `ruff format --fix`, or fix imports itself. Any correction must go through the actuator via a new iteration.
-* ❌ **Bypassing Validation Rungs:** Skipping Rung 1 or Rung 2 to directly execute Rung 3 (tests), which wastes CPU resources and semantic tokens in case of a trivial syntax error.
-* ❌ **Semantic Validation by the Action Model:** Using the same coding agent as the validation judge for Rung 4.
-* ❌ **Looping without a Learning Delta:** Repeating an iteration by sending the same goal without attaching the structured list of found errors (`learning_deltas`), preventing the agent from correcting its logic in a targeted manner.
+* ❌ **Auto-Modification par l'Auditeur :** L'auditeur ne doit jamais essayer d'exécuter `black`, `ruff format --fix` ou de corriger les imports lui-même. Toute correction doit passer par l'actionneur via une nouvelle itération.
+* ❌ **Contournement des Rungs de Validation :** Sauter le Rung 1 ou le Rung 2 pour exécuter directement le Rung 3 (tests), ce qui gaspille des ressources CPU et des jetons sémantiques en cas d'erreur de syntaxe triviale.
+* ❌ **Validation sémantique par le modèle d'action :** Utiliser le même agent de codage comme juge de validation pour le Rung 4.
+* ❌ **Bouclage sans delta d'apprentissage :** Répéter une itération en envoyant le même objectif sans y joindre la liste structurée des erreurs trouvées (`learning_deltas`), empêchant l'agent de corriger sa logique de manière ciblée.
 
 ---
 
 ## 9. Handshake & Signature
 
-*Certified and signed on MIDGARD by Tesla Curator Prime.*  
-*Certification Date: July 10, 2026.*  
+*Certifié et signé sur MIDGARD par Tesla Curator Prime.*  
+*Date de certification : 10 Juillet 2026.*  
 
 > **Curator Prime Certification Seal**  
-> The architecture and coherence specifications above have been formally validated.  
-> Role coherence: Certified.  
-> Absence of redundancy: Verified.  
-> Persistence schemas and interface contracts: Frozen.  
-> Ready for Phase 2 deployment.  
+> Les spécifications d'architecture et de cohérence ci-dessus ont été formellement validées.  
+> Cohérence des rôles : Certifiée.  
+> Absence de redondance : Vérifiée.  
+> Schémas de persistance et contrats d'interface : Figés.  
+> Prêt pour le déploiement de Phase 2.  
 > `SHA256:d8c52bc7291a5db48cbcfd34208a6e87f2e1e0a293c61df289456955a1d7fce8`
 
 ---
-*Absolute Delivery Rule (SGC): This report is physically deposited in `OUTPUTS/` under the canonical archive name `rapport_curator_loop_engineering_v1.0_2026-07-10.md` for immediate indexing by Alexandria and Obsidian Avalon.*
+*Règle Absolue de Livraison (SGC) : Ce rapport est déposé physiquement dans `OUTPUTS/` sous le nom d'archive canonique `rapport_curator_loop_engineering_v1.0_2026-07-10.md` pour indexation immédiate par Alexandria et Obsidian Avalon.*
