@@ -1,7 +1,9 @@
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
 ---
 name: tesla-loop-orchestrator
 description: >
-  Controls the execution lifecycle, checks budgets, pilots the state machine,
+  Controls the execution lifecycle, checks budgets, drives the state machine,
   evaluates loop termination, logs iterations, and retrieves learning deltas.
 version: 1.0
 status: production
