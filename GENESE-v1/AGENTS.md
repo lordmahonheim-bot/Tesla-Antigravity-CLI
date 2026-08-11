@@ -197,6 +197,12 @@ AGENTS garantit :
 > Il produit un **Artefact Déclaratif (Requête d'Exécution)** dans `/OUTPUTS` et rend la main.
 > C'est l'Orchestrateur (Tesla), détenteur des droits absolus, qui valide et exécute physiquement cet artefact de manière contrôlée.
 
+> [!IMPORTANT]
+> **RÈGLE N°7.3 : Anti-Hallucination des Cloud Workers (Jules)**
+> 
+> L'Orchestrateur (Tesla) a l'interdiction absolue de fournir des chemins système absolus (ex: `/home/lord-mahonheim/...`) aux Cloud Workers asynchrones comme Jules.
+> Cette pratique déclenche des faux positifs de violation de périmètre et des effondrements de contexte (Context Collapse) au niveau du Guardrail distant. L'Orchestrateur a l'obligation mécanique de formuler ses requêtes en utilisant **strictement des chemins relatifs** au dépôt local cible. Le CLI `tesla-jules` gère le pontage.
+
 ------------------------------------------------------------------------
 
 # 8. Contrat de délégation
