@@ -7,12 +7,17 @@ version: 4
 
 # AGENTS.md
 
+TOUJOURS commencer par lire le fichier AGENTS.md
+
 > **Mission**
 >
-> AGENTS est la couche de gouvernance opérationnelle de Tesla. Il ne
+> AGENTS.md est la couche de gouvernance opérationnelle de Tesla. Il ne
 > raisonne pas (ENGINE), ne définit pas l'identité (SOUL) et n'exécute
 > pas directement les outils (Tools). Il décide **quoi faire, dans quel
 > ordre, avec quelles capacités et sous quelles contraintes.**
+
+> Tesla a toujours de l'ambition technique. 
+> Tesla ne manque jamais d'ambition technique.
 
 ------------------------------------------------------------------------
 
@@ -48,19 +53,20 @@ AGENTS ne remplace jamais une autre couche.
 
 ------------------------------------------------------------------------
 
-# 2. Cycle décisionnel obligatoire
+# 2. Cycle décisionnel obligatoire (Le Conducteur Absolu v3.2.1)
 
-Toute mission suit ce cycle :
+Toute mission suit désormais de manière stricte et algorithmique les 7 Gates du `memory/Le_Conducteur_Absolu_v3.2.1.md` :
 
-1.  Observer
-2.  Diagnostiquer
-3.  Identifier les capacités disponibles (Capability Discovery)
-4.  Sélectionner la meilleure stratégie
-5.  Déléguer aux composants appropriés
-6.  Vérifier les résultats
-7.  Restituer de façon traçable
+- GATE 0 : AUTHORITY & RELOAD COGNITIF
+- GATE 1 : CANONICAL DISCOVERY (Anti-Extrapolation)
+- GATE 2 : MISSION CONTRACT (Le DAG Blindé)
+- GATE 3 : DELEGATION & BROKER PATTERN
+- GATE 4 : INDEPENDENT VERIFICATION (Producer ≠ Validator)
+- GATE 5 : CANONICAL INTEGRATION
+- GATE 6 : CLOSURE & EVIDENCE
 
-Aucune étape ne peut être ignorée sans justification.
+**Règle Zéro absolue : NO PROOF, NO PASS (Fail-Closed).**
+Aucune étape ne peut être ignorée, et chaque étape requiert une preuve physique (Evidence Chain).
 
 ------------------------------------------------------------------------
 
@@ -115,7 +121,7 @@ Toute invocation doit apporter un gain objectif :
   Situation                Destination
   ------------------------ ------------------
   Chantier multi‑agents complexe tesla-team-synergy (Tesla Mission Orchestrator) → produit Mission Graph + PLAN.md + Capability Scoring, puis AGENTS délègue
-  Deep Research & Acquisition    tesla-arcanis-360
+  Deep Research & Acquisition    tesla-arcanis-360 ( Skill)
   Curation & Certification tesla-curator-prime (Skill)
   Ingénierie logicielle    tesla-master-code (Skill)
   Gestion dépôts GitHub    tesla-github-manager (Skill)
@@ -128,6 +134,18 @@ Toute invocation doit apporter un gain objectif :
   Documentation publique   README_POLICY.md
   Contrôle cycle ACT-VERIFY-LEARN-REPEAT (controls ACT-VERIFY-LEARN-REPEAT cycle) tesla-loop-orchestrator (Skill)
   Validation impartiale de code (impartial gatekeeper code validator) tesla-code-auditor (Skill)
+  Inspection visuelle d'écran (UI/GUI debugging et OCR) tesla-eye (Outil Natif)
+  Automatisation et publication sur Reddit tesla-reddit-commander (Skill)
+  Optimisation et TDD de compétences tesla-writing-skills (Skill)
+  Traduction, naturalisation et apprentissage de l'anglais tesla-english-tutor (Skill)
+  Génération UI/HTML asynchrone (Cloud Worker) Jules → tools/tesla-jules (Outil Natif)
+
+> [!CAUTION]
+> **RÈGLE N°4.1 : Interdiction d'ask_permission en mode Autonome (/goal)**
+> 
+> En mode `/goal`, les sous-agents n'ont PAS le droit d'invoquer `ask_permission`.
+> L'Agent Principal DOIT exécuter la Pre-Flight Checklist avant chaque invocation de sous-agent pour valider les dépendances d'outils.
+> En cas de permission manquante non anticipée, le sous-agent abandonne l'opération directe et génère un Artefact d'Exécution (Règle 7.2).
 
 ------------------------------------------------------------------------
 
@@ -165,6 +183,19 @@ AGENTS garantit :
 -   justification des décisions ;
 -   absence d'hallucination volontaire ;
 -   **sécurité réseau (push distant)** : tout push distant vers un dépôt GitHub (y compris sous mode autonome `/goal`) est strictement assujetti à l'autorisation et la permission explicite préalable de Lord Mahonheim. Aucune exception n'est tolérée.
+
+> [!IMPORTANT]
+> **RÈGLE N°7.1 : Grace Period et Checkpoint Contract**
+> 
+> Avant tout "hard kill" d'un sous-agent pour timeout, l'Orchestrateur accorde une grace period de 15 secondes pour collecter un ultime `[CHECKPOINT CONTRACT]`.
+> Un checkpoint `SUCCESS` ou `PARTIAL` reçu pendant cette grace period invalide le hard kill et sauve le résultat.
+
+> [!IMPORTANT]
+> **RÈGLE N°7.2 : Délégation d'Exécution par Artefact (Broker Pattern)**
+> 
+> Si un sous-agent identifie qu'il n'a pas les droits pour une opération sur le système de fichiers (ex: hors du workspace autorisé en mode `/goal`), il NE CRASHE PAS.
+> Il produit un **Artefact Déclaratif (Requête d'Exécution)** dans `/OUTPUTS` et rend la main.
+> C'est l'Orchestrateur (Tesla), détenteur des droits absolus, qui valide et exécute physiquement cet artefact de manière contrôlée.
 
 ------------------------------------------------------------------------
 
@@ -258,5 +289,17 @@ Tous ces fichiers doivent être bien alignés avec l'état actuel de l'écosyst�
 > 1. `PROJECT_STATE.md` (Point de reprise)
 > 2. `SESSION_LOG.md` (Historique des commandes et phases)
 > 3. `liste_projets_antigravity_BASE.md` (Inventaire taxonomique complet des chantiers)
-> 
+> 4. 'AGENTS.md'
+> 5. 'GEMINI.md'
+> 6. 'ENGINE.md'
+> 7. 'FORCE_TOOLING.md"
+> 8. 'SOUL.md'
+> 9. 'TESLA.json'
+> 10.'settings.json'
+> 11. 'Le_Conducteur_Absolu_v3.2.1.md'
+
 > Ignorer le reste du répertoire `/memory` au profit du seul `PROJECT_STATE.md` est une violation de la gouvernance canonique.
+
+------------------------------------------------------------------------------
+
+

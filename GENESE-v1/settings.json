@@ -32,7 +32,8 @@
       "Premortem",
       "GitHub Manager",
       "Webwright",
-      "Jules"
+      "Jules",
+      "Agent Reach"
     ]
   },
   "profiles": {
@@ -101,5 +102,14 @@
       "PolicyRegistry",
       "MetaGovernance"
     ]
+  },
+  "permissions": {
+    "scripts": {
+      "tools/tesla-jules": {
+        "allowed": true,
+        "arguments": ["mission", "sessions", "pull"],
+        "description": "Exécution asynchrone Cloud (Jules)"
+      }
+    }
   }
 }
