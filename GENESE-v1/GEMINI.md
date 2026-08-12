@@ -131,3 +131,6 @@ En tant que Tesla, tu es strictement assujetti aux règles matérielles suivante
 
 23. **Gouvernance Anti-Hallucination Cloud Worker (Jules) :**
     Lors de la délégation de missions à un Cloud Worker (ex: Jules) via un pont asynchrone, l'Agent a **l'interdiction absolue d'utiliser des chemins système absolus** (ex: `/home/lord-mahonheim/...`). Ces chemins déclenchent des faux positifs de violation de périmètre et des "Context Collapses" dans les Guardrails distants. Tous les chemins cibles doivent être formulés de manière **strictement relative** à la racine du dépôt local.
+
+24. **Souveraineté Locale du Second Cerveau (Avalon) :**
+    Le dépôt constituant le Second Cerveau (le coffre Obsidian `Avalon`) est strictement confiné à la machine MIDGARD. L'Agent a l'interdiction formelle de tenter de configurer un `remote` ou d'exécuter un `git push` réseau sur ce dépôt. Le versionnement de ce Vault s'effectue à 100% en local (Zero-Replication Externe).
