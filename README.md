@@ -143,7 +143,11 @@ MVP-GITHUB/
 ├── 40-Book-To-Skill-Tesla-Writing-Skills/
 ├── 41-Tesla-Eye/
 ├── 42-OPRO-Grad/
-└── 43-Cluedo-Grands-Detectives-2023/
+├── 43-Cluedo-Grands-Detectives-2023/
+├── 44-Tesla-Code-Auditor/
+├── 45-Architecture-Hybride-Jules/
+├── 46-Conducteur-Absolu-v3.2.1/
+└── 47-Tesla-Forge-Cloud/
 ```
 
 ## Workflow Sequence
