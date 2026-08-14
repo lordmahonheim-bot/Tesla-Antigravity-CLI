@@ -1,55 +1,25 @@
-# CAHIER DES CHARGES : TESLA-GITHUB-MCP
-**Version :** 2.0 (Refonte post-Audit Team-Synergy)
-**Date :** 2026-08-14
-**Statut :** ⚪ Clos
+# Tesla-Github-MCP (MVP 48)
 
----
+![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-## 1. Méta-données
-- **Identifiant :** Chantier 046
-- **Responsable :** Tesla (Agent Principal)
-- **Autorité :** Lord Mahonheim
+**Tesla-Github-MCP** implements a Dual Instantiation Model Context Protocol (MCP) server architecture. It strictly segregates GitHub authority between agents, ensuring absolute Zero-Trust hardware-level constraints.
 
-## 2. Contexte & Problématique
-Suite à l'invalidation du brouillon externe, la vision de Lord Mahonheim a été clarifiée : `tesla-github-manager` détient l'autorité totale (Read/Write) sur GitHub, tandis que `tesla-arcanis-360` opère en `Read-Only` strict pour l'OSINT.
-Étant donné qu'Antigravity CLI expose les outils MCP de manière globale à l'agent, l'architecture retenue est la **Double Instanciation de Serveurs** avec ségrégation par Token (Hardware-level constraint) pour garantir un "Zero-Trust" absolu.
+## 📐 Architecture & Dual Instantiation
 
-## 3. Périmètre & Objectifs
-**Architecture Technique :**
-Déploiement de deux serveurs MCP locaux (via `npx -y @modelcontextprotocol/server-github`) dans `mcp_config.json` :
-1. **Serveur `github-manager`** : Alimenté par un Token GitHub (PAT ou OAuth) avec droits de mutation.
-2. **Serveur `github-arcanis`** : Alimenté par un Fine-Grained PAT **strictement limité à la lecture seule**.
-Les `SKILL.md` des deux agents seront mis à jour pour imposer l'utilisation exclusive de leur préfixe d'outils respectif (`github-manager_*` vs `github-arcanis_*`). Toute erreur cognitive d'Arcanis tentant d'écrire sera interceptée matériellement par l'API GitHub (Erreur 403) grâce au Token read-only.
+The ecosystem relies on deploying two separate local MCP servers pointing to the same `@modelcontextprotocol/server-github` NPM package but configured with different authentication environments:
 
-## 4. Feuille de Route Maîtresse (Mission Graph - DAG)
+1. **`github-manager` Server**: Powered by a GitHub Token (PAT or OAuth) with full mutation rights. Exclusively routed to the `tesla-github-manager` agent.
+2. **`github-arcanis` Server**: Powered by a Fine-Grained PAT strictly restricted to Read-Only access. Exclusively routed to the `tesla-arcanis-360` agent for OSINT tasks.
 
-#### 📍 NOEUD 1 : ACQUISITION DES TOKENS & ISOLATION SÉCURITAIRE (Gate 1 & 2)
-**Agents Assignés :** `Tesla-PREMORTEM` + `Tesla-Github-Manager`
-*   **Action :** Création et validation des deux clés d'authentification (PAT Standard pour Manager, Fine-Grained PAT Read-Only pour Arcanis). Audit strict des scopes du token Arcanis pour garantir l'absence totale de droit d'écriture (Zero-Trust hardware limit).
-*   **Contrainte :** Les tokens doivent être stockés de manière sécurisée en variables d'environnement locales.
+By enforcing tool namespace prefixes (`github-manager_*` vs `github-arcanis_*`), any cognitive error attempting unauthorized writes is physically blocked by the GitHub API (403 Forbidden).
 
-#### 📍 NOEUD 2 : DÉPLOIEMENT DE LA DOUBLE INSTANCIATION MCP (Gate 5)
-**Agent Assigné :** `Tesla-Master-Code`
-*   **Action :** Configurer `~/.gemini/antigravity-cli/mcp_config.json` pour déclarer les deux serveurs (`github-manager` et `github-arcanis`) pointant vers le même package NPM officiel mais avec des environnements différents.
-*   **Contrainte :** Connectivité vérifiée et exposition confirmée des deux pools d'outils.
+## 🛡 Security & Resilience
 
-#### 📍 NOEUD 3 : MISE À JOUR DE LA GOUVERNANCE ET DES SKILLS
-**Agents Assignés :** `Tesla-Curator-Prime`
-*   **Action :** Mise à jour canonique des directives dans les `SKILL.md` de `tesla-github-manager` et `tesla-arcanis-360`. Verrouillage des namespaces : Arcanis a l'interdiction stricte d'appeler les outils préfixés `github-manager_`.
-*   **Contrainte :** Doctrine anti-usurpation d'outils fermement ancrée dans leurs instructions.
+- **Hardware-Level Isolation**: Read-Only restrictions are not just enforced via agent prompts; they are hardcoded into the Fine-Grained PAT, providing a fail-closed boundary against unauthorized mutations.
+- **Zero-Trust Segregation**: Tokens are isolated securely in local environment variables and independently fed to their respective MCP server instance.
 
-#### 📍 NOEUD 4 : STRESS-TEST & RED TEAM (Gate 4 & 7)
-**Agent Assigné :** `Tesla-PREMORTEM`
-*   **Action :** 
-    - *Test 1 (Sur-permission Hardware)* : Simuler l'appel d'un outil d'écriture via le serveur `github-arcanis`. L'API GitHub distante doit renvoyer une erreur `403 Forbidden`.
-    - *Test 2 (Prompt Injection Cognitive)* : Soumettre Arcanis à une issue malveillante pour tenter de lui faire utiliser frauduleusement un outil `github-manager_`. Il doit rejeter l'instruction.
-*   **Contrainte :** Certification PREMORTEM obligatoire pour valider cette étape (NO PROOF, NO PASS).
+## 🤝 Contribution & Governance
 
-#### 📍 NOEUD 5 : CLÔTURE & SYNCHRONISATION (Gate 6)
-**Agent Assigné :** `Tesla-Team-Synergy`
-*   **Action :** Archivage SGC des logs de test, clôture du chantier (mise à jour de `PROJECT_STATE.md` et `INDEX.md`), synchronisation du registre.
-
-## 5. Critères d'Acceptation (DoD)
-- Deux serveurs MCP distincts fonctionnent en parallèle.
-- Arcanis est matériellement incapable de muter l'état GitHub, validant la doctrine "Fail-Closed".
-- La séparation d'autorité est claire, opérationnelle et documentée.
+The evolution of this module is governed by the **Vigilum Codex**.
+- **Strict English** for all future technical documentation.
+- Module modifications are subject to **Rule 12 (Double Copy)** (MIDGARD / MVP-GITHUB Sync).

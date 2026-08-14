@@ -2,19 +2,19 @@
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
-**Tesla-Forge-Cloud** est un serveur Model Context Protocol (MCP) basé sur FastMCP permettant l'instanciation et l'orchestration Zero-Trust d'environnements de développement cloud éphémères (E2B Sandboxes) depuis la station locale MIDGARD.
+**Tesla-Forge-Cloud** is a Model Context Protocol (MCP) server based on FastMCP, enabling Zero-Trust instantiation and orchestration of ephemeral cloud development environments (E2B Sandboxes) from the local MIDGARD station.
 
-## 🚀 Prérequis & Installation Rapide
+## 🚀 Prerequisites & Quick Installation
 
-**Audience cible :** Agents d'exécution locaux (Tesla, Master-Code) nécessitant un environnement d'exécution distant hautement outillé sans compromettre le système hôte.
+**Target Audience:** Local execution agents (Tesla, Master-Code) requiring a highly tooled remote execution environment without compromising the host system.
 
-### Prérequis
-- `uv` (Gestionnaire de paquets Python 3.12+)
-- Clé API E2B (`E2B_API_KEY` dans l'environnement)
-- Template E2B `tesla-forge-v1` buildé
+### Prerequisites
+- `uv` (Python 3.12+ package manager)
+- E2B API Key (`E2B_API_KEY` in environment)
+- Built `tesla-forge-v1` E2B template
 
-### Configuration MCP Locale
-Pour déclarer le serveur MCP dans l'écosystème Antigravity (`~/.gemini/antigravity-cli/mcp_config.json`) :
+### Local MCP Configuration
+To declare the MCP server in the Antigravity ecosystem (`~/.gemini/antigravity-cli/mcp_config.json`):
 
 ```json
 {
@@ -35,18 +35,18 @@ Pour déclarer le serveur MCP dans l'écosystème Antigravity (`~/.gemini/antigr
 }
 ```
 
-## 🛠 Usage & Exemples (Outils MCP Exposés)
+## 🛠 Usage & Examples (Exposed MCP Tools)
 
-Le module expose **6 outils natifs** via FastMCP pour le pilotage de la sandbox :
+The module exposes **6 native tools** via FastMCP for sandbox control:
 
-1. `create_forge()` : Instancie une nouvelle sandbox `tesla-forge-v1` (Timeout 300s).
-2. `forge_exec(command: str)` : Exécute une commande shell arbitraire.
-3. `forge_write_file(path: str, content: str)` : Écrit un fichier distant.
-4. `forge_read_file(path: str)` : Lit un fichier distant.
-5. `forge_sync_to_midgard(remote_path: str, local_path: str)` : Rapatrie un fichier sur MIDGARD en toute sécurité.
-6. `forge_destroy()` : Termine la session de la sandbox.
+1. `create_forge()`: Instantiates a new `tesla-forge-v1` sandbox (300s timeout).
+2. `forge_exec(command: str)`: Executes an arbitrary shell command.
+3. `forge_write_file(path: str, content: str)`: Writes a remote file.
+4. `forge_read_file(path: str)`: Reads a remote file.
+5. `forge_sync_to_midgard(remote_path: str, local_path: str)`: Safely synchronizes a file back to MIDGARD.
+6. `forge_destroy()`: Terminates the sandbox session.
 
-### Workflow d'Orchestration Type
+### Typical Orchestration Workflow
 
 ```mermaid
 sequenceDiagram
@@ -63,32 +63,32 @@ sequenceDiagram
     Agent->>MCP: call forge_sync_to_midgard("/dist/out.js", "./out.js")
     MCP->>E2B: filesystem.read_bytes()
     E2B-->>MCP: stream
-    MCP->>Agent: Fichier rapatrié (Zero-Trust)
+    MCP->>Agent: File synchronized (Zero-Trust)
     Agent->>MCP: call forge_destroy()
     MCP->>E2B: kill()
 ```
 
 ## 📐 Architecture & Design Decisions
 
-Le serveur utilise `mcp.server.fastmcp.FastMCP` pour exposer rapidement les fonctions Python.
-L'environnement cloud (template `tesla-forge-v1`) est basé sur `ubuntu:24.04` et embarque le SDK E2B. 
-Le Dockerfile associé provisionne un outillage massif non-interactif :
+The server uses `mcp.server.fastmcp.FastMCP` to quickly expose Python functions.
+The cloud environment (`tesla-forge-v1` template) is based on `ubuntu:24.04` and embeds the E2B SDK. 
+The associated Dockerfile provisions massive non-interactive tooling:
 - `python3.12`, `pip`, `venv`
 - `nodejs 20.x`
 - `ripgrep (rg)`, `fd-find (fd)`, `curl`, `wget`
 - `just` (Command runner)
 
-La décision d'utiliser **E2B** au lieu de conteneurs locaux (Docker) s'inscrit dans la doctrine de préservation des ressources (CPU/RAM) de la station locale MIDGARD. L'isolation est stricte : les dépendances lourdes sont exécutées à distance et seuls les artefacts générés sont rapatriés.
+The decision to use **E2B** instead of local containers (Docker) aligns with the doctrine of preserving resources (CPU/RAM) on the local MIDGARD station. Isolation is strict: heavy dependencies are executed remotely and only generated artifacts are synchronized back.
 
-## 🛡 Sécurité & Résilience
+## 🛡 Security & Resilience
 
-- **Pattern Broker & Zero-Trust :** Les agents ne peuvent exécuter le code qu'au travers des 6 verrous (outils) MCP. Le rapatriement de fichiers (`forge_sync_to_midgard`) est le seul pont unidirectionnel vers l'hôte.
-- **Fail-Closed & Timeout :** La sandbox est configurée avec un `timeout` absolu de 300 secondes. En cas de blocage d'un agent, l'environnement se détruit automatiquement (auto-kill).
-- **ID LOCKED :** La clé API E2B n'est jamais exposée aux agents. Elle réside hermétiquement dans l'environnement (`os.getenv`) injecté par le fichier de configuration MCP.
+- **Broker Pattern & Zero-Trust:** Agents can only execute code through the 6 MCP tool gateways. File synchronization (`forge_sync_to_midgard`) is the only unidirectional bridge back to the host.
+- **Fail-Closed & Timeout:** The sandbox is configured with an absolute timeout of 300 seconds. If an agent hangs, the environment automatically destroys itself (auto-kill).
+- **ID LOCKED:** The E2B API key is never exposed to agents. It resides hermetically in the environment (`os.getenv`) injected by the MCP configuration file.
 
-## 🤝 Contribution & Gouvernance
+## 🤝 Contribution & Governance
 
-L'évolution de ce module est régie par le **Vigilum Codex**.
-- **Anglais strict** pour toute future documentation technique.
-- Modification du module assujettie à la **Règle 12 (Double Copie)** (Synchro MIDGARD / MVP-GITHUB).
-- Tout nouveau endpoint MCP doit être accompagné de la mise à jour correspondante dans les graphes Mermaid.
+The evolution of this module is governed by the **Vigilum Codex**.
+- **Strict English** for all future technical documentation.
+- Module modifications are subject to **Rule 12 (Double Copy)** (MIDGARD / MVP-GITHUB Sync).
+- Any new MCP endpoint must be accompanied by the corresponding update in Mermaid graphs.
