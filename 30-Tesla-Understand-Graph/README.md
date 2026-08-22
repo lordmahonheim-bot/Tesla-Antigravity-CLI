@@ -1,6 +1,11 @@
 # Tesla Understand Graph: Understand-Anything Integration
 
-![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+![Status](https://img.shields.io/badge/Status-OBSOLETE-red) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+
+> [!WARNING]
+> **DEPRECATION NOTICE (2026-08-22)**
+> This MVP has been officially deprecated and superseded by **[MVP 51: CodeBase Memory MCP PRO](../51-CodeBase-Memory-MCP-PRO/)**.
+> The limits of this engine (notably >30s timeouts on massive codebase queries) have been resolved by the new Two-Phase CBM architecture using Cypher queries.
 
 ## 📌 Objective & Purpose
 The **Tesla Understand Graph** project implements a hybrid engine for analyzing codebases (combining AST Tree-sitter and Semantic LLMs). Its primary goal is to produce JSON-based knowledge graphs that can be indexed into the **Alexandria** database, strictly without compromising system governance or exceeding token budget limits.
