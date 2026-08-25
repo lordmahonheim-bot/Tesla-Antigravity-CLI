@@ -39,6 +39,10 @@ version: "2.0.0"
   > **[EVIDENCE_CHAIN]**:
   > `EVIDENCE_TYPE: OBSERVATION`
   > Validation objective sans blocage artificiel.
+* **[VC-GOV-07] Utilisation Contextuelle de Github-Manager**: Si la mission concerne GitHub, l'emploi de `tesla-github-manager` est impératif. Si la mission ne concerne ni de près ni de loin GitHub (ex: écrasement ou copie de fichier local pur), l'agent `tesla-github-manager` n'a aucun intérêt à être utilisé et doit être exclu du Mission Graph pour éviter le gaspillage de ressources.
+  > **[EVIDENCE_CHAIN]**:
+  > `EVIDENCE_TYPE: STRUCTURAL_CHECK`
+  > Absence de `tesla-github-manager` dans le Graphe de Mission pour les opérations strictement locales.
 
 ### II. Rigueur Opérationnelle & Traitement des Données
 
