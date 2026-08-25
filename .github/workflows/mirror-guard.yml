@@ -1,0 +1,13 @@
+name: mirror-guard
+on:
+  pull_request:
+    paths: ['LEARN/**', 'PROTOCOLES/**']
+permissions:
+  contents: read
+jobs:
+  souverainete-locale:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::LEARN/ et PROTOCOLES/ sont des MIROIRS UNIDIRECTIONNELS."
+          exit 1
