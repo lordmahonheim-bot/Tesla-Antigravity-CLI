@@ -77,6 +77,7 @@ graph TD
     Gov --> U["20-Tesla-Premortem"]
     Gov --> V["21-Tesla-Web-Raider"]
     Gov --> W["22-Shadow-Targeting-Method"]
+    Gov --> X["53-Vigilum-Codex-2.0-Executable-Governance"]
 
     Data --> C["02-Alexandria-Database"]
     Data --> D["03-Memory-MLT"]
@@ -151,7 +152,9 @@ MVP-GITHUB/
 ├── 48-Tesla-Github-MCP/
 ├── 49-Stitch-Skills/
 ├── 50-Tesla-Github-Manager/
-└── 51-CodeBase-Memory-MCP-PRO/
+├── 51-CodeBase-Memory-MCP-PRO/
+├── 52-Tesla-Mirroring-Cognitif-Assimilation/
+└── 53-Vigilum-Codex-2.0-Executable-Governance/
 ```
 
 ## Workflow Sequence
@@ -165,6 +168,7 @@ MVP-GITHUB/
 8. Predictive failure scenarios, AMDEC/FMEA assessments, and dynamic risk graph entries are mapped and certified by `20-Tesla-Premortem` before critical systems execution.
 9. Internet operations, OSINT searches, web navigation via Webwright, fact-checking, and evidence collection are dispatched to and certified by `21-Tesla-Web-Raider` to support all subagent operations.
 10. Shadow-targeted injection mechanisms, naming conventions, and metadata standards are defined and validated by `22-Shadow-Targeting-Method` to bypass subscription limits while maintaining modularity.
+11. All runtime filesystem modifications and git push actions are mediated deterministically by `53-Vigilum-Codex-2.0-Executable-Governance`, enforcing transactional staging, anti-TOCTOU confinement, and POSIX atomic anti-replay tokens.
 
 ## Feature Highlights (v3.0.0)
 *   **SQLite Safe Mode (`mode=rw`):** Centralized `db_connector.py` database wrapper enforces read-write only constraints by default. This blocks scripts from silently creating blank SQLite files on disk if the primary database is missing, ensuring configuration consistency.

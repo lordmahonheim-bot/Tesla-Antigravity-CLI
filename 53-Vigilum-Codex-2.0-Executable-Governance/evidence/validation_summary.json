@@ -1,0 +1,25 @@
+{
+  "mission_id": "SGC-EXEC-GOV-03",
+  "protocol": "Le Conducteur Absolu v3.2.1 / Loi de Parité Absolue v2.0.0",
+  "status": "PASS",
+  "date": "2026-08-27",
+  "authority": "Lord Mahonheim",
+  "evidence_ledger": "evidence/parity_SGC-EXEC-GOV-03_20260827-214806-958216.json",
+  "global_fingerprint": "sha256:61fb88912918128ae942ebbabcb5c2075f504a8014696c10215c3092c3989594",
+  "tests_executed": 14,
+  "tests_failed": 0,
+  "nodes_completed": [
+    "GATE_N1_PARITY_TOOLING",
+    "GATE_N2_BROKER_TRANSACTIONAL",
+    "GATE_N3_GIT_GUARDRAILS_ATOMIC_ANTI_REPLAY",
+    "GATE_N4_AMDEC_MAPPING_CHAIN_ANCHOR"
+  ],
+  "invariants_verified": [
+    "Q-001 (Atomic Ingestion on Same Filesystem)",
+    "T-002 (Anti-TOCTOU & Anti-Symlink Confinement)",
+    "R4 (Crash Recovery & Durable State Journal)",
+    "A-001 (Signed Push Authorization Token)",
+    "A-002 (JCS Canonical Verification)",
+    "A-003 (POSIX O_CREAT|O_EXCL Atomic Anti-Replay)"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigilum-codex.local/schemas/intent_v3.1.schema.json",
+  "title": "Synergy Governance Intent V3.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intent_id", "mission_id", "operation", "target", "content", "sha256"],
+  "properties": {
+    "intent_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,96}$"},
+    "mission_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,96}$"},
+    "operation": {"const": "write_file"},
+    "target": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "content": {"type": "string", "maxLength": 1048576},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "submitted_at": {"type": ["string", "number"]},
+    "signature": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
