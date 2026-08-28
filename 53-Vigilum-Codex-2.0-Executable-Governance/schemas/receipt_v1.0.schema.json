@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigilum-codex.local/schemas/receipt_v1.0.schema.json",
+  "title": "Subagent Receipt V1.0 (Quittance de Sous-Agent)",
+  "description": "Physical proof emitted by a sub-agent via invoke_subagent after a node completes. Presence in runtime/subagents/receipt_<agent_id>.json is the ONLY evidence accepted for Team-Synergy synthesis (Absolute Rule N°4).",
+  "type": "object",
+  "required": ["agent_id", "node_id", "mission_id", "status", "output_artifacts", "submitted_at"],
+  "properties": {
+    "agent_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "mission_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["SUCCESS", "COMPLETED", "PARTIAL", "FAILED"]},
+    "output_artifacts": {"type": "array", "items": {"type": "string"}},
+    "submitted_at": {"type": "string", "minLength": 1},
+    "transcript_ref": {"type": "string"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

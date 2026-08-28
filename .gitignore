@@ -53,3 +53,7 @@ Thumbs.db
 *.whl
 **/node_modules/
 
+# Vigilum Codex 2.1: runtime state is never committed (intents, nonces,
+# orchestration registry, audit passes, subagent receipts) — hygiene E5
+**/runtime/
+

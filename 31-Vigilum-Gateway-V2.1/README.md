@@ -18,6 +18,23 @@
 4. **Graceful Shutdown Protocol (GSP)**
    In the event of a sub-task failure, the agent cleans its workspace and surfaces a structured error instead of abruptly halting the process.
 
+## 🧬 Enforcement Layer (Vigilum Codex 2.1 — RETEX Hardening)
+
+The orchestration hardening above is now **enforced deterministically** by the
+Vigilum Orchestration Gate (`53-Vigilum-Codex-2.0-Executable-Governance/`):
+
+- **Gate 2 (Mission Contract):** `orchestration_gate.py dag-verify` — a DAG is
+  executable only with Lord Mahonheim's approval seal (`approval_sha256`).
+- **Anti-Usurpation (Rule N°4):** `orchestration_gate.py receipt-quorum` +
+  `intent-guard` (hook `07-orchestration-gate.sh`) — Team-Synergy synthesis is
+  blocked until physical receipts `runtime/subagents/receipt_<agent_id>.json`
+  exist for every agent of the graph.
+- **Execution Broker compatibility:** the Execution Artifact system materializes
+  as the sealed Mission Graph + contracts; receipts are the proof that the
+  artifact was actually executed by a distinct entity.
+
+Full catalogue: `53-Vigilum-Codex-2.0-Executable-Governance/docs/RETEX_HARDENING_2.1.md`.
+
 ## 📊 Execution Broker Architecture
 
 ```mermaid

@@ -31,3 +31,20 @@ La hiérarchie d'autorité immuable s'applique :
 ## 3. États de Transition
 - **File Broker :** `CLAIMED` ➔ `AUTHORIZED` ➔ `MUTATION_STARTED` ➔ `MUTATION_COMMITTED` ➔ `VERIFIED` ➔ `RECEIPTED` ➔ `COMPLETED` (ou `FAILED`).
 - **Gouvernance Mission :** `PASS` (validé), `BLOCKED` (échec gatekeeper), `STALE_STATE` (dérive fingerprint), `UNKNOWN` (élément externe non observable).
+
+---
+
+## 4. Extension Vigilum Codex 2.1 (RETEX Hardening — SGC-EXEC-GOV-03-R3)
+
+| Verrou RETEX | Composant Exécutable | Contrat / Schéma | Preuve Matérielle |
+|---|---|---|---|
+| **Gate 2 (Mission Contract / DAG)** | `core/orchestration/orchestration_gate.py dag-verify` | `schemas/mission_graph_v2.0.schema.json` | Sceau `approval_sha256` canonique (RFC-8785-style) + `approved_by` |
+| **Anti-Usurpation (Règle Absolue N°4)** | `orchestration_gate.py receipt-quorum` / `intent-guard` | `schemas/receipt_v1.0.schema.json` | Quittances physiques `runtime/subagents/receipt_<agent_id>.json` (status SUCCESS/COMPLETED) |
+| **Double Track Staging $N+1$** | `bin/staging_gate.py` | Phase 4 Gravure sur Marbre | Jalon calculé sur `MVP-GITHUB/` + README anglais strict vérifié |
+| **13 Piliers Mémoire** | `bin/memory_parite.py` | `schemas/memory_pillars_v2.1.schema.json` | Matrice 13/13 SHA-256, exit 0 |
+| **Plafond d'Audit Max 3** | `bin/audit_cap.py` | — | SPEC LOCK atomique `O_CREAT\|O_EXCL` (exit 80) |
+| **Universal Test Runner** | `bin/test_runner.py` | — | Discovery `-s tests`, ledger `evidence/test_runner_*.json` |
+| **Hygiène du Creuset** | hook `08-draft-artifact-guard.sh` | — | Refus des artefacts éphémères (exit 90) |
+
+- **Nouveaux codes de sortie guardrails :** `TESLA_EXIT_LOCK=80`, `TESLA_EXIT_ORCH=81`, `TESLA_EXIT_DRAFT=90`.
+- **Exit codes orchestration gate :** `0 PASS | 1 BLOCKED | 64 USAGE | 66 UNKNOWN` (P3).

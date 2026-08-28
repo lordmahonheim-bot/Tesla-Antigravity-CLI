@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vigilum-codex.local/schemas/mission_graph_v2.0.schema.json",
+  "title": "Mission Graph V2.0 (DAG Scellé — Gate 2)",
+  "description": "Canonical Mission Graph emitted by tesla-team-synergy. A graph is executable ONLY when its approval block carries an approval_sha256 matching the canonical serialization of the graph content (Biological Gate of Lord Mahonheim).",
+  "type": "object",
+  "required": ["mission", "nodes", "approval"],
+  "additionalProperties": true,
+  "properties": {
+    "mission": {"type": "string", "minLength": 1},
+    "version": {"type": "string"},
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "agents"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "agents": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "depends_on": {"type": "array", "items": {"type": "string"}},
+          "contract_ref": {"type": "string"},
+          "capability_min": {"type": "object"},
+          "model_recommended": {"type": "string"},
+          "complexity": {"type": "string"},
+          "time_estimate_min": {"type": "integer"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": ["approved_by", "approved_at", "nonce", "approval_sha256"],
+      "properties": {
+        "approved_by": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "string", "minLength": 1},
+        "nonce": {"type": "string", "minLength": 1},
+        "approval_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

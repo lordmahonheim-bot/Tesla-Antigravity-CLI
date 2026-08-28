@@ -58,6 +58,27 @@ Transform an SGC project into a **coordinated multi-agent team**, outputting:
 
 ---
 
+## 0.1 Gate 2 — Mission Graph Seal & Physical Receipts (Vigilum Codex 2.1)
+
+> **Deterministic contract (SGC-EXEC-GOV-03-R3).** The Mission Orchestrator
+> produces the DAG; execution is gated by the Vigilum Orchestration Gate
+> (`53-Vigilum-Codex-2.0-Executable-Governance/core/orchestration/orchestration_gate.py`):
+>
+> 1. **Seal (Gate 2):** every `mission_graph.yaml` MUST carry an `approval`
+>    block — `approved_by: Lord Mahonheim`, `approved_at`, `nonce`,
+>    `approval_sha256` (SHA-256 of the canonical graph content minus the
+>    approval block). `dag-verify` recomputes and compares the seal: an
+>    unsealed or tampered DAG is `BLOCKED` (exit 1).
+> 2. **Receipt quorum (Anti-Usurpation):** after each `invoke_subagent`, the
+>    sub-agent MUST emit a physical receipt
+>    `runtime/subagents/receipt_<agent_id>.json` (schema
+>    `schemas/receipt_v1.0.schema.json`, `status: SUCCESS|COMPLETED`). Any
+>    Team-Synergy synthesis committed without the full quorum is blocked by
+>    pre-commit guardrail `07-orchestration-gate.sh` (exit 81).
+>
+> The Principal Agent never writes a multi-agent deliverable before these
+> proofs exist on disk. See `docs/RETEX_HARDENING_2.1.md`.
+
 ## 1. Position in the Tesla Stack
 
 ```

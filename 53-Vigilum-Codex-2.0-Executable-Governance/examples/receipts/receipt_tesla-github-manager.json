@@ -1,0 +1,10 @@
+{
+  "agent_id": "tesla-github-manager",
+  "node_id": "N3",
+  "mission_id": "SGC-EXEC-GOV-03-R3",
+  "status": "SUCCESS",
+  "output_artifacts": ["README.md", "docs/protocol_mapping.md", "evidence/retex_hardening_summary.json"],
+  "submitted_at": "2026-08-28T21:05:00+01:00",
+  "transcript_ref": "runtime/subagents/transcripts/tesla-github-manager.jsonl",
+  "notes": "Vérification de la publication et de la parité des livrables — quittance émise."
+}

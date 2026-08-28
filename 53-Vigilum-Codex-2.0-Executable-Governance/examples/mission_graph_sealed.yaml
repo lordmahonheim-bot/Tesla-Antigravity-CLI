@@ -1,0 +1,27 @@
+# Mission Graph scellé — Exemple canonique Vigilum Codex 2.1
+# Gate 2 : un DAG n'est exécutable qu'avec le sceau d'approbation de Lord Mahonheim.
+# Le champ approval_sha256 est le SHA-256 de la sérialisation canonique du graphe
+# SANS le bloc approval (vérifié par core/orchestration/orchestration_gate.py).
+mission: SGC-EXEC-GOV-03-R3 Orchestration Retrofit
+version: 1.0
+nodes:
+  - id: N1
+    role: Audit
+    agents: [tesla-arcanis-360]
+    depends_on: []
+    contract_ref: contracts/N1.yaml
+  - id: N2
+    role: Implementation
+    agents: [tesla-master-code]
+    depends_on: [N1]
+    contract_ref: contracts/N2.yaml
+  - id: N3
+    role: Verification
+    agents: [tesla-github-manager]
+    depends_on: [N2]
+    contract_ref: contracts/N3.yaml
+approval:
+  approved_by: Lord Mahonheim
+  approved_at: 2026-08-28T21:00:00+01:00
+  nonce: seal-demo-0001
+  approval_sha256: 94886bd971ded2dc8b810b499257547fc1f22172cb78fc812ffd47f700b1f6ca

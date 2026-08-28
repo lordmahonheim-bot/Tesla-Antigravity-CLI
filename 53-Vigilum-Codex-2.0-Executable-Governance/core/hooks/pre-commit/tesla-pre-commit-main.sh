@@ -10,6 +10,8 @@ dir=$(dirname "$0")
 "$dir/04-project-state-check.sh"
 "$dir/05-marble-cert-check.sh"
 "$dir/06-lint-check.sh"
+"$dir/07-orchestration-gate.sh"
+"$dir/08-draft-artifact-guard.sh"
 
 tesla_log INFO "all pre-commit guardrails passed successfully"
 exit "$TESLA_EXIT_OK"

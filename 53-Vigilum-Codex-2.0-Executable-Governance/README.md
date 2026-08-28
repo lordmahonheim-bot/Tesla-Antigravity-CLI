@@ -3,9 +3,10 @@
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
 *Author:* Lord Mahonheim  
-*Mission ID:* `SGC-EXEC-GOV-03`  
+*Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
+*Version:* **2.1.0** (RETEX Hardening — 7 erreurs → 6 verrous exécutables, voir `docs/RETEX_HARDENING_2.1.md`)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
@@ -82,9 +83,14 @@ flowchart TD
 | **Gatekeeper** | `core/gatekeeper.py` | High-speed cryptographic capability verifier and mission lease validator. |
 | **Broker Daemon** | `core/broker/tesla_brokerd.py` | Transactional mediation daemon managing intent lifecycle and atomic writes. |
 | **Intent Schema** | `schemas/intent_v3.1.schema.json` | JSON Schema draft-07 defining strict write intent specifications. |
-| **Git Guardrails** | `core/hooks/` | Suite of 9 scripts (lib, 6 pre-commit checks, 1 atomic pre-push hook). |
+| **Git Guardrails** | `core/hooks/` | Suite of 11 scripts (lib, 8 pre-commit checks incl. orchestration gate & draft guard, 1 atomic pre-push hook). |
 | **Parity Engine** | `bin/audit_parite.py` & `.sh` | Real-time filesystem parity inspector, fingerprint generator, and audit validator. |
-| **Test Suites** | `tests/test_governance.py` & `.sh` | Complete Python unit test suite (8 tests) and bash hook test harness (6 tests). |
+| **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (30 tests) and bash hook test harness (9 tests). |
+| **Orchestration Gate (2.1)** | `core/orchestration/orchestration_gate.py` + `yaml_mini.py` | Gate 2 (sealed Mission Graph) + Anti-Usurpation (physical receipt quorum) — stdlib-only, fail-closed. |
+| **Universal Test Runner (2.1)** | `bin/test_runner.py` | E4-proof discovery (`unittest discover -s tests`), aggregate ledger in `evidence/`. |
+| **Memory Parity (2.1)** | `bin/memory_parite.py` | 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure). |
+| **Staging Gate (2.1)** | `bin/staging_gate.py` | Phase 4 mandatory public staging: milestone $N+1$ computed on `MVP-GITHUB/`, README English-strict verification. |
+| **Audit Cap / SPEC LOCK (2.1)** | `bin/audit_cap.py` | Max 3 audit passes, atomic SPEC LOCK (exit 80), forced switch to executable code. |
 | **Evidence Ledger** | `evidence/` | Sealed SHA-256 chain head anchor and JSON validation summary. |
 
 ---
@@ -149,8 +155,37 @@ TEST SUITE EXECUTION SUMMARY
 
 TOTAL TESTS: 14 | PASSED: 14 | FAILED: 0 | ACCURACY: 100.0%
 PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
+
+[RETEX HARDENING 2.1 — SGC-EXEC-GOV-03-R3]
+  Python suite (governance + RETEX): 30/30 PASS
+  Bash hook suite (6 + orchestration gate + draft guard + LOCKED): 9/9 PASS
+  Demos: dag-verify PASS | receipt-quorum PASS | intent-guard BLOCKED→PASS |
+         audit_cap SPEC LOCK exit 80 | staging N+1=13 PASS | memory 13/13 PASS
+TOTAL TESTS (V2.0 + V2.1): 39 | PASSED: 39 | FAILED: 0
 ======================================================================
 ```
+
+---
+
+## 🧰 RETEX Hardening 2.1 — Operational Summary
+
+The RETEX corrective action plan (7 documented failures) is now enforced by
+deterministic, OS-level mechanisms — not prompt-level intentions:
+
+| Verrou | Commande | Fail-Closed |
+| :--- | :--- | :--- |
+| Gate 2 (DAG approved) | `python3 core/orchestration/orchestration_gate.py dag-verify --graph <mission_graph.yaml>` | unsealed graph → exit 1 |
+| Anti-Usurpation (Rule N°4) | `python3 core/orchestration/orchestration_gate.py receipt-quorum --graph <f> --receipts runtime/subagents` | missing receipt → exit 1 |
+| Anti-Usurpation (commit hook) | hook `07-orchestration-gate.sh` (auto on `team_synergy: true` markers) | exit 81 |
+| 13 Memory Pillars | `python3 bin/memory_parite.py --root <TESLA_ROOT>` | 13/13 SHA-256 required, exit 0 |
+| Staging $N+1$ | `python3 bin/staging_gate.py verify --registry MVP-GITHUB/ --milestone N` | Phase 4 mandatory |
+| Audit Ceiling (SPEC LOCK) | `python3 bin/audit_cap.py --root <dir> --spec <ID> --record` | lock at 3rd pass, exit 80 |
+| Universal Runner | `python3 bin/test_runner.py --root . --mission <ID>` | all suites must PASS |
+| Draft Hygiene | hook `08-draft-artifact-guard.sh` | ephemeral artifacts → exit 90 |
+
+Runtime state (`runtime/`) is never committed (see `.gitignore`). The full
+mechanism catalogue, schemas, exit codes and the canonical closure procedure
+are documented in `docs/RETEX_HARDENING_2.1.md` and `docs/protocol_mapping.md`.
 
 ---
 

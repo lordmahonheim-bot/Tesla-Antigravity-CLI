@@ -68,4 +68,30 @@ replay_status=$?
 set -e
 [ "$replay_status" -eq 70 ] || { echo "expected anti-replay exit 70, got $replay_status" >&2; exit 1; }
 
-echo "Hook suite passed completely (All 6 tests OK, including A-003 anti-replay)."
+# Test 7: Orchestration gate / Anti-Usurpation (Exit 81)
+git -C "$tmp" reset -q
+printf '{"team_synergy": true, "mission": "demo", "target": "OUTPUTS/synth.md"}\n' > "$tmp/synth.json"
+git -C "$tmp" add synth.json
+set +e
+(cd "$tmp" && "$root/core/hooks/pre-commit/tesla-pre-commit-main.sh")
+status=$?
+set -e
+[ "$status" -eq 81 ] || { echo "expected orchestration gate exit 81, got $status" >&2; exit 1; }
+
+# Test 8: Draft artifact guard (Exit 90)
+git -C "$tmp" reset -q
+printf 'draft content\n' > "$tmp/doc_V3.1_brouillon.md"
+git -C "$tmp" add doc_V3.1_brouillon.md
+set +e
+(cd "$tmp" && "$root/core/hooks/pre-commit/tesla-pre-commit-main.sh")
+status=$?
+set -e
+[ "$status" -eq 90 ] || { echo "expected draft guard exit 90, got $status" >&2; exit 1; }
+
+# Test 9: Canonical LOCKED document allowed (Exit 0)
+git -C "$tmp" reset -q
+printf 'canonical locked spec\n' > "$tmp/Synergy_Gouvernance_Executable_V3.6_LOCKED.md"
+git -C "$tmp" add Synergy_Gouvernance_Executable_V3.6_LOCKED.md
+(cd "$tmp" && "$root/core/hooks/pre-commit/tesla-pre-commit-main.sh")
+
+echo "Hook suite passed completely (All 9 tests OK, including A-003 anti-replay, Gate 2 anti-usurpation and draft guard)."
