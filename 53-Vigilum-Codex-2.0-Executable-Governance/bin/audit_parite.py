@@ -43,6 +43,7 @@ REQUIRED_COMPONENTS = [
     "schemas/mission_graph_v2.0.schema.json",
     "schemas/memory_pillars_v2.1.schema.json",
     "manifest/memory_manifest_v2.1.yaml",
+    "manifest/test_manifest_v2.1.yaml",
     "tests/test_retex_hardening.py",
     "docs/RETEX_HARDENING_2.1.md",
     "OUTPUTS/Synergy_Gouvernance_Executable_V3.6_LOCKED.md",
@@ -116,10 +117,23 @@ def main() -> int:
     verdict = "STALE_STATE" if stale else ("BLOCKED" if failures else "PASS")
     exit_code = 2 if stale else (1 if failures else 0)
 
+    # V2.1.3 (arbitrage #6) — classification du sceau :
+    #  - evidence/chain_head.sha256 (local, vérifiable par re-calcul) = TAMPER_EVIDENT
+    #  - certificat de marbre ancré côté distant (POST_PUB_VERIFIED) = IMMUTABLE
+    chain_head_path = root / "evidence" / "chain_head.sha256"
+    seal_classification = {
+        "evidence_chain_head": str(chain_head_path) if chain_head_path.is_file() else "ABSENT",
+        "classification": "TAMPER_EVIDENT" if chain_head_path.is_file() else "UNSEALED",
+        "immutable": "IMMUTABLE (ancrage distant POST_PUB_VERIFIED — certificat de marbre)",
+        "note": "preuve locale vérifiable par re-calcul ; l'immutabilité définitive est établie "
+                "côté distant après publication vérifiée (jamais auto-attestée).",
+    }
+
     ledger = {
         "protocol": "Loi-Parite-Absolue",
-        "version": "2.0.0",
+        "version": "2.1.3",
         "mission_id": args.mission,
+        "seal_classification": seal_classification,
         "component_id": args.id,
         "component_type": args.type,
         "tesla_root": str(root),

@@ -9,6 +9,7 @@ universal test runner on dash-decorated paths (E4).
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -84,7 +85,7 @@ def make_receipt(agent_id: str, node_id: str, mission: str, status: str = "SUCCE
         "runtime_event_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "output_manifest_sha256": "sha256:ca978112ca1bbdcaf064278e4a1f2c4510594720443035ed1409f0c5ca10e3f8",
         "executor_attestation": "subagent_runtime_v2.1_signed",
-        "transcript_ref": f"inv-550e8400-e29b-41d4-a716-44665544{seq}.log",
+        "transcript_ref": f"inv-550e8400-e29b-41d4-a716-44665544{seq}.json",
     }
 
 
@@ -201,10 +202,94 @@ class OrchestrationGateTests(unittest.TestCase):
             receipts_dir = Path(directory) / "subagents"
             write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
             # Remove one transcript while keeping its receipt
-            (receipts_dir.parent / "transcripts" / "inv-550e8400-e29b-41d4-a716-4466554402.log").unlink()
+            (receipts_dir.parent / "transcripts" / "inv-550e8400-e29b-41d4-a716-4466554402.json").unlink()
             code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
             self.assertEqual(code, EXIT_BLOCKED)
             self.assertIn("tesla-master-code", result["missing"])
+
+    def test_receipt_quorum_isolated_runtime_evidence(self) -> None:
+        """D-008 V2.1.3 (arbitrage #1): corrélation via TESLA_RUNTIME_EVIDENCE isolé."""
+        import os
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as evidence_dir:
+            graph = make_graph()
+            receipts_dir = Path(directory) / "subagents"
+            receipts_dir.mkdir(parents=True)
+            for agent, node in (("tesla-arcanis-360", "N1"), ("tesla-master-code", "N2")):
+                receipt = make_receipt(agent, node, graph["mission"])
+                write_json(receipts_dir / f"receipt_{agent}.json", receipt)
+            # Journal isolé hors workspace (aucun miroir local)
+            isolated = Path(evidence_dir) / graph["mission"] / "transcripts"
+            isolated.mkdir(parents=True)
+            for agent in ("tesla-arcanis-360", "tesla-master-code"):
+                seq = {"tesla-arcanis-360": "01", "tesla-master-code": "02"}[agent]
+                ref = f"inv-550e8400-e29b-41d4-a716-44665544{seq}.json"
+                (isolated / ref).write_text(json.dumps({"event": "subagent_invocation"}) + "\n", encoding="utf-8")
+            old_env = os.environ.get("TESLA_RUNTIME_EVIDENCE")
+            try:
+                os.environ["TESLA_RUNTIME_EVIDENCE"] = evidence_dir
+                code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
+                self.assertEqual(code, EXIT_PASS, result)
+                self.assertEqual(result["agents_receipted"], ["tesla-arcanis-360", "tesla-master-code"])
+            finally:
+                if old_env is None:
+                    os.environ.pop("TESLA_RUNTIME_EVIDENCE", None)
+                else:
+                    os.environ["TESLA_RUNTIME_EVIDENCE"] = old_env
+
+    def test_receipt_quorum_runtime_evidence_configured_but_unobservable(self) -> None:
+        """D-008 V2.1.3: env isolée configurée mais inobservable → BLOCKED (fail-closed)."""
+        import os
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as evidence_dir:
+            graph = make_graph()
+            receipts_dir = Path(directory) / "subagents"
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
+            # L'espace isolé existe mais est vide : le miroir local ne peut plus servir de preuve
+            (Path(evidence_dir) / graph["mission"] / "transcripts").mkdir(parents=True)
+            old_env = os.environ.get("TESLA_RUNTIME_EVIDENCE")
+            try:
+                os.environ["TESLA_RUNTIME_EVIDENCE"] = evidence_dir
+                code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
+                self.assertEqual(code, EXIT_BLOCKED)
+                self.assertEqual(result["reason"], "RECEIPT_QUORUM_MISSING")
+            finally:
+                if old_env is None:
+                    os.environ.pop("TESLA_RUNTIME_EVIDENCE", None)
+                else:
+                    os.environ["TESLA_RUNTIME_EVIDENCE"] = old_env
+
+    def test_transcript_correlation_resolution_order(self) -> None:
+        """D-008 V2.1.3: ordre de résolution direct (ref explicite → isolé → miroir)."""
+        import os
+        from core.orchestration.orchestration_gate import _transcript_correlation
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as evidence_dir:
+            graph = make_graph()
+            receipts_dir = Path(directory) / "subagents"
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
+            receipt = make_receipt("tesla-master-code", "N2", graph["mission"])
+            old_env = os.environ.get("TESLA_RUNTIME_EVIDENCE")
+            try:
+                # a) env absente → miroir local (journal inobservable ≠ FAIL)
+                os.environ.pop("TESLA_RUNTIME_EVIDENCE", None)
+                self.assertIsNone(_transcript_correlation(receipt, receipts_dir))
+                # b) env configurée + répertoire mission absent → UNOBSERVABLE (fail-closed)
+                os.environ["TESLA_RUNTIME_EVIDENCE"] = evidence_dir
+                self.assertEqual(_transcript_correlation(receipt, receipts_dir),
+                                 "RECEIPT_RUNTIME_EVIDENCE_UNOBSERVABLE")
+                # c) env configurée + journal présent dans l'espace isolé → corrélé
+                isolated = Path(evidence_dir) / graph["mission"] / "transcripts"
+                isolated.mkdir(parents=True)
+                (isolated / receipt["transcript_ref"]).write_text(
+                    json.dumps({"event": "subagent_invocation"}) + "\n", encoding="utf-8")
+                self.assertIsNone(_transcript_correlation(receipt, receipts_dir))
+                # d) ref explicite absolu prioritaire sur l'isolé
+                receipt_abs = dict(receipt)
+                receipt_abs["transcript_ref"] = str(isolated / receipt["transcript_ref"])
+                self.assertIsNone(_transcript_correlation(receipt_abs, receipts_dir))
+            finally:
+                if old_env is None:
+                    os.environ.pop("TESLA_RUNTIME_EVIDENCE", None)
+                else:
+                    os.environ["TESLA_RUNTIME_EVIDENCE"] = old_env
 
     def test_intent_guard_blocks_team_synergy_without_quorum(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -619,6 +704,121 @@ class MissionControllerTests(unittest.TestCase):
             self.assertTrue(result["marble_eligible"])
             self.assertEqual(result["state"], "HUMAN_AUTHORIZED")
 
+    def test_probe_valid_contextualized_from_contract(self) -> None:
+        """V2.1.3 (arbitrage #4): PROBE_VALID piloté par required_capabilities du contrat."""
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._build_eligible_workspace(directory)
+            # Contrat exigeant python3 + bash : le prédicat REQUIS est piloté
+            # par le contrat, pas par le défaut codé en dur
+            contract_path = root / "runtime" / "contracts" / "mission_contract.json"
+            contract = json.loads(contract_path.read_text(encoding="utf-8"))
+            contract["required_capabilities"] = ["python3", "bash"]
+            contract_path.write_text(json.dumps(contract) + "\n", encoding="utf-8")
+            code, result = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                                    registry=None, milestone=None, graph_override=None,
+                                    receipts_override=None, authorized=False)
+            self.assertEqual(code, 0, result)
+            self.assertTrue(result["marble_eligible"])
+            self.assertTrue(result["equation_terms"]["PROBE_VALID"]["pass"])
+            self.assertEqual(result["equation_terms"]["PROBE_VALID"]["detail"]["required_set"],
+                             ["python3", "bash"])
+
+    def test_probe_valid_blocks_on_contract_missing_capability(self) -> None:
+        """V2.1.3: capacité requise par le contrat absente → PROBE_VALID false (fail-closed)."""
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._build_eligible_workspace(directory)
+            contract_path = root / "runtime" / "contracts" / "mission_contract.json"
+            contract = json.loads(contract_path.read_text(encoding="utf-8"))
+            contract["required_capabilities"] = ["python3", "tesla-nonexistent-capability-xyz"]
+            contract_path.write_text(json.dumps(contract) + "\n", encoding="utf-8")
+            code, result = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                                    registry=None, milestone=None, graph_override=None,
+                                    receipts_override=None, authorized=False)
+            self.assertEqual(code, 1, result)
+            self.assertFalse(result["marble_eligible"])
+            self.assertFalse(result["equation_terms"]["PROBE_VALID"]["pass"])
+
+
+class ExitCodeLibraryTests(unittest.TestCase):
+    """V2.1.3 (arbitrage #3) : codes POSIX uniques — les alias 71/72/73 sont bannis."""
+
+    def test_exit_code_library_has_no_numeric_aliases(self) -> None:
+        """Seuls les 12 codes canoniques sont exportés numériquement."""
+        lib = (ROOT / "core" / "hooks" / "lib" / "tesla-exit-codes.sh").read_text(encoding="utf-8")
+        exported: dict[str, str] = {}
+        for line in lib.splitlines():
+            match = re.match(r"^export\s+(\w+)=(\d+)\s*$", line)
+            if match:
+                exported[match.group(1)] = match.group(2)
+        values = sorted(exported.values())
+        self.assertEqual(values, ["0", "10", "20", "30", "40", "50", "60", "66", "70", "80", "81", "90"])
+        self.assertNotIn("71", values)
+        self.assertNotIn("72", values)
+        self.assertNotIn("73", values)
+
+    def test_exit_code_library_semantic_ids_present(self) -> None:
+        """Les identifiants sémantiques documentent les codes, sans export numérique."""
+        lib = (ROOT / "core" / "hooks" / "lib" / "tesla-exit-codes.sh").read_text(encoding="utf-8")
+        self.assertIn("ERR_SPEC_LOCKED", lib)
+        self.assertIn("ERR_AGENT_THEATER", lib)
+        self.assertIn("ERR_PUBLIC_STAGING_MISSING", lib)
+        self.assertIn("80", lib)  # ERR_SPEC_LOCKED → 80
+        self.assertIn("81", lib)  # ERR_AGENT_THEATER → 81
+
+
+class TestManifestTests(unittest.TestCase):
+    """V2.1.3 (arbitrage #5) : comptes déclarés au manifeste, jamais hardcodés."""
+
+    def _module_with_manifest(self, directory: str, declared_python: int) -> Path:
+        module = Path(directory) / "53-Manifest-Tests"
+        tests_dir = module / "tests"
+        tests_dir.mkdir(parents=True)
+        (tests_dir / "test_sample.py").write_text(
+            "import unittest\nclass Sample(unittest.TestCase):\n"
+            "    def test_ok(self): self.assertTrue(True)\n", encoding="utf-8")
+        manifest_dir = module / "manifest"
+        manifest_dir.mkdir(parents=True)
+        (manifest_dir / "test_manifest_v2.1.yaml").write_text(
+            "manifest_version: \"2.1.3\"\n"
+            "suites:\n"
+            "  - name: python-unittest-discovery\n"
+            "    expected_tests: {}\n"
+            "total_tests: {}\n".format(declared_python, declared_python), encoding="utf-8")
+        # Chaque module déployé embarque son propre parseur (stdlib-only)
+        parser_src = ROOT / "core" / "orchestration" / "yaml_mini.py"
+        parser_dst = module / "core" / "orchestration" / "yaml_mini.py"
+        parser_dst.parent.mkdir(parents=True, exist_ok=True)
+        parser_dst.write_text(parser_src.read_text(encoding="utf-8"), encoding="utf-8")
+        return module
+
+    def test_runner_passes_when_manifest_matches(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            module = self._module_with_manifest(directory, 1)
+            proc = subprocess.run(
+                [sys.executable, str(ROOT / "bin/test_runner.py"),
+                 "--root", str(module), "--mission", "MANIFEST-OK", "--skip-bash"],
+                capture_output=True, text=True, check=False)
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertIn('"test_manifest"', proc.stdout)
+            self.assertIn('"verdict": "PASS"', proc.stdout)
+
+    def test_runner_fails_when_manifest_declares_more(self) -> None:
+        """Fail-closed: le runner refuse si les tests exécutés < tests déclarés."""
+        with tempfile.TemporaryDirectory() as directory:
+            module = self._module_with_manifest(directory, 5)
+            proc = subprocess.run(
+                [sys.executable, str(ROOT / "bin/test_runner.py"),
+                 "--root", str(module), "--mission", "MANIFEST-FAIL", "--skip-bash"],
+                capture_output=True, text=True, check=False)
+            self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+            summary = json.loads(proc.stdout)
+            self.assertEqual(summary["verdict_global"], "FAIL")
+            self.assertEqual(summary["test_manifest"]["verdict"], "FAIL")
+            self.assertTrue(any("declared 5" in m for m in summary["test_manifest"]["mismatches"]))
+            self.assertTrue(any("total: declared 5" in m for m in summary["test_manifest"]["mismatches"]))
+
 
 class MarbleCertificateTests(unittest.TestCase):
     def test_certificate_sealed_after_eligibility(self) -> None:
@@ -637,13 +837,36 @@ class MarbleCertificateTests(unittest.TestCase):
             cert_path = Path(result["certificate"])
             self.assertTrue(cert_path.is_file())
             anchors = result["anchors"]
-            self.assertEqual(anchors["status"], "SEALED_IMMUTABLE")
+            # V2.1.3 (arbitrage #6) : classification TAMPER_EVIDENT explicite
+            self.assertEqual(anchors["status"], "SEALED_TAMPER_EVIDENT")
+            self.assertEqual(anchors["seal_class"], "TAMPER_EVIDENT")
             self.assertEqual(anchors["authority"], "Lord Mahonheim (Biological Gate)")
             self.assertIn("dag_sha256", anchors)
             self.assertIn("receipts_manifest_sha256", anchors)
             self.assertTrue(anchors["receipts_manifest_sha256"] not in ("UNSEALED", ""))
+            self.assertIn("sha256:", anchors["evidence_chain_head"])
             mode = cert_path.stat().st_mode & 0o777
             self.assertEqual(mode, 0o444, "certificate must be sealed read-only (0444)")
+
+    def test_certificate_remote_anchor_is_immutable(self) -> None:
+        """V2.1.3 (arbitrage #6) : ancre distante → IMMUTABLE, jamais auto-attesté."""
+        from bin.marble_certificate import build_certificate
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = MissionControllerTests()._build_eligible_workspace(directory)
+            code, _ = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                               registry=None, milestone=None, graph_override=None,
+                               receipts_override=None, authorized=True)
+            self.assertEqual(code, 0)
+            code, result = build_certificate(root, "SGC-EXEC-GOV-03-R3",
+                                             remote_commit="f053432deadbeef", out_dir=None,
+                                             graph_override=None)
+            self.assertEqual(code, 0, result)
+            anchors = result["anchors"]
+            self.assertEqual(anchors["status"], "SEALED_IMMUTABLE")
+            self.assertEqual(anchors["seal_class"], "IMMUTABLE")
+            self.assertEqual(anchors["remote_commit_sha"], "f053432deadbeef")
+            self.assertIn("POST_PUB_VERIFIED", anchors["seal_note"])
 
     def test_certificate_refused_without_eligibility(self) -> None:
         from bin.marble_certificate import build_certificate

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.1.2 — Mission Closure Controller (Machine d'États à 13 Niveaux).
+"""Vigilum Codex 2.1.3 — Mission Closure Controller (Machine d'États à 13 Niveaux).
 
 Deterministic enforcement of the state machine and the MARBLE_ELIGIBILITY
 equation. No transition and no sealing rests on declarative IA text: every
@@ -126,8 +126,20 @@ def _resolve_graph(root: Path, graph_override: str | None) -> Path | None:
     return None
 
 
-def _probe_valid(root: Path) -> tuple[bool, dict[str, Any]]:
-    """PROBE_VALID (U-006, P3): required PASS ∧ optional ∈ {PASS, UNKNOWN-CONFINED} ∧ evidence recorded."""
+def _probe_valid(root: Path, contract: dict[str, Any] | None = None) -> tuple[bool, dict[str, Any]]:
+    """PROBE_VALID (U-006, P3) — V2.1.3 contextualisé au contrat (arbitrage #4).
+
+    Lorsque le contrat de mission déclare ``required_capabilities``, cet
+    ensemble devient la référence REQUISE pour le prédicat (le profil et les
+    agents requis pilotent la sonde, jamais un défaut codé en dur). Sans
+    déclaration : repli sur les capacités requises par défaut.
+    """
+    required_override = None
+    if isinstance(contract, dict):
+        caps = contract.get("required_capabilities")
+        if isinstance(caps, list) and caps:
+            required_override = [str(c) for c in caps]
+
     probe_file = root / "runtime" / "capability_health.json"
     if probe_file.is_file():
         try:
@@ -135,7 +147,11 @@ def _probe_valid(root: Path) -> tuple[bool, dict[str, Any]]:
         except (OSError, json.JSONDecodeError):
             evidence = None
     else:
-        code, evidence = probe_set(list(REQUIRED_DEFAULT), list(OPTIONAL_DEFAULT))
+        if required_override:
+            required_tools = [{"name": name, "cmd": name, "probe": ["--version"]} for name in required_override]
+        else:
+            required_tools = list(REQUIRED_DEFAULT)
+        code, evidence = probe_set(required_tools, list(OPTIONAL_DEFAULT))
         try:
             probe_file.parent.mkdir(parents=True, exist_ok=True)
             probe_file.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -145,19 +161,26 @@ def _probe_valid(root: Path) -> tuple[bool, dict[str, Any]]:
 
     if not isinstance(evidence, dict):
         return False, {"note": "PROBE_EVIDENCE_UNOBSERVABLE (P3)", "status": "UNKNOWN"}
-    required_ok = all(
-        cap.get("status") == "PASS"
-        for cap in evidence.get("capabilities", [])
-        if cap.get("capability") in set(evidence.get("required", []))
-    )
-    optional_ok = all(
-        cap.get("status") in ("PASS", "UNKNOWN-CONFINED")
-        for cap in evidence.get("capabilities", [])
-        if cap.get("capability") not in set(evidence.get("required", []))
-    )
+
+    caps_by_name = {cap.get("capability"): cap.get("status") for cap in evidence.get("capabilities", [])}
+    required_names = required_override or list(evidence.get("required", []))
+
+    # Les capacités requises absentes du fichier de preuve sont re-sondées
+    # immédiatement (fail-closed : jamais acceptées sans observation).
+    missing = [name for name in required_names if name not in caps_by_name]
+    if missing:
+        extra = [{"name": name, "cmd": name, "probe": ["--version"]} for name in missing]
+        _, extra_result = probe_set(extra, [])
+        for cap in extra_result.get("capabilities", []):
+            caps_by_name[cap.get("capability")] = cap.get("status")
+
+    required_ok = all(caps_by_name.get(name) == "PASS" for name in required_names)
+    optional_names = [name for name in caps_by_name if name not in required_names]
+    optional_ok = all(caps_by_name[name] in ("PASS", "UNKNOWN-CONFINED") for name in optional_names)
     recorded = bool(evidence.get("evidence") or probe_file.is_file())
     verdict = required_ok and optional_ok and recorded
     return verdict, {
+        "required_set": required_names,
         "required_ok": required_ok,
         "optional_ok": optional_ok,
         "recorded_in_evidence": recorded,
@@ -225,7 +248,7 @@ def evaluate(root: Path, mission: str, profile: str, registry: Path | None,
     hyg_code, hyg_detail = run_hygiene(root, prune=False, extra_targets=[])
     hygiene_ok = hyg_code == EXIT_PASS
 
-    probe_ok, probe_detail = _probe_valid(root)
+    probe_ok, probe_detail = _probe_valid(root, contract)
 
     receipts_ok = False
     receipts_detail: dict[str, Any] = {}
@@ -249,7 +272,7 @@ def evaluate(root: Path, mission: str, profile: str, registry: Path | None,
 
     result: dict[str, Any] = {
         "controller": "Mission Closure Controller",
-        "version": "2.1.2",
+        "version": "2.1.3",
         "mission_id": mission,
         "closure_profile": profile,
         "state": state,

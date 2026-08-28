@@ -31,6 +31,55 @@ EXIT_PASS = 0
 EXIT_FAIL = 1
 EXIT_UNKNOWN = 66
 
+MANIFEST_NAME = "test_manifest_v2.1.yaml"
+
+
+def load_test_manifest(root: Path) -> tuple[Path | None, dict | None, str | None]:
+    """Load the declarative test manifest (YAML-subset or JSON). Returns (path, data, error).
+
+    Path-agnostic (E4) : le runner est invocable depuis n'importe quel CWD,
+    donc la racine du module est ajoutée à ``sys.path`` avant l'import du
+    parseur ``core.orchestration.yaml_mini``.
+    """
+    path = root / "manifest" / MANIFEST_NAME
+    if not path.is_file():
+        return None, None, None
+    try:
+        root_str = str(root)
+        if root_str not in sys.path:
+            sys.path.insert(0, root_str)
+        if path.suffix.lower() in (".yaml", ".yml"):
+            from core.orchestration.yaml_mini import load_file
+            data = load_file(str(path))
+        else:
+            data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:  # P3 : manifeste illisible => jamais un PASS implicite
+        return path, None, f"TEST_MANIFEST_UNPARSEABLE:{exc}"
+    if not isinstance(data, dict):
+        return path, None, "TEST_MANIFEST_ROOT_NOT_OBJECT"
+    return path, data, None
+
+
+def manifest_mismatches(suites: list[dict[str, Any]], manifest: dict) -> list[str]:
+    """Compare executed suite counts against the declared manifest (fail-closed)."""
+    problems: list[str] = []
+    actual = {s["name"]: s.get("tests_reported") for s in suites}
+    for entry in manifest.get("suites", []):
+        if not isinstance(entry, dict):
+            continue
+        name = entry.get("name")
+        declared = entry.get("expected_tests")
+        executed = actual.get(name)
+        if not isinstance(declared, int):
+            continue
+        if not isinstance(executed, int) or executed < declared:
+            problems.append(f"{name}: declared {declared}, executed {executed if executed is not None else 'SKIPPED'}")
+    declared_total = manifest.get("total_tests")
+    executed_total = sum(v for v in actual.values() if isinstance(v, int))
+    if isinstance(declared_total, int) and executed_total < declared_total:
+        problems.append(f"total: declared {declared_total}, executed {executed_total}")
+    return problems
+
 
 def run_command(cmd: list[str], cwd: Path) -> tuple[int, str]:
     try:
@@ -72,11 +121,15 @@ def run_python_suite(root: Path) -> dict[str, Any]:
 def run_bash_suite(root: Path) -> dict[str, Any]:
     cmd = ["bash", "tests/test_hooks_suite.sh"]
     code, output = run_command(cmd, root)
+    import re
+    match = re.search(r"All (\d+) tests OK", output)
+    tests_reported = int(match.group(1)) if match else None
     return {
         "name": "bash-hooks-suite",
         "command": " ".join(cmd),
         "exit_code": code,
         "verdict": "PASS" if code == 0 else "FAIL",
+        "tests_reported": tests_reported,
         "output_tail": output,
     }
 
@@ -123,14 +176,30 @@ def main() -> int:
     if not executed:
         global_verdict = "UNKNOWN"
 
+    # V2.1.3 (arbitrage #5) : validation contre le manifeste déclaratif des tests
+    manifest_path, manifest, manifest_error = load_test_manifest(root)
+    manifest_check: dict[str, Any] = {"manifest": str(manifest_path) if manifest_path else None}
+    if manifest_error:
+        manifest_check.update({"verdict": "FAIL", "reason": manifest_error})
+        global_verdict = "FAIL"
+    elif manifest is not None:
+        problems = manifest_mismatches(suites, manifest)
+        manifest_check.update({
+            "verdict": "PASS" if not problems else "FAIL",
+            "mismatches": problems,
+        })
+        if problems:
+            global_verdict = "FAIL"
+
     summary: dict[str, Any] = {
         "runner": "Universal Test Runner",
-        "version": "2.1.0",
+        "version": "2.1.3",
         "mission_id": args.mission,
         "module_root": str(root),
         "verdict_global": global_verdict,
         "exit_code": 0 if global_verdict == "PASS" else 1,
         "suites": suites,
+        "test_manifest": manifest_check,
         "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     }
 

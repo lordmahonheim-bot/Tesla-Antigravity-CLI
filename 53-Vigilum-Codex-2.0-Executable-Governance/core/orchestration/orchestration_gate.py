@@ -307,21 +307,43 @@ def validate_receipt(receipt: dict[str, Any]) -> str | None:
 def _transcript_correlation(receipt: dict[str, Any], receipts_dir: Path) -> str | None:
     """Correlate the receipt with the runtime transcript journal (D-008).
 
-    When the transcripts directory is observable (``<receipts>/../transcripts``),
-    the referenced transcript file MUST exist on disk; otherwise the receipt is
-    deemed fabricated (fail-closed). If the journal directory is unobservable,
-    the field-level check stands (documented N/A — never a PASS coercion).
+    V2.1.3 — Frontière de Confiance Runtime Isolée (arbitrage #1) : les
+    journaux bruts d'invocation vivent HORS du workspace agent, dans
+    ``~/.tesla/runtime-evidence/<mission_id>/transcripts/`` (variable
+    ``TESLA_RUNTIME_EVIDENCE``). Le workspace local ne détient qu'un miroir
+    de consultation. Résolution (première correspondance retenue) :
+
+      1. ``transcript_ref`` absolu ou ``~/``  -> le fichier doit exister tel quel.
+      2. ``TESLA_RUNTIME_EVIDENCE/<mission>/transcripts/<ref>`` si configurée
+         (mode strict : répertoire configuré mais inobservable => BLOCKED).
+      3. miroir local ``<receipts>/../transcripts/<ref>``.
+
+    Si aucun journal n'est observable (aucun ref absolu, env absente, miroir
+    absent) : la corrélation reste documentée N/A — jamais un PASS coercé (P3).
     """
     ref = receipt.get("transcript_ref")
     if not isinstance(ref, str) or not ref.strip():
         return "RECEIPT_TRANSCRIPT_REF_MISSING"
-    transcripts_dir = receipts_dir.parent / "transcripts"
-    if not transcripts_dir.is_dir():
-        return None
-    candidate = Path(ref)
-    if not candidate.is_absolute():
-        candidate = transcripts_dir / ref
-    return None if candidate.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+
+    # 1. Référence explicite (isolée ou absolue)
+    if ref.startswith("~") or Path(ref).is_absolute():
+        explicit = Path(os.path.expanduser(ref))
+        return None if explicit.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+
+    # 2. Espace runtime isolé (hors périmètre d'écriture agent)
+    runtime_evidence = os.environ.get("TESLA_RUNTIME_EVIDENCE")
+    mission_id = receipt.get("mission_id")
+    if runtime_evidence and isinstance(mission_id, str) and mission_id.strip():
+        isolated_dir = Path(os.path.expanduser(runtime_evidence)) / mission_id / "transcripts"
+        if not isolated_dir.is_dir():
+            return "RECEIPT_RUNTIME_EVIDENCE_UNOBSERVABLE"
+        return None if (isolated_dir / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+
+    # 3. Miroir local de consultation (workspace)
+    mirror = receipts_dir.parent / "transcripts"
+    if mirror.is_dir():
+        return None if (mirror / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+    return None  # journal inobservable -> corrélation N/A documentée (P3)
 
 
 def receipt_quorum(graph: dict[str, Any], receipts_dir: Path, mission_expected: str | None) -> tuple[int, dict[str, Any]]:

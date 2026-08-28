@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.1.2 — Cryptographic Marble Certificate (Sceau de Marbre).
+"""Vigilum Codex 2.1.3 — Cryptographic Marble Certificate (Sceau de Marbre).
 
 Deterministic issuance of the immutability certificate (V2.1.2 arbitrage #3):
 a full cryptographic anchor — local_commit_sha, remote_commit_sha,
 evidence_chain_head, dag_sha256, receipts_manifest_sha256 — sealed in mode
 0444 (tamper-evident). Refuses to issue unless the Mission Closure Controller
 recorded MARBLE_ELIGIBLE (runtime/marble_eligibility.json).
+
+V2.1.3 (arbitrage #6) — classification explicite du sceau :
+  - TAMPER_EVIDENT : preuve locale (evidence/chain_head.sha256), vérifiable
+    par re-calcul, mutable jusqu'à ancrage distant ;
+  - IMMUTABLE      : certificat ancré côté distant (--remote-commit,
+    POST_PUB_VERIFIED) — jamais auto-attesté.
 
 Output: CERTIFICATES/MARBLE_CERTIFICATE_<mission>_<ts>.json (hook-05 compatible).
 
@@ -46,13 +52,32 @@ def _local_commit_sha(root: Path) -> str:
     return "UNCOMMITTED"
 
 
-def _chain_head(root: Path) -> str:
+def _chain_head(root: Path) -> dict[str, str]:
+    """V2.1.3 (arbitrage #6) : point de tête calculé sur le ledger de preuve.
+
+    H_n = SHA-256(evidence_ledger) — calculé sur le plus récent ledger
+    (test_runner_*.json / parity_*.json). Classification explicite :
+    TAMPER_EVIDENT (preuve locale, vérifiable) vs IMMUTABLE (établi côté
+    distant après POST_PUB_VERIFIED).
+    """
+    evidence_dir = root / "evidence"
+    candidates: list[Path] = []
+    if evidence_dir.is_dir():
+        candidates = sorted(
+            [p for p in evidence_dir.glob("*.json") if p.name.startswith(("test_runner_", "parity_"))],
+            key=lambda p: p.name,
+        )
+    if candidates:
+        newest = candidates[-1]
+        digest = hashlib.sha256(newest.read_bytes()).hexdigest()
+        return {"value": f"sha256:{digest} {newest.name}", "seal_class": "TAMPER_EVIDENT",
+                "note": "immutabilité définitive établie côté distant après POST_PUB_VERIFIED"}
     path = root / "evidence" / "chain_head.sha256"
     if path.is_file():
         content = path.read_text(encoding="utf-8").strip()
         if content:
-            return content
-    return "UNSEALED"
+            return {"value": content, "seal_class": "TAMPER_EVIDENT", "note": "ancrage pré-existant"}
+    return {"value": "UNSEALED", "seal_class": "UNSEALED", "note": "aucun ledger de preuve observable"}
 
 
 def _dag_sha256(root: Path, graph_override: str | None) -> str:
@@ -107,16 +132,31 @@ def build_certificate(root: Path, mission: str, remote_commit: str | None,
         return EXIT_BLOCKED, {"verdict": "BLOCKED", "reason": "MARBLE_NOT_ELIGIBLE",
                               "state": ledger.get("state")}
 
+    chain_head = _chain_head(root)
+    # V2.1.3 (arbitrage #6) : TAMPER_EVIDENT local → IMMUTABLE une fois l'ancre
+    # distante fournie (POST_PUB_VERIFIED). L'immutabilité n'est jamais
+    # auto-attestée : elle repose sur l'ancre de commit côté distant.
+    if remote_commit:
+        seal_class = "IMMUTABLE"
+        seal_note = ("immutabilité ancrée côté distant (POST_PUB_VERIFIED) — "
+                     "vérifiable par re-calcul local et ancre de commit distante")
+        status = "SEALED_IMMUTABLE"
+    else:
+        seal_class = chain_head.get("seal_class", "TAMPER_EVIDENT")
+        seal_note = chain_head.get("note", "")
+        status = "SEALED_TAMPER_EVIDENT"
     certificate: dict[str, Any] = {
         "certificate_type": "MARBLE_CERTIFICATE",
         "doctrine": "Vigilum Codex 2.1 — Sovereign Shield",
-        "status": "SEALED_IMMUTABLE",
+        "status": status,
+        "seal_class": seal_class,
+        "seal_note": seal_note,
         "mission_id": mission,
         "closure_profile": ledger.get("closure_profile"),
         "state_at_issuance": ledger.get("state"),
         "local_commit_sha": _local_commit_sha(root),
         "remote_commit_sha": remote_commit or "PENDING_AUTHORIZATION",
-        "evidence_chain_head": _chain_head(root),
+        "evidence_chain_head": chain_head.get("value"),
         "dag_sha256": _dag_sha256(root, graph_override),
         "receipts_manifest_sha256": _receipts_manifest_sha256(root),
         "authority": "Lord Mahonheim (Biological Gate)",
