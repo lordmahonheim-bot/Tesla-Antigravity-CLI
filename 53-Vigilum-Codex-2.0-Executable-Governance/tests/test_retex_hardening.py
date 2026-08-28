@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from bin.audit_cap import cmd_check, cmd_record
-from bin.memory_parite import DEFAULT_PILLARS, audit_memory
+from bin.memory_parite import DEFAULT_PILLARS, audit_memory, load_pillars
 from bin.staging_gate import cmd_next_milestone, cmd_verify
 from core.orchestration.orchestration_gate import (  # noqa: E402
     EXIT_BLOCKED,
@@ -225,7 +225,9 @@ class MemoryParityTests(unittest.TestCase):
         memory_dir = root / "memory"
         memory_dir.mkdir(parents=True, exist_ok=True)
         for pillar in DEFAULT_PILLARS[:count]:
-            (memory_dir / pillar).write_text(f"content {pillar}\n", encoding="utf-8")
+            path = memory_dir / pillar
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(f"content {pillar}\n", encoding="utf-8")
 
     def test_memory_parity_passes_13_13(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -350,6 +352,121 @@ class UniversalRunnerTests(unittest.TestCase):
             summary = json.loads(ledger[0].read_text(encoding="utf-8"))
             self.assertEqual(summary["verdict_global"], "PASS")
             self.assertEqual(summary["suites"][0]["verdict"], "PASS")
+
+
+class MemoryManifestTests(unittest.TestCase):
+    def test_shipped_manifest_is_canonical_13(self) -> None:
+        """Plan V2.1.1 Étape 8: manifest/memory_manifest_v2.1.yaml governs the 13 pillars."""
+        manifest = ROOT / "manifest" / "memory_manifest_v2.1.yaml"
+        self.assertTrue(manifest.is_file(), f"missing manifest: {manifest}")
+        data = load_file(str(manifest))
+        self.assertEqual(data["manifest_version"], "2.1.1")
+        pillars = data["required_pillars"]
+        self.assertEqual(len(pillars), 13)
+        self.assertEqual(pillars[0]["path"], "PROJECT_STATE.md")
+        nested = [p["path"] for p in pillars]
+        self.assertIn("PROTOCOLES/GRAVURE-SUR-MARBRE.md", nested)
+        self.assertIn("Le_Conducteur_Absolu_v3.2.1.md", nested)
+
+    def test_memory_parite_uses_manifest_paths(self) -> None:
+        """M-014: audit resolves pillars from the manifest, incl. nested PROTOCOLES/."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            memory = root / "memory"
+            (memory / "PROTOCOLES").mkdir(parents=True)
+            for pillar in DEFAULT_PILLARS:
+                path = memory / pillar
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(f"content {pillar}\n", encoding="utf-8")
+            pillars = load_pillars(None, root)
+            self.assertEqual(len(pillars), 13)
+            code, result = audit_memory(root, pillars, {})
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result["verdict"], "PASS")
+            self.assertEqual(result["pillars_passed"], 13)
+
+
+class WorkspaceHygieneTests(unittest.TestCase):
+    def test_report_blocks_on_drafts(self) -> None:
+        from bin.workspace_hygiene import run_hygiene
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            outputs = root / "OUTPUTS"
+            outputs.mkdir()
+            (outputs / "Synergy_Gouvernance_Executable_V3.4.md").write_text("draft\n", encoding="utf-8")
+            code, result = run_hygiene(root, prune=False, extra_targets=[])
+            self.assertEqual(code, 1)
+            self.assertEqual(result["verdict"], "BLOCKED")
+            self.assertEqual(result["drafts_count"], 1)
+
+    def test_prune_quarantines_and_respects_canonical(self) -> None:
+        from bin.workspace_hygiene import run_hygiene
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            outputs = root / "OUTPUTS"
+            outputs.mkdir()
+            draft = outputs / "Synergy_Gouvernance_Executable_V3.4.md"
+            draft.write_text("draft\n", encoding="utf-8")
+            canonical = outputs / "Synergy_Gouvernance_Executable_V3.6_LOCKED.md"
+            canonical.write_text("locked\n", encoding="utf-8")
+            code, result = run_hygiene(root, prune=True, extra_targets=[])
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result["verdict"], "PASS")
+            self.assertFalse(draft.exists())
+            self.assertTrue(canonical.exists(), "canonical final must never be quarantined")
+            self.assertEqual(len(result["archived"]), 1)
+            archive = Path(result["archive_dir"])
+            self.assertTrue(list(archive.glob("Synergy_Gouvernance_Executable_V3.4.md")))
+
+    def test_hygiene_clean_workspace_passes_without_prune(self) -> None:
+        from bin.workspace_hygiene import run_hygiene
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "OUTPUTS").mkdir()
+            (root / "OUTPUTS" / "Rapport_FINAL_2026.md").write_text("canonical\n", encoding="utf-8")
+            code, result = run_hygiene(root, prune=False, extra_targets=[])
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result["verdict"], "PASS")
+
+
+class ProbeCapabilitiesTests(unittest.TestCase):
+    def test_probe_pass_with_required_tools(self) -> None:
+        from bin.probe_capabilities import probe_set
+        tools = [
+            {"name": "python3", "cmd": "python3", "probe": ["-c", "import sys"]},
+            {"name": "bash", "cmd": "bash", "probe": ["--version"]},
+        ]
+        code, result = probe_set(tools, [])
+        self.assertEqual(code, 0, result)
+        self.assertEqual(result["verdict"], "PASS")
+        self.assertTrue(all(c["status"] == "PASS" for c in result["capabilities"]))
+
+    def test_probe_unknown_confined_when_absent(self) -> None:
+        from bin.probe_capabilities import probe_set
+        tools = [{"name": "tesla-nonexistent-tool-xyz", "cmd": "tesla-nonexistent-tool-xyz", "probe": ["--version"]}]
+        code, result = probe_set(tools, [])
+        self.assertEqual(code, 66)
+        self.assertEqual(result["verdict"], "UNKNOWN")
+        self.assertEqual(result["capabilities"][0]["status"], "UNKNOWN-CONFINED")
+        self.assertIn("jamais", result["capabilities"][0]["note"].lower())
+
+    def test_probe_fail_when_tool_broken(self) -> None:
+        from bin.probe_capabilities import probe_set
+        with tempfile.TemporaryDirectory() as directory:
+            fake = Path(directory) / "fake-tool"
+            fake.write_text("#!/bin/sh\nexit 1\n", encoding="utf-8")
+            fake.chmod(0o755)
+            import os
+            old_path = os.environ.get("PATH", "")
+            try:
+                os.environ["PATH"] = f"{directory}:{old_path}"
+                tools = [{"name": "fake-tool", "cmd": "fake-tool", "probe": ["--version"]}]
+                code, result = probe_set(tools, [])
+            finally:
+                os.environ["PATH"] = old_path
+            self.assertEqual(code, 1)
+            self.assertEqual(result["verdict"], "FAIL")
+            self.assertEqual(result["capabilities"][0]["status"], "FAIL")
 
 
 if __name__ == "__main__":

@@ -34,17 +34,18 @@ La hiérarchie d'autorité immuable s'applique :
 
 ---
 
-## 4. Extension Vigilum Codex 2.1 (RETEX Hardening — SGC-EXEC-GOV-03-R3)
+## 4. Extension Vigilum Codex 2.1.1 (RETEX Hardening — SGC-EXEC-GOV-03-R3)
 
 | Verrou RETEX | Composant Exécutable | Contrat / Schéma | Preuve Matérielle |
 |---|---|---|---|
 | **Gate 2 (Mission Contract / DAG)** | `core/orchestration/orchestration_gate.py dag-verify` | `schemas/mission_graph_v2.0.schema.json` | Sceau `approval_sha256` canonique (RFC-8785-style) + `approved_by` |
-| **Anti-Usurpation (Règle Absolue N°4)** | `orchestration_gate.py receipt-quorum` / `intent-guard` | `schemas/receipt_v1.0.schema.json` | Quittances physiques `runtime/subagents/receipt_<agent_id>.json` (status SUCCESS/COMPLETED) |
-| **Double Track Staging $N+1$** | `bin/staging_gate.py` | Phase 4 Gravure sur Marbre | Jalon calculé sur `MVP-GITHUB/` + README anglais strict vérifié |
-| **13 Piliers Mémoire** | `bin/memory_parite.py` | `schemas/memory_pillars_v2.1.schema.json` | Matrice 13/13 SHA-256, exit 0 |
-| **Plafond d'Audit Max 3** | `bin/audit_cap.py` | — | SPEC LOCK atomique `O_CREAT\|O_EXCL` (exit 80) |
-| **Universal Test Runner** | `bin/test_runner.py` | — | Discovery `-s tests`, ledger `evidence/test_runner_*.json` |
-| **Hygiène du Creuset** | hook `08-draft-artifact-guard.sh` | — | Refus des artefacts éphémères (exit 90) |
+| **Anti-Usurpation (D-007/D-008)** | `orchestration_gate.py receipt-quorum` / `intent-guard` | `schemas/receipt_v1.0.schema.json` | Quittances physiques `runtime/subagents/receipt_<agent_id>.json` (quorum N/N) |
+| **Double Track Staging $N+1$ (S-002)** | `bin/staging_gate.py` | Phase 4 Gravure sur Marbre | Jalon calculé sur `MVP-GITHUB/` + README anglais strict vérifié |
+| **Piliers Mémoire Manifeste (M-014)** | `bin/memory_parite.py` + hook 04 | `manifest/memory_manifest_v2.1.yaml` + `schemas/memory_pillars_v2.1.schema.json` | Matrice 13/13 SHA-256, exit 0 ; hook strict → 40 |
+| **Plafond d'Audit Max 3 (L-001)** | `bin/audit_cap.py` | — | SPEC LOCK atomique `O_CREAT\|O_EXCL` (exit 80 ; alias 71) |
+| **Universal Test Runner (R-004)** | `bin/test_runner.py` | — | Discovery `-s tests`, ledger `evidence/test_runner_*.json` |
+| **Hygiène & Quarantaine (H-005)** | `bin/workspace_hygiene.py --prune` + hook 08 | — | Brouillons → `runtime/drafts/archive_<ts>/` ; exit 90 au commit |
+| **Sonde Tri-State (U-006)** | `bin/probe_capabilities.py` | — | `runtime/capability_health.json` : PASS/FAIL/UNKNOWN-CONFINED (P3) |
 
-- **Nouveaux codes de sortie guardrails :** `TESLA_EXIT_LOCK=80`, `TESLA_EXIT_ORCH=81`, `TESLA_EXIT_DRAFT=90`.
+- **Codes de sortie guardrails :** `10-60` existants, `TESLA_EXIT_LOCK=80`, `TESLA_EXIT_ORCH=81`, `TESLA_EXIT_DRAFT=90` ; aliases plan `71/72/73` déclarés dans `core/hooks/lib/tesla-exit-codes.sh`.
 - **Exit codes orchestration gate :** `0 PASS | 1 BLOCKED | 64 USAGE | 66 UNKNOWN` (P3).

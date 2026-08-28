@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.1 — Memory Parity Loop (E3: Amnésie Mémorielle Partielle).
+"""Vigilum Codex 2.1.1 — Memory Parity Scrutator (E3: Amnésie Mémorielle Partielle).
 
 Deterministic enforcement of the RETEX corrective action
-"Bouclage des 13 Piliers Mémoire": no mission closure is acceptable without
-the 13/13 SHA-256 matrix report and exit code 0.
+"Bouclage des Piliers Mémoire" (Invariant M-014): no mission closure is
+acceptable without the N/N SHA-256 matrix report and exit code 0, where N is
+governed by a DECLARATIVE manifest (never hardcoded at runtime).
 
-Behavior (fail-closed, Invariants P1/P3/P7):
-  - Memory directory missing          -> UNKNOWN (exit 66): an unobservable
-                                          state is never a PASS.
-  - Pillar missing or empty           -> BLOCKED (exit 1), never synthesized.
-  - --baseline hashes declared and a
-    pillar drifted                    -> STALE_STATE (exit 2).
+Manifest resolution order (first hit wins):
+  1. --manifest <file>                       (explicit; JSON or YAML-subset)
+  2. <TESLA_ROOT>/memory/MEMORY_MANIFEST.yaml
+  3. <module>/manifest/memory_manifest_v2.1.yaml   (canonical shipped 13)
+  4. built-in DEFAULT_PILLARS                      (fallback, 13 canoniques)
 
-Usage
------
-  python3 bin/memory_parite.py --root <TESLA_ROOT> [--mission <ID>]
-                               [--manifest <json-list>] [--baseline <json-map>]
+Exit codes (fail-closed, Invariants P1/P3/P7):
+  0 PASS           matrix N/N all present and matching baseline (if any)
+  1 BLOCKED        at least one pillar missing or empty
+  2 STALE_STATE    baseline hashes declared and a pillar drifted
+  66 UNKNOWN       memory/ directory unobservable (UNKNOWN != PASS)
 """
 from __future__ import annotations
 
@@ -28,28 +29,37 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Script-execution shim: allow `python3 bin/memory_parite.py` from any CWD
+# while keeping package imports (E4-compliant absolute resolution).
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from core.orchestration.yaml_mini import YamlMiniError, load_file  # noqa: E402
+
 EXIT_PASS = 0
 EXIT_BLOCKED = 1
 EXIT_STALE = 2
 EXIT_USAGE = 64
 EXIT_UNKNOWN = 66
 
-# Canonical 13 pillars (Source de Vérité, AGENTS.md Rule 14 / Loi de Parité).
+# Fallback canonique (utilisé uniquement si aucun manifeste n'est trouvé).
 DEFAULT_PILLARS: list[str] = [
-    "PROJECT_STATE.md",                      # Ancrage à court terme
-    "SESSION_LOG.md",                        # Historique chronologique
-    "liste_projets_antigravity_BASE.md",     # Taxonomie canonique des projets
-    "TESLA.json",                            # Registre des capacités
-    "FORCE_TOOLING.md",                      # Policy Registry & lifecycle
-    "ENGINE.md",                             # Moteurs cognitifs
-    "SOUL.md",                               # Identité constitutionnelle
-    "AGENTS.md",                             # Gouvernance opérationnelle
-    "SETTINGS.json",                         # Configuration de l'écosystème
-    "GEMINI.md",                             # Contrat de modèle (Gemini)
-    "knowledge_graph.json",                  # Graphe relationnel canonique
-    "TELEGRAM_SYNAPSE.md",                   # Synapse de canal (Telegram)
-    "CLAUDE.md",                             # Contrat de modèle (Claude)
+    "PROJECT_STATE.md",
+    "SESSION_LOG.md",
+    "liste_projets_antigravity_BASE.md",
+    "AGENTS.md",
+    "GEMINI.md",
+    "ENGINE.md",
+    "FORCE_TOOLING.md",
+    "SOUL.md",
+    "TESLA.json",
+    "settings.json",
+    "Le_Conducteur_Absolu_v3.2.1.md",
+    "PROTOCOLES/GRAVURE-SUR-MARBRE.md",
+    "PROTOCOLES/LOI-DE-PARITE-ABSOLUE.md",
 ]
+
+SHIPPED_MANIFEST = Path(__file__).resolve().parent.parent / "manifest" / "memory_manifest_v2.1.yaml"
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -68,25 +78,58 @@ def resolve_root(args_root: str | None) -> Path | None:
     return None
 
 
-def load_pillars(args_manifest: str | None) -> list[str]:
-    if not args_manifest:
-        return list(DEFAULT_PILLARS)
-    manifest = Path(args_manifest).expanduser()
-    if not manifest.is_file():
-        raise SystemExit(f"usage: manifest not found: {manifest}")
-    try:
-        data = json.loads(manifest.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        raise SystemExit(f"usage: manifest is not valid JSON: {exc}") from exc
+def _extract_pillars(data: Any) -> list[str] | None:
+    """Extract pillar paths from a manifest payload (JSON or YAML-subset dict)."""
     if isinstance(data, list):
-        pillars = [str(p) for p in data]
-    elif isinstance(data, dict) and isinstance(data.get("pillars"), list):
-        pillars = [str(p) for p in data["pillars"]]
+        if all(isinstance(item, str) for item in data):
+            return [str(item) for item in data]
+        if all(isinstance(item, dict) for item in data):
+            paths = [item.get("path") for item in data]
+            if all(isinstance(p, str) and p for p in paths):
+                return [str(p) for p in paths]
+        return None
+    if isinstance(data, dict):
+        required = data.get("required_pillars")
+        if isinstance(required, list) and all(isinstance(item, dict) for item in required):
+            paths = [item.get("path") for item in required]
+            if all(isinstance(p, str) and p for p in paths):
+                return [str(p) for p in paths]
+        if isinstance(required, list) and all(isinstance(item, str) for item in required):
+            return [str(item) for item in required]
+        if isinstance(data.get("pillars"), list) and all(isinstance(item, str) for item in data["pillars"]):
+            return [str(item) for item in data["pillars"]]
+    return None
+
+
+def load_pillars(args_manifest: str | None, root: Path | None) -> list[str]:
+    """Resolve the pillar list from the manifest resolution order (fail-closed)."""
+    candidates: list[Path] = []
+    if args_manifest:
+        candidates.append(Path(args_manifest).expanduser())
     else:
-        raise SystemExit("usage: manifest must be a list or {pillars: [...]}")
-    if not pillars:
-        raise SystemExit("usage: manifest pillar list is empty")
-    return pillars
+        if root is not None:
+            candidates.append(root / "memory" / "MEMORY_MANIFEST.yaml")
+        candidates.append(SHIPPED_MANIFEST)
+
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        try:
+            if candidate.suffix.lower() in (".yaml", ".yml"):
+                data = load_file(str(candidate))
+            else:
+                data = json.loads(candidate.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError, YamlMiniError) as exc:
+            if args_manifest:
+                raise SystemExit(f"usage: manifest unparsable: {candidate}: {exc}") from exc
+            continue
+        pillars = _extract_pillars(data)
+        if pillars:
+            return pillars
+        if args_manifest:
+            raise SystemExit(f"usage: manifest structure unsupported: {candidate}")
+
+    return list(DEFAULT_PILLARS)
 
 
 def load_baseline(args_baseline: str | None) -> dict[str, str]:
@@ -151,10 +194,11 @@ def audit_memory(root: Path, pillars: list[str], baseline: dict[str, str]) -> tu
         exit_code = EXIT_BLOCKED
 
     result: dict[str, Any] = {
-        "protocol": "Bouclage des 13 Piliers Mémoire",
-        "version": "2.1.0",
+        "protocol": "Invariant M-014 — Piliers Mémoire (Manifeste Déclaratif)",
+        "version": "2.1.1",
         "verdict": verdict,
         "exit_code": exit_code,
+        "manifest_source": str(SHIPPED_MANIFEST),
         "pillars_total": total,
         "pillars_passed": passed,
         "missing": missing,
@@ -167,10 +211,10 @@ def audit_memory(root: Path, pillars: list[str], baseline: dict[str, str]) -> tu
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Memory parity loop (13 piliers)")
+    parser = argparse.ArgumentParser(description="Memory parity scrutator (manifest-driven, M-014)")
     parser.add_argument("--root", default=None, help="TESLA_ROOT (default: $TESLA_ROOT or CWD)")
     parser.add_argument("--mission", default="SGC-EXEC-GOV-03", help="Mission ID (informational)")
-    parser.add_argument("--manifest", default=None, help="JSON list of pillar filenames (default: 13 canoniques)")
+    parser.add_argument("--manifest", default=None, help="Manifest override (JSON or YAML subset)")
     parser.add_argument("--baseline", default=None, help="JSON map {pillar: sha256} for stale-state detection")
     args = parser.parse_args()
 
@@ -183,10 +227,11 @@ def main() -> int:
         }, indent=2, ensure_ascii=False))
         return EXIT_UNKNOWN
 
-    pillars = load_pillars(args.manifest)
+    pillars = load_pillars(args.manifest, root)
     baseline = load_baseline(args.baseline)
     exit_code, result = audit_memory(root, pillars, baseline)
     result["mission_id"] = args.mission
+    result["pillars"] = pillars
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return exit_code
 

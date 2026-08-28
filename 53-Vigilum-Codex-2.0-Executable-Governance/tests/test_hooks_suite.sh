@@ -94,4 +94,14 @@ printf 'canonical locked spec\n' > "$tmp/Synergy_Gouvernance_Executable_V3.6_LOC
 git -C "$tmp" add Synergy_Gouvernance_Executable_V3.6_LOCKED.md
 (cd "$tmp" && "$root/core/hooks/pre-commit/tesla-pre-commit-main.sh")
 
-echo "Hook suite passed completely (All 9 tests OK, including A-003 anti-replay, Gate 2 anti-usurpation and draft guard)."
+# Test 10: Memory parity strict — memory/ unobservable blocks (Exit 40, P3)
+set +e
+(cd "$tmp" && TESLA_ENFORCE_MEMORY_PARITY=1 "$root/core/hooks/pre-commit/04-project-state-check.sh")
+status=$?
+set -e
+[ "$status" -eq 40 ] || { echo "expected memory parity exit 40, got $status" >&2; exit 1; }
+
+# Test 11: Memory parity non-strict — memory/ unobservable passes (documented UNKNOWN)
+(cd "$tmp" && "$root/core/hooks/pre-commit/04-project-state-check.sh")
+
+echo "Hook suite passed completely (All 11 tests OK: A-003 anti-replay, Gate 2 anti-usurpation, draft guard, memory parity M-014)."

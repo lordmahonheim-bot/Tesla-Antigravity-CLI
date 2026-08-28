@@ -88,9 +88,11 @@ flowchart TD
 | **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (30 tests) and bash hook test harness (9 tests). |
 | **Orchestration Gate (2.1)** | `core/orchestration/orchestration_gate.py` + `yaml_mini.py` | Gate 2 (sealed Mission Graph) + Anti-Usurpation (physical receipt quorum) — stdlib-only, fail-closed. |
 | **Universal Test Runner (2.1)** | `bin/test_runner.py` | E4-proof discovery (`unittest discover -s tests`), aggregate ledger in `evidence/`. |
-| **Memory Parity (2.1)** | `bin/memory_parite.py` | 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure). |
-| **Staging Gate (2.1)** | `bin/staging_gate.py` | Phase 4 mandatory public staging: milestone $N+1$ computed on `MVP-GITHUB/`, README English-strict verification. |
+| **Memory Parity (2.1)** | `bin/memory_parite.py` + `manifest/memory_manifest_v2.1.yaml` | Manifest-driven 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure); wired to hook 04 (strict, exit 40). |
+| **Staging Gate (2.1)** | `bin/staging_gate.py` | Phase 4 mandatory public staging: milestone $N+1$ computed on `MVP-GITHUB/`, README English-strict verification, profile-aware. |
 | **Audit Cap / SPEC LOCK (2.1)** | `bin/audit_cap.py` | Max 3 audit passes, atomic SPEC LOCK (exit 80), forced switch to executable code. |
+| **Workspace Hygiene (2.1)** | `bin/workspace_hygiene.py` | Atomic quarantine of transitory drafts into `runtime/drafts/archive_<ts>/` (H-005), report/prune modes. |
+| **Tri-State Probe (2.1)** | `bin/probe_capabilities.py` | Capability probe emitting PASS / FAIL / UNKNOWN-CONFINED into `runtime/capability_health.json` (P3 strict, U-006). |
 | **Evidence Ledger** | `evidence/` | Sealed SHA-256 chain head anchor and JSON validation summary. |
 
 ---
@@ -156,12 +158,13 @@ TEST SUITE EXECUTION SUMMARY
 TOTAL TESTS: 14 | PASSED: 14 | FAILED: 0 | ACCURACY: 100.0%
 PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
 
-[RETEX HARDENING 2.1 — SGC-EXEC-GOV-03-R3]
-  Python suite (governance + RETEX): 30/30 PASS
-  Bash hook suite (6 + orchestration gate + draft guard + LOCKED): 9/9 PASS
+[RETEX HARDENING 2.1.1 — SGC-EXEC-GOV-03-R3]
+  Python suite (governance + RETEX): 38/38 PASS
+  Bash hook suite (6 + orchestration + draft + LOCKED + memory M-014): 11/11 PASS
   Demos: dag-verify PASS | receipt-quorum PASS | intent-guard BLOCKED→PASS |
-         audit_cap SPEC LOCK exit 80 | staging N+1=13 PASS | memory 13/13 PASS
-TOTAL TESTS (V2.0 + V2.1): 39 | PASSED: 39 | FAILED: 0
+         audit_cap SPEC LOCK exit 80 | staging N+1=13 PASS | memory 13/13 PASS |
+         probe U-006 PASS/UNKNOWN-CONFINED | hygiene H-005 BLOCKED→PASS
+TOTAL TESTS (V2.0 + V2.1.1): 49 | PASSED: 49 | FAILED: 0
 ======================================================================
 ```
 
@@ -177,11 +180,12 @@ deterministic, OS-level mechanisms — not prompt-level intentions:
 | Gate 2 (DAG approved) | `python3 core/orchestration/orchestration_gate.py dag-verify --graph <mission_graph.yaml>` | unsealed graph → exit 1 |
 | Anti-Usurpation (Rule N°4) | `python3 core/orchestration/orchestration_gate.py receipt-quorum --graph <f> --receipts runtime/subagents` | missing receipt → exit 1 |
 | Anti-Usurpation (commit hook) | hook `07-orchestration-gate.sh` (auto on `team_synergy: true` markers) | exit 81 |
-| 13 Memory Pillars | `python3 bin/memory_parite.py --root <TESLA_ROOT>` | 13/13 SHA-256 required, exit 0 |
-| Staging $N+1$ | `python3 bin/staging_gate.py verify --registry MVP-GITHUB/ --milestone N` | Phase 4 mandatory |
-| Audit Ceiling (SPEC LOCK) | `python3 bin/audit_cap.py --root <dir> --spec <ID> --record` | lock at 3rd pass, exit 80 |
-| Universal Runner | `python3 bin/test_runner.py --root . --mission <ID>` | all suites must PASS |
-| Draft Hygiene | hook `08-draft-artifact-guard.sh` | ephemeral artifacts → exit 90 |
+| 13 Memory Pillars (M-014) | `python3 bin/memory_parite.py --root <TESLA_ROOT>` (manifest-driven) | 13/13 SHA-256 required, exit 0; hook 04 strict → 40 |
+| Staging $N+1$ (S-002) | `python3 bin/staging_gate.py verify --registry MVP-GITHUB/ --milestone N` | Phase 4 mandatory (profile-aware) |
+| Audit Ceiling (L-001) | `python3 bin/audit_cap.py --root <dir> --spec <ID> --record` | lock at 3rd pass, exit 80 |
+| Universal Runner (R-004) | `python3 bin/test_runner.py --root . --mission <ID>` | all suites must PASS |
+| Draft Hygiene (H-005) | `bin/workspace_hygiene.py --prune` + hook `08-draft-artifact-guard.sh` | quarantine to `runtime/drafts/`; ephemeral → exit 90 |
+| Tri-State Probe (U-006) | `python3 bin/probe_capabilities.py --root <dir>` | PASS/FAIL/UNKNOWN-CONFINED → `runtime/capability_health.json` (P3) |
 
 Runtime state (`runtime/`) is never committed (see `.gitignore`). The full
 mechanism catalogue, schemas, exit codes and the canonical closure procedure

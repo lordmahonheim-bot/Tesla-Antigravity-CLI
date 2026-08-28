@@ -1,0 +1,33 @@
+# Manifeste Canonique des Piliers Mémoire — Vigilum Codex 2.1.1 (Invariant M-014)
+# Source de vérité déclarative gouvernant l'audit des 13 piliers de /memory.
+# Consommé par bin/memory_parite.py (--manifest ou découverte automatique).
+# Ordre et contenu : consolidation triangulée MANUS / ChatGPT / RENA (Plan V2.1.1).
+manifest_version: "2.1.1"
+doctrine: "AUCUN MASQUAGE, VÉRITÉ FACTUELLE, ÉLÉVATION SYSTÉMIQUE."
+required_pillars:
+  - path: "PROJECT_STATE.md"
+    role: "Cognitive Anchor & Resume Point"
+  - path: "SESSION_LOG.md"
+    role: "Chronological Command & Session History"
+  - path: "liste_projets_antigravity_BASE.md"
+    role: "Taxonomic Master Project Inventory"
+  - path: "AGENTS.md"
+    role: "Operational Governance & Delegation Rules"
+  - path: "GEMINI.md"
+    role: "Cognitive Engine Behavioral Router"
+  - path: "ENGINE.md"
+    role: "Universal Cognitive Reasoning Engine"
+  - path: "FORCE_TOOLING.md"
+    role: "Capability Governance Framework"
+  - path: "SOUL.md"
+    role: "Constitution & Immutable Identity"
+  - path: "TESLA.json"
+    role: "Universal Platform Manifest"
+  - path: "settings.json"
+    role: "Configuration Adapter & MCP Settings"
+  - path: "Le_Conducteur_Absolu_v3.2.1.md"
+    role: "7-Gate Decision Cycle Protocol"
+  - path: "PROTOCOLES/GRAVURE-SUR-MARBRE.md"
+    role: "Canonical Sealing Protocol v2.1"
+  - path: "PROTOCOLES/LOI-DE-PARITE-ABSOLUE.md"
+    role: "Absolute Parity & Verification Protocol"
