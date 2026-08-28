@@ -85,7 +85,7 @@ flowchart TD
 | **Intent Schema** | `schemas/intent_v3.1.schema.json` | JSON Schema draft-07 defining strict write intent specifications. |
 | **Git Guardrails** | `core/hooks/` | Suite of 11 scripts (lib, 8 pre-commit checks incl. orchestration gate & draft guard, 1 atomic pre-push hook). |
 | **Parity Engine** | `bin/audit_parite.py` & `.sh` | Real-time filesystem parity inspector, fingerprint generator, and audit validator. |
-| **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (30 tests) and bash hook test harness (9 tests). |
+| **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (45 tests) and bash hook test harness (11 tests). |
 | **Orchestration Gate (2.1)** | `core/orchestration/orchestration_gate.py` + `yaml_mini.py` | Gate 2 (sealed Mission Graph) + Anti-Usurpation (physical receipt quorum) — stdlib-only, fail-closed. |
 | **Universal Test Runner (2.1)** | `bin/test_runner.py` | E4-proof discovery (`unittest discover -s tests`), aggregate ledger in `evidence/`. |
 | **Memory Parity (2.1)** | `bin/memory_parite.py` + `manifest/memory_manifest_v2.1.yaml` | Manifest-driven 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure); wired to hook 04 (strict, exit 40). |
@@ -93,6 +93,9 @@ flowchart TD
 | **Audit Cap / SPEC LOCK (2.1)** | `bin/audit_cap.py` | Max 3 audit passes, atomic SPEC LOCK (exit 80), forced switch to executable code. |
 | **Workspace Hygiene (2.1)** | `bin/workspace_hygiene.py` | Atomic quarantine of transitory drafts into `runtime/drafts/archive_<ts>/` (H-005), report/prune modes. |
 | **Tri-State Probe (2.1)** | `bin/probe_capabilities.py` | Capability probe emitting PASS / FAIL / UNKNOWN-CONFINED into `runtime/capability_health.json` (P3 strict, U-006). |
+| **Receipt Attestation (2.1)** | `core/orchestration/orchestration_gate.py` | D-008: runtime attestation fields (`invocation_id`, `executor_attestation`, `output_manifest_sha256`) + transcript correlation against `runtime/subagents/transcripts/`. |
+| **Mission Closure Controller (2.1)** | `bin/mission_controller.py` | 13-level state machine evaluating MARBLE_ELIGIBILITY from on-disk evidence → `runtime/marble_eligibility.json` + `runtime/state.json`. |
+| **Marble Certificate (2.1)** | `bin/marble_certificate.py` | Cryptographic seal (local/remote commit, chain head, DAG + receipts hashes) → `CERTIFICATES/MARBLE_CERTIFICATE_*.json` mode 0444. |
 | **Evidence Ledger** | `evidence/` | Sealed SHA-256 chain head anchor and JSON validation summary. |
 
 ---
@@ -158,13 +161,14 @@ TEST SUITE EXECUTION SUMMARY
 TOTAL TESTS: 14 | PASSED: 14 | FAILED: 0 | ACCURACY: 100.0%
 PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
 
-[RETEX HARDENING 2.1.1 — SGC-EXEC-GOV-03-R3]
-  Python suite (governance + RETEX): 38/38 PASS
+[RETEX HARDENING 2.1.2 — SGC-EXEC-GOV-03-R3]
+  Python suite (governance + RETEX): 45/45 PASS
   Bash hook suite (6 + orchestration + draft + LOCKED + memory M-014): 11/11 PASS
-  Demos: dag-verify PASS | receipt-quorum PASS | intent-guard BLOCKED→PASS |
+  Demos: dag-verify PASS | receipt-quorum D-008 PASS | intent-guard BLOCKED→PASS |
          audit_cap SPEC LOCK exit 80 | staging N+1=13 PASS | memory 13/13 PASS |
-         probe U-006 PASS/UNKNOWN-CONFINED | hygiene H-005 BLOCKED→PASS
-TOTAL TESTS (V2.0 + V2.1.1): 49 | PASSED: 49 | FAILED: 0
+         probe U-006 PASS/UNKNOWN-CONFINED | hygiene H-005 BLOCKED→PASS |
+         mission_controller 6/6 prédicats → MARBLE_ELIGIBLE | marble_certificate SEALED 0444
+TOTAL TESTS (V2.0 + V2.1.2): 56 | PASSED: 56 | FAILED: 0
 ======================================================================
 ```
 

@@ -32,6 +32,8 @@ REQUIRED_COMPONENTS = [
     "bin/test_runner.py",
     "bin/workspace_hygiene.py",
     "bin/probe_capabilities.py",
+    "bin/mission_controller.py",
+    "bin/marble_certificate.py",
     "core/orchestration/orchestration_gate.py",
     "core/orchestration/yaml_mini.py",
     "core/hooks/pre-commit/04-project-state-check.sh",

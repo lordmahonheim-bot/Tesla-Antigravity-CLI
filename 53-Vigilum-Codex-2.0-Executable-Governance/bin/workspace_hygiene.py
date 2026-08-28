@@ -52,6 +52,9 @@ def _is_draft(path: Path) -> bool:
     name = path.name
     if _is_canonical(name):
         return False
+    if name == "capability_health.json":
+        # Preuve canonique de la sonde U-006 — jamais traitée comme un brouillon.
+        return False
     if _VERSIONED_DOC.search(name):
         return True
     if _EPHEMERAL_EXT.search(name):

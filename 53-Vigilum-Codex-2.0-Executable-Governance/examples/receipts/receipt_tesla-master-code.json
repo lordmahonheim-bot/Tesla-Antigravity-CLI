@@ -1,10 +1,19 @@
 {
+  "receipt_version": "2.1",
   "agent_id": "tesla-master-code",
   "node_id": "N2",
   "mission_id": "SGC-EXEC-GOV-03-R3",
   "status": "SUCCESS",
   "output_artifacts": ["bin/memory_parite.py", "bin/staging_gate.py", "bin/audit_cap.py", "bin/test_runner.py"],
   "submitted_at": "2026-08-28T21:05:00+01:00",
-  "transcript_ref": "runtime/subagents/transcripts/tesla-master-code.jsonl",
-  "notes": "Implémentation exécutable des 4 verrous RETEX — quittances émises."
+  "invocation_id": "inv-550e8400-e29b-41d4-a716-446655440002",
+  "started_at": "2026-08-28T21:01:00+01:00",
+  "finished_at": "2026-08-28T21:04:45+01:00",
+  "exit_code": 0,
+  "tool_invocations_count": 6,
+  "runtime_event_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "output_manifest_sha256": "sha256:ca978112ca1bbdcaf064278e4a1f2c4510594720443035ed1409f0c5ca10e3f8",
+  "executor_attestation": "subagent_runtime_v2.1_signed",
+  "transcript_ref": "inv-550e8400-e29b-41d4-a716-446655440002.log",
+  "notes": "Implémentation exécutable des verrous RETEX — quittances émises (D-008 corrélé)."
 }

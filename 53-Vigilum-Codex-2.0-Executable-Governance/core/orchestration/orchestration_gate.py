@@ -34,6 +34,8 @@ import argparse
 import hashlib
 import hmac
 import json
+import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -254,7 +256,15 @@ def load_receipts(receipts_dir: Path) -> tuple[dict[str, dict[str, Any]], list[s
 
 
 def validate_receipt(receipt: dict[str, Any]) -> str | None:
-    """Return None when valid, else a machine-readable reason."""
+    """Return None when valid, else a machine-readable reason.
+
+    Invariant D-008 (Vigilum Codex 2.1.2): a receipt is authentic and
+    receivable only when it carries the runtime attestation fields —
+    invocation_id (runtime-generated), started_at/finished_at (post-Gate-2),
+    output_manifest_sha256 (artefacts fingerprint), executor_attestation,
+    and a transcript reference. Field-level checks here; file correlation
+    happens in receipt_quorum (transcript existence).
+    """
     if not isinstance(receipt.get("node_id"), str) or not receipt["node_id"].strip():
         return "RECEIPT_NODE_ID_MISSING"
     if not isinstance(receipt.get("mission_id"), str) or not receipt["mission_id"].strip():
@@ -265,7 +275,53 @@ def validate_receipt(receipt: dict[str, Any]) -> str | None:
         return "RECEIPT_OUTPUT_ARTIFACTS_MISSING"
     if not isinstance(receipt.get("submitted_at"), str) or not receipt["submitted_at"].strip():
         return "RECEIPT_SUBMITTED_AT_MISSING"
+
+    # --- Invariant D-008 : attestation runtime (V2.1.2) ------------------- #
+    invocation_id = receipt.get("invocation_id")
+    if not isinstance(invocation_id, str) or not re.fullmatch(r"inv-[A-Za-z0-9-]{8,64}", invocation_id):
+        return "RECEIPT_INVOCATION_ID_INVALID"
+    started_at = receipt.get("started_at")
+    finished_at = receipt.get("finished_at")
+    if not isinstance(started_at, str) or not started_at.strip():
+        return "RECEIPT_STARTED_AT_MISSING"
+    if not isinstance(finished_at, str) or not finished_at.strip():
+        return "RECEIPT_FINISHED_AT_MISSING"
+    if finished_at < started_at:
+        return "RECEIPT_TIMELINE_INVALID"
+    output_manifest = receipt.get("output_manifest_sha256")
+    if not isinstance(output_manifest, str) or not re.fullmatch(r"(sha256:)?[a-fA-F0-9]{64}", output_manifest):
+        return "RECEIPT_OUTPUT_MANIFEST_SHA256_INVALID"
+    attestation = receipt.get("executor_attestation")
+    if not isinstance(attestation, str) or not attestation.strip().endswith("_signed"):
+        return "RECEIPT_EXECUTOR_ATTESTATION_MISSING"
+    if not isinstance(receipt.get("transcript_ref"), str) or not receipt["transcript_ref"].strip():
+        return "RECEIPT_TRANSCRIPT_REF_MISSING"
+    if "exit_code" in receipt and (not isinstance(receipt["exit_code"], int) or receipt["exit_code"] != 0):
+        return "RECEIPT_EXIT_CODE_NONZERO"
+    if "tool_invocations_count" in receipt and (
+            not isinstance(receipt["tool_invocations_count"], int) or receipt["tool_invocations_count"] <= 0):
+        return "RECEIPT_NO_TOOL_INVOCATIONS"
     return None
+
+
+def _transcript_correlation(receipt: dict[str, Any], receipts_dir: Path) -> str | None:
+    """Correlate the receipt with the runtime transcript journal (D-008).
+
+    When the transcripts directory is observable (``<receipts>/../transcripts``),
+    the referenced transcript file MUST exist on disk; otherwise the receipt is
+    deemed fabricated (fail-closed). If the journal directory is unobservable,
+    the field-level check stands (documented N/A — never a PASS coercion).
+    """
+    ref = receipt.get("transcript_ref")
+    if not isinstance(ref, str) or not ref.strip():
+        return "RECEIPT_TRANSCRIPT_REF_MISSING"
+    transcripts_dir = receipts_dir.parent / "transcripts"
+    if not transcripts_dir.is_dir():
+        return None
+    candidate = Path(ref)
+    if not candidate.is_absolute():
+        candidate = transcripts_dir / ref
+    return None if candidate.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
 
 
 def receipt_quorum(graph: dict[str, Any], receipts_dir: Path, mission_expected: str | None) -> tuple[int, dict[str, Any]]:
@@ -285,6 +341,8 @@ def receipt_quorum(graph: dict[str, Any], receipts_dir: Path, mission_expected: 
         reason = validate_receipt(receipt)
         if mission_expected and receipt.get("mission_id") != mission_expected:
             reason = "RECEIPT_MISSION_MISMATCH"
+        if reason is None:
+            reason = _transcript_correlation(receipt, receipts_dir)
         per_agent[agent_id] = {
             "verdict": "PASS" if reason is None else "BLOCKED",
             "reason": reason,
@@ -365,6 +423,18 @@ def _target_has_marker(target: Path) -> bool:
                      text, flags=re.IGNORECASE) is not None
 
 
+def _default_receipts_dir(root: Path) -> Path:
+    """Resolve the canonical receipts directory (V2.1.2 unification).
+
+    Prefers ``runtime/subagents/receipts/`` (plan Sovereign Shield layout),
+    falls back to ``runtime/subagents/`` (V2.1 layout) when absent.
+    """
+    nested = root / "runtime" / "subagents" / "receipts"
+    if nested.is_dir():
+        return nested
+    return root / "runtime" / "subagents"
+
+
 def intent_guard(root: Path, targets: list[Path], graph_override: str | None, receipts_override: str | None) -> tuple[int, dict[str, Any]]:
     triggers = [t for t in targets if _target_has_marker(t)]
     graph_changes = [t for t in targets if "mission_graph" in t.name or "/contracts/" in t.as_posix()]
@@ -391,7 +461,7 @@ def intent_guard(root: Path, targets: list[Path], graph_override: str | None, re
             "triggers": [str(t) for t in triggers + graph_changes],
         }
 
-    receipts_dir = Path(receipts_override) if receipts_override else root / "runtime" / "subagents"
+    receipts_dir = Path(receipts_override) if receipts_override else _default_receipts_dir(root)
     code, quorum_result = receipt_quorum(_load_for_quorum(graph_path), receipts_dir, mission_expected=None)
     if code != EXIT_PASS:
         return EXIT_BLOCKED, {

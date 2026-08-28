@@ -46,6 +46,9 @@ La hiérarchie d'autorité immuable s'applique :
 | **Universal Test Runner (R-004)** | `bin/test_runner.py` | — | Discovery `-s tests`, ledger `evidence/test_runner_*.json` |
 | **Hygiène & Quarantaine (H-005)** | `bin/workspace_hygiene.py --prune` + hook 08 | — | Brouillons → `runtime/drafts/archive_<ts>/` ; exit 90 au commit |
 | **Sonde Tri-State (U-006)** | `bin/probe_capabilities.py` | — | `runtime/capability_health.json` : PASS/FAIL/UNKNOWN-CONFINED (P3) |
+| **Corrélation Runtime D-008** | `orchestration_gate.py` (validate_receipt + `_transcript_correlation`) | `schemas/receipt_v1.0.schema.json` (v1.1) | Quittances attestées (`invocation_id`, `executor_attestation`, `output_manifest_sha256`, `transcript_ref` corrélé au journal `runtime/subagents/transcripts/`) |
+| **Mission Closure Controller** | `bin/mission_controller.py` | — | `runtime/marble_eligibility.json` + `runtime/state.json` (machine 13 états) |
+| **Certificat de Marbre Crypto** | `bin/marble_certificate.py` | hook 05 (`CERTIFICATES/*.json`) | `CERTIFICATES/MARBLE_CERTIFICATE_*.json` scellé 0444 (ancres commits/hashes) |
 
 - **Codes de sortie guardrails :** `10-60` existants, `TESLA_EXIT_LOCK=80`, `TESLA_EXIT_ORCH=81`, `TESLA_EXIT_DRAFT=90` ; aliases plan `71/72/73` déclarés dans `core/hooks/lib/tesla-exit-codes.sh`.
 - **Exit codes orchestration gate :** `0 PASS | 1 BLOCKED | 64 USAGE | 66 UNKNOWN` (P3).

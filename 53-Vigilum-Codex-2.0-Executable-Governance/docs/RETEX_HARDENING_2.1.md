@@ -1,8 +1,9 @@
-# 🔒 RETEX HARDENING VIGILUM CODEX 2.1.1 — Paquet Exécutable (SGC-EXEC-GOV-03-R3)
+# 🔒 RETEX HARDENING VIGILUM CODEX 2.1.2 — Paquet Exécutable (SGC-EXEC-GOV-03-R3)
 
 **Mission ID :** `SGC-EXEC-GOV-03-R3` (RETEX Post-Déploiement)
 **Date d'implémentation :** 2026-08-28
-**Version Consolidée :** **2.1.1** (absorption intégrale des arbitrages MANUS / ChatGPT / RENA — Plan SOVEREIGN SHIELD)
+**Version Consolidée :** **2.1.2** (Master Execution Baseline — triangulation MANUS-2 / ChatGPT-2 / RENA-2, rebasée sur l'état physique)
+**Statut Doctrinal :** `CONTROLLED IMPLEMENTATION BASELINE — E7 P0 — RUNTIME PROVENANCE REQUIRED`
 **Autorité Suprême :** Abdellah MOUHTAJ (Lord Mahonheim)
 **Classification :** Correctif Exécutable — DOCTRINE VIGILUM CODEX 2.1
 **Principe Directeur :** **« AUCUN MASQUAGE, VÉRITÉ FACTUELLE, ÉLÉVATION SYSTÉMIQUE. »**
@@ -95,24 +96,51 @@ Statuts formels : **PASS** (présent + smoke test exit 0) · **FAIL** (présent 
 
 ---
 
+## 2.10 Mission Closure Controller — `bin/mission_controller.py` (Machine d'États à 13 Niveaux)
+Évalue déterministiquement `MARBLE_ELIGIBLE` à partir des preuves sur disque et dérive l'état le plus profond atteint :
+```bash
+python3 bin/mission_controller.py --root <dir> --mission <id> \
+    [--profile internal-only|public-release|memory-assimilation] \
+    [--registry MVP-GITHUB/] [--milestone N] [--graph <f>] [--receipts <dir>] [--authorized]
+```
+- Prédicats : `WORK_VALIDATED` (ledger `evidence/test_runner_*.json` PASS) · `MEMORY_PARITY_PASS` · `HYGIENE_PASS` · `PROBE_VALID` (P3 : requis PASS ∧ optionnels ∈ {PASS, UNKNOWN-CONFINED} ∧ preuve enregistrée) · `RECEIPTS_CORRELATED` (quorum D-008) · `PROFILE_REQUIREMENTS_PASS` (profil-aware).
+- Sorties : `runtime/marble_eligibility.json` (ledger complet) + `runtime/state.json`.
+- États : `DRAFT → CONTRACTED → G2_APPROVED → EXECUTING → WORK_VALIDATED → EVIDENCE_VALIDATED → STAGING_VALIDATED → MARBLE_ELIGIBLE → HUMAN_AUTHORIZED → PUBLISHING → PUBLISHED → POST_PUB_VERIFIED → SEALED`.
+
+## 2.11 Certificat de Marbre Cryptographique — `bin/marble_certificate.py`
+```bash
+python3 bin/marble_certificate.py --root <dir> --mission <id> [--remote-commit <sha>]
+```
+- Refuse l'émission tant que `runtime/marble_eligibility.json` n'enregistre pas `marble_eligible: true`.
+- Ancres : `local_commit_sha`, `remote_commit_sha`, `evidence_chain_head`, `dag_sha256`, `receipts_manifest_sha256` → `CERTIFICATES/MARBLE_CERTIFICATE_*.json` scellé **0444** (tamper-evident, hook-05 compatible).
+
+## 2.12 Racine de Confiance Biologique (Trust Root — hors périmètre agent)
+- Clé publique d'autorité : `~/.tesla/security/authority_pubkey.pem` (lecture seule, hors workspace — prérequis côté Creuset MIDGARD, non forgeable ici).
+- Clé privée : exclusivement détenue par Lord Mahonheim, hors du workspace.
+- Nonces anti-rejeu : `runtime/auth_nonces/` via `open(O_CREAT|O_EXCL)` (A-003) ; jetons expirant à 2 h max.
+
+---
+
 ## 3. Preuve d'Exécution (chaîne matérielle)
 
 ```text
-TEST SUITE EXECUTION SUMMARY — SGC-EXEC-GOV-03-R3 (V2.1.1)
+TEST SUITE EXECUTION SUMMARY — SGC-EXEC-GOV-03-R3 (V2.1.2)
   [Python: tests/test_governance.py + tests/test_retex_hardening.py]
-      Ran 38 tests (unittest discover -s tests) ......... ALL PASS
+      Ran 45 tests (unittest discover -s tests) ......... ALL PASS
   [Bash: tests/test_hooks_suite.sh]
       11 tests (6 existants + orchestration + draft + LOCKED + mémoire M-014) ALL PASS
   [Démos déterministes]
-      dag-verify       graphe scellé ......................... PASS (exit 0)
-      receipt-quorum   quorum dynamique N/N ................... PASS (exit 0)
-      intent-guard     synthèse sans quittances ............... BLOCKED (exit 1)
-      audit_cap        passe #3 → SPEC LOCK ................... exit 80
-      staging_gate     N+1 = 13 (registre public) ............. PASS
-      memory_parite    13/13 manifeste déclaratif ............. PASS (exit 0)
+      dag-verify        graphe scellé ........................ PASS (exit 0)
+      receipt-quorum    quorum N/N + corrélation D-008 ........ PASS (exit 0)
+      intent-guard      synthèse sans quittances .............. BLOCKED (exit 1)
+      audit_cap         passe #3 → SPEC LOCK .................. exit 80
+      staging_gate      N+1 = 13 (registre public) ............ PASS
+      memory_parite     13/13 manifeste déclaratif ............ PASS (exit 0)
       probe_capabilities  requis PASS · pyright UNKNOWN-CONFINED  PASS(0)/UNKNOWN(66) — P3
-      workspace_hygiene   report BLOCKED → --prune PASS ....... 1 → 0
-TOTAL TESTS: 49 | PASSED: 49 | FAILED: 0
+      workspace_hygiene report BLOCKED → --prune PASS ......... 1 → 0
+      mission_controller  6/6 prédicats → MARBLE_ELIGIBLE ..... PASS (exit 0)
+      marble_certificate  ancres crypto → SEALED 0444 ......... PASS
+TOTAL TESTS: 56 | PASSED: 56 | FAILED: 0
 ```
 
 Le ledger complet est généré par le runner : `evidence/test_runner_<MISSION>_<ts>.json`.

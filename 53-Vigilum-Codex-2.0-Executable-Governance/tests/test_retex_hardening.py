@@ -66,14 +66,41 @@ def write_graph(path: Path, graph: dict) -> None:
 
 
 def make_receipt(agent_id: str, node_id: str, mission: str, status: str = "SUCCESS") -> dict:
+    """D-008 compliant receipt (V2.1.2): runtime attestation fields included."""
+    seq = {"tesla-arcanis-360": "01", "tesla-master-code": "02", "tesla-github-manager": "03"}.get(agent_id, "99")
     return {
+        "receipt_version": "2.1",
         "agent_id": agent_id,
         "node_id": node_id,
         "mission_id": mission,
         "status": status,
         "output_artifacts": [f"out/{agent_id}.md"],
         "submitted_at": "2026-08-28T21:05:00+01:00",
+        "invocation_id": f"inv-550e8400-e29b-41d4-a716-44665544{seq}",
+        "started_at": "2026-08-28T21:01:00+01:00",
+        "finished_at": "2026-08-28T21:04:00+01:00",
+        "exit_code": 0,
+        "tool_invocations_count": 3,
+        "runtime_event_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "output_manifest_sha256": "sha256:ca978112ca1bbdcaf064278e4a1f2c4510594720443035ed1409f0c5ca10e3f8",
+        "executor_attestation": "subagent_runtime_v2.1_signed",
+        "transcript_ref": f"inv-550e8400-e29b-41d4-a716-44665544{seq}.log",
     }
+
+
+def write_receipts_with_transcripts(receipts_dir: Path, graph: dict, mission: str) -> None:
+    """Write D-008 receipts AND their runtime transcript journals (correlation)."""
+    receipts_dir.mkdir(parents=True, exist_ok=True)
+    transcripts_dir = receipts_dir.parent / "transcripts"
+    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    for node in graph["nodes"]:
+        for agent in node["agents"]:
+            receipt = make_receipt(agent, node["id"], mission)
+            write_json(receipts_dir / f"receipt_{agent}.json", receipt)
+            ref = receipt["transcript_ref"]
+            (transcripts_dir / ref).write_text(
+                json.dumps({"invocation_id": ref[:-4], "event": "subagent_invocation"}) + "\n",
+                encoding="utf-8")
 
 
 class OrchestrationGateTests(unittest.TestCase):
@@ -122,10 +149,7 @@ class OrchestrationGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             graph = make_graph()
             receipts_dir = Path(directory) / "subagents"
-            receipts_dir.mkdir()
-            for agent, node in (("tesla-arcanis-360", "N1"), ("tesla-master-code", "N2")):
-                write_json(receipts_dir / f"receipt_{agent}.json",
-                           make_receipt(agent, node, graph["mission"]))
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
             code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
             self.assertEqual(code, EXIT_PASS, result)
             self.assertEqual(result["agents_receipted"], ["tesla-arcanis-360", "tesla-master-code"])
@@ -134,9 +158,8 @@ class OrchestrationGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             graph = make_graph()
             receipts_dir = Path(directory) / "subagents"
-            receipts_dir.mkdir()
-            write_json(receipts_dir / "receipt_tesla-arcanis-360.json",
-                       make_receipt("tesla-arcanis-360", "N1", graph["mission"]))
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
+            (receipts_dir / "receipt_tesla-master-code.json").unlink()
             code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
             self.assertEqual(code, EXIT_BLOCKED)
             self.assertEqual(result["reason"], "RECEIPT_QUORUM_MISSING")
@@ -146,11 +169,39 @@ class OrchestrationGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             graph = make_graph()
             receipts_dir = Path(directory) / "subagents"
-            receipts_dir.mkdir()
-            for agent, node in (("tesla-arcanis-360", "N1"), ("tesla-master-code", "N2")):
-                status = "SUCCESS" if agent == "tesla-arcanis-360" else "FAILED"
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
+            for agent in ("tesla-arcanis-360", "tesla-master-code"):
+                node = "N1" if agent == "tesla-arcanis-360" else "N2"
                 write_json(receipts_dir / f"receipt_{agent}.json",
-                           make_receipt(agent, node, graph["mission"], status=status))
+                           make_receipt(agent, node, graph["mission"], status="FAILED"))
+            code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
+            self.assertEqual(code, EXIT_BLOCKED)
+            self.assertIn("tesla-master-code", result["missing"])
+
+    def test_receipt_quorum_blocks_forged_receipt_missing_attestation(self) -> None:
+        """D-008 (V2.1.2): a receipt without the runtime attestation is rejected."""
+        with tempfile.TemporaryDirectory() as directory:
+            graph = make_graph()
+            receipts_dir = Path(directory) / "subagents"
+            receipts_dir.mkdir()
+            forged = make_receipt("tesla-arcanis-360", "N1", graph["mission"])
+            del forged["executor_attestation"]
+            forged["invocation_id"] = "written-by-agent"  # not runtime-generated
+            write_json(receipts_dir / "receipt_tesla-arcanis-360.json", forged)
+            write_json(receipts_dir / "receipt_tesla-master-code.json",
+                       make_receipt("tesla-master-code", "N2", graph["mission"]))
+            code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
+            self.assertEqual(code, EXIT_BLOCKED)
+            self.assertIn("tesla-arcanis-360", result["missing"])
+
+    def test_receipt_quorum_blocks_missing_transcript(self) -> None:
+        """D-008: transcript journal exists but the referenced file is absent → BLOCKED."""
+        with tempfile.TemporaryDirectory() as directory:
+            graph = make_graph()
+            receipts_dir = Path(directory) / "subagents"
+            write_receipts_with_transcripts(receipts_dir, graph, graph["mission"])
+            # Remove one transcript while keeping its receipt
+            (receipts_dir.parent / "transcripts" / "inv-550e8400-e29b-41d4-a716-4466554402.log").unlink()
             code, result = receipt_quorum(graph, receipts_dir, mission_expected=None)
             self.assertEqual(code, EXIT_BLOCKED)
             self.assertIn("tesla-master-code", result["missing"])
@@ -467,6 +518,141 @@ class ProbeCapabilitiesTests(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertEqual(result["verdict"], "FAIL")
             self.assertEqual(result["capabilities"][0]["status"], "FAIL")
+
+
+class MissionControllerTests(unittest.TestCase):
+    """V2.1.2 : Mission Closure Controller (13 niveaux) + MARBLE_ELIGIBILITY."""
+
+    def _build_eligible_workspace(self, directory: str) -> Path:
+        root = Path(directory)
+        # Mémoire 13 piliers
+        memory = root / "memory"
+        (memory / "PROTOCOLES").mkdir(parents=True)
+        for pillar in DEFAULT_PILLARS:
+            path = memory / pillar
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(f"content {pillar}\n", encoding="utf-8")
+        # Contrat machine
+        contracts = root / "runtime" / "contracts"
+        contracts.mkdir(parents=True)
+        (contracts / "mission_contract.json").write_text(json.dumps({
+            "mission_id": "SGC-EXEC-GOV-03-R3",
+            "closure_profile": "internal-only",
+            "required_nodes": ["N1", "N2"],
+            "required_agents": ["tesla-arcanis-360", "tesla-master-code"],
+            "max_documentation_rounds": 3,
+        }) + "\n", encoding="utf-8")
+        # DAG scellé + registre
+        orch = root / "runtime" / "orchestration"
+        orch.mkdir(parents=True)
+        graph = make_graph()
+        write_graph(orch / "mission_graph.json", graph)
+        (orch / "active_mission.json").write_text(json.dumps({
+            "mission_id": graph["mission"],
+            "mission_graph": "runtime/orchestration/mission_graph.json",
+            "activated_by": "Lord Mahonheim",
+        }) + "\n", encoding="utf-8")
+        # Quittances D-008 corrélées (répertoire canonical receipts/)
+        write_receipts_with_transcripts(root / "runtime" / "subagents" / "receipts", graph, graph["mission"])
+        # Ledger test runner (WORK_VALIDATED)
+        evidence = root / "evidence"
+        evidence.mkdir(exist_ok=True)
+        (evidence / "test_runner_SGC-EXEC-GOV-03-R3_FINAL.json").write_text(json.dumps({
+            "mission_id": "SGC-EXEC-GOV-03-R3",
+            "verdict_global": "PASS",
+            "exit_code": 0,
+            "timestamp": "2026-08-28T22:00:00Z",
+        }) + "\n", encoding="utf-8")
+        # Sonde tri-state (PROBE_VALID)
+        probe_dir = root / "runtime"
+        (probe_dir / "capability_health.json").write_text(json.dumps({
+            "verdict": "PASS",
+            "required": ["python3", "bash", "git"],
+            "evidence": "runtime/capability_health.json",
+            "capabilities": [
+                {"capability": "python3", "status": "PASS"},
+                {"capability": "bash", "status": "PASS"},
+                {"capability": "git", "status": "PASS"},
+                {"capability": "pyright", "status": "UNKNOWN-CONFINED"},
+            ],
+        }) + "\n", encoding="utf-8")
+        # Workspace propre
+        (root / "OUTPUTS").mkdir(exist_ok=True)
+        return root
+
+    def test_controller_marble_eligible_internal_only(self) -> None:
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._build_eligible_workspace(directory)
+            code, result = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                                    registry=None, milestone=None, graph_override=None,
+                                    receipts_override=None, authorized=False)
+            self.assertEqual(code, 0, result)
+            self.assertTrue(result["marble_eligible"])
+            self.assertEqual(result["state"], "MARBLE_ELIGIBLE")
+            self.assertTrue(all(term["pass"] for term in result["equation_terms"].values()))
+            self.assertTrue((root / "runtime" / "marble_eligibility.json").is_file())
+            self.assertTrue((root / "runtime" / "state.json").is_file())
+
+    def test_controller_blocks_when_receipts_missing(self) -> None:
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._build_eligible_workspace(directory)
+            import shutil
+            shutil.rmtree(root / "runtime" / "subagents")
+            code, result = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                                    registry=None, milestone=None, graph_override=None,
+                                    receipts_override=None, authorized=False)
+            self.assertEqual(code, 1, result)
+            self.assertFalse(result["marble_eligible"])
+            self.assertFalse(result["equation_terms"]["RECEIPTS_CORRELATED"]["pass"])
+            self.assertIn(result["state"], ("WORK_VALIDATED", "EVIDENCE_VALIDATED"))
+
+    def test_controller_human_authorized_transition(self) -> None:
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._build_eligible_workspace(directory)
+            code, result = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                                    registry=None, milestone=None, graph_override=None,
+                                    receipts_override=None, authorized=True)
+            self.assertEqual(code, 0, result)
+            self.assertTrue(result["marble_eligible"])
+            self.assertEqual(result["state"], "HUMAN_AUTHORIZED")
+
+
+class MarbleCertificateTests(unittest.TestCase):
+    def test_certificate_sealed_after_eligibility(self) -> None:
+        from bin.marble_certificate import build_certificate
+        from bin.mission_controller import evaluate
+        with tempfile.TemporaryDirectory() as directory:
+            root = MissionControllerTests()._build_eligible_workspace(directory)
+            code, _ = evaluate(root, "SGC-EXEC-GOV-03-R3", "internal-only",
+                               registry=None, milestone=None, graph_override=None,
+                               receipts_override=None, authorized=True)
+            self.assertEqual(code, 0)
+            code, result = build_certificate(root, "SGC-EXEC-GOV-03-R3",
+                                             remote_commit=None, out_dir=None, graph_override=None)
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result["verdict"], "SEALED")
+            cert_path = Path(result["certificate"])
+            self.assertTrue(cert_path.is_file())
+            anchors = result["anchors"]
+            self.assertEqual(anchors["status"], "SEALED_IMMUTABLE")
+            self.assertEqual(anchors["authority"], "Lord Mahonheim (Biological Gate)")
+            self.assertIn("dag_sha256", anchors)
+            self.assertIn("receipts_manifest_sha256", anchors)
+            self.assertTrue(anchors["receipts_manifest_sha256"] not in ("UNSEALED", ""))
+            mode = cert_path.stat().st_mode & 0o777
+            self.assertEqual(mode, 0o444, "certificate must be sealed read-only (0444)")
+
+    def test_certificate_refused_without_eligibility(self) -> None:
+        from bin.marble_certificate import build_certificate
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            code, result = build_certificate(root, "SGC-EXEC-GOV-03-R3",
+                                             remote_commit=None, out_dir=None, graph_override=None)
+            self.assertEqual(code, 1)
+            self.assertEqual(result["reason"], "MARBLE_ELIGIBILITY_NOT_RECORDED")
 
 
 if __name__ == "__main__":
