@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TeslaMemoryPillarsManifest",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "doctrine",
+    "required_pillars"
+  ],
+  "properties": {
+    "manifest_version": { "type": "string" },
+    "doctrine": { "type": "string" },
+    "description": { "type": "string" },
+    "required_pillars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "properties": {
+          "path": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    }
+  }
+}

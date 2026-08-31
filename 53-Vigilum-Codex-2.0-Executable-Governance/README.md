@@ -10,7 +10,9 @@
 
 ---
 
-## 📌 Executive Summary & Objectives
+## Objective
+
+### Executive Summary
 
 The **Vigilum Codex 2.0 Executable Governance Engine (MVP 53)** establishes a deterministic, OS-enforced runtime guardrail system for autonomous AI agents. Departing from vulnerable prompt-level constraints, this framework enforces transactional file mediation, cryptographic authorization tokens, path-traversal confinement, and atomic anti-replay git hooks directly at the operating system and process layer.
 
@@ -154,7 +156,9 @@ PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
 
 ---
 
-## 💻 Installation & CLI Usage
+## Installation
+
+### CLI Usage
 
 ### Prerequisites
 - Linux OS (Ubuntu 22.04+ / Debian 12+)
@@ -208,7 +212,9 @@ bash tests/test_hooks_suite.sh
 
 ---
 
-## 🔒 Security & Governance Guidelines
+## Security
+
+### Security & Governance Guidelines
 
 1. **Immutable Audit Anchor:** The cryptographic seal is anchored in `evidence/chain_head.sha256` (`feb5a0bd14e350d34af4d799f535fd4cd107076194136f2274b9c94917cbb6ab`). Any modification to upstream specifications breaks chain parity.
 2. **Single-Use Push Tokens:** Pushes to remote origins require generating an explicit token containing an unconsumed nonce, written to `TESLA_PUSH_AUTH_FILE`. Reusing an authorization token results in immediate rejection with exit code `70`.

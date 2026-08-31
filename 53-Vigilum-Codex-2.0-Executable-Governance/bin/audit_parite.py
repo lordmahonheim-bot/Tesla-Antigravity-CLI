@@ -35,16 +35,19 @@ def sha256(path: Path) -> str:
 
 
 def fingerprint(root: Path) -> str:
-    paths = sorted(
-        p for p in root.rglob("*")
-        if p.is_file()
-        and "evidence" not in p.parts
-        and "__pycache__" not in p.parts
-        and ".git" not in p.parts
-        and ".venv" not in p.parts
-        and "node_modules" not in p.parts
-        and "runtime" not in p.parts
-    )
+    target_dirs = ["core", "bin", "schemas", "manifest", "docs", "tests", "memory"]
+    paths: list[Path] = []
+    for d in target_dirs:
+        target = root / d
+        if target.is_dir():
+            for p in target.rglob("*"):
+                if p.is_file() and "__pycache__" not in p.parts:
+                    paths.append(p)
+    for f in ["OUTPUTS/Synergy_Gouvernance_Executable_V3.6_LOCKED.md", "memory/MEMORY_MANIFEST.yaml"]:
+        p = root / f
+        if p.is_file():
+            paths.append(p)
+    paths.sort()
     digest = hashlib.sha256()
     for path in paths:
         rel = path.relative_to(root).as_posix()

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TeslaMissionGraph",
+  "type": "object",
+  "required": [
+    "mission",
+    "version",
+    "nodes"
+  ],
+  "properties": {
+    "mission": { "type": "string" },
+    "version": { "type": "string" },
+    "closure_profile": { "type": "string", "enum": ["public-release", "internal-only", "memory-assimilation"] },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "agents"],
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "type": "string" },
+          "agents": { "type": "array", "items": { "type": "string" } },
+          "depends_on": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": ["approved_by", "approved_at", "nonce", "approval_sha256"],
+      "properties": {
+        "approved_by": { "type": "string" },
+        "approved_at": { "type": "string" },
+        "nonce": { "type": "string" },
+        "approval_sha256": { "type": "string" }
+      }
+    }
+  }
+}
