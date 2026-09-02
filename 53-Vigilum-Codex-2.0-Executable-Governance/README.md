@@ -3,16 +3,15 @@
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)
 
 *Author:* Lord Mahonheim  
-*Mission ID:* `SGC-EXEC-GOV-03`  
+*Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
+*Version:* **2.1.0** (RETEX Hardening — 7 erreurs → 6 verrous exécutables, voir `docs/RETEX_HARDENING_2.1.md`)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
 
-## Objective
-
-### Executive Summary
+## 📌 Executive Summary & Objectives
 
 The **Vigilum Codex 2.0 Executable Governance Engine (MVP 53)** establishes a deterministic, OS-enforced runtime guardrail system for autonomous AI agents. Departing from vulnerable prompt-level constraints, this framework enforces transactional file mediation, cryptographic authorization tokens, path-traversal confinement, and atomic anti-replay git hooks directly at the operating system and process layer.
 
@@ -84,9 +83,19 @@ flowchart TD
 | **Gatekeeper** | `core/gatekeeper.py` | High-speed cryptographic capability verifier and mission lease validator. |
 | **Broker Daemon** | `core/broker/tesla_brokerd.py` | Transactional mediation daemon managing intent lifecycle and atomic writes. |
 | **Intent Schema** | `schemas/intent_v3.1.schema.json` | JSON Schema draft-07 defining strict write intent specifications. |
-| **Git Guardrails** | `core/hooks/` | Suite of 9 scripts (lib, 6 pre-commit checks, 1 atomic pre-push hook). |
+| **Git Guardrails** | `core/hooks/` | Suite of 11 scripts (lib, 8 pre-commit checks incl. orchestration gate & draft guard, 1 atomic pre-push hook). |
 | **Parity Engine** | `bin/audit_parite.py` & `.sh` | Real-time filesystem parity inspector, fingerprint generator, and audit validator. |
-| **Test Suites** | `tests/test_governance.py` & `.sh` | Complete Python unit test suite (8 tests) and bash hook test harness (6 tests). |
+| **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (55 tests) and bash hook test harness (11 tests). |
+| **Orchestration Gate (2.1)** | `core/orchestration/orchestration_gate.py` + `yaml_mini.py` | Gate 2 (sealed Mission Graph) + Anti-Usurpation (physical receipt quorum) — stdlib-only, fail-closed. |
+| **Universal Test Runner (2.1)** | `bin/test_runner.py` | E4-proof discovery (`unittest discover -s tests`), aggregate ledger in `evidence/`. |
+| **Memory Parity (2.1)** | `bin/memory_parite.py` + `manifest/memory_manifest_v2.1.yaml` | Manifest-driven 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure); wired to hook 04 (strict, exit 40). |
+| **Staging Gate (2.1)** | `bin/staging_gate.py` | Phase 4 mandatory public staging: milestone $N+1$ computed on `MVP-GITHUB/`, README English-strict verification, profile-aware. |
+| **Audit Cap / SPEC LOCK (2.1)** | `bin/audit_cap.py` | Max 3 audit passes, atomic SPEC LOCK (exit 80), forced switch to executable code. |
+| **Workspace Hygiene (2.1)** | `bin/workspace_hygiene.py` | Atomic quarantine of transitory drafts into `runtime/drafts/archive_<ts>/` (H-005), report/prune modes. |
+| **Tri-State Probe (2.1)** | `bin/probe_capabilities.py` | Capability probe emitting PASS / FAIL / UNKNOWN-CONFINED into `runtime/capability_health.json` (P3 strict, U-006). |
+| **Receipt Attestation (2.1)** | `core/orchestration/orchestration_gate.py` | D-008: runtime attestation fields (`invocation_id`, `executor_attestation`, `output_manifest_sha256`) + transcript correlation against `runtime/subagents/transcripts/`. |
+| **Mission Closure Controller (2.1)** | `bin/mission_controller.py` | 13-level state machine evaluating MARBLE_ELIGIBILITY from on-disk evidence → `runtime/marble_eligibility.json` + `runtime/state.json`. |
+| **Marble Certificate (2.1)** | `bin/marble_certificate.py` | Cryptographic seal (local/remote commit, chain head, DAG + receipts hashes) → `CERTIFICATES/MARBLE_CERTIFICATE_*.json` mode 0444. |
 | **Evidence Ledger** | `evidence/` | Sealed SHA-256 chain head anchor and JSON validation summary. |
 
 ---
@@ -151,14 +160,44 @@ TEST SUITE EXECUTION SUMMARY
 
 TOTAL TESTS: 14 | PASSED: 14 | FAILED: 0 | ACCURACY: 100.0%
 PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
+
+[RETEX HARDENING 2.1.3 — SGC-EXEC-GOV-03-R3]
+  Python suite (governance + RETEX): 55/55 PASS
+  Bash hook suite (6 + orchestration + draft + LOCKED + memory M-014): 11/11 PASS
+  Demos: dag-verify PASS | receipt-quorum D-008 PASS | intent-guard BLOCKED→PASS |
+         audit_cap SPEC LOCK exit 80 | staging N+1=13 PASS | memory 13/13 PASS |
+         probe U-006 PASS/UNKNOWN-CONFINED | hygiene H-005 BLOCKED→PASS |
+         mission_controller 6/6 prédicats → MARBLE_ELIGIBLE | marble_certificate SEALED 0444
+TOTAL TESTS (V2.0 + V2.1.3): 66 | PASSED: 66 | FAILED: 0
 ======================================================================
 ```
 
 ---
 
-## Installation
+## 🧰 RETEX Hardening 2.1 — Operational Summary
 
-### CLI Usage
+The RETEX corrective action plan (7 documented failures) is now enforced by
+deterministic, OS-level mechanisms — not prompt-level intentions:
+
+| Verrou | Commande | Fail-Closed |
+| :--- | :--- | :--- |
+| Gate 2 (DAG approved) | `python3 core/orchestration/orchestration_gate.py dag-verify --graph <mission_graph.yaml>` | unsealed graph → exit 1 |
+| Anti-Usurpation (Rule N°4) | `python3 core/orchestration/orchestration_gate.py receipt-quorum --graph <f> --receipts runtime/subagents` | missing receipt → exit 1 |
+| Anti-Usurpation (commit hook) | hook `07-orchestration-gate.sh` (auto on `team_synergy: true` markers) | exit 81 |
+| 13 Memory Pillars (M-014) | `python3 bin/memory_parite.py --root <TESLA_ROOT>` (manifest-driven) | 13/13 SHA-256 required, exit 0; hook 04 strict → 40 |
+| Staging $N+1$ (S-002) | `python3 bin/staging_gate.py verify --registry MVP-GITHUB/ --milestone N` | Phase 4 mandatory (profile-aware) |
+| Audit Ceiling (L-001) | `python3 bin/audit_cap.py --root <dir> --spec <ID> --record` | lock at 3rd pass, exit 80 |
+| Universal Runner (R-004) | `python3 bin/test_runner.py --root . --mission <ID>` | all suites must PASS |
+| Draft Hygiene (H-005) | `bin/workspace_hygiene.py --prune` + hook `08-draft-artifact-guard.sh` | quarantine to `runtime/drafts/`; ephemeral → exit 90 |
+| Tri-State Probe (U-006) | `python3 bin/probe_capabilities.py --root <dir>` | PASS/FAIL/UNKNOWN-CONFINED → `runtime/capability_health.json` (P3) |
+
+Runtime state (`runtime/`) is never committed (see `.gitignore`). The full
+mechanism catalogue, schemas, exit codes and the canonical closure procedure
+are documented in `docs/RETEX_HARDENING_2.1.md` and `docs/protocol_mapping.md`.
+
+---
+
+## 💻 Installation & CLI Usage
 
 ### Prerequisites
 - Linux OS (Ubuntu 22.04+ / Debian 12+)
@@ -212,9 +251,7 @@ bash tests/test_hooks_suite.sh
 
 ---
 
-## Security
-
-### Security & Governance Guidelines
+## 🔒 Security & Governance Guidelines
 
 1. **Immutable Audit Anchor:** The cryptographic seal is anchored in `evidence/chain_head.sha256` (`feb5a0bd14e350d34af4d799f535fd4cd107076194136f2274b9c94917cbb6ab`). Any modification to upstream specifications breaks chain parity.
 2. **Single-Use Push Tokens:** Pushes to remote origins require generating an explicit token containing an unconsumed nonce, written to `TESLA_PUSH_AUTH_FILE`. Reusing an authorization token results in immediate rejection with exit code `70`.

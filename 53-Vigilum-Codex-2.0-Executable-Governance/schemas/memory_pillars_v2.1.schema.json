@@ -1,26 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "TeslaMemoryPillarsManifest",
+  "$id": "https://vigilum-codex.local/schemas/memory_pillars_v2.1.schema.json",
+  "title": "Manifest des 13 Piliers Mémoire (Vigilum Codex 2.1)",
+  "description": "Contract defining the 13 canonical pillars of the Source de Vérité under $TESLA_ROOT/memory. The memory parity loop (bin/memory_parite.py) refuses any mission closure unless the 13/13 matrix reports PASS with exit code 0. Adjustable via --manifest for workspace-specific sets; count is strict by default.",
   "type": "object",
-  "required": [
-    "manifest_version",
-    "doctrine",
-    "required_pillars"
-  ],
+  "required": ["version", "pillars"],
   "properties": {
-    "manifest_version": { "type": "string" },
-    "doctrine": { "type": "string" },
-    "description": { "type": "string" },
-    "required_pillars": {
+    "version": {"type": "string"},
+    "pillars": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["path", "role"],
-        "properties": {
-          "path": { "type": "string" },
-          "role": { "type": "string" }
-        }
-      }
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
     }
   }
 }

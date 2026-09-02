@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# Guardrail 04: project state & memory parity check
+# Vigilum Codex 2.1.1 — Guardrail 04 : Project State & Memory Parity (Invariant M-014)
+# 1) Project-state-file coherence guard (legacy).
+# 2) Memory parity: when TESLA_ENFORCE_MEMORY_PARITY=1, runs
+#    bin/memory_parite.py (manifest-driven 13 pillars, SHA-256) and BLOCKS the
+#    commit with exit 40 on any desynchronization (BLOCKED/STALE_STATE) or
+#    unobservable memory/ (UNKNOWN — P3: UNKNOWN != PASS).
 set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -7,13 +12,23 @@ MODULE_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 . "$SCRIPT_DIR/../lib/tesla-exit-codes.sh"
 . "$SCRIPT_DIR/../lib/tesla-logging.sh"
 
-staged=$(git diff --cached --name-only --diff-filter=ACM || true)
-[ -n "$staged" ] || exit "$TESLA_EXIT_OK"
+# 1) Project state file guard
+state_file=${TESLA_PROJECT_STATE_FILE:-}
+if [ -n "$state_file" ]; then
+  [ -f "$state_file" ] || { tesla_log ERROR "project state file missing: $state_file"; exit "$TESLA_EXIT_STATE"; }
 
-repo_root=$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")
-tesla_root="${TESLA_ROOT:-$repo_root}"
+  staged=$(git diff --cached --name-only || true)
+  if [ -n "$staged" ] && ! echo "$staged" | grep -F -x "$state_file" >/dev/null 2>&1; then
+    if [ "${TESLA_REQUIRE_STATE_UPDATE:-0}" = "1" ]; then
+      tesla_log ERROR "commit contains modifications without updating $state_file"
+      exit "$TESLA_EXIT_STATE"
+    fi
+  fi
+fi
 
-if [ "${TESLA_ENFORCE_MEMORY_PARITY:-0}" = "1" ] && [ -f "$MODULE_ROOT/bin/memory_parite.py" ]; then
+# 2) Memory parity (Invariant M-014) — strict mode only, opt-in via env
+if [ "${TESLA_ENFORCE_MEMORY_PARITY:-0}" = "1" ]; then
+  tesla_root=${TESLA_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")}
   parity_log=$(mktemp)
   set +e
   python3 "$MODULE_ROOT/bin/memory_parite.py" --root "$tesla_root" \

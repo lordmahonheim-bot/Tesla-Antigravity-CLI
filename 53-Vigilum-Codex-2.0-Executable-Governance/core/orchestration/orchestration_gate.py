@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.1 — Orchestration Gate & Anti-Usurpation Enforcement (E7).
+"""Vigilum Codex 2.1 — Deterministic Orchestration Gate.
 
-Deterministic enforcement of Rule N°4 ("AGENTS délègue, il ne réimplémente
-pas") and Gate 2 (Mission Contract seal):
+Deterministic enforcement of the RETEX corrective actions SGC-EXEC-GOV-03:
 
-1. dag-verify
-   Validates structural integrity (mission name, nodes, non-empty agents,
-   dependency references, acyclicity) AND checks the cryptographic approval
-   seal produced by Lord Mahonheim (``approval_sha256``).
+  E7 (Anti-Usurpation / Théâtre d'Agents)  -> receipt-quorum + intent-guard
+  Gate 2 (Mission Contract / DAG approval) -> dag-verify (sealed Mission Graph)
 
-2. receipt-quorum
-   Inspects ``runtime/subagents/receipts/`` (and falls back to
-   ``runtime/subagents/``) to guarantee that every agent assigned to any
-   node in the graph has emitted a physical receipt JSON with status
-   SUCCESS/COMPLETED. Includes D-008 runtime attestation and transcript
-   correlation.
+Sub-commands
+------------
+dag-verify --graph <file> [--root <dir>]
+    Validates a Mission Graph: structure, node uniqueness, dependency
+    acyclicity (Kahn), and the human approval seal (Gate 2). A graph without
+    a valid ``approval`` block is BLOCKED: no DAG may be executed before Lord
+    Mahonheim's Biological Gate.
 
-3. intent-guard
-   Pre-commit interceptor: detects staged files declaring a Team-Synergy
-   synthesis marker (``team_synergy: true`` / ``x-vigilum-team-synergy: true``)
-   or Mission Graph / contract changes, then enforces dag-verify + receipt
-   quorum before any commit. Fail-closed: no marker detection without proof.
+receipt-quorum --graph <file> --receipts <dir> [--mission <id>]
+    Enforces Absolute Rule N°4 (AGENTS delegates, it does not reimplement):
+    every agent referenced by the graph MUST have a physical, valid receipt
+    file ``receipt_<agent_id>.json`` with status SUCCESS|COMPLETED. A
+    Team-Synergy deliverable written without these receipts is BLOCKED.
+
+intent-guard --root <dir> --target <file> [--target <file> ...]
+    Pre-commit guard used by hook 07: scans staged files for the Team-Synergy
+    synthesis marker (``team_synergy: true`` / ``x-vigilum-team-synergy: true``)
+    or Mission Graph / contract changes, then enforces dag-verify + receipt
+    quorum before any commit. Fail-closed: no marker detection without proof.
 
 Exit codes: 0 PASS | 1 BLOCKED | 64 USAGE | 66 UNKNOWN (P3: UNKNOWN != PASS).
 """
@@ -258,7 +262,8 @@ def validate_receipt(receipt: dict[str, Any]) -> str | None:
     receivable only when it carries the runtime attestation fields —
     invocation_id (runtime-generated), started_at/finished_at (post-Gate-2),
     output_manifest_sha256 (artefacts fingerprint), executor_attestation,
-    and a transcript reference.
+    and a transcript reference. Field-level checks here; file correlation
+    happens in receipt_quorum (transcript existence).
     """
     if not isinstance(receipt.get("node_id"), str) or not receipt["node_id"].strip():
         return "RECEIPT_NODE_ID_MISSING"
@@ -300,29 +305,45 @@ def validate_receipt(receipt: dict[str, Any]) -> str | None:
 
 
 def _transcript_correlation(receipt: dict[str, Any], receipts_dir: Path) -> str | None:
-    """Correlate the receipt with the runtime transcript journal (D-008)."""
+    """Correlate the receipt with the runtime transcript journal (D-008).
+
+    V2.1.3 — Frontière de Confiance Runtime Isolée (arbitrage #1) : les
+    journaux bruts d'invocation vivent HORS du workspace agent, dans
+    ``~/.tesla/runtime-evidence/<mission_id>/transcripts/`` (variable
+    ``TESLA_RUNTIME_EVIDENCE``). Le workspace local ne détient qu'un miroir
+    de consultation. Résolution (première correspondance retenue) :
+
+      1. ``transcript_ref`` absolu ou ``~/``  -> le fichier doit exister tel quel.
+      2. ``TESLA_RUNTIME_EVIDENCE/<mission>/transcripts/<ref>`` si configurée
+         (mode strict : répertoire configuré mais inobservable => BLOCKED).
+      3. miroir local ``<receipts>/../transcripts/<ref>``.
+
+    Si aucun journal n'est observable (aucun ref absolu, env absente, miroir
+    absent) : la corrélation reste documentée N/A — jamais un PASS coercé (P3).
+    """
     ref = receipt.get("transcript_ref")
     if not isinstance(ref, str) or not ref.strip():
         return "RECEIPT_TRANSCRIPT_REF_MISSING"
 
-    ref_path = Path(os.path.expanduser(ref))
-    if ref_path.is_absolute():
-        return None if ref_path.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+    # 1. Référence explicite (isolée ou absolue)
+    if ref.startswith("~") or Path(ref).is_absolute():
+        explicit = Path(os.path.expanduser(ref))
+        return None if explicit.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
 
-    transcripts_dir = receipts_dir.parent / "transcripts"
-    if transcripts_dir.is_dir():
-        candidate = transcripts_dir / ref
-        return None if candidate.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+    # 2. Espace runtime isolé (hors périmètre d'écriture agent)
+    runtime_evidence = os.environ.get("TESLA_RUNTIME_EVIDENCE")
+    mission_id = receipt.get("mission_id")
+    if runtime_evidence and isinstance(mission_id, str) and mission_id.strip():
+        isolated_dir = Path(os.path.expanduser(runtime_evidence)) / mission_id / "transcripts"
+        if not isolated_dir.is_dir():
+            return "RECEIPT_RUNTIME_EVIDENCE_UNOBSERVABLE"
+        return None if (isolated_dir / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
 
-    # Fallback to home isolated runtime evidence when local transcripts/ is not used
-    mission_id = receipt.get("mission_id", "")
-    home_evidence = Path(os.path.expanduser(f"~/.tesla/runtime-evidence/{mission_id}/transcripts"))
-    if home_evidence.is_dir():
-        candidate = home_evidence / Path(ref).name
-        if candidate.is_file():
-            return None
-
-    return "RECEIPT_TRANSCRIPT_MISSING"
+    # 3. Miroir local de consultation (workspace)
+    mirror = receipts_dir.parent / "transcripts"
+    if mirror.is_dir():
+        return None if (mirror / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+    return None  # journal inobservable -> corrélation N/A documentée (P3)
 
 
 def receipt_quorum(graph: dict[str, Any], receipts_dir: Path, mission_expected: str | None) -> tuple[int, dict[str, Any]]:
@@ -410,7 +431,11 @@ def _env_mission_graph() -> str | None:
 
 
 def _target_has_marker(target: Path) -> bool:
-    """True when the file declares a Team-Synergy synthesis (explicit marker only)."""
+    """True when the file declares a Team-Synergy synthesis (explicit marker only).
+
+    Matches YAML (``team_synergy: true``) and JSON (``"team_synergy": true``)
+    spellings with optional quoting and whitespace around the separator.
+    """
     import re
     try:
         text = target.read_text(encoding="utf-8", errors="replace")
@@ -421,6 +446,11 @@ def _target_has_marker(target: Path) -> bool:
 
 
 def _default_receipts_dir(root: Path) -> Path:
+    """Resolve the canonical receipts directory (V2.1.2 unification).
+
+    Prefers ``runtime/subagents/receipts/`` (plan Sovereign Shield layout),
+    falls back to ``runtime/subagents/`` (V2.1 layout) when absent.
+    """
     nested = root / "runtime" / "subagents" / "receipts"
     if nested.is_dir():
         return nested

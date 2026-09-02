@@ -95,11 +95,8 @@ git -C "$tmp" add Synergy_Gouvernance_Executable_V3.6_LOCKED.md
 (cd "$tmp" && "$root/core/hooks/pre-commit/tesla-pre-commit-main.sh")
 
 # Test 10: Memory parity strict — memory/ unobservable blocks (Exit 40, P3)
-git -C "$tmp" reset -q
-printf 'dummy\n' > "$tmp/dummy.txt"
-git -C "$tmp" add dummy.txt
 set +e
-(cd "$tmp" && TESLA_ROOT="$tmp" TESLA_ENFORCE_MEMORY_PARITY=1 "$root/core/hooks/pre-commit/04-project-state-check.sh")
+(cd "$tmp" && TESLA_ENFORCE_MEMORY_PARITY=1 "$root/core/hooks/pre-commit/04-project-state-check.sh")
 status=$?
 set -e
 [ "$status" -eq 40 ] || { echo "expected memory parity exit 40, got $status" >&2; exit 1; }

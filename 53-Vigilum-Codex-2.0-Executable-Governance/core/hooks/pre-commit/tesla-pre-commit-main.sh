@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-# Main pre-commit hook aggregator for Tesla Vigilum Codex
 set -eu
-
-dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+dir=$(dirname "$0")
 . "$dir/../lib/tesla-exit-codes.sh"
 . "$dir/../lib/tesla-logging.sh"
-
-tesla_log INFO "running pre-commit guardrails..."
 
 "$dir/01-schema-validator.sh"
 "$dir/02-secret-scanner.sh"

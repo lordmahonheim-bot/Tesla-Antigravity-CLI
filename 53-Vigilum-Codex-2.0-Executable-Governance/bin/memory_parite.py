@@ -75,7 +75,7 @@ def resolve_root(args_root: str | None) -> Path | None:
     if env_root:
         candidate = Path(env_root).expanduser()
         return candidate.resolve() if candidate.is_dir() else None
-    return Path(__file__).resolve().parent.parent
+    return None
 
 
 def _extract_pillars(data: Any) -> list[str] | None:

@@ -1,0 +1,15 @@
+# Manifeste Déclaratif des Suites de Tests — Vigilum Codex 2.1.3 (arbitrage #5)
+# « 100% des tests déclarés au manifeste » : le test_runner valide que les
+# comptes exécutés atteignent les comptes déclarés (fail-closed sur écart).
+manifest_version: "2.1.3"
+doctrine: "100% des tests déclarés au manifeste — aucun comptage narratif"
+suites:
+  - name: python-unittest-discovery
+    command: "python3 -m unittest discover -s tests"
+    expected_tests: 55
+    critical: true
+  - name: bash-hooks-suite
+    command: "bash tests/test_hooks_suite.sh"
+    expected_tests: 11
+    critical: true
+total_tests: 66

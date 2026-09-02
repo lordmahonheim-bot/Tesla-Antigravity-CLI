@@ -1,7 +1,9 @@
-manifest_version: "2.1.0"
-doctrine: "Vigilum Codex 2.1 — Sovereign Shield (Invariant M-014)"
-description: "Manifeste déclaratif canonique des 13 piliers de la source de vérité mémorielle."
-
+# Manifeste Canonique des Piliers Mémoire — Vigilum Codex 2.1.1 (Invariant M-014)
+# Source de vérité déclarative gouvernant l'audit des 13 piliers de /memory.
+# Consommé par bin/memory_parite.py (--manifest ou découverte automatique).
+# Ordre et contenu : consolidation triangulée MANUS / ChatGPT / RENA (Plan V2.1.1).
+manifest_version: "2.1.1"
+doctrine: "AUCUN MASQUAGE, VÉRITÉ FACTUELLE, ÉLÉVATION SYSTÉMIQUE."
 required_pillars:
   - path: "PROJECT_STATE.md"
     role: "Cognitive Anchor & Resume Point"

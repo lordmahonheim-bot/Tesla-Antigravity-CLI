@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.1 — Tri-State Capability Health Probe (E6 / Invariant U-006).
+"""Vigilum Codex 2.1.1 — Tri-State Capability Probe (E6: Angle Mort LSP).
 
-Deterministic probe enforcing the tripartite capability model:
-  PASS              observable and functioning normally
-  FAIL              observable and failing (syntax error, broken dependency)
-  UNKNOWN-CONFINED  unobservable / uninstantiated (P3: UNKNOWN != PASS)
+Deterministic enforcement of Invariant U-006: external tooling state is
+formally emitted as PASS / FAIL / UNKNOWN-CONFINED and recorded in
+``runtime/capability_health.json``. Invariant P3 (UNKNOWN != PASS) is applied
+rigorously: an unobservable or degraded capability is NEVER coerced into a
+success status.
 
-Strict doctrine: an unobservable tool is ALWAYS marked UNKNOWN-CONFINED
-and NEVER coerced into a PASS or PASS_UNOBSERVED.
+Semantics (fail-closed):
+  PASS                tool present and functional smoke test exited 0
+  FAIL                tool present but smoke test failed (degraded)
+  UNKNOWN-CONFINED    tool not observable in this environment (absent/confined)
 
-Generates: runtime/capability_health.json
-Exit: 0 when required capabilities are PASS and optional are PASS or UNKNOWN-CONFINED.
-      66 when a critical capability is UNKNOWN.
-      1 when any capability is FAIL.
+Global verdict:
+  PASS   (exit 0)  every probed capability is PASS
+  FAIL   (exit 1)  at least one REQUIRED capability FAIL
+  UNKNOWN (exit 66) otherwise (any required UNKNOWN, or optional degraded) — P3
+
+Default required set: python3, bash, git.  Default optional set: jq, pyright,
+flake8, pyyaml (module). Override with --required / --optional / --tool.
 """
 from __future__ import annotations
 
@@ -120,7 +126,7 @@ def _parse_tools(specs: list[str]) -> list[dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Tri-state capability probe (U-006)")
-    parser.add_argument("--root", type=Path, default=Path("."), help="Workspace root (evidence target)")
+    parser.add_argument("--root", type=Path, required=True, help="Workspace root (evidence target)")
     parser.add_argument("--tool", action="append", default=[], help="Probe a single capability (name[=cmd])")
     parser.add_argument("--required", action="append", default=[], help="Required capability (name[=cmd])")
     parser.add_argument("--optional", action="append", default=[], help="Optional capability (name[=cmd])")

@@ -32,9 +32,23 @@ try:
         raise ValueError("nonce cannot be empty")
     
     # Invariant A-003: Atomic Anti-Replay Primitive via POSIX O_CREAT | O_EXCL
+    # V2.1.3 (arbitrage #2): registre nonce isolé hors workspace agent.
+    #   TESLA_SECURITY_NONCES_DIR  -> répertoire nonce explicite (ex: ~/.tesla/security/nonces/)
+    #   sinon défaut : <root>/runtime/nonces/ (rétro-compatible)
+    import os as _os
+    import pathlib
     root_dir = Path.cwd()
-    nonces_dir = root_dir / "runtime" / "nonces"
+    nonces_dir_env = _os.environ.get("TESLA_SECURITY_NONCES_DIR")
+    if nonces_dir_env:
+        nonces_dir = pathlib.Path(nonces_dir_env).expanduser()
+    else:
+        nonces_dir = root_dir / "runtime" / "nonces"
     nonces_dir.mkdir(parents=True, exist_ok=True)
+    if nonces_dir_env:
+        try:
+            _os.chmod(nonces_dir, 0o700)  # mode 0700 : registre confidentiel isolé
+        except OSError:
+            pass
     nonce_lock = nonces_dir / f"{nonce}.lock"
     
     try:

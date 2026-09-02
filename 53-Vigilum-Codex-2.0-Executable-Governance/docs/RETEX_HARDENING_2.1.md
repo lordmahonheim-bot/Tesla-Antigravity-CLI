@@ -1,0 +1,197 @@
+# 🔒 RETEX HARDENING VIGILUM CODEX 2.1.3 — Paquet Exécutable (SGC-EXEC-GOV-03-R3)
+
+**Mission ID :** `SGC-EXEC-GOV-03-R3` (RETEX Post-Déploiement)
+**Date d'implémentation :** 2026-08-28
+**Version Consolidée :** **2.1.3** (Master Execution Baseline — réconciliation des 7 arbitrages, rebasée sur l'état physique)
+**Statut Doctrinal :** `CONTROLLED IMPLEMENTATION BASELINE — SPECIFICATION RECONCILED; RUNTIME EVIDENCE PENDING`
+**Autorité Suprême :** Abdellah MOUHTAJ (Lord Mahonheim)
+**Classification :** Correctif Exécutable — DOCTRINE VIGILUM CODEX 2.1
+**Principe Directeur :** **« AUCUN MASQUAGE, VÉRITÉ FACTUELLE, ÉLÉVATION SYSTÉMIQUE. »**
+**Postulat de Non-Usurpation (P-AGENT-001) :** *« Une délégation sans quittance authentique émise par le runtime est réputée non exécutée ; une synthèse sans manifeste de preuves validé est réputée non produite ; une clôture sans profil de mission respecté est réputée non clôturée. »*
+**Doctrine :** *AI Proposes, Code Validates* — tout verrou du Plan d'Action Correctif est un **mécanisme déterministe exécutable**, jamais une consigne textuelle.
+
+---
+
+## 1. Cartographie : 7 Erreurs → 7 Verrous Exécutables (V2.1.1)
+
+| Erreur du Diagnostic | Verrou du Plan Correctif | Composant Exécutable | Preuve Matérielle |
+|---|---|---|---|
+| **E7** Théâtre d'Agents | Interdiction d'Écriture Directe + Corrélation Runtime (**D-007 / D-008**) | `core/orchestration/orchestration_gate.py` (receipt-quorum + intent-guard) + hook `07-orchestration-gate.sh` | Quittances physiques `runtime/subagents/receipt_<agent_id>.json` (quorum dynamique N/N issu du DAG approuvé) |
+| **Gate 2** Court-circuit du DAG | Validation Obligatoire du Mission Graph | `orchestration_gate.py dag-verify` | Sceau `approval_sha256` (SHA-256 canonique du DAG sans le bloc approval) + `approved_by: Lord Mahonheim` |
+| **E2** Omission Phase 4 | Double Track Staging Public, **profile-aware** (`public-release` / `internal-only` / `memory-assimilation`) | `bin/staging_gate.py` (`next-milestone` / `verify`) | Jalon $N+1$ calculé strictement sur `MVP-GITHUB/` ; `STAGING_NA_CONFIRMED` pour `internal-only` |
+| **E3** Amnésie Mémorielle (R14) | Manifeste Déclaratif `MEMORY_MANIFEST.yaml` (**M-014**) | `bin/memory_parite.py` (manifest-driven) + hook `04-project-state-check.sh` | Rapport matriciel 13/13 SHA-256, exit 0 ; hook strict → exit 40 |
+| **E1** Paralysie Documentaire | Plafond d'Audit (k ≤ 3) (**L-001**) | `bin/audit_cap.py` | SPEC LOCK atomique `O_CREAT\|O_EXCL` + état logique (exit 80 — ERR_SPEC_LOCKED) |
+| **E4** Faille d'Invocation Python | Test Runner Universel (**R-004**) | `bin/test_runner.py` | Discovery `-s tests` (résolution absolue `sys.path`), ledger JSON dans `evidence/` |
+| **E5** Encombrement du Creuset | Quarantaine Atomique (**H-005**) | `bin/workspace_hygiene.py --prune` + hook `08-draft-artifact-guard.sh` + `.gitignore` | Brouillons déplacés vers `runtime/drafts/archive_<ts>/` ; git status propre |
+| **E6** Incertitude LSP | Sonde Tri-State (**U-006**, P3 strict) | `bin/probe_capabilities.py` | `runtime/capability_health.json` : `PASS / FAIL / UNKNOWN-CONFINED` — jamais de PASS implicite |
+
+---
+
+## 2. Composants & Contrats Déterministes
+
+### 2.1 Orchestration Gate — `core/orchestration/orchestration_gate.py`
+Moteur 100 % stdlib (parseur YAML strict `core/orchestration/yaml_mini.py`, comportement identique sans PyYAML).
+
+| Sous-commande | Rôle | Exit 0 | Exit 1 | Exit 66 |
+|---|---|---|---|---|
+| `dag-verify --graph <f>` | Gate 2 : structure du DAG (nœuds uniques, dépendances résolues, acyclicité de Kahn) + sceau d'approbation humain | PASS | `GRAPH_*`, `APPROVAL_*` | `GRAPH_UNPARSEABLE` |
+| `receipt-quorum --graph <f> --receipts <dir> [--mission <id>]` | Règle Absolue N°4 : quorum **dynamique N/N** des agents du DAG (quittances `status ∈ {SUCCESS, COMPLETED}`) | PASS | `RECEIPT_QUORUM_MISSING` | `RECEIPTS_DIR_MISSING` |
+| `intent-guard --root <dir> --target <f>...` | Hook anti-usurpation : marqueurs explicites `team_synergy: true` / `x-vigilum-team-synergy: true` (YAML **et** JSON) puis DAG scellé + quorum | PASS | `MISSION_GRAPH_NOT_DECLARED`, `GATE2_DAG_NOT_APPROVED`, `ANTI_USURPATION_RECEIPT_QUORUM_FAILED` | — |
+
+**Registre d'activation :** `runtime/orchestration/active_mission.json` ou `TESLA_MISSION_GRAPH`. L'autorité est le **sceau** contenu dans le graphe.
+
+### 2.2 Schémas canoniques — `schemas/`
+- `receipt_v1.0.schema.json` · `mission_graph_v2.0.schema.json` · `memory_pillars_v2.1.schema.json`.
+
+### 2.3 Manifeste Mémoire Déclaratif — `manifest/memory_manifest_v2.1.yaml`
+Arbitrage #4 (ChatGPT/MANUS/RENA) : **plus aucun pilier codé en dur à l'exécution**. Le scrutateur `bin/memory_parite.py` résout le manifeste dans l'ordre :
+1. `--manifest <file>` (explicite)
+2. `<TESLA_ROOT>/memory/MEMORY_MANIFEST.yaml`
+3. `<module>/manifest/memory_manifest_v2.1.yaml` (manifest canonique livré — 13 piliers)
+4. fallback intégré (13 canoniques)
+
+```bash
+python3 bin/memory_parite.py --root <TESLA_ROOT> [--manifest <f>] [--baseline <json>]
+```
+Exit : **0** PASS · **1** BLOCKED · **2** STALE_STATE · **66** UNKNOWN (P3). Câblé au hook **04** (mode strict `TESLA_ENFORCE_MEMORY_PARITY=1` → exit **40** à la moindre désynchronisation ; `UNKNOWN` documenté, jamais masqué).
+
+### 2.4 Hygiène & Quarantaine Atomique — `bin/workspace_hygiene.py` (H-005)
+```bash
+python3 bin/workspace_hygiene.py --root <dir>            # report : BLOCKED si brouillons (exit 1)
+python3 bin/workspace_hygiene.py --root <dir> --prune    # quarantaine atomique → PASS (exit 0)
+```
+Cibles : `OUTPUTS/*_V\d+.*.md` non canoniques, `.tmp/.bak/.orig/.swp/*~`, `runtime/capability-health/*.json` (+ `.runtime/` hérité). Les finals canoniques (`LOCKED/FINAL/CANON/SPEC/SEALED/DIAGNOSTIC`) ne sont **jamais** quarantainés. Déplacement atomique `os.replace` (même filesystem) vers `runtime/drafts/archive_<timestamp>/`.
+
+### 2.5 Sonde Tri-State — `bin/probe_capabilities.py` (U-006)
+```bash
+python3 bin/probe_capabilities.py --root <dir> [--tool pyright] [--required pyright] ...
+```
+Statuts formels : **PASS** (présent + smoke test exit 0) · **FAIL** (présent mais dégradé) · **UNKNOWN-CONFINED** (non observable). Verdict global : PASS (0) si tout PASS ; FAIL (1) si un requis FAIL ; UNKNOWN (66) sinon — **P3 strict, un UNKNOWN n'est jamais un PASS**. Preuve : `runtime/capability_health.json`.
+
+### 2.6 Audit Cap / SPEC LOCK — `bin/audit_cap.py` (L-001)
+État dans `runtime/audit/` ; verrou atomique `O_CREAT|O_EXCL` à la 3ᵉ passe → **SPEC LOCK** (exit 80 — ERR_SPEC_LOCKED). Toute passe supplémentaire refusée.
+
+### 2.7 Staging Gate — `bin/staging_gate.py` (S-002)
+`next-milestone` (N+1 strictement public) · `verify` (README anglais strict + sous-dossiers d'ingénierie) · `git-status` (informatif, jamais PASS). Profile-aware : `internal-only` → `STAGING_NA_CONFIRMED`.
+
+### 2.8 Universal Test Runner — `bin/test_runner.py` (R-004)
+`python3 -m unittest discover -s tests` (jamais `-t <racine>` ni `-m unittest <chemin-décorrélé>`) + `bash tests/test_hooks_suite.sh`. Ledger : `evidence/test_runner_<MISSION>_<ts>.json`.
+
+### 2.9 Guardrails Git — 8 checks pre-commit
+| # | Guardrail | Exit |
+|---|---|---|
+| 01-06 | Schéma, secrets, scope, **état + parité mémoire (M-014 strict)**, marbre, lint | 10-60 |
+| **07** | **Orchestration Gate** — synthèse Team-Synergy / DAG & contrats (Gate 2 + quorum D-007/D-008) | **81** (`ERR_AGENT_THEATER`) |
+| **08** | **Draft Artifact Guard** — artefacts éphémères | **90** |
+
+**Table des codes POSIX (V2.1.3 — arbitrage #3 : un code = une condition, alias supprimés) :**
+
+| Code canonique | Identifiant sémantique | Sémantique |
+|---|---|---|
+| `80` | `ERR_SPEC_LOCKED` | L-001 (plafond d'audit) |
+| `81` | `ERR_AGENT_THEATER` | D-007/D-008 (orchestration gate) |
+| exit 1 `staging_gate.py` | `ERR_PUBLIC_STAGING_MISSING` | S-002 (outil-spécifique) |
+| `90` | `ERR_WORKSPACE_CLUTTER` | H-005 + hook 08 |
+| `66` | `STAT_CAPABILITY_UNKNOWN` | P3 (UNKNOWN ≠ PASS) |
+
+Les alias numériques plan `71/72/73` sont **supprimés** : la bibliothèque exporte uniquement `0,10,20,30,40,50,60,66,70,80,81,90`.
+
+---
+
+## 2.10 Mission Closure Controller — `bin/mission_controller.py` (Machine d'États à 13 Niveaux)
+Évalue déterministiquement `MARBLE_ELIGIBLE` à partir des preuves sur disque et dérive l'état le plus profond atteint :
+```bash
+python3 bin/mission_controller.py --root <dir> --mission <id> \
+    [--profile internal-only|public-release|memory-assimilation] \
+    [--registry MVP-GITHUB/] [--milestone N] [--graph <f>] [--receipts <dir>] [--authorized]
+```
+- Prédicats : `WORK_VALIDATED` (ledger `evidence/test_runner_*.json` PASS) · `MEMORY_PARITY_PASS` · `HYGIENE_PASS` · `PROBE_VALID` (P3 : requis PASS ∧ optionnels ∈ {PASS, UNKNOWN-CONFINED} ∧ preuve enregistrée) · `RECEIPTS_CORRELATED` (quorum D-008) · `PROFILE_REQUIREMENTS_PASS` (profil-aware).
+- Sorties : `runtime/marble_eligibility.json` (ledger complet) + `runtime/state.json`.
+- États : `DRAFT → CONTRACTED → G2_APPROVED → EXECUTING → WORK_VALIDATED → EVIDENCE_VALIDATED → STAGING_VALIDATED → MARBLE_ELIGIBLE → HUMAN_AUTHORIZED → PUBLISHING → PUBLISHED → POST_PUB_VERIFIED → SEALED`.
+
+## 2.11 Certificat de Marbre Cryptographique — `bin/marble_certificate.py`
+```bash
+python3 bin/marble_certificate.py --root <dir> --mission <id> [--remote-commit <sha>]
+```
+- Refuse l'émission tant que `runtime/marble_eligibility.json` n'enregistre pas `marble_eligible: true`.
+- Ancres : `local_commit_sha`, `remote_commit_sha`, `evidence_chain_head`, `dag_sha256`, `receipts_manifest_sha256` → `CERTIFICATES/MARBLE_CERTIFICATE_*.json` scellé **0444** (tamper-evident, hook-05 compatible).
+
+## 2.12 Racine de Confiance Biologique (Trust Root — hors périmètre agent)
+- Clé publique d'autorité : `~/.tesla/security/authority_pubkey.pem` (lecture seule, hors workspace — prérequis côté Creuset MIDGARD, non forgeable ici).
+- Clé privée : exclusivement détenue par Lord Mahonheim, hors du workspace.
+- Nonces anti-rejeu : `runtime/auth_nonces/` via `open(O_CREAT|O_EXCL)` (A-003) ; jetons expirant à 2 h max.
+
+---
+
+## 3. Preuve d'Exécution (chaîne matérielle)
+
+```text
+TEST SUITE EXECUTION SUMMARY — SGC-EXEC-GOV-03-R3 (V2.1.2)
+  [Python: tests/test_governance.py + tests/test_retex_hardening.py]
+      Ran 45 tests (unittest discover -s tests) ......... ALL PASS
+  [Bash: tests/test_hooks_suite.sh]
+      11 tests (6 existants + orchestration + draft + LOCKED + mémoire M-014) ALL PASS
+  [Démos déterministes]
+      dag-verify        graphe scellé ........................ PASS (exit 0)
+      receipt-quorum    quorum N/N + corrélation D-008 ........ PASS (exit 0)
+      intent-guard      synthèse sans quittances .............. BLOCKED (exit 1)
+      audit_cap         passe #3 → SPEC LOCK .................. exit 80
+      staging_gate      N+1 = 13 (registre public) ............ PASS
+      memory_parite     13/13 manifeste déclaratif ............ PASS (exit 0)
+      probe_capabilities  requis PASS · pyright UNKNOWN-CONFINED  PASS(0)/UNKNOWN(66) — P3
+      workspace_hygiene report BLOCKED → --prune PASS ......... 1 → 0
+      mission_controller  6/6 prédicats → MARBLE_ELIGIBLE ..... PASS (exit 0)
+      marble_certificate  ancres crypto → SEALED 0444 ......... PASS
+TOTAL TESTS: 56 | PASSED: 56 | FAILED: 0
+```
+
+Le ledger complet est généré par le runner : `evidence/test_runner_<MISSION>_<ts>.json`.
+
+---
+
+## 4. Équation d'Éligibilité au Marbre (Profile-Aware)
+
+$$\text{MARBLE\_ELIGIBLE} = \text{WORK\_VALIDATED} \land \text{MEMORY\_PARITY\_PASS} \land \text{HYGIENE\_PASS} \land \text{PROBE\_VALID} \land \text{RECEIPTS\_CORRELATED} \land \text{PROFILE\_REQUIREMENTS\_PASS}$$
+
+$$\text{PROFILE\_REQUIREMENTS\_PASS} = \begin{cases} \text{STAGING\_N1\_PASS} \land \text{PUBLICATION\_AUTH} & \text{si } closure\_profile = \text{public-release} \\ \text{STAGING\_NA\_CONFIRMED} & \text{si } closure\_profile = \text{internal-only} \\ \text{MEMORY\_ASSIMILATION\_PASS} & \text{si } closure\_profile = \text{memory-assimilation} \end{cases}$$
+
+`WORK_VALIDATED` = 50 % du cycle seulement : il n'autorise jamais le scellement (machine d'états `DRAFT → CONTRACTED → G2_APPROVED → EXECUTING → WORK_VALIDATED → EVIDENCE_VALIDATED → STAGING_VALIDATED → HUMAN_AUTHORIZED → SEALED`).
+
+---
+
+## 5. Procédure Opérationnelle (Ordre Canonique de Clôture)
+
+1. **Contrat** : `runtime/contracts/mission_contract.json` (mission_id, closure_profile, required_nodes, max_documentation_rounds=3).
+2. **Gate 2** : DAG scellé approuvé par Lord Mahonheim → `dag-verify` PASS.
+3. **Exécution** : `invoke_subagent` uniquement ; quittances physiques `runtime/subagents/` (quorum N/N corrélé).
+4. **Anti-usurpation** : synthèse avec marqueur explicite → hook 07 ne la laisse passer qu'avec DAG + quorum.
+5. **Tests** : `python3 bin/test_runner.py --root . --mission <ID>` → exit 0.
+6. **Mémoire** : `python3 bin/memory_parite.py --root <TESLA_ROOT>` → 13/13, exit 0.
+7. **Sonde** : `python3 bin/probe_capabilities.py --root <dir>` → statuts formels (P3).
+8. **Hygiène** : `python3 bin/workspace_hygiene.py --root <dir> --prune` → PASS.
+9. **Staging** : `python3 bin/staging_gate.py verify --registry MVP-GITHUB/ --milestone $N+1` (profil public) ou `STAGING_NA_CONFIRMED`.
+10. **SPEC LOCK** : `python3 bin/audit_cap.py --root <dir> --spec <ID> --record` (3 passes max).
+11. **Scellement** : pre-push avec jeton signé (A-001/A-003) — publication uniquement après Biological Gate.
+
+---
+
+---
+
+## 6. Extension V2.1.3 — Réconciliation des 7 Arbitrages
+
+| # | Arbitrage | Implémentation physique | Preuve |
+|---|---|---|---|
+| 1 | Frontière runtime isolée | `orchestration_gate.py::_transcript_correlation` — `TESLA_RUNTIME_EVIDENCE/<mission_id>/transcripts/` (strict, `RECEIPT_RUNTIME_EVIDENCE_UNOBSERVABLE`) | Tests corrélation isolée ; quittances corrélées hors workspace |
+| 2 | Registre de nonces isolé | `tesla-pre-push-main.sh` — `TESLA_SECURITY_NONCES_DIR` (0700) sinon `<root>/runtime/nonces/` ; `O_CREAT\|O_EXCL` | Suite hooks bash (anti-replay exit 70) |
+| 3 | Codes POSIX uniques | `tesla-exit-codes.sh` — 12 exports `0,10,20,30,40,50,60,66,70,80,81,90` ; alias 71/72/73 supprimés | Tests `ExitCodeLibraryTests` ; `grep` négatif |
+| 4 | PROBE_VALID contextualisé | `mission_controller.py::_probe_valid(root, contract)` — REQUIS piloté par `required_capabilities` du contrat | `marble_eligibility.json` — `required_set` du contrat |
+| 5 | Comptes depuis manifeste | `test_runner.py` + `manifest/test_manifest_v2.1.yaml` — 55+11=66 déclarés, écart → FAIL | Ledger `test_runner_*.json` bloc `test_manifest` |
+| 6 | TAMPER_EVIDENT vs IMMUTABLE | `marble_certificate.py` (`seal_class`), `audit_parite.py` (`seal_classification`) | Certificat 0444 ; `SEALED_TAMPER_EVIDENT` ↔ `SEALED_IMMUTABLE` |
+| 7 | Ordonnancement I0→I5 | Cartographié `docs/protocol_mapping.md` §5 ; chaque incrément verrouillé par hook | Table de mapping protocole ↔ preuve |
+
+**Statut doctrinal V2.1.3 :** `CONTROLLED IMPLEMENTATION BASELINE — SPECIFICATION RECONCILED; RUNTIME EVIDENCE PENDING`.
+**Non-deltas assumés :** signature biologique (hors périmètre agent), journal runtime distant (hors workspace), piliers mémoire racine du dépôt (E3).
+
+---
+
+*Paquet correctif V2.1.3 certifié conforme à la doctrine Vigilum Codex 2.0 / 2.1 — implémentation exécutable, testée (55 Python + 11 Bash = 66) et scellée dans le registre de preuves.*

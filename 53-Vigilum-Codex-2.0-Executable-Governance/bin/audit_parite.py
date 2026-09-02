@@ -26,6 +26,26 @@ REQUIRED_COMPONENTS = [
     "docs/protocol_mapping.md",
     "bin/audit_parite.py",
     "bin/audit_parite.sh",
+    "bin/audit_cap.py",
+    "bin/memory_parite.py",
+    "bin/staging_gate.py",
+    "bin/test_runner.py",
+    "bin/workspace_hygiene.py",
+    "bin/probe_capabilities.py",
+    "bin/mission_controller.py",
+    "bin/marble_certificate.py",
+    "core/orchestration/orchestration_gate.py",
+    "core/orchestration/yaml_mini.py",
+    "core/hooks/pre-commit/04-project-state-check.sh",
+    "core/hooks/pre-commit/07-orchestration-gate.sh",
+    "core/hooks/pre-commit/08-draft-artifact-guard.sh",
+    "schemas/receipt_v1.0.schema.json",
+    "schemas/mission_graph_v2.0.schema.json",
+    "schemas/memory_pillars_v2.1.schema.json",
+    "manifest/memory_manifest_v2.1.yaml",
+    "manifest/test_manifest_v2.1.yaml",
+    "tests/test_retex_hardening.py",
+    "docs/RETEX_HARDENING_2.1.md",
     "OUTPUTS/Synergy_Gouvernance_Executable_V3.6_LOCKED.md",
 ]
 
@@ -35,19 +55,16 @@ def sha256(path: Path) -> str:
 
 
 def fingerprint(root: Path) -> str:
-    target_dirs = ["core", "bin", "schemas", "manifest", "docs", "tests", "memory"]
-    paths: list[Path] = []
-    for d in target_dirs:
-        target = root / d
-        if target.is_dir():
-            for p in target.rglob("*"):
-                if p.is_file() and "__pycache__" not in p.parts:
-                    paths.append(p)
-    for f in ["OUTPUTS/Synergy_Gouvernance_Executable_V3.6_LOCKED.md", "memory/MEMORY_MANIFEST.yaml"]:
-        p = root / f
-        if p.is_file():
-            paths.append(p)
-    paths.sort()
+    paths = sorted(
+        p for p in root.rglob("*")
+        if p.is_file()
+        and "evidence" not in p.parts
+        and "__pycache__" not in p.parts
+        and ".git" not in p.parts
+        and ".venv" not in p.parts
+        and "node_modules" not in p.parts
+        and "runtime" not in p.parts
+    )
     digest = hashlib.sha256()
     for path in paths:
         rel = path.relative_to(root).as_posix()
@@ -100,10 +117,23 @@ def main() -> int:
     verdict = "STALE_STATE" if stale else ("BLOCKED" if failures else "PASS")
     exit_code = 2 if stale else (1 if failures else 0)
 
+    # V2.1.3 (arbitrage #6) — classification du sceau :
+    #  - evidence/chain_head.sha256 (local, vérifiable par re-calcul) = TAMPER_EVIDENT
+    #  - certificat de marbre ancré côté distant (POST_PUB_VERIFIED) = IMMUTABLE
+    chain_head_path = root / "evidence" / "chain_head.sha256"
+    seal_classification = {
+        "evidence_chain_head": str(chain_head_path) if chain_head_path.is_file() else "ABSENT",
+        "classification": "TAMPER_EVIDENT" if chain_head_path.is_file() else "UNSEALED",
+        "immutable": "IMMUTABLE (ancrage distant POST_PUB_VERIFIED — certificat de marbre)",
+        "note": "preuve locale vérifiable par re-calcul ; l'immutabilité définitive est établie "
+                "côté distant après publication vérifiée (jamais auto-attestée).",
+    }
+
     ledger = {
         "protocol": "Loi-Parite-Absolue",
-        "version": "2.0.0",
+        "version": "2.1.3",
         "mission_id": args.mission,
+        "seal_classification": seal_classification,
         "component_id": args.id,
         "component_type": args.type,
         "tesla_root": str(root),

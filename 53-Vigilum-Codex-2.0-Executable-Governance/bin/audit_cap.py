@@ -102,6 +102,7 @@ def cmd_record(root: Path, spec: str, max_passes: int, now: float | None) -> tup
         return EXIT_LOCKED, {"verdict": "SPEC_LOCK", "spec": spec, "passes": count, "max": max_passes,
                              "note": "locked: further textual audit passes are forbidden"}
     if count >= max_passes:
+        # Sealing pass: reach the ceiling AND atomically lock
         state["passes"].append({"ts": now if now is not None else time.time()})
         state["locked"] = True
         save_state(state, state_file)

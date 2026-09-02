@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "TeslaSubagentReceipt",
+  "$id": "https://vigilum-codex.local/schemas/receipt_v1.1.schema.json",
+  "title": "Subagent Receipt V1.1 — Attestation Runtime (Invariant D-008)",
+  "description": "Physical proof emitted by the RUNTIME executor after a sub-agent invocation. Receivable only when it carries the D-008 attestation fields: runtime-generated invocation_id, started_at/finished_at (post-Gate-2), output_manifest_sha256 (artefacts fingerprint), executor_attestation and a correlated transcript_ref. Presence in runtime/subagents/receipts/receipt_<agent_id>.json is the ONLY evidence accepted for Team-Synergy synthesis (Absolute Rule N°4).",
   "type": "object",
   "required": [
-    "receipt_version",
-    "mission_id",
-    "node_id",
     "agent_id",
+    "node_id",
+    "mission_id",
     "status",
     "output_artifacts",
     "submitted_at",
@@ -18,21 +19,23 @@
     "transcript_ref"
   ],
   "properties": {
-    "receipt_version": { "type": "string" },
-    "mission_id": { "type": "string" },
-    "node_id": { "type": "string" },
-    "agent_id": { "type": "string" },
-    "status": { "type": "string", "enum": ["SUCCESS", "COMPLETED", "FAILED"] },
-    "output_artifacts": { "type": "array", "items": { "type": "string" } },
-    "submitted_at": { "type": "string" },
-    "invocation_id": { "type": "string", "pattern": "^inv-[A-Za-z0-9-]{8,64}$" },
-    "started_at": { "type": "string" },
-    "finished_at": { "type": "string" },
-    "output_manifest_sha256": { "type": "string" },
-    "executor_attestation": { "type": "string" },
-    "transcript_ref": { "type": "string" },
-    "exit_code": { "type": "integer" },
-    "tool_invocations_count": { "type": "integer" }
+    "receipt_version": {"type": "string"},
+    "agent_id": {"type": "string", "minLength": 1},
+    "node_id": {"type": "string", "minLength": 1},
+    "mission_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["SUCCESS", "COMPLETED", "PARTIAL", "FAILED"]},
+    "output_artifacts": {"type": "array", "items": {"type": "string"}},
+    "submitted_at": {"type": "string", "minLength": 1},
+    "invocation_id": {"type": "string", "pattern": "^inv-[A-Za-z0-9-]{8,64}$"},
+    "started_at": {"type": "string", "minLength": 1},
+    "finished_at": {"type": "string", "minLength": 1},
+    "exit_code": {"type": "integer"},
+    "tool_invocations_count": {"type": "integer", "minimum": 1},
+    "runtime_event_sha256": {"type": "string", "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"},
+    "output_manifest_sha256": {"type": "string", "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"},
+    "executor_attestation": {"type": "string", "minLength": 1},
+    "transcript_ref": {"type": "string", "minLength": 1},
+    "notes": {"type": "string"}
   },
-  "additionalProperties": false
+  "additionalProperties": true
 }
