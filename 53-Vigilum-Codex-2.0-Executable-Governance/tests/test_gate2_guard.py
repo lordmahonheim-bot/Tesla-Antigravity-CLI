@@ -82,6 +82,30 @@ class Gate2GuardHarness(unittest.TestCase):
         self.secret_path.write_text("gate2-hmac-secret-0123456789abcdef", encoding="utf-8")
         self.secret_path.chmod(0o600)
 
+        daemon_path = ROOT / "core" / "orchestration" / "vigilum_gate_daemon.py"
+        self.sock_path = Path(self._tmp.name) / "gate.sock"
+        os.environ["VIGILUM_GATE_SOCK"] = str(self.sock_path)
+        
+        self.daemon_proc = subprocess.Popen(
+            [sys.executable, str(daemon_path)],
+            cwd=str(self.workspace),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            env=os.environ.copy()
+        )
+        import time
+        for _ in range(50):
+            if self.sock_path.exists():
+                break
+            time.sleep(0.1)
+        else:
+            raise RuntimeError(f"Daemon failed to start. Socket {self.sock_path} not found. stderr: {self.daemon_proc.stderr.read()}")
+
+    def tearDown(self) -> None:
+        if hasattr(self, 'daemon_proc'):
+            self.daemon_proc.terminate()
+            self.daemon_proc.wait(timeout=2)
+
     # ------------------------------------------------------------------ #
     def _write_graph(self, *, sealed: bool = False, mission: str = MISSION,
                      n1_role: str = "Audit", nonce: str = "gate2-test-0001",
@@ -104,7 +128,7 @@ class Gate2GuardHarness(unittest.TestCase):
         env["HOME"] = str(self.home)
         env.update(kwargs.get("env_overrides") or {})
         return subprocess.run([sys.executable, str(GUARD), *argv],
-                              capture_output=True, text=True, env=env, check=False)
+                              capture_output=True, text=True, env=env, check=False, cwd=str(self.workspace))
 
     def _issue(self, graph: Path, mission: str = MISSION, ttl: str = "900",
                secret: Path | None = None) -> subprocess.CompletedProcess:

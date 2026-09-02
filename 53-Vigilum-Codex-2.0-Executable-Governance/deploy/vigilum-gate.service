@@ -1,0 +1,29 @@
+[Unit]
+Description=Vigilum Gate Daemon (Authority Boundary P0)
+Documentation=https://github.com/tesla-antigravity/vigilum-codex
+After=network.target
+
+[Service]
+Type=simple
+User=vigilum-gate
+Group=vigilum-gate
+ExecStart=/usr/bin/env python3 /opt/vigilum-codex/core/orchestration/vigilum_gate_daemon.py
+Restart=always
+RestartSec=5
+
+# Isolement systemd (Privilege Separation)
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+ReadOnlyPaths=/
+ReadWritePaths=/run/vigilum-gate
+# Le daemon écrit dans /etc/vigilum-gate/ au premier lancement si la clé n'existe pas
+ReadWritePaths=/etc/vigilum-gate
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=vigilum-gate
+
+[Install]
+WantedBy=multi-user.target

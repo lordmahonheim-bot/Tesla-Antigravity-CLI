@@ -158,16 +158,42 @@ def resolve_secret(secret_file: str | None) -> tuple[bytes | None, str | None]:
 # --------------------------------------------------------------------------- #
 # Jeton Gate 2 : charge utile, signature, vérification                        #
 # --------------------------------------------------------------------------- #
-def sign_token(payload: dict[str, Any], secret: bytes) -> str:
-    return hmac.new(secret, canonical_bytes(payload), hashlib.sha256).hexdigest()
+def _ipc_call(req: dict[str, Any]) -> dict[str, Any]:
+    ipc_sock = os.environ.get("VIGILUM_GATE_SOCK", "/run/vigilum-gate/gate.sock")
+    if not os.path.exists(ipc_sock):
+        ipc_sock = os.path.abspath(os.path.join(os.getcwd(), "runtime/vigilum-gate/gate.sock"))
+    
+    import socket
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+        s.settimeout(2.0)
+        s.connect(ipc_sock)
+        s.sendall(json.dumps(req).encode('utf-8'))
+        resp_data = s.recv(4096)
+        if not resp_data:
+            raise RuntimeError("Empty response from daemon")
+        return json.loads(resp_data.decode('utf-8'))
 
 
-def verify_token_signature(token: dict[str, Any], secret: bytes) -> bool:
+def sign_token(payload: dict[str, Any], secret: bytes = None) -> str:
+    # Délégation au daemon vigilum-gate pour signature Ed25519
+    req = {"action": "sign_token", "payload": payload}
+    resp = _ipc_call(req)
+    if resp.get("status") != "success":
+        raise RuntimeError(f"Daemon sign error: {resp.get('error_code')}")
+    return resp["signature"]
+
+
+def verify_token_signature(token: dict[str, Any], secret: bytes = None) -> bool:
     supplied = token.get("hmac")
     if not isinstance(supplied, str) or not supplied:
         return False
-    expected = sign_token({k: v for k, v in token.items() if k != "hmac"}, secret)
-    return hmac.compare_digest(supplied, expected)
+    payload = {k: v for k, v in token.items() if k != "hmac"}
+    req = {"action": "verify_token", "payload": payload, "signature": supplied}
+    try:
+        resp = _ipc_call(req)
+        return resp.get("status") == "success"
+    except Exception:
+        return False
 
 
 def _load_token_file(token_path: Path) -> tuple[dict[str, Any] | None, str | None]:
