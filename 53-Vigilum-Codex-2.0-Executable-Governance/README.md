@@ -87,6 +87,7 @@ flowchart TD
 | **Parity Engine** | `bin/audit_parite.py` & `.sh` | Real-time filesystem parity inspector, fingerprint generator, and audit validator. |
 | **Test Suites** | `tests/test_governance.py`, `tests/test_retex_hardening.py` & `tests/test_hooks_suite.sh` | Complete Python unit test suite (55 tests) and bash hook test harness (11 tests). |
 | **Orchestration Gate (2.1)** | `core/orchestration/orchestration_gate.py` + `yaml_mini.py` | Gate 2 (sealed Mission Graph) + Anti-Usurpation (physical receipt quorum) — stdlib-only, fail-closed. |
+| **Gate 2 Delegation Guard (2.1.3)** | `core/orchestration/gate2_guard.py` | Intercepteur pré-vol **pur** (idempotent) de `invoke_subagent` : jeton humain `G2T-1` signé HMAC (secret hors workspace), lié à (mission, `graph_sha256`, fenêtre, nonce), consommation atomique `O_CREAT\|O_EXCL` (A-003) + grand livre d'échange chaîné SHA-256 (`runtime/gate2/redemptions.jsonl`). RETEX `SPINOFF-DIAG-GATE2-BYPASS`. |
 | **Universal Test Runner (2.1)** | `bin/test_runner.py` | E4-proof discovery (`unittest discover -s tests`), aggregate ledger in `evidence/`. |
 | **Memory Parity (2.1)** | `bin/memory_parite.py` + `manifest/memory_manifest_v2.1.yaml` | Manifest-driven 13/13 SHA-256 pillar matrix with exit 0 requirement (Rule 14 closure); wired to hook 04 (strict, exit 40). |
 | **Staging Gate (2.1)** | `bin/staging_gate.py` | Phase 4 mandatory public staging: milestone $N+1$ computed on `MVP-GITHUB/`, README English-strict verification, profile-aware. |
@@ -169,6 +170,15 @@ PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
          probe U-006 PASS/UNKNOWN-CONFINED | hygiene H-005 BLOCKED→PASS |
          mission_controller 6/6 prédicats → MARBLE_ELIGIBLE | marble_certificate SEALED 0444
 TOTAL TESTS (V2.0 + V2.1.3): 66 | PASSED: 66 | FAILED: 0
+
+[SPINOFF-DIAG-GATE2-BYPASS — Gate 2 Delegation Guard, 2026-09-02]
+  Python suite (governance + RETEX + gate2_guard): 72/72 PASS
+    — reproduction incident 19:14:36 verrouillée en test de régression
+    — P-AGENT-002 effectif (approved_by forgé + sceau recalculé → BLOCKED)
+    — jeton HMAC lié (mission, graph_sha256), usage unique O_CREAT|O_EXCL
+  Bash hook suite: 11/11 PASS
+  Manifeste déclaratif (arbitrage #5): déclaré 83 = exécuté 83 — écart 0
+TOTAL TESTS (V2.0 + V2.1.3 + Gate2 Guard): 83 | PASSED: 83 | FAILED: 0
 ======================================================================
 ```
 
@@ -182,6 +192,7 @@ deterministic, OS-level mechanisms — not prompt-level intentions:
 | Verrou | Commande | Fail-Closed |
 | :--- | :--- | :--- |
 | Gate 2 (DAG approved) | `python3 core/orchestration/orchestration_gate.py dag-verify --graph <mission_graph.yaml>` | unsealed graph → exit 1 |
+| Gate 2 Délégation (jeton humain) | `python3 core/orchestration/gate2_guard.py pre-flight|consume --graph <f> --mission <id> --secret-file <key>` | jeton absent/falsifié/rejoué → exit 1 ; secret non observable → exit 66 (P3) |
 | Anti-Usurpation (Rule N°4) | `python3 core/orchestration/orchestration_gate.py receipt-quorum --graph <f> --receipts runtime/subagents` | missing receipt → exit 1 |
 | Anti-Usurpation (commit hook) | hook `07-orchestration-gate.sh` (auto on `team_synergy: true` markers) | exit 81 |
 | 13 Memory Pillars (M-014) | `python3 bin/memory_parite.py --root <TESLA_ROOT>` (manifest-driven) | 13/13 SHA-256 required, exit 0; hook 04 strict → 40 |

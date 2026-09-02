@@ -39,6 +39,7 @@ La hiérarchie d'autorité immuable s'applique :
 | Verrou RETEX | Composant Exécutable | Contrat / Schéma | Preuve Matérielle |
 |---|---|---|---|
 | **Gate 2 (Mission Contract / DAG)** | `core/orchestration/orchestration_gate.py dag-verify` | `schemas/mission_graph_v2.0.schema.json` | Sceau `approval_sha256` canonique (RFC-8785-style) + `approved_by` |
+| **Gate 2 Délégation (SPINOFF-DIAG-GATE2-BYPASS)** | `core/orchestration/gate2_guard.py` (`issue-token` / `pre-flight` / `consume` / `status`) | jeton `G2T-1` HMAC-SHA256, secret hors workspace (`TESLA_GATE2_SECRET` / `~/.tesla/gate2/secret.key` 0600) | Pré-vol **pur** idempotent + liaison (mission, `graph_sha256`, fenêtre, nonce) + anti-rejeu `O_CREAT\|O_EXCL` (A-003) + grand livre chaîné `runtime/gate2/redemptions.jsonl` (`GATE2_LEDGER_CHAIN_BROKEN` si falsifié) |
 | **Anti-Usurpation (D-007/D-008)** | `orchestration_gate.py receipt-quorum` / `intent-guard` | `schemas/receipt_v1.0.schema.json` | Quittances physiques `runtime/subagents/receipt_<agent_id>.json` (quorum N/N) |
 | **Double Track Staging $N+1$ (S-002)** | `bin/staging_gate.py` | Phase 4 Gravure sur Marbre | Jalon calculé sur `MVP-GITHUB/` + README anglais strict vérifié |
 | **Piliers Mémoire Manifeste (M-014)** | `bin/memory_parite.py` + hook 04 | `manifest/memory_manifest_v2.1.yaml` + `schemas/memory_pillars_v2.1.schema.json` | Matrice 13/13 SHA-256, exit 0 ; hook strict → 40 |
