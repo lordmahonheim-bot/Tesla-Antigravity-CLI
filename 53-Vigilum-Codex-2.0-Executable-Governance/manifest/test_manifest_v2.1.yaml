@@ -6,10 +6,10 @@ doctrine: "100% des tests déclarés au manifeste — aucun comptage narratif"
 suites:
   - name: python-unittest-discovery
     command: "python3 -m unittest discover -s tests"
-    expected_tests: 72
+    expected_tests: 81
     critical: true
   - name: bash-hooks-suite
     command: "bash tests/test_hooks_suite.sh"
     expected_tests: 11
     critical: true
-total_tests: 83
+total_tests: 92

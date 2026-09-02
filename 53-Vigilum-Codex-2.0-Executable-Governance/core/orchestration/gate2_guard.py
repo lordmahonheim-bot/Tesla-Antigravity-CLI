@@ -50,6 +50,7 @@ import hmac
 import json
 import os
 import secrets
+import subprocess
 import sys
 import tempfile
 from datetime import datetime, timezone
@@ -81,6 +82,13 @@ CHAIN_HEAD_NAME = "chain_head.sha256"
 GENESIS_HASH = "0" * 64
 DEFAULT_SECRET_PATH = Path("~/.tesla/gate2/secret.key").expanduser()
 SECRET_ENV_VAR = "TESLA_GATE2_SECRET"
+
+# États du verrou de nonce (A-7) : RESERVED = spawn réservé mais non observé
+# (crash possible entre RESERVE et OBSERVE — fail-closed, release manuel signé
+# requis) ; tout autre état (ou verrou legacy illisible) = définitivement
+# consommé. Un nonce terminal n'est JAMAIS réutilisable automatiquement.
+LOCK_STATE_RESERVED = "RESERVED"
+LOCK_STATE_CONSUMED = "CONSUMED"
 
 
 # --------------------------------------------------------------------------- #
@@ -213,6 +221,16 @@ def nonce_consumed(root: Path, nonce: str) -> bool:
     return nonce_lock_path(root, nonce).is_file()
 
 
+def _lock_state(lock: Path) -> str:
+    """État du verrou de nonce. Verrou legacy/inconnu => CONSUMED (fail-closed)."""
+    try:
+        data = json.loads(lock.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return LOCK_STATE_CONSUMED
+    state = data.get("state") if isinstance(data, dict) else None
+    return state if isinstance(state, str) else LOCK_STATE_CONSUMED
+
+
 def gate2_dir(root: Path) -> Path:
     return root / "runtime" / "gate2"
 
@@ -276,6 +294,14 @@ def issue_token(graph_path: Path, token_out: Path, mission_id: str, authority: s
     """Scelle la boucle d'approbation : un jeton ne peut être émis QUE pour un
     graphe structurellement valide ET déjà scellé, et SEULEMENT par un détenteur
     du secret humain (cérémonie Gate 2)."""
+    if not authority or not authority.strip():
+        # BYPASS-04 : aucun jeton n'est émis avec une autorité vide (P-AGENT-002).
+        return EXIT_BLOCKED, {
+            "verdict": "BLOCKED",
+            "reason": "GATE2_TOKEN_AUTHORITY_MISSING",
+            "note": "Émission refusée : l'autorité émettrice est vide ou absente.",
+        }
+
     code, dag = dag_verify(graph_path)
     if code != EXIT_PASS:
         return EXIT_BLOCKED, {
@@ -396,10 +422,17 @@ def pre_flight_delegation_check(graph_path: Path, token_path: Path, mission_id: 
         return EXIT_BLOCKED, verdict
 
     # 5. Anti-rejeu (lecture seule) : le nonce a-t-il déjà été consommé ?
-    if root is not None and nonce_consumed(root, str(token["nonce"])):
-        verdict.update({"verdict": "BLOCKED", "reason": "GATE2_TOKEN_ALREADY_CONSUMED",
-                        "stage": "NONCE_REGISTRY", "nonce": token["nonce"]})
-        return EXIT_BLOCKED, verdict
+    if root is not None:
+        lock = nonce_lock_path(root, str(token["nonce"]))
+        if lock.is_file():
+            # RESERVED = spawn réservé non observé (crash possible, A-7) —
+            # fail-closed : libération uniquement par `release` manuel signé.
+            state_reason = ("GATE2_TOKEN_RESERVED_UNOBSERVED"
+                            if _lock_state(lock) == LOCK_STATE_RESERVED
+                            else "GATE2_TOKEN_ALREADY_CONSUMED")
+            verdict.update({"verdict": "BLOCKED", "reason": state_reason,
+                            "stage": "NONCE_REGISTRY", "nonce": token["nonce"]})
+            return EXIT_BLOCKED, verdict
 
     verdict.update({
         "verdict": "PASS",
@@ -449,6 +482,7 @@ def redeem_delegation_token(graph_path: Path, token_path: Path, mission_id: str,
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
             handle.write(json.dumps({
                 "nonce": nonce,
+                "state": LOCK_STATE_CONSUMED,
                 "mission_id": mission_id,
                 "graph_sha256": verdict["graph_sha256"],
                 "token_sha256": verdict["token_sha256"],
@@ -477,6 +511,256 @@ def redeem_delegation_token(graph_path: Path, token_path: Path, mission_id: str,
     verdict.update({"reason": "GATE2_DELEGATION_REDEEMED", "stage": "CONSUMED",
                     "redemption_entry_hash": entry_hash,
                     "note": "Nonce consommé (A-003) — tout rejeu est désormais détecté et bloqué."})
+    return EXIT_PASS, verdict
+
+
+# --------------------------------------------------------------------------- #
+# Transaction Safe-Spawn (A-7) : RESERVE -> SPAWN -> OBSERVE                   #
+# --------------------------------------------------------------------------- #
+def _rewrite_lock_state(lock: Path, payload: dict[str, Any]) -> None:
+    """Réécrit le verrou de nonce avec un état terminal (observation consignée)."""
+    with lock.open("w", encoding="utf-8") as handle:
+        handle.write(json.dumps(payload, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def _terminal_lock(lock: Path, verdict: dict[str, Any], state: str, moment: datetime) -> None:
+    _rewrite_lock_state(lock, {
+        "nonce": verdict["nonce"],
+        "state": state,
+        "mission_id": verdict["mission_id"],
+        "graph_sha256": verdict["graph_sha256"],
+        "token_sha256": verdict["token_sha256"],
+        "observed_at": _iso(moment),
+    })
+
+
+def spawn_delegation_transaction(graph_path: Path, token_path: Path, mission_id: str,
+                                 secret: bytes, *, root: Path,
+                                 spawn_command: list[str],
+                                 timeout_seconds: int = 120,
+                                 spawn_cwd: Path | None = None,
+                                 now: datetime | None = None) -> tuple[int, dict[str, Any]]:
+    """Transaction de délégation Safe-Spawn (A-7).
+
+    Séquence déterministe :
+      1. PRE_FLIGHT  — vérification pure (structure, sceau, jeton, liaison, nonce).
+      2. RESERVE     — verrou exclusif O_CREAT|O_EXCL sur le nonce.
+      3. SPAWN       — exécution de la commande d'instanciation observée.
+      4. OBSERVE     — quatre issues fermées :
+           - SPAWN_SUCCEEDED             -> COMMIT_SUCCESS   (nonce consommé, ledger)
+           - SPAWN_FAILED post-start     -> COMMIT_FAILURE   (nonce consommé, ledger)
+           - SPAWN_NOT_STARTED (certain) -> ABORT_SAFE       (nonce libéré, ledger)
+           - SPAWN_UNKNOWN / timeout     -> UNKNOWN_CONFINED (nonce consommé, ledger)
+
+    Règle absolue : dès qu'il existe une possibilité non nulle que le spawn ait
+    débuté, le nonce est DÉFINITIVEMENT consommé — aucun retry automatique.
+    La reprise après crash (verrou RESERVED non observé) passe par `release`,
+    un geste manuel signé et ledgeré.
+    """
+    moment = now or _utc_now()
+    code, verdict = pre_flight_delegation_check(graph_path, token_path, mission_id,
+                                                secret=secret, now=moment, root=root)
+    if code != EXIT_PASS:
+        return code, verdict
+
+    nonce = str(verdict["nonce"])
+    lock = nonce_lock_path(root, nonce)
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        os.chmod(lock.parent, 0o700)
+    except OSError:
+        pass
+
+    # --- RESERVE ---------------------------------------------------------- #
+    try:
+        fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError:
+        return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                              "reason": "GATE2_TOKEN_REPLAY_DETECTED", "stage": "RESERVE"}
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(json.dumps({
+                "nonce": nonce,
+                "state": LOCK_STATE_RESERVED,
+                "mission_id": mission_id,
+                "graph_sha256": verdict["graph_sha256"],
+                "token_sha256": verdict["token_sha256"],
+                "reserved_at": _iso(moment),
+            }, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+    except OSError:
+        return EXIT_UNKNOWN, {**verdict, "verdict": "UNKNOWN",
+                              "reason": "GATE2_NONCE_WRITE_FAILED", "stage": "RESERVE"}
+
+    # Re-vérification d'intégrité post-RESERVE (anti-TOCTOU) : si le graphe a
+    # été retouché entre le pré-vol et le spawn, le spawn n'a PAS commencé ->
+    # ABORT_SAFE propre.
+    code_post, dag_post = dag_verify(graph_path)
+    if code_post != EXIT_PASS:
+        try:
+            os.unlink(lock)
+        except OSError:
+            pass
+        _, ledger_reason = _append_ledger(root, {
+            "event": "GATE2_SPAWN_ABORT_SAFE",
+            "mission_id": mission_id,
+            "graph_sha256": verdict["graph_sha256"],
+            "nonce": nonce,
+            "abort_reason": "GATE2_GRAPH_CHANGED_AFTER_RESERVE",
+            "observed_at": _iso(moment),
+        })
+        if ledger_reason is not None:
+            return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                                  "reason": ledger_reason, "stage": "REDEMPTION_LEDGER"}
+        verdict.update({"verdict": "BLOCKED", "stage": "SPAWN",
+                        "reason": "GATE2_GRAPH_CHANGED_AFTER_RESERVE",
+                        "dag": dag_post,
+                        "note": "ABORT_SAFE : nonce libéré — le spawn n'a pas démarré."})
+        return EXIT_BLOCKED, verdict
+
+    # --- SPAWN ------------------------------------------------------------ #
+    try:
+        proc = subprocess.run(spawn_command, capture_output=True, text=True,
+                              timeout=max(int(timeout_seconds), 1), check=False,
+                              cwd=str(spawn_cwd) if spawn_cwd is not None else None)
+    except subprocess.TimeoutExpired:
+        # --- OBSERVE : UNKNOWN_CONFINED (fail-closed, zéro retry) --------- #
+        _terminal_lock(lock, verdict, "UNKNOWN_CONFINED", moment)
+        entry_hash, ledger_reason = _append_ledger(root, {
+            "event": "GATE2_SPAWN_UNKNOWN_CONFINED",
+            "mission_id": mission_id,
+            "graph_sha256": verdict["graph_sha256"],
+            "nonce": nonce,
+            "authority": verdict["authority"],
+            "spawn_command": spawn_command,
+            "timeout_seconds": max(int(timeout_seconds), 1),
+            "observed_at": _iso(moment),
+        })
+        if ledger_reason is not None:
+            return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                                  "reason": ledger_reason, "stage": "REDEMPTION_LEDGER"}
+        verdict.update({"verdict": "UNKNOWN", "reason": "GATE2_SPAWN_UNKNOWN_CONFINED",
+                        "stage": "OBSERVE", "redemption_entry_hash": entry_hash,
+                        "note": "Nonce DÉFINITIVEMENT consommé — inspection requise, "
+                                "aucun retry automatique (A-7)."})
+        return EXIT_UNKNOWN, verdict
+    except (OSError, subprocess.SubprocessError):
+        # --- OBSERVE : SPAWN_NOT_STARTED certain -> ABORT_SAFE ------------ #
+        try:
+            os.unlink(lock)
+        except OSError:
+            pass
+        _, ledger_reason = _append_ledger(root, {
+            "event": "GATE2_SPAWN_ABORT_SAFE",
+            "mission_id": mission_id,
+            "graph_sha256": verdict["graph_sha256"],
+            "nonce": nonce,
+            "abort_reason": "GATE2_SPAWN_NOT_STARTED",
+            "spawn_command": spawn_command,
+            "observed_at": _iso(moment),
+        })
+        if ledger_reason is not None:
+            return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                                  "reason": ledger_reason, "stage": "REDEMPTION_LEDGER"}
+        verdict.update({"verdict": "BLOCKED", "reason": "GATE2_SPAWN_NOT_STARTED_ABORT_SAFE",
+                        "stage": "SPAWN",
+                        "note": "ABORT_SAFE : échec de lancement certain (spawn jamais "
+                                "démarré) — nonce libéré et réutilisable."})
+        return EXIT_BLOCKED, verdict
+
+    # --- OBSERVE : résultat déterministe ----------------------------------- #
+    if proc.returncode == 0:
+        _terminal_lock(lock, verdict, LOCK_STATE_CONSUMED, moment)
+        entry_hash, ledger_reason = _append_ledger(root, {
+            "event": "GATE2_DELEGATION_SPAWN_SUCCEEDED",
+            "mission_id": mission_id,
+            "graph_sha256": verdict["graph_sha256"],
+            "nonce": nonce,
+            "authority": verdict["authority"],
+            "token_sha256": verdict["token_sha256"],
+            "spawn_command": spawn_command,
+            "spawn_exit_code": 0,
+            "observed_at": _iso(moment),
+            "nonce_lock": str(lock.relative_to(root.resolve())),
+        })
+        if ledger_reason is not None:
+            return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                                  "reason": ledger_reason, "stage": "REDEMPTION_LEDGER"}
+        verdict.update({"verdict": "PASS", "reason": "GATE2_DELEGATION_SPAWN_SUCCEEDED",
+                        "stage": "OBSERVE", "spawn_exit_code": 0,
+                        "redemption_entry_hash": entry_hash,
+                        "note": "COMMIT_SUCCESS : nonce consommé, grand livre chaîné mis à jour."})
+        return EXIT_PASS, verdict
+
+    _terminal_lock(lock, verdict, LOCK_STATE_CONSUMED, moment)
+    entry_hash, ledger_reason = _append_ledger(root, {
+        "event": "GATE2_DELEGATION_SPAWN_FAILED",
+        "mission_id": mission_id,
+        "graph_sha256": verdict["graph_sha256"],
+        "nonce": nonce,
+        "authority": verdict["authority"],
+        "spawn_command": spawn_command,
+        "spawn_exit_code": proc.returncode,
+        "observed_at": _iso(moment),
+        "nonce_lock": str(lock.relative_to(root.resolve())),
+    })
+    if ledger_reason is not None:
+        return EXIT_BLOCKED, {**verdict, "verdict": "BLOCKED",
+                              "reason": ledger_reason, "stage": "REDEMPTION_LEDGER"}
+    verdict.update({"verdict": "BLOCKED", "reason": "GATE2_DELEGATION_SPAWN_FAILED",
+                    "stage": "OBSERVE", "spawn_exit_code": proc.returncode,
+                    "redemption_entry_hash": entry_hash,
+                    "note": "COMMIT_FAILURE : spawn démarré puis échoué — nonce "
+                            "définitivement consommé, anomalie consignée."})
+    return EXIT_BLOCKED, verdict
+
+
+def release_reserved_nonce(root: Path, nonce: str, *, secret: bytes | None,
+                           now: datetime | None = None) -> tuple[int, dict[str, Any]]:
+    """Release MANUEL signé d'un verrou RESERVED non observé (reprise post-crash).
+
+    Refuse tout verrou terminal : un nonce consommé n'est jamais relâchable.
+    Le geste est ledgeré (GATE2_NONCE_RELEASED_MANUAL) pour garantir la
+    traçabilité de toute remise en jeu d'autorisation.
+    """
+    verdict: dict[str, Any] = {"guard": "Gate 2 Delegation Guard", "nonce": nonce}
+    if secret is None:
+        verdict.update({"verdict": "UNKNOWN", "reason": "GATE2_SECRET_UNAVAILABLE",
+                        "note": "P3 : release manuel refusé sans autorité observable."})
+        return EXIT_UNKNOWN, verdict
+    lock = nonce_lock_path(root, nonce)
+    if not lock.is_file():
+        verdict.update({"verdict": "BLOCKED", "reason": "GATE2_NONCE_LOCK_MISSING"})
+        return EXIT_BLOCKED, verdict
+    state = _lock_state(lock)
+    if state != LOCK_STATE_RESERVED:
+        verdict.update({"verdict": "BLOCKED", "reason": "GATE2_NONCE_LOCK_TERMINAL",
+                        "state": state,
+                        "note": "Un nonce consommé n'est jamais relâchable."})
+        return EXIT_BLOCKED, verdict
+    try:
+        os.unlink(lock)
+    except OSError:
+        verdict.update({"verdict": "UNKNOWN", "reason": "GATE2_NONCE_RELEASE_FAILED"})
+        return EXIT_UNKNOWN, verdict
+    entry_hash, ledger_reason = _append_ledger(root, {
+        "event": "GATE2_NONCE_RELEASED_MANUAL",
+        "nonce": nonce,
+        "released_at": _iso(now or _utc_now()),
+        "note": "Release manuel signé — spawn certainement jamais démarré "
+                "(verrou RESERVED, jamais observé).",
+    })
+    if ledger_reason is not None:
+        verdict.update({"verdict": "BLOCKED", "reason": ledger_reason,
+                        "stage": "REDEMPTION_LEDGER"})
+        return EXIT_BLOCKED, verdict
+    verdict.update({"verdict": "PASS", "reason": "GATE2_NONCE_RELEASED_MANUAL",
+                    "redemption_entry_hash": entry_hash,
+                    "note": "Nonce libéré et ledgeré — la délégation peut être rejouée "
+                            "par un nouveau pré-vol."})
     return EXIT_PASS, verdict
 
 
@@ -551,6 +835,24 @@ def main(argv: list[str] | None = None) -> int:
     p_consume = sub.add_parser("consume", help="Consommer le jeton (usage unique, A-003)")
     common(p_consume)
 
+    p_delegate = sub.add_parser(
+        "delegate",
+        help="Transaction Safe-Spawn (A-7) : RESERVE -> SPAWN -> OBSERVE (usage unique)")
+    common(p_delegate)
+    p_delegate.add_argument("--spawn-command", nargs="+", required=True,
+                            help="Commande d'instanciation à observer (transaction A-7)")
+    p_delegate.add_argument("--spawn-timeout", type=int, default=120,
+                            help="Timeout du spawn (s) — au-delà : UNKNOWN_CONFINED")
+    p_delegate.add_argument("--spawn-cwd", type=Path, default=None,
+                            help="Répertoire de travail du spawn (défaut: hérité)")
+
+    p_release = sub.add_parser(
+        "release",
+        help="Release manuel signé d'un nonce RESERVED non observé (reprise post-crash)")
+    p_release.add_argument("--root", type=Path, default=None)
+    p_release.add_argument("--nonce", required=True)
+    p_release.add_argument("--secret-file", default=None)
+
     p_status = sub.add_parser("status", help="État du verrou Gate 2")
     p_status.add_argument("--root", type=Path, default=None)
     p_status.add_argument("--token", type=Path, default=None)
@@ -560,7 +862,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     root = (getattr(args, "root", None) or Path.cwd()).resolve()
-    token_path = args.token or (gate2_dir(root) / TOKEN_FILE_NAME)
+    token_path = getattr(args, "token", None) or (gate2_dir(root) / TOKEN_FILE_NAME)
     secret, secret_reason = resolve_secret(getattr(args, "secret_file", None))
     now = _parse_iso(args.now) if getattr(args, "now", None) else None
     if getattr(args, "now", None) and now is None:
@@ -595,6 +897,24 @@ def main(argv: list[str] | None = None) -> int:
             return EXIT_UNKNOWN
         code, result = redeem_delegation_token(args.graph, token_path, args.mission,
                                                secret, now=now, root=root)
+        _emit(result)
+        return code
+
+    if args.command == "delegate":
+        if secret is None:
+            _emit({"verdict": "UNKNOWN", "reason": secret_reason,
+                   "note": "P3 : transaction de délégation refusée sans secret observable."})
+            return EXIT_UNKNOWN
+        code, result = spawn_delegation_transaction(
+            args.graph, token_path, args.mission, secret, root=root,
+            spawn_command=list(args.spawn_command),
+            timeout_seconds=args.spawn_timeout,
+            spawn_cwd=args.spawn_cwd, now=now)
+        _emit(result)
+        return code
+
+    if args.command == "release":
+        code, result = release_reserved_nonce(root, args.nonce, secret=secret, now=now)
         _emit(result)
         return code
 

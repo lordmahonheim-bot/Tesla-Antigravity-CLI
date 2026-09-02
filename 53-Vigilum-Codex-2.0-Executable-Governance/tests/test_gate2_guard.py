@@ -30,9 +30,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from core.orchestration.gate2_guard import (  # noqa: E402
+    LOCK_STATE_RESERVED,
+    TOKEN_VERSION,
     canonical_bytes,
     gate2_dir,
     pre_flight_delegation_check,
+    redeem_delegation_token,
+    sign_token,
 )
 from core.orchestration.orchestration_gate import compute_approval_sha256, load_graph_file  # noqa: E402
 
@@ -360,6 +364,191 @@ class AntiReplayLedgerTests(Gate2GuardHarness):
             prev = entry["entry_hash"]
         head = (self.workspace / "runtime" / "gate2" / "chain_head.sha256").read_text().strip()
         self.assertEqual(head, prev)
+
+
+class Bypass04AuthorityTests(Gate2GuardHarness):
+    """BYPASS-04 : un jeton ne peut ni être émis ni être accepté sans autorité."""
+
+    def test_issue_token_refuses_empty_authority(self) -> None:
+        graph = self._write_graph(sealed=True)
+        proc = self._run("issue-token", "--graph", str(graph), "--mission", MISSION,
+                         "--root", str(self.workspace), "--secret-file", str(self.secret_path),
+                         "--authority", "   ", "--issued-at", ISSUED_AT)
+        self.assertEqual(proc.returncode, 1)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_TOKEN_AUTHORITY_MISSING")
+
+    def test_pre_flight_rejects_signed_token_with_empty_authority(self) -> None:
+        """Défense en profondeur : même un jeton bien signé mais à autorité vide
+        est rejeté en liaison (pré-vol), jamais un PASS implicite."""
+        graph = self._write_graph(sealed=True)
+        secret = self.secret_path.read_bytes().strip()
+        payload = {
+            "token_version": TOKEN_VERSION,
+            "mission_id": MISSION,
+            "graph_sha256": compute_approval_sha256(load_graph_file(graph)),
+            "authority": "",
+            "issued_at": ISSUED_AT,
+            "expires_at": "2026-09-02T19:30:00Z",
+            "nonce": "empty-authority-0001",
+        }
+        token = dict(payload)
+        token["hmac"] = sign_token(payload, secret)
+        token_path = self.workspace / "runtime" / "gate2" / "gate2_approval.token"
+        token_path.parent.mkdir(parents=True, exist_ok=True)
+        token_path.write_text(json.dumps(token, indent=2) + "\n", encoding="utf-8")
+
+        proc = self._pre_flight(graph)
+        self.assertEqual(proc.returncode, 1)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_TOKEN_AUTHORITY_MISSING")
+        self.assertEqual(result["stage"], "TOKEN_BINDING")
+
+
+class Bypass06LedgerTamperingTests(Gate2GuardHarness):
+    """BYPASS-06 : toute falsification du grand livre rompt la chaîne (détection)."""
+
+    def test_tampered_ledger_blocks_further_redemptions(self) -> None:
+        secret = self.secret_path.read_bytes().strip()
+        moment = datetime(2026, 9, 2, 19, 5, tzinfo=timezone.utc)
+        graph_a = self._write_graph(sealed=True, nonce="ledger-0001", name="g1.yaml")
+        graph_b = self._write_graph(sealed=True, nonce="ledger-0002", name="g2.yaml")
+        token_path = self.workspace / "runtime" / "gate2" / "gate2_approval.token"
+
+        self.assertEqual(self._issue(graph_a).returncode, 0)
+        code, verdict = redeem_delegation_token(graph_a, token_path, MISSION,
+                                                secret, now=moment, root=self.workspace)
+        self.assertEqual(code, 0, verdict)
+
+        self.assertEqual(self._issue(graph_b).returncode, 0)
+
+        # Falsification d'une entrée existante (autorité usurpée rétrospectivement).
+        ledger = self.workspace / "runtime" / "gate2" / "redemptions.jsonl"
+        lines = ledger.read_text(encoding="utf-8").splitlines()
+        forged = json.loads(lines[0])
+        forged["authority"] = "Faux Mahonheim"
+        lines[0] = json.dumps(forged, sort_keys=True, ensure_ascii=False)
+        ledger.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+        code, verdict = redeem_delegation_token(graph_b, token_path, MISSION,
+                                                secret, now=moment, root=self.workspace)
+        self.assertEqual(code, 1)
+        self.assertEqual(verdict["reason"], "GATE2_LEDGER_CHAIN_BROKEN")
+
+
+class SafeSpawnTransactionTests(Gate2GuardHarness):
+    """A-7 : transaction RESERVE -> SPAWN -> OBSERVE (quatre issues fermées)."""
+
+    def _delegate(self, graph: Path, spawn: list[str], timeout: str = "120") -> subprocess.CompletedProcess:
+        return self._run("delegate", "--graph", str(graph), "--mission", MISSION,
+                         "--root", str(self.workspace), "--secret-file", str(self.secret_path),
+                         "--now", NOW_VALID, "--spawn-timeout", timeout,
+                         "--spawn-command", *spawn)
+
+    def test_delegate_success_commits_nonce(self) -> None:
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        proc = self._delegate(graph, ["true"])
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_DELEGATION_SPAWN_SUCCEEDED")
+        self.assertEqual(result["stage"], "OBSERVE")
+        # Le nonce est définitivement consommé : tout retry est un rejeu.
+        replay = self._delegate(graph, ["true"])
+        self.assertEqual(replay.returncode, 1)
+        self.assertIn(self._json(replay)["reason"],
+                      ("GATE2_TOKEN_REPLAY_DETECTED", "GATE2_TOKEN_ALREADY_CONSUMED"))
+
+    def test_delegate_spawn_failure_consumes_nonce(self) -> None:
+        """COMMIT_FAILURE : spawn démarré puis échoué -> nonce brûlé, pas de rejeu."""
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        proc = self._delegate(graph, ["false"])
+        self.assertEqual(proc.returncode, 1)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_DELEGATION_SPAWN_FAILED")
+        self.assertEqual(result["spawn_exit_code"], 1)
+        replay = self._delegate(graph, ["true"])
+        self.assertEqual(replay.returncode, 1)
+        self.assertIn(self._json(replay)["reason"],
+                      ("GATE2_TOKEN_REPLAY_DETECTED", "GATE2_TOKEN_ALREADY_CONSUMED"))
+
+    def test_delegate_launch_failure_aborts_safe_and_releases_nonce(self) -> None:
+        """ABORT_SAFE : échec de lancement CERTAIN -> nonce libéré et réutilisable."""
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        proc = self._delegate(graph, ["/nonexistent/vigilum-spawn-xyz"])
+        self.assertEqual(proc.returncode, 1)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_SPAWN_NOT_STARTED_ABORT_SAFE")
+        nonces = self.workspace / "runtime" / "gate2" / "nonces"
+        self.assertFalse(any(nonces.iterdir()), "ABORT_SAFE doit libérer le verrou")
+        # Le nonce est à nouveau jouable (spawn certainement jamais démarré).
+        proc2 = self._delegate(graph, ["true"])
+        self.assertEqual(proc2.returncode, 0, proc2.stdout)
+        self.assertEqual(self._json(proc2)["reason"], "GATE2_DELEGATION_SPAWN_SUCCEEDED")
+
+    def test_delegate_timeout_confines_unknown_and_forbids_retry(self) -> None:
+        """BYPASS-09 : timeout -> UNKNOWN_CONFINED, nonce brûlé, zéro retry."""
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        proc = self._delegate(graph, ["sleep", "5"], timeout="1")
+        self.assertEqual(proc.returncode, 66, proc.stdout)
+        result = self._json(proc)
+        self.assertEqual(result["reason"], "GATE2_SPAWN_UNKNOWN_CONFINED")
+        # L'état d'incertitude interdit la remise en jeu automatique du nonce :
+        # le pré-vol bloque en registre (état terminal non-RESERVED = consommé).
+        retry = self._delegate(graph, ["true"])
+        self.assertEqual(retry.returncode, 1)
+        self.assertEqual(self._json(retry)["reason"], "GATE2_TOKEN_ALREADY_CONSUMED")
+        # Le verrou porte l'état terminal d'incertitude (inspectable).
+        lock = self.workspace / "runtime" / "gate2" / "nonces" / f"{result['nonce']}.lock"
+        self.assertEqual(json.loads(lock.read_text(encoding="utf-8"))["state"],
+                         "UNKNOWN_CONFINED")
+
+
+class ReservedNonceRecoveryTests(Gate2GuardHarness):
+    """Crash entre RESERVE et SPAWN : fail-closed + release manuel signé."""
+
+    def test_reserved_unobserved_blocks_then_manual_release_restores(self) -> None:
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        token_path = self.workspace / "runtime" / "gate2" / "gate2_approval.token"
+        nonce = json.loads(token_path.read_text(encoding="utf-8"))["nonce"]
+
+        # Simulation du crash : verrou RESERVED sans observation (BYPASS-09).
+        lock = self.workspace / "runtime" / "gate2" / "nonces" / f"{nonce}.lock"
+        lock.parent.mkdir(parents=True, exist_ok=True)
+        lock.write_text(json.dumps({"nonce": nonce, "state": LOCK_STATE_RESERVED}) + "\n",
+                        encoding="utf-8")
+
+        proc = self._pre_flight(graph)
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(self._json(proc)["reason"], "GATE2_TOKEN_RESERVED_UNOBSERVED")
+
+        # Release manuel signé (autorité humaine) — ledgeré.
+        rel = self._run("release", "--nonce", nonce, "--root", str(self.workspace),
+                        "--secret-file", str(self.secret_path))
+        self.assertEqual(rel.returncode, 0, rel.stdout)
+        self.assertEqual(self._json(rel)["reason"], "GATE2_NONCE_RELEASED_MANUAL")
+
+        # Le pré-vol redevient PASS : le nonce est à nouveau présentable.
+        proc = self._pre_flight(graph)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+
+    def test_release_refuses_terminal_nonce(self) -> None:
+        graph = self._write_graph(sealed=True)
+        self.assertEqual(self._issue(graph).returncode, 0)
+        consume = self._run("consume", "--graph", str(graph), "--mission", MISSION,
+                            "--root", str(self.workspace), "--secret-file", str(self.secret_path),
+                            "--now", NOW_VALID)
+        self.assertEqual(consume.returncode, 0)
+        token_path = self.workspace / "runtime" / "gate2" / "gate2_approval.token"
+        nonce = json.loads(token_path.read_text(encoding="utf-8"))["nonce"]
+        rel = self._run("release", "--nonce", nonce, "--root", str(self.workspace),
+                        "--secret-file", str(self.secret_path))
+        self.assertEqual(rel.returncode, 1)
+        self.assertEqual(self._json(rel)["reason"], "GATE2_NONCE_LOCK_TERMINAL")
 
 
 if __name__ == "__main__":
