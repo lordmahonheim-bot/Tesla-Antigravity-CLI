@@ -7,6 +7,9 @@ trap 'rm -rf "$tmp"' EXIT
 
 export GIT_CONFIG_NOSYSTEM=1
 export HOME="$tmp/home"
+unset TESLA_ROOT || true
+unset TESLA_PROJECT_STATE_FILE || true
+unset TESLA_PUSH_AUTH_FILE || true
 mkdir -p "$HOME"
 
 git -C "$tmp" init -q
