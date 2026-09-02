@@ -1,0 +1,65 @@
+[Unit]
+Description=Vigilum Codex Anchor Daemon
+Documentation=https://github.com/tesla-governance/vigilum-codex
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vigilum-anchor
+Group=vigilum-anchor
+
+# Working directory for local execution and queue storage
+WorkingDirectory=/var/lib/vigilum/anchor
+
+# The core daemon logic
+ExecStart=/usr/bin/env python3 /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/53-Vigilum-Codex-2.0-Executable-Governance/core/anchor/vigilum_anchor.py
+
+# Environment configuration
+Environment="VIGILUM_CHAIN_HEAD=/home/lord-mahonheim/bifrost/tesla/runtime/gate2/chain_head.sha256"
+Environment="VIGILUM_REPO_DIR=/var/lib/vigilum/anchor/repo_anchor"
+Environment="VIGILUM_KEY_PATH=/etc/vigilum/keys/id_ed25519_anchor"
+Environment="VIGILUM_CHECK_INTERVAL=900"
+Environment="VIGILUM_MAX_RETRIES=5"
+
+# Resilience & Recovery
+Restart=on-failure
+RestartSec=60
+TimeoutStopSec=30
+
+# Logging Configuration (Structured logs sent to journal)
+StandardOutput=journal
+StandardError=journal
+
+# ==========================================
+# Security & Privilege Separation (Hardening)
+# ==========================================
+# Enforce Read-Only on the whole system except explicitly allowed paths
+ProtectSystem=strict
+ProtectHome=read-only
+
+# Allow read access to the chain head file
+ReadOnlyPaths=/home/lord-mahonheim/bifrost/tesla/runtime/gate2/
+
+# Allow read access to the cryptographic keys
+ReadOnlyPaths=/etc/vigilum/keys/
+
+# Allow write access only to the local git repository (queue)
+ReadWritePaths=/var/lib/vigilum/anchor/repo_anchor
+
+# Prevent the process from gaining any new privileges
+NoNewPrivileges=yes
+
+# Restrict capabilities to absolute minimum
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# System hardening
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+PrivateDevices=yes
+RestrictRealtime=yes
+
+[Install]
+WantedBy=multi-user.target
