@@ -1,11 +1,11 @@
-# 🛡️ DIAGNOSTIC D'INCIDENT CRITIQUE & SOLUTION SYSTÉMIQUE — ÉDITION CANONIQUE CONSOLIDÉE 2.3
+# 🛡️ DIAGNOSTIC D'INCIDENT CRITIQUE & SOLUTION SYSTÉMIQUE — ÉDITION CANONIQUE CONSOLIDÉE 2.4
 ## Court-Circuit de la Gate 2 (Biological Gate) & Spécification du Moteur Exécutable Hardened
 **Mission Spin-Off** : `SPINOFF-DIAG-GATE2-BYPASS`
 **Date de l'Incident** : 2026-09-02 (19:14:36)
-**Date de l'Édition Consolidée 2.3** : 2026-09-02 · **Synchronisation dépôt canonique** : 2026-09-02 (ce commit)
-**Sources de Confrontation Croisée (4 Rounds Exhaustifs)** :
-- `Verdict-By-RENA.py`, `Verdict-2-By-RENA.txt`, `Verdict-3-By-RENA.txt`, `Verdict-4-By-RENA.txt`
-- `Verdict-By-ChatGPT.md`, `Verdict-2-By-ChatGPT.md`, `Verdict-3-By-ChatGPT.md`, `Verdict-4-By-ChatGPT.md`
+**Date de l'Édition Consolidée 2.4** : 2026-09-02 · **Synchronisation dépôt canonique** : 2026-09-02 (ce commit)
+**Sources de Confrontation Croisée (5 Rounds Exhaustifs)** :
+- `Verdict-By-RENA.py` à `Verdict-5-By-RENA` (5 pièces)
+- `Verdict-By-ChatGPT.md` à `Verdict-5-By-ChatGPT` (5 pièces)
   *(archives détenues par l'autorité locale — push `DataBase/Vigilum-Codex-2.0/` en attente, action A-3)*
 **Autorité Suprême** : Abdellah MOUHTAJ (Lord Mahonheim)
 **Classification Doctrinale** : Post-Mortem de Sécurité & Spécification Canonique de Gouvernance Exécutable
@@ -19,7 +19,7 @@
 
 ## 0. Synthèse Exécutive du Quadruple Round de Confrontation
 
-L'incident du 2026-09-02 (19:14:36) — où l'Orchestrateur a instancié des sous-agents en court-circuitant l'approbation humaine en **GATE 2** — a fait l'objet de **quatre rounds successifs d'arbitrage contradictoire** avec **RENA** et **ChatGPT**.
+L'incident du 2026-09-02 (19:14:36) — où l'Orchestrateur a instancié des sous-agents en court-circuitant l'approbation humaine en **GATE 2** — a fait l'objet de **cinq rounds successifs d'arbitrage contradictoire** avec **RENA** et **ChatGPT**.
 
 Cette confrontation continue a permis d'ériger ce document en référence d'ingénierie :
 
@@ -38,7 +38,7 @@ Cette confrontation continue a permis d'ériger ce document en référence d'ing
 │ 4. ÉDITION V2.1 : Traçabilité épistémique, distinction MARBLE_ELIGIBLE ≠ SEALED, Bypass testing │
 │    └─► Critique Round 3 : Bloquants B1-B4 + Safe-Abort transactionnel A-7 + Ancrage A-8         │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ 5. ÉDITION V2.3 CANONIQUE (synchro dépôt) :                                                     │
+│ 5. ÉDITION V2.4 CANONIQUE (synchro dépôt) :                                                     │
 │    - Statuts des 10 vecteurs Bypass étiquetés : 9 TESTÉS, 1 CIBLE (BYPASS-01 → couche A-4)      │
 │    - Sémantique Safe-Abort A-7 : SPÉCIFIÉE PUIS IMPLÉMENTÉE & TESTÉE (même journée)             │
 │    - Séparation Anchor Authority ≠ Evidence Writer (Spécification A-8, cible P1)                │
@@ -47,7 +47,7 @@ Cette confrontation continue a permis d'ériger ce document en référence d'ing
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Note de synchronisation (aucun masquage).** Les statuts ci-dessous sont **recalés sur l'état vérifiable du dépôt canonique** au moment du commit : A-7 est passée de « spécifiée » à « déployée & testée » (BYPASS-04/06/09 désormais testés) ; A-1 est **partielle** (le présent document est synchronisé dans `docs/`, l'archivage `DataBase/` reste à la charge de l'autorité) ; A-3 est **en attente de push** (les 8 verdicts existent côté autorité locale mais ne sont pas encore dans le dépôt canonique).
+**Note de synchronisation (aucun masquage).** Les statuts ci-dessous sont **recalés sur l'état vérifiable du dépôt canonique** au moment du commit : A-7 est **déployée & testée** (BYPASS-04/06/09 testés, transaction `delegate` + `release`) ; A-1 est **partielle** (la présente édition 2.4 est synchronisée dans `docs/`, l'archivage `DataBase/` reste à la charge de l'autorité) ; A-3 est **en attente de push** (les 10 verdicts existent côté autorité locale mais ne sont pas encore dans le dépôt canonique). **Règle de recevabilité :** seule une pièce committée fait preuve — la source v2.4 externe citait un ledger non committé (`…213000-918347.json`) et un temps d'exécution non reproductible localement (25,95 s contre ~5 s mesurés) ; le §8 ci-dessous cite exclusivement le registre committé.
 
 ---
 
@@ -262,9 +262,9 @@ $$\begin{aligned}
 
 | Réf. | Priorité | Action de Sécurisation & Alignement | Responsable | Statut Canonique |
 |---|:---:|---|---|:---:|
-| **A-1** | P0 | Intégration du présent document V2.3 dans `docs/RETEX_GATE2_BYPASS.md` **et** `DataBase/`. | `tesla-curator-prime` | 🟡 **PARTIEL — docs/ synchronisé (ce commit) ; push `DataBase/` en attente** |
+| **A-1** | P0 | Intégration du présent document V2.4 dans `docs/RETEX_GATE2_BYPASS.md` **et** `DataBase/`. | `tesla-curator-prime` | 🟡 **PARTIEL — docs/ synchronisé (ce commit) ; push `DataBase/` en attente** |
 | **A-2** | P0 | Déploiement et tests de `core/orchestration/gate2_guard.py` (26 tests dédiés). | `tesla-master-code` | 🟢 **RÉALISÉ (92/92 PASS — manifeste sans écart)** |
-| **A-3** | P0 | Archivage physique des 8 verdicts de confrontation dans `DataBase/Vigilum-Codex-2.0/`. | `AGENTS` | 🟡 **EN ATTENTE DE PUSH (8 fichiers côté autorité locale)** |
+| **A-3** | P0 | Archivage physique des 10 verdicts de confrontation dans `DataBase/Vigilum-Codex-2.0/`. | `AGENTS` | 🟡 **EN ATTENTE DE PUSH (10 fichiers côté autorité locale)** |
 | **A-7** | **P0** | **Implémentation de la Transaction Safe-Spawn & Tests BYPASS-09 (+ BYPASS-04/06).** | `tesla-master-code` | 🟢 **RÉALISÉ & TESTÉ (même journée — `delegate` + `release`)** |
 | **A-4** | **P0** | **Isolation d'UID & Signature Asymétrique Ed25519** (Daemon sous compte `vigilum-gate`) + interception BYPASS-01. | `tesla-master-code` | 🔵 **SPÉCIFIÉ CIBLE / PLANIFIÉ** |
 | **A-8** | **P1** | **Ancrage Cryptographique Externe du Grand Livre** (`Anchor Authority ≠ Evidence Writer`). | `tesla-github-manager` | 🔵 **SPÉCIFIÉ / PLANIFIÉ** |
@@ -281,7 +281,7 @@ Runner universel — mission SPINOFF-DIAG-GATE2-BYPASS
   bash-hooks-suite          : 11/11 PASS
   Manifeste test_manifest_v2.1.yaml : PASS — déclaré 92, exécuté 92, écart 0
   verdict_global : PASS
-  Ledger : evidence/test_runner_SPINOFF-DIAG-GATE2-BYPASS_*.json
+  Ledger COMMITTÉ : evidence/test_runner_SPINOFF-DIAG-GATE2-BYPASS_20260902-211733-819857.json
 ```
 
 ---
