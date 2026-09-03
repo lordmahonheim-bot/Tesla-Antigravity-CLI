@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
-"""Vigilum Codex 2.5.1 — Garde d'Usurpation Git (Phase 1 du plan V2.5.0, audité).
+"""Vigilum Codex 2.5.1/2.6.1 — Garde d'Usurpation Git (Phase 1 du plan V2.5.0, audité).
 
 Verrou déterministe D-007 : l'Orchestrateur ne doit physiquement plus pouvoir
 exécuter de commandes Git mutantes. La juridiction Git (add/commit/push/cp de
 staging, publication) appartient EXCLUSIVEMENT à l'agent d'élite
 ``tesla-github-manager`` (Règle Absolue N°4 : « AGENTS délègue, il ne
 réimplémente pas »).
+
+V2.6.1 (audit du plan V2.6.0, Phase 2) : le périmètre couvre aussi les
+TRANSFERTS DE FICHIERS vers les espaces de gouvernance (``cp``/``mv``/
+``install``/``rsync`` ciblant ``MVP-GITHUB/``, ``CERTIFICATES/``,
+``evidence/``, ``runtime/gate2``, ``runtime/contracts``, ``.git``, ``.tesla``)
+— éradication de l'usurpation de staging (RETEX Incident 3 « double copie »).
+Correction d'audit : le blocage est CIBLÉ PAR DESTINATION, jamais aveugle —
+un transfert vers un fichier de travail reste légitime.
 
 Doctrine appliquée :
   P4  — L'IA propose, le code valide : la classification est un parseur
@@ -232,8 +240,99 @@ def _classify_gh_run(run: list[str]) -> dict[str, Any]:
 
 
 # --------------------------------------------------------------------------- #
-# Segmentation : découpe le flux de tokens en exécutions (runs)                #
+# Tables de commandes de transfert de fichiers (V2.6.1 — extension du plan    #
+# V2.6.0 Phase 2, corrigée : blocage CIBLÉ par destination, jamais aveugle)    #
 # --------------------------------------------------------------------------- #
+TRANSFER_COMMANDS: dict[str, frozenset[str]] = {
+    "cp": frozenset({"-t", "--target-directory", "-S", "--suffix",
+                     "--backup", "-Z", "--context"}),
+    "mv": frozenset({"-t", "--target-directory", "-S", "--suffix",
+                     "--backup", "-Z", "--context"}),
+    "install": frozenset({"-t", "--target-directory", "-o", "--owner",
+                          "-g", "--group", "-m", "--mode"}),
+    "rsync": frozenset({"-b", "--backup-dir", "-e", "--rsh", "--exclude",
+                        "--include", "--chmod", "--rsync-path", "--suffix",
+                        "--files-from", "--filter"}),
+}
+
+# Segments de destination critiques pour la gouvernance (mutation de staging,
+# preuve ou sécurité). Le blocage vise la DESTINATION, pas l'outil : un
+# `cp` vers un fichier de travail reste légitime pour l'Orchestrateur.
+GOVERNANCE_DESTINATION_SEGMENTS: tuple[tuple[str, ...], ...] = (
+    ("MVP-GITHUB",),
+    ("Archives-MVP-GITHUB",),
+    ("CERTIFICATES",),
+    ("evidence",),
+    ("runtime", "gate2"),
+    ("runtime", "contracts"),
+    (".tesla",),
+    (".git",),
+)
+
+
+def _is_governance_destination(destination: str) -> bool:
+    """True si la destination d'un transfert touche un espace de gouvernance.
+
+    Analyse par segments normalisés (sans résolution CWD — le confinement
+    physique des chemins relève du broker T-002 ; ici : détection déterministe
+    des usurpations de staging/preuve, RETEX Incident 3 « double copie »).
+    """
+    segments = [seg for seg in destination.replace("\\", "/").split("/")
+                if seg not in ("", ".")]
+    if not segments:
+        return False
+    for forbidden in GOVERNANCE_DESTINATION_SEGMENTS:
+        size = len(forbidden)
+        for start in range(len(segments) - size + 1):
+            if tuple(segments[start:start + size]) == forbidden:
+                return True
+    return False
+
+
+def _classify_transfer_run(run: list[str]) -> dict[str, Any] | None:
+    """Classifie cp/mv/install/rsync selon la destination.
+
+    Retourne None (transfert neutre) ou un finding MUTATING (STAGING_MUTATION).
+    Destination = valeur de -t/--target-directory si présente, sinon le
+    dernier argument non-flag.
+    """
+    head = run[0].rsplit("/", 1)[-1]
+    flags_with_value = TRANSFER_COMMANDS.get(head)
+    if flags_with_value is None:
+        return None
+    explicit_dest: str | None = None
+    operands: list[str] = []
+    idx = 1
+    while idx < len(run):
+        tok = run[idx]
+        if tok in flags_with_value:
+            if idx + 1 < len(run) and tok in ("-t", "--target-directory"):
+                explicit_dest = run[idx + 1]
+            idx += 2
+            continue
+        if tok.startswith("--") and "=" in tok:
+            # Forme auto-suffisante --target-directory=<dest>
+            key, _, value = tok.partition("=")
+            if key in ("-t", "--target-directory"):
+                explicit_dest = value
+            idx += 1
+            continue
+        if tok.startswith("-"):
+            idx += 1
+            continue
+        operands.append(tok)
+        idx += 1
+    destination = explicit_dest if explicit_dest is not None else (
+        operands[-1] if operands else None)
+    if destination is None:
+        return None
+    if _is_governance_destination(destination):
+        return {"tool": "fs", "verb": head, "verdict": "MUTATING",
+                "reason": f"STAGING_MUTATION:{destination}"}
+    return None
+
+
+
 def _split_runs(tokens: list[str]) -> tuple[list[list[str]], int]:
     """Découpe en exécutions ; retourne (runs, nb de tokens 'git'/'gh'
     consommés comme cibles de redirection — comptabilisés, jamais exécutés)."""
@@ -346,6 +445,11 @@ def _classify_token_list(tokens: list[str], depth: int) -> dict[str, Any]:
         elif _is_gh_token(effective[0]):
             findings.append({"tool": "gh", **_classify_gh_run(effective)})
         else:
+            # V2.6.1 : transferts de fichiers vers destinations de
+            # gouvernance (cp/mv/install/rsync) — usurpation de staging.
+            transfer_finding = _classify_transfer_run(effective)
+            if transfer_finding is not None:
+                findings.append(transfer_finding)
             # Occurrences de git/gh en position d'ARGUMENT (ex. echo git) :
             # comptabilisées pour la réconciliation, jamais exécutées.
             for tok in effective[1:]:
@@ -477,6 +581,12 @@ def evaluate_hook(payload: dict[str, Any]) -> dict[str, Any]:
                 "reason": f"Git lecture pure autorisee ({caller})."}
 
     verb = classification.get("reason") or "classification"
+    if str(verb).startswith("STAGING_MUTATION"):
+        return {"decision": "deny",
+                "reason": f"Exit 81 (D-007 Anti-Usurpation): mutation d'un "
+                          f"espace de gouvernance par transfert de fichier "
+                          f"({verb}) reservee a {GIT_JURISDICTION_AGENT} "
+                          f"(staging/preuve). Delegation requise (Regle N.4)."}
     return {"decision": "deny",
             "reason": f"Exit 81 (D-007 Anti-Usurpation): commande Git "
                       f"non-lecture ({verb}) reservee a "

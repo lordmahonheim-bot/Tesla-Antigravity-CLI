@@ -6,7 +6,7 @@
 *Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
-*Version:* **2.5.1** (Orchestrator Lockdown — audit du Plan d'Intervention Correctif V2.5.0 : 4 phases déterministes, voir `docs/protocol_mapping.md` §6)  
+*Version:* **2.6.1** (Verdict du Plan de Haut Niveau V2.6.0 : P11 + Gate R, staging-transfer jurisdiction, deferred CI wiring — see `docs/protocol_mapping.md` §7)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
@@ -100,7 +100,9 @@ flowchart TD
 | **Git Jurisdiction Guard (2.5.1)** | `core/hooks/antigravity/hook_08_anti_usurpation.sh` + `core/hooks/lib/tesla_git_guard.py` | Phase 1 of the V2.5.0 corrective plan: deterministic git-verb classifier (fail-closed on aliases, `sh -c`/`sudo`/`xargs` obfuscation, unreconciled occurrences); mutating git/gh commands are Exit 81 for every caller except `tesla-github-manager`; read-only inspection remains available to the Orchestrator. |
 | **SCD Library + Zero-Middleman (2.5.1)** | `core/hooks/lib/tesla-scd.sh`, `hook_07` (refactored), `hook_09_zero_middleman.sh` + `core/hooks/lib/tesla_zero_middleman.py` | Phase 2: Sovereign Chat Directives become the universal & exclusive validation source (transcript.jsonl read backwards via `tac`, strict phrase set, `O_EXCL` anti-replay); agents are physically forbidden from writing authorization artifacts (`.flag`, `.token`, receipts, certificates, nonces) — BYPASS-01 eradicated. |
 | **Gate 0 Pre-Flight Checklist (2.5.1)** | `core/hooks/antigravity/hook_10_gate0_preflight.sh` + `core/hooks/lib/tesla_preflight.py` | Phase 3: proactive physical-privilege checks before sensitive tools (invoke_subagent, git mutations, privilege escalation): writable runtime, capability probe PASS (U-006/P3), SCD transcript readability; escalation denied unless `TESLA_ALLOW_PRIVILEGE_ESCALATION=1` is set in the sovereign terminal. |
-| **SLSA Attestation (2.5.1)** | `bin/slsa_attestation.py` | Phase 4: SLSA Provenance v0.2 (in-toto Statement v0.1) in a DSSE envelope signed HMAC-SHA256 by the Control Plane — deterministic Gate-2 evidence substitute for ephemeral CI where the local transcript is unobservable; keys are refused inside the workspace (P2); verify is fail-closed (0 PASS / 1 FAIL / 66 UNKNOWN). |
+| **SLSA Attestation (2.5.1)** | `bin/slsa_attestation.py` | Phase 4: SLSA Provenance v0.2 (in-toto Statement v0.1) in a DSSE envelope signed HMAC-SHA256 by the Control Plane — deterministic Gate-2 evidence substitute for ephemeral CI where the local transcript is unobservable; keys are refused inside the workspace (P2); verify is fail-closed (0 PASS / 1 FAIL / 66 UNKNOWN). CI *wiring* is deferred and traced (`OUTPUTS/open_items_todo-Updated.md` OI-01) — the asset is retained because Gate R depends on its HMAC/DSSE machinery. |
+| **Gate R — Evidence Reconciliation (2.6.1)** | `bin/gate_r.py` | P11 (Assertion ≠ Evidence) enforcement: reconciles the declarative test manifest ↔ the test_runner execution ledger ↔ a Control-Plane-signed DSSE attestation covering that ledger; emits `runtime/contracts/mission_truth.json` (written by the deterministic tool, never by the agent — agent writes are physically blocked by hook 09). Fail-closed: 0 RECONCILED / 50 blocked (P11) / 66 UNKNOWN (P3). |
+| **Staging-Transfer Jurisdiction (2.6.1)** | `core/hooks/lib/tesla_git_guard.py` (transfer tables) | Extension of the anti-usurpation jurisdiction to file transfers (`cp`/`mv`/`install`/`rsync`) targeting governance spaces (`MVP-GITHUB/`, `Archives-MVP-GITHUB/`, `CERTIFICATES/`, `evidence/`, `runtime/gate2`, `runtime/contracts`, `.git`, `.tesla`) — destination-targeted, never blind (workspace file moves remain legitimate); Exit 81 for every caller except `tesla-github-manager`. |
 
 ---
 
@@ -184,6 +186,15 @@ TOTAL TESTS (V2.0 + V2.1.3): 66 | PASSED: 66 | FAILED: 0
   Repairs: 8 RETEX tests restored (arbitrage #1 transcript resolution order,
     P7 parity repair); runner now discloses skipped tests (p3_disclosure)
   Evidence: evidence/test_runner_SGC-EXEC-GOV-03-V251_*.json (verdict PASS)
+======================================================================
+
+[VIGILUM CODEX 2.6.1 — VERDICT DU PLAN V2.6.0 (P11 + GATE R)]
+  Python suite: 178 ran, 152 PASS, 26 SKIP (PyNaCl, disclosed P3)
+  Bash hook suite: 11/11 PASS
+  Manifest (v2.6.1): 178 + 11 = 189 declared = executed
+  New: Gate R reconcile (0/50/66), staging-transfer jurisdiction (cp/mv by
+  destination), mission_truth.json agent-unwritable, deferred items traced
+  (OUTPUTS/open_items_todo-Updated.md — no silent deletion, P8)
 ======================================================================
 ```
 

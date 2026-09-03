@@ -98,3 +98,34 @@ Codes sémantiques mobilisés (aucun nouveau code numérique — arbitrage #3 re
 `81` (D-007 usurpation/BYPASS-01), `66` (P3 UNKNOWN), `10` (schéma), `0` (succès prouvé).
 
 Manifeste : `154 + 11 = 165` tests déclarés (`manifest/test_manifest_v2.1.yaml` v2.5.1).
+
+---
+
+## 7. Extension Vigilum Codex 2.6.1 — Verdict du Plan de Haut Niveau V2.6.0
+
+Source : verdict d'audit du « PLAN D'INTERVENTION DE HAUT NIVEAU (V2.6.0) »
+(consolidation RENA/ChatGPT/Claude). Livrable :
+`OUTPUTS/Verdict_Audit_Plan_V2.6.0.md`. Deltas admissibles implémentés :
+
+| Delta du plan V2.6.0 | Composant Exécutable | Preuve Matérielle |
+|---|---|---|
+| **Phase 2 — usurpation de staging** (cp/mv, corrigé : blocage ciblé par destination, jamais aveugle) | `core/hooks/lib/tesla_git_guard.py` (tables `TRANSFER_COMMANDS` + `GOVERNANCE_DESTINATION_SEGMENTS`, formes `-t`/`--target-directory=`) | Verdict `STAGING_MUTATION` → deny Exit 81 pour tout appelant hors `tesla-github-manager` ; destinations couvertes : `MVP-GITHUB/`, `Archives-MVP-GITHUB/`, `CERTIFICATES/`, `evidence/`, `runtime/gate2`, `runtime/contracts`, `.git`, `.tesla` ; 8 tests classifieur + 3 tests hook |
+| **Phase 5 — P11 & Gate R** (Evidence Reconciliation, corrigé : registre produit par l'outil déterministe, signature via machinerie HMAC/DSSE) | `bin/gate_r.py` + P11 gravé au Titre III | `reconcile` : manifeste ↔ ledger (comptes, verdict, skips divulgués) ↔ attestation DSSE signée Control Plane → `runtime/contracts/mission_truth.json` (verdict RECONCILED) ; sorties 0/50/66 ; 12 tests |
+| **Phase 5 — integrité du registre de vérité** | `core/hooks/lib/tesla_zero_middleman.py` (motifs `mission_truth.json` + `runtime/contracts`) | Écriture agent du registre physiquement bloquée (hook 09, Exit 81) ; 3 tests |
+| **Phase 1 — déférérence tracée (P8)** | `OUTPUTS/open_items_todo-Updated.md` (OI-01/OI-02/OI-03) | Câblage CI du SLSA différé, actif conservé (la Gate R dépend de sa machinerie HMAC/DSSE) ; gravure ENGINE.md proposée avec formulation corrigée (OI-02) |
+
+Rejets motivés du plan V2.6.0 (détail dans le verdict) :
+- **Phase 4 telle quelle** (artefact pré-vol généré par l'Orchestrateur) :
+  auto-attestation circulaire — réintroduction de BYPASS-01, violation P2.
+  L'intention est déjà matérialisée par le hook 10 V2.5.1 (vérifications
+  déterministes directes, sans artefact agent).
+- **Phase 6 telle quelle** (invariant anti-friction absolu « hors-chat = invalide ») :
+  contredit la racine de confiance (clé Control Plane, cérémonies, A-001).
+  Formulation corrigée gravée au changelog : l'anti-friction lie l'agent,
+  jamais le Souverain.
+- **Renommage hook_09_anti_usurpation** : la collision invoquée est un faux
+  problème (espaces de noms `antigravity/` vs `pre-commit/` disjoints) et le
+  renommage créerait une collision réelle avec `hook_09_zero_middleman`
+  (V2.5.1). Numérotation V2.5.1 maintenue.
+- **« Annulation » de la Phase 4 V2.5.0** : remplacée par un déféré tracé
+  (voir ci-dessus) — la suppression de l'actif casserait la Gate R.

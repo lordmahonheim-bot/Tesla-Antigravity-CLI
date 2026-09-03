@@ -24,7 +24,10 @@ Périmètre bloqué (motifs déterministes, nom de base + répertoires) :
   - quittances de sous-agents (``receipt_<agent>.json``) et journaux
     transcripts — preuves runtime D-008, jamais auto-attestables (P-AGENT-001) ;
   - certificats de marbre (``MARBLE_CERTIFICATE_*.json``) et ancre de chaîne
-    (``chain_head.sha256``) — produits uniquement par ``marble_certificate.py``.
+    (``chain_head.sha256``) — produits uniquement par ``marble_certificate.py`` ;
+  - V2.6.1 (P11) : registre de vérité ``mission_truth.json`` et contrats
+    ``runtime/contracts/`` — produits uniquement par le déterminisme de la
+    Gate R (``bin/gate_r.py``), jamais par l'agent.
 
 Fail-closed : un outil d'écriture sans chemin extractible est refusé
 (la cible ne pouvant être vérifiée, elle ne peut être autorisée — P10).
@@ -62,6 +65,7 @@ FORBIDDEN_BASENAME_PATTERNS: tuple[re.Pattern[str], ...] = tuple(
         r"MARBLE_CERTIFICATE_.*\.json$",
         r"chain_head\.sha256$",
         r"marble_eligibility\.json$",
+        r"mission_truth\.json$",
     )
 )
 
@@ -72,6 +76,7 @@ FORBIDDEN_DIR_SEGMENTS: tuple[tuple[str, ...], ...] = (
     ("runtime", "nonces"),
     ("runtime", "subagents", "receipts"),
     ("runtime", "security"),
+    ("runtime", "contracts"),
     ("CERTIFICATES",),
     (".tesla", "security"),
     (".tesla", "gate2"),

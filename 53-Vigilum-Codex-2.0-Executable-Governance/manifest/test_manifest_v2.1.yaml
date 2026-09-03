@@ -1,6 +1,12 @@
-# Manifeste Déclaratif des Suites de Tests — Vigilum Codex 2.5.1
+# Manifeste Déclaratif des Suites de Tests — Vigilum Codex 2.6.1
 # « 100% des tests déclarés au manifeste » : le test_runner valide que les
 # comptes exécutés atteignent les comptes déclarés (fail-closed sur écart).
+#
+# V2.6.1 (verdict du plan V2.6.0) :
+#   + tests/test_v26_gate_r_and_staging.py (24 tests — deltas admissibles :
+#     usurpation de staging cp/mv ciblée par destination, Gate R/P11,
+#     registre mission_truth.json ininscriptible par l'agent) ;
+#   + P11 gravée (Assertion != Evidence) — enforcement : bin/gate_r.py.
 #
 # V2.5.1 (audit du plan V2.5.0) :
 #   + tests/test_v25_orchestrator_lockdown.py (73 tests — phases 1 à 4) ;
@@ -9,15 +15,15 @@
 #     requirements.txt) sont SKIP avec raison explicite lorsque la
 #     dépendance est inobservable — comptés dans « Ran », jamais un PASS
 #     implicite, divulgés dans le ledger (tests_skipped / p3_disclosure).
-manifest_version: "2.5.1"
+manifest_version: "2.6.1"
 doctrine: "100% des tests déclarés au manifeste — aucun comptage narratif"
 suites:
   - name: python-unittest-discovery
     command: "python3 -m unittest discover -s tests"
-    expected_tests: 154
+    expected_tests: 178
     critical: true
   - name: bash-hooks-suite
     command: "bash tests/test_hooks_suite.sh"
     expected_tests: 11
     critical: true
-total_tests: 165
+total_tests: 189
