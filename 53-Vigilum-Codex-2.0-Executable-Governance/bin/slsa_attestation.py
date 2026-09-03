@@ -13,6 +13,17 @@ l'intégrité et l'origine Control Plane sur cet hôte ; l'atteinte du niveau
 SLSA >= 2 (signature de la plateforme de build) exige un runner CI signant
 nativement — non-delta assumé et documenté.
 
+Honnêteté cryptographique (C2, V2.6.3 — SPEC LOCK) : un HMAC est une clé
+SYMÉTRIQUE — quiconque peut vérifier peut aussi forger. Cette enveloppe est
+donc une ATTESTATION LOCALE dont le niveau de confiance est borné par
+(a) l'isolation du signataire (la clé ne doit vivre ni dans le workspace
+agent ni dans un environnement contrôlable par lui) et (b) la protection
+du matériel de clé. Elle n'est PAS une signature indépendante de tiers ;
+cette dernière exige une signature asymétrique (courtier Ed25519 — OI-03 —
+ou GPG/SSH selon l'invariant A-002). Toute présentation de cette attestation
+comme « signature indépendante » serait une violation de P11 (confusion
+ATTESTATION ≠ AUTHORIZATION et sur-déclaration du niveau de confiance).
+
 Frontières de confiance (P2 — Producer != Validator) :
   - la clé de signature vit HORS du workspace agent :
     TESLA_CONTROL_PLANE_KEY (env, injectée au runtime) ou --key-file dont

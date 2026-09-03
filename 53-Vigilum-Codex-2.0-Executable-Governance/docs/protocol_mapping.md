@@ -150,3 +150,31 @@ câblage CI différé OI-01, OI-03 pour la séparation UID/GID).
 | **Divergence arbitrée — défense en profondeur du hook 09 maintenue** | `core/hooks/lib/tesla_zero_middleman.py` | Domaines **ET** motifs d'artefacts conservés : l'abandon des motifs (proposé par le plan pour « fragilité ») rouvrirait la falsification de quittances `receipt_*.json` et de certificats sans qu'aucune casse légitime ne soit démontrée (les outils déterministes n'empruntent pas le canal d'écriture agent — 183 tests au vert en témoignent) |
 | **Divergence arbitrée — répertoire `authority/` différé** | — (non créé) | Scope Lock (principe invoqué par le plan V2.6.0 lui-même) : bloquer un domaine inexistant est du spéculatif ; à ajouter au `FORBIDDEN_DIR_SEGMENTS` si le domaine est créé |
 | **Numérotation canonique réaffirmée** | `core/hooks/antigravity/` | 07 SCD · 08 anti-usurpation (commandes) · 09 zero-middleman (écritures) · 10 pre-flight — le plan consolidé désigne « Hook 09 » pour deux fonctions distinctes ; le canon V2.5.1 prévaut |
+
+---
+
+## 9. Extension Vigilum Codex 2.6.3 — Ratification & SPEC LOCK (fin du cycle)
+
+Source : verdict d'audit du « PLAN D'INTERVENTION CONSOLIDÉ (V2.6.2 — SPEC
+LOCK) ». Livrable : `OUTPUTS/Verdict_Audit_Plan_V2.6.2_SPEC_LOCK.md`.
+
+**Statut : RATIFIÉ ET SCELLÉ.** Le plan adopte l'intégralité des arbitrages
+précédents (nomenclature 07/08/09/10, défense en profondeur domaines+motifs,
+détection de spoofing runtime/payload, Gate 0 sans artefact agent, registre
+dérivé `mission_truth.json`, anti-friction v2) — ses assertions correspondent
+à l'état physique (P11 vérifié).
+
+| Apport propre du plan | Gravure / Composant | Preuve Matérielle |
+|---|---|---|
+| **Principe Directeur Définitif** (« la preuve est dérivée d'observations contrôlées ; le contrôleur détermine l'état ») | Préambule du Codex canonique (V2.6.3) | Changelog V2.6.3 |
+| **C1 — Honnêteté sémantique** (hooks/env = garde-fous sur chemins d'exécution, non verrous OS) | Préambule du Codex canonique | Restriction universelle ⇒ UID/GID (OI-03) |
+| **C2 — Honnêteté cryptographique** (HMAC = attestation LOCALE symétrique ; confiance bornée par l'isolation du signataire et la protection de clé ; PAS une signature indépendante de tiers) | Préambule + docstrings `bin/slsa_attestation.py` & `bin/gate_r.py` | Élévation vers l'indépendance réelle ⇒ Ed25519 (OI-03) / GPG-SSH (A-002) |
+| **P11 étendue** — échelle épistémique : ASSERTION ≠ OBSERVATION ≠ VALIDATION ≠ ATTESTATION ≠ AUTHORIZATION | Titre III, principe n° 11 (extension V2.6.3) | Chaque niveau mappe un composant : transcript/tests (observation) → runner↔manifeste (validation) → DSSE HMAC (attestation locale) → jeton/FSM (autorisation) |
+| **SPEC LOCK déclaré ⇒ matérialisé** | `bin/audit_cap.py` (L-001) — spec `VIGILUM-CONSOLIDATION-V2.6` | 3 passes enregistrées (V2.6.0, V2.6.1, V2.6.2) → `SPEC_LOCK_CREATED` (exit 80) ; 4ᵉ passe REFUSÉE (« further textual audit passes are forbidden ») ; preuve durable : `evidence/spec_lock_VIGILUM-CONSOLIDATION-V2.6.json` |
+
+**Clôture du cycle** : V2.5.0 → V2.6.2 (4 plans, 4 verdicts exécutables,
+165 → 194 preuves). Le verrou L-001 interdit désormais toute révision
+textuelle du plan scellé — toute évolution du périmètre « Sécurisation
+Déterministe & Gouvernance de la Preuve » exigera une **nouvelle mission**
+par la FSM (nouvel ID, nouveau cycle d'audit plafonné), conformément au
+verrou E1 (Illusion du Raffinement Infini).

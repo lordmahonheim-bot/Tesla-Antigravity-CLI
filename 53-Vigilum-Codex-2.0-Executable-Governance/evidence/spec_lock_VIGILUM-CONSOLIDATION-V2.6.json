@@ -1,0 +1,61 @@
+{
+  "tool": "bin/audit_cap.py (L-001 — Audit Ceiling & SPEC LOCK)",
+  "doctrine": "Vigilum Codex 2.0 — implémentation 2.6.3 (SPEC LOCK)",
+  "spec": "VIGILUM-CONSOLIDATION-V2.6",
+  "cycle": "V2.5.0 → V2.6.0 → V2.6.1 → V2.6.2-SPEC LOCK (4 plans, 3 verdicts de consolidation)",
+  "verdict": "SPEC_LOCK_CREATED",
+  "directive": "SPEC LOCK — audit textuel gelé, bascule forcée vers le code exécuté. Toute évolution ultérieure exige une nouvelle mission par la FSM (jamais une révision du plan scellé).",
+  "passes": [
+    {
+      "audit_pass": "V2.6.0 (RENA/ChatGPT/Claude)",
+      "exit_code": 0,
+      "result": {
+        "verdict": "BELOW_CEILING",
+        "spec": "VIGILUM-CONSOLIDATION-V2.6",
+        "passes": 1,
+        "max": 3,
+        "remaining": 2
+      }
+    },
+    {
+      "audit_pass": "V2.6.1 (RENA & ChatGPT)",
+      "exit_code": 0,
+      "result": {
+        "verdict": "BELOW_CEILING",
+        "spec": "VIGILUM-CONSOLIDATION-V2.6",
+        "passes": 2,
+        "max": 3,
+        "remaining": 1
+      }
+    },
+    {
+      "audit_pass": "V2.6.2-SPEC LOCK (ratification finale)",
+      "exit_code": 80,
+      "result": {
+        "verdict": "SPEC_LOCK_CREATED",
+        "spec": "VIGILUM-CONSOLIDATION-V2.6",
+        "passes": 3,
+        "max": 3,
+        "lock": {
+          "spec": "VIGILUM-CONSOLIDATION-V2.6",
+          "type": "SPEC_LOCK",
+          "locked_at": 1788475028.3876622,
+          "nonce": "2ca179be821142fe853257e98bfe1714",
+          "max_audit_passes": 3,
+          "directive": "SPEC LOCK — audit textuel gelé, bascule forcée vers le code exécutable."
+        }
+      }
+    },
+    {
+      "audit_pass": "TENTATIVE DE 4E PASSE (post-SPEC LOCK)",
+      "exit_code": 80,
+      "result": {
+        "verdict": "SPEC_LOCK",
+        "spec": "VIGILUM-CONSOLIDATION-V2.6",
+        "passes": 3,
+        "max": 3,
+        "note": "locked: further textual audit passes are forbidden"
+      }
+    }
+  ]
+}

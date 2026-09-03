@@ -11,11 +11,17 @@ Corrections d'audit apportées au design du plan :
      version du plan (« l'Orchestrateur génère l'artefact pré-vol ») aurait
      réintroduit BYPASS-01 sous un autre nom. L'écriture agent de ce registre
      est physiquement bloquée par le hook 09 (zero-middleman, V2.6.1).
-  2. SIGNATURE INDÉPENDANTE RÉELLE : la preuve d'exécution (ledger du
-     test_runner) doit être couverte par une ATTESTATION signée par le Plan de
-     Contrôle (HMAC-SHA256, enveloppe DSSE via ``bin/slasa_attestation.py``).
-     La clé vit hors du workspace (env runtime ou fichier refusé sous la
-     racine) — le générateur du code ne peut pas signer sa propre preuve.
+  2. SIGNATURE — précision C2 (V2.6.3, SPEC LOCK) : la preuve d'exécution
+     (ledger du test_runner) doit être couverte par une ATTESTATION LOCALE
+     signée HMAC-SHA256 par le Plan de Contrôle (enveloppe DSSE via
+     ``bin/slasa_attestation.py``). Un HMAC étant symétrique (quiconque
+     vérifie peut forger), le niveau de confiance est borné par l'isolation
+     du signataire et la protection du matériel de clé — ce n'est PAS une
+     signature indépendante de tiers (voir slsa_attestation.py, C2). La clé
+     vit hors du workspace (env runtime ou fichier refusé sous la racine) :
+     le générateur du code ne peut pas signer sa propre preuve SUR LES
+     CHEMINS CONTRÔLÉS (C1). L'élévation vers une indépendance de tiers
+     véritable passe par le courtier Ed25519 (OI-03).
   3. L'ASSET SLSA EST REQUIS : la Phase 5 du plan V2.6.0 dépend de la
      machinerie HMAC/DSSE de la Phase 4 du plan V2.5.0 — confirmer la
      suppression de cette dernière casserait la Gate R (incohérence interne

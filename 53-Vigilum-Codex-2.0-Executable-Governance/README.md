@@ -6,7 +6,7 @@
 *Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
-*Version:* **2.6.2** (Ratification of the Consolidated Plan V2.6.1 — convergence verified, identity-spoof detection, ratified axiom; see `docs/protocol_mapping.md` §7-8)  
+*Version:* **2.6.3 (SPEC LOCK)** (Ratification of the Consolidated Plan V2.6.2 — C1/C2 semantic & cryptographic honesty, P11 epistemic ladder, plan cycle physically sealed via `bin/audit_cap.py`; see `docs/protocol_mapping.md` §7-9)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
