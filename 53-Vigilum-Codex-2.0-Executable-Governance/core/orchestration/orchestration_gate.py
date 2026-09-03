@@ -310,40 +310,38 @@ def _transcript_correlation(receipt: dict[str, Any], receipts_dir: Path) -> str 
     V2.1.3 — Frontière de Confiance Runtime Isolée (arbitrage #1) : les
     journaux bruts d'invocation vivent HORS du workspace agent, dans
     ``~/.tesla/runtime-evidence/<mission_id>/transcripts/`` (variable
-    ``TESLA_RUNTIME_EVIDENCE``). Le workspace local ne détient qu'un miroir
-    de consultation. Résolution (première correspondance retenue) :
+    ``TESLA_RUNTIME_EVIDENCE``).
 
-      1. ``transcript_ref`` absolu ou ``~/``  -> le fichier doit exister tel quel.
-      2. ``TESLA_RUNTIME_EVIDENCE/<mission>/transcripts/<ref>`` si configurée
-         (mode strict : répertoire configuré mais inobservable => BLOCKED).
-      3. miroir local ``<receipts>/../transcripts/<ref>``.
-
-    Si aucun journal n'est observable (aucun ref absolu, env absente, miroir
-    absent) : la corrélation reste documentée N/A — jamais un PASS coercé (P3).
+    SECURITY FIX (Premortem):
+    1. Blocks absolute paths and path traversals (fake evidence SPOF).
+    2. Enforces regex sanitization on mission_id.
+    3. Fail-Closed behavior if unobservable (NO PROOF = BLOCKED).
     """
     ref = receipt.get("transcript_ref")
     if not isinstance(ref, str) or not ref.strip():
         return "RECEIPT_TRANSCRIPT_REF_MISSING"
 
-    # 1. Référence explicite (isolée ou absolue)
-    if ref.startswith("~") or Path(ref).is_absolute():
-        explicit = Path(os.path.expanduser(ref))
-        return None if explicit.is_file() else "RECEIPT_TRANSCRIPT_MISSING"
+    # 1. SECURITY FIX: Bloquer les traversées de chemins et références absolues (/bin/bash)
+    if ref.startswith("/") or ref.startswith("~") or ".." in ref:
+        return "RECEIPT_TRANSCRIPT_REF_TRAVERSAL_FORBIDDEN"
 
     # 2. Espace runtime isolé (hors périmètre d'écriture agent)
     runtime_evidence = os.environ.get("TESLA_RUNTIME_EVIDENCE")
     mission_id = receipt.get("mission_id")
-    if runtime_evidence and isinstance(mission_id, str) and mission_id.strip():
+    
+    # SECURITY FIX: Assainissement strict du mission_id
+    if not isinstance(mission_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", mission_id):
+        return "RECEIPT_MISSION_ID_INVALID_FORMAT"
+
+    if runtime_evidence:
         isolated_dir = Path(os.path.expanduser(runtime_evidence)) / mission_id / "transcripts"
         if not isolated_dir.is_dir():
             return "RECEIPT_RUNTIME_EVIDENCE_UNOBSERVABLE"
         return None if (isolated_dir / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
 
-    # 3. Miroir local de consultation (workspace)
-    mirror = receipts_dir.parent / "transcripts"
-    if mirror.is_dir():
-        return None if (mirror / ref).is_file() else "RECEIPT_TRANSCRIPT_MISSING"
-    return None  # journal inobservable -> corrélation N/A documentée (P3)
+    # SECURITY FIX (Fail-Open): On ne se rabat pas sur le miroir local (territoire agent)
+    # et on retourne strictement un BLOCKED si l'environnement isolé n'est pas accessible.
+    return "RECEIPT_TRANSCRIPT_UNOBSERVABLE_FAIL_CLOSED"
 
 
 def receipt_quorum(graph: dict[str, Any], receipts_dir: Path, mission_expected: str | None) -> tuple[int, dict[str, Any]]:
@@ -405,7 +403,12 @@ def _resolve_mission_graph(root: Path, explicit: str | None) -> Path | None:
     registry = root / "runtime" / "orchestration" / "active_mission.json"
     if registry.is_file():
         try:
-            data = json.loads(registry.read_text(encoding="utf-8"))
+            import fcntl
+            with open(registry, "r", encoding="utf-8") as f:
+                # SECURITY FIX: Fcntl lock prevents read corruption on concurrent writes
+                fcntl.flock(f, fcntl.LOCK_SH)
+                data = json.loads(f.read())
+                fcntl.flock(f, fcntl.LOCK_UN)
             ref = data.get("mission_graph")
             if isinstance(ref, str) and ref:
                 candidate = Path(ref)
@@ -437,8 +440,17 @@ def _target_has_marker(target: Path) -> bool:
     spellings with optional quoting and whitespace around the separator.
     """
     import re
+    import subprocess
     try:
-        text = target.read_text(encoding="utf-8", errors="replace")
+        # SECURITY FIX: Read from Git Index (staged version) to prevent TOCTOU on pre-commit
+        proc = subprocess.run(
+            ["git", "show", f":./{target.name}"],
+            capture_output=True, text=True, check=False, cwd=target.parent
+        )
+        if proc.returncode == 0:
+            text = proc.stdout
+        else:
+            text = target.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return False
     return re.search(r"[\"']?(team_synergy|x-vigilum-team-synergy)[\"']?\s*:\s*true",
