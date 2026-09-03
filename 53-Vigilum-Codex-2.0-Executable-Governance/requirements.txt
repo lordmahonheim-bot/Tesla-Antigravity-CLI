@@ -1,0 +1,12 @@
+# Vigilum Codex 2.5.1 — Dépendances externes déclarées (audit P1/P3).
+#
+# Le cœur de gouvernance (hooks, orchestration_gate, gate2_guard,
+# mission_controller, marble_certificate, slsa_attestation) est STDLIB ONLY.
+# Unique dépendance externe : le courtier de délégation Ed25519
+# (core/orchestration/vigilum_gate_daemon.py) — composant du Control Plane
+# déployé sous UID séparé (recommandation RETEX_GATE2_BYPASS §7).
+#
+# Sans cette dépendance, la couche daemon est classée UNKNOWN-CONFINED
+# (invariant P3 : UNKNOWN != PASS) : les tests associés sont SKIP avec
+# raison explicite — jamais un PASS implicite, jamais un silence.
+pynacl>=1.5.0

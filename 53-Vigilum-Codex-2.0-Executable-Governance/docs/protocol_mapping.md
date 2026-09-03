@@ -69,3 +69,32 @@ La hiérarchie d'autorité immuable s'applique :
 
 - **Statut doctrinal V2.1.3 :** `CONTROLLED IMPLEMENTATION BASELINE — SPECIFICATION RECONCILED; RUNTIME EVIDENCE PENDING`.
 - **Non-deltas assumés (hors périmètre agent) :** signature biologique elle-même, journal runtime distant hors workspace, piliers mémoire à la racine du dépôt (E3).
+
+---
+
+## 6. Extension Vigilum Codex 2.5.1 — Verrouillage de l'Orchestrateur (audit du Plan d'Intervention Correctif V2.5.0)
+
+Source : audit du rapport `docs/PLAN_INTERVENTION_CORRECTIF_ORCHESTRATOR.md` (V2.5.0)
+et du RETEX `docs/RETEX_SESSION_ORCHESTRATOR_ERRORS.md` (4 déviations).
+Livrable d'audit : `OUTPUTS/Audit_Plan_V2.5.0_Et_Solution_Definitive_V2.5.1.md`.
+
+| Phase | Verrou | Composant Exécutable | Preuve Matérielle |
+|---|---|---|---|
+| **1 — Anti-Usurpation Git** | Juridiction Git exclusive (`tesla-github-manager`) ; lectures pures seules autorisées à l'Orchestrateur ; fail-closed sur tout `git` non classé (alias, obfuscation `sh -c`/`sudo`/`xargs`/`$()`, occurrence non réconciliée) ; extension `gh` (API mutations) | `core/hooks/antigravity/hook_08_anti_usurpation.sh` + `core/hooks/lib/tesla_git_guard.py` | Décision JSON `deny` Exit 81 (D-007) ; 22 tests de classification + 8 tests hook end-to-end |
+| **2 — Zero-Middleman / SCD** | Validation souveraine UNIVERSELLE et EXCLUSIVE par lecture du `transcript.jsonl` (SCD) ; interdiction physique d'écrire tout artefact d'autorisation (`.flag`, `.token`, `.approval`, quittances `receipt_*.json`, certificats, nonces, ledger) — sans exemption d'agent | `core/hooks/lib/tesla-scd.sh` (bibliothèque universelle), `hook_07` refactoré dessus, `core/hooks/antigravity/hook_09_zero_middleman.sh` + `core/hooks/lib/tesla_zero_middleman.py` | Décisions `deny` Exit 81 (BYPASS-01) ; cérémonie SCD complète, anti-rejeu `O_EXCL`, anti-spoofing de type — 26 tests |
+| **3 — Pre-Flight Checklist Gate 0** | Vérification PROACTIVE des privilèges physiques avant outil sensible (`invoke_subagent`, mutation Git, élévation `sudo/su/pkexec/doas`) : runtime inscriptible, sonde capacités PASS (U-006), transcript SCD lisible ; élévation refusée sauf `TESLA_ALLOW_PRIVILEGE_ESCALATION=1` posé dans le terminal hôte | `core/hooks/antigravity/hook_10_gate0_preflight.sh` + `core/hooks/lib/tesla_preflight.py` | Décisions `deny` Exit 66 (P3) / 81 ; 9 tests. *Correction d'audit : « injection dans le Moteur Cognitif » du plan V2.5.0 = gouvernance par le verbe (violation P4) → remplacée par un intercepteur déterministe* |
+| **4 — Pivot Cloud CI/CD (SLSA)** | Attestation de provenance SLSA v0.2 (in-toto Statement v0.1) en enveloppe DSSE signée HMAC-SHA256 par le Control Plane ; substitut déterministe du `transcript.jsonl` local en CI éphémère ; clé REFUSÉE si elle vit sous la racine du workspace (P2) | `bin/slsa_attestation.py` | `generate`/`verify` : exit 0 PASS / 1 FAIL (falsification, empreinte divergente, sujet non attesté) / 66 UNKNOWN (P3 clé absente) ; 9 tests |
+
+Réparations de parité (P7) accompagnant l'audit :
+- `orchestration_gate.py::_transcript_correlation` — ordre de résolution arbitré V2.1.3
+  (ref explicite confiné → espace isolé strict → miroir local) restauré ;
+  8 preuves RETEX réparées.
+- `vigilum_gate_daemon.py` — diagnostic de dépendance sur stderr, exit 66 (P3).
+- `requirements.txt` — PyNaCl déclarée (seule dépendance externe, courtier
+  Ed25519 du Control Plane) ; 26 tests associés SKIP avec raison explicite,
+  divulgés dans le ledger du runner (`tests_skipped`, `p3_disclosure`).
+
+Codes sémantiques mobilisés (aucun nouveau code numérique — arbitrage #3 respecté) :
+`81` (D-007 usurpation/BYPASS-01), `66` (P3 UNKNOWN), `10` (schéma), `0` (succès prouvé).
+
+Manifeste : `154 + 11 = 165` tests déclarés (`manifest/test_manifest_v2.1.yaml` v2.5.1).

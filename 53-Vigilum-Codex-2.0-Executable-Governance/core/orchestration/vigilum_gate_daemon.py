@@ -19,8 +19,11 @@ try:
     import nacl.encoding
     import nacl.exceptions
 except ImportError:
-    print("Erreur: PyNaCl est requis. Installez-le avec `pip install pynacl`.")
-    sys.exit(1)
+    # V2.5.1 (audit) : diagnostic sur stderr (canal d'erreur POSIX) — le
+    # message aller sur stdout laissait les harnais de test sans cause racine.
+    print("Erreur: PyNaCl est requis. Installez-le avec `pip install -r "
+          "requirements.txt`.", file=sys.stderr)
+    sys.exit(66)  # P3 : dépendance inobservable != silence
 
 # Configuration
 SOCKET_PATH = Path(os.environ.get("VIGILUM_GATE_SOCK", "/run/vigilum-gate/gate.sock"))

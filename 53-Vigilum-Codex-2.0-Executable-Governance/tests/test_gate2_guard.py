@@ -13,6 +13,14 @@ humaine du Mission Graph) :
   - grand livre d'échange chaîné SHA-256 (tamper-evident).
 
 Stdlib uniquement, fail-closed, déterministe (--now, --issued-at).
+
+V2.5.1 (audit P3) : le courtier de délégation Ed25519
+(``vigilum_gate_daemon.py``) dépend de PyNaCl — seule dépendance externe du
+module, déclarée dans ``requirements.txt``. Si PyNaCl est absent, la
+couche daemon est INOBSERVABLE : les tests sont SKIP avec raison explicite
+(UNKNOWN-CONFINED, jamais un PASS implicite — invariant P3). La couche
+HMAC/jetons (stdlib) reste intégralement testée par ce même fichier dès
+que le harnais daemon peut démarrer.
 """
 from __future__ import annotations
 
@@ -25,6 +33,12 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+
+try:
+    import nacl.signing  # noqa: F401  — dépendance du courtier Ed25519
+    PY_NACL_AVAILABLE = True
+except ImportError:
+    PY_NACL_AVAILABLE = False
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -71,6 +85,12 @@ class Gate2GuardHarness(unittest.TestCase):
     """Socle commun : workspace éphémère + secret humain hors workspace."""
 
     def setUp(self) -> None:
+        if not PY_NACL_AVAILABLE:
+            self.skipTest(
+                "P3/UNKNOWN-CONFINED: PyNaCl absent — courtier Ed25519 "
+                "(vigilum_gate_daemon) inobservable. Installer: "
+                "pip install -r requirements.txt (V2.5.1, audit P3 : "
+                "UNKNOWN != PASS, jamais un skip silencieux).")
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.home = Path(self._tmp.name)

@@ -96,10 +96,12 @@ def run_python_suite(root: Path) -> dict[str, Any]:
     # defaults to the start dir so the dash-decorated module path never becomes
     # an import name. `-t <root>` is forbidden: it requires an importable
     # top-level dir and breaks under `53-Vigilum-Codex-2.0-...` (E4).
+    import re
     cmd = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]
     code, output = run_command(cmd, root)
     passed = 0
     failed = 0
+    skipped = 0
     for line in output.splitlines():
         if line.startswith("Ran "):
             try:
@@ -108,14 +110,26 @@ def run_python_suite(root: Path) -> dict[str, Any]:
                 pass
         if line.startswith("FAILED"):
             failed = 1
-    return {
+        # V2.5.1 (audit P3 — aucun masquage) : les skips sont comptés et
+        # divulgués dans le ledger de preuve. Un skip = dépendance ou
+        # condition INOBSERVABLE, jamais un PASS implicite.
+        match = re.search(r"skipped=(\d+)", line)
+        if match:
+            skipped = int(match.group(1))
+    result = {
         "name": "python-unittest-discovery",
         "command": " ".join(cmd),
         "exit_code": code,
         "verdict": "PASS" if code == 0 else "FAIL",
         "tests_reported": passed,
+        "tests_skipped": skipped,
         "output_tail": output,
     }
+    if skipped:
+        result["p3_disclosure"] = (
+            f"{skipped} tests SKIP (UNKNOWN-CONFINED, dépendance/condition "
+            "inobservable — jamais un PASS implicite, invariant P3)")
+    return result
 
 
 def run_bash_suite(root: Path) -> dict[str, Any]:

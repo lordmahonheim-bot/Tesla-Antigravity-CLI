@@ -6,7 +6,7 @@
 *Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
-*Version:* **2.1.0** (RETEX Hardening — 7 erreurs → 6 verrous exécutables, voir `docs/RETEX_HARDENING_2.1.md`)  
+*Version:* **2.5.1** (Orchestrator Lockdown — audit du Plan d'Intervention Correctif V2.5.0 : 4 phases déterministes, voir `docs/protocol_mapping.md` §6)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
@@ -97,6 +97,10 @@ flowchart TD
 | **Mission Closure Controller (2.1)** | `bin/mission_controller.py` | 13-level state machine evaluating MARBLE_ELIGIBILITY from on-disk evidence → `runtime/marble_eligibility.json` + `runtime/state.json`. |
 | **Marble Certificate (2.1)** | `bin/marble_certificate.py` | Cryptographic seal (local/remote commit, chain head, DAG + receipts hashes) → `CERTIFICATES/MARBLE_CERTIFICATE_*.json` mode 0444. |
 | **Evidence Ledger** | `evidence/` | Sealed SHA-256 chain head anchor and JSON validation summary. |
+| **Git Jurisdiction Guard (2.5.1)** | `core/hooks/antigravity/hook_08_anti_usurpation.sh` + `core/hooks/lib/tesla_git_guard.py` | Phase 1 of the V2.5.0 corrective plan: deterministic git-verb classifier (fail-closed on aliases, `sh -c`/`sudo`/`xargs` obfuscation, unreconciled occurrences); mutating git/gh commands are Exit 81 for every caller except `tesla-github-manager`; read-only inspection remains available to the Orchestrator. |
+| **SCD Library + Zero-Middleman (2.5.1)** | `core/hooks/lib/tesla-scd.sh`, `hook_07` (refactored), `hook_09_zero_middleman.sh` + `core/hooks/lib/tesla_zero_middleman.py` | Phase 2: Sovereign Chat Directives become the universal & exclusive validation source (transcript.jsonl read backwards via `tac`, strict phrase set, `O_EXCL` anti-replay); agents are physically forbidden from writing authorization artifacts (`.flag`, `.token`, receipts, certificates, nonces) — BYPASS-01 eradicated. |
+| **Gate 0 Pre-Flight Checklist (2.5.1)** | `core/hooks/antigravity/hook_10_gate0_preflight.sh` + `core/hooks/lib/tesla_preflight.py` | Phase 3: proactive physical-privilege checks before sensitive tools (invoke_subagent, git mutations, privilege escalation): writable runtime, capability probe PASS (U-006/P3), SCD transcript readability; escalation denied unless `TESLA_ALLOW_PRIVILEGE_ESCALATION=1` is set in the sovereign terminal. |
+| **SLSA Attestation (2.5.1)** | `bin/slsa_attestation.py` | Phase 4: SLSA Provenance v0.2 (in-toto Statement v0.1) in a DSSE envelope signed HMAC-SHA256 by the Control Plane — deterministic Gate-2 evidence substitute for ephemeral CI where the local transcript is unobservable; keys are refused inside the workspace (P2); verify is fail-closed (0 PASS / 1 FAIL / 66 UNKNOWN). |
 
 ---
 
@@ -170,6 +174,17 @@ PARITY AUDIT: EXIT CODE 0 | DRIFT: 0.00%
          mission_controller 6/6 prédicats → MARBLE_ELIGIBLE | marble_certificate SEALED 0444
 TOTAL TESTS (V2.0 + V2.1.3): 66 | PASSED: 66 | FAILED: 0
 ======================================================================
+
+[VIGILUM CODEX 2.5.1 — ORCHESTRATOR LOCKDOWN (audit du plan V2.5.0)]
+  Python suite (governance + RETEX + V2.5.1 lockdown): 154 ran, 128 PASS,
+    26 SKIP (PyNaCl broker UNKNOWN-CONFINED — explicit P3 reason, disclosed
+    in the evidence ledger; zero failures)
+  Bash hook suite: 11/11 PASS
+  Manifest (arbitrage #5, v2.5.1): 154 + 11 = 165 declared = executed
+  Repairs: 8 RETEX tests restored (arbitrage #1 transcript resolution order,
+    P7 parity repair); runner now discloses skipped tests (p3_disclosure)
+  Evidence: evidence/test_runner_SGC-EXEC-GOV-03-V251_*.json (verdict PASS)
+======================================================================
 ```
 
 ---
@@ -204,6 +219,7 @@ are documented in `docs/RETEX_HARDENING_2.1.md` and `docs/protocol_mapping.md`.
 - Python 3.12+
 - Git 2.34+
 - `jq` (command-line JSON processor)
+- `pynacl>=1.5.0` (only for the Ed25519 delegation broker `core/orchestration/vigilum_gate_daemon.py` — declared in `requirements.txt`; without it, that layer is UNKNOWN-CONFINED per P3 and its tests skip with an explicit reason; the governance core is stdlib-only)
 
 ### 1. Initializing Git Guardrails
 To bind the local repository to the Vigilum Codex git hooks:
