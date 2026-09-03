@@ -129,3 +129,24 @@ Rejets motivés du plan V2.6.0 (détail dans le verdict) :
   (V2.5.1). Numérotation V2.5.1 maintenue.
 - **« Annulation » de la Phase 4 V2.5.0** : remplacée par un déféré tracé
   (voir ci-dessus) — la suppression de l'actif casserait la Gate R.
+
+---
+
+## 8. Extension Vigilum Codex 2.6.2 — Ratification du Plan Consolidé V2.6.1
+
+Source : verdict d'audit du « PLAN D'INTERVENTION CONSOLIDÉ (V2.6.1) »
+(RENA & ChatGPT). Livrable : `OUTPUTS/Verdict_Audit_Plan_V2.6.1.md`.
+Statut : **CONVERGENCE RATIFIÉE** — chaque assertion du plan vérifiée contre
+l'état physique du dépôt (P11) correspond à l'implémentation livrée en
+V2.5.1/V2.6.1 (anti-usurpation ciblée par destination, Gate 0 sans artefact
+agent, Gate R monopole d'émission, SLSA conservée pour la signature locale,
+câblage CI différé OI-01, OI-03 pour la séparation UID/GID).
+
+| Delta / arbitrage | Composant | Preuve Matérielle |
+|---|---|---|
+| **Détection d'usurpation d'identité** (seul delta exécutable nouveau — plan Phase 1 : « blocage de toute usurpation détectée ») | `core/hooks/lib/tesla_git_guard.py::detect_identity_spoof` | Contradiction entre l'identité runtime (`TESLA_AGENT_IDENTITY`, racine de confiance) et l'identité déclarée dans le payload → deny Exit 81 **avant** toute évaluation de juridiction (même une lecture pure est refusée — P10) ; 5 tests |
+| **Axiome ratifié gravé** (« l'agent ne génère jamais sa propre preuve » + hiérarchie de confiance opérationnelle/OS) | `docs/VIGILUM_CODEX_2.0_CANONICAL_EDITION.md` (préambule) | Corollaire de P2/P11 ; garde-fous opérationnels vs séparation UID/GID (OI-03) |
+| **Formulation consolidée de l'Invariant Anti-Friction** (plan Phase 5) | `OUTPUTS/open_items_todo-Updated.md` (OI-02 v2) | Devoir positif in-chat + test de nécessité + prérogatives souveraines ; v1 supersédée, tracée (P8) |
+| **Divergence arbitrée — défense en profondeur du hook 09 maintenue** | `core/hooks/lib/tesla_zero_middleman.py` | Domaines **ET** motifs d'artefacts conservés : l'abandon des motifs (proposé par le plan pour « fragilité ») rouvrirait la falsification de quittances `receipt_*.json` et de certificats sans qu'aucune casse légitime ne soit démontrée (les outils déterministes n'empruntent pas le canal d'écriture agent — 183 tests au vert en témoignent) |
+| **Divergence arbitrée — répertoire `authority/` différé** | — (non créé) | Scope Lock (principe invoqué par le plan V2.6.0 lui-même) : bloquer un domaine inexistant est du spéculatif ; à ajouter au `FORBIDDEN_DIR_SEGMENTS` si le domaine est créé |
+| **Numérotation canonique réaffirmée** | `core/hooks/antigravity/` | 07 SCD · 08 anti-usurpation (commandes) · 09 zero-middleman (écritures) · 10 pre-flight — le plan consolidé désigne « Hook 09 » pour deux fonctions distinctes ; le canon V2.5.1 prévaut |

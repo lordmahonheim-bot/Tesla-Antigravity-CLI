@@ -134,6 +134,80 @@ class Hook08StagingTests(unittest.TestCase):
         self.assertEqual(decision["decision"], "allow")
 
 
+class IdentitySpoofDetectionTests(unittest.TestCase):
+    """V2.6.2 (plan consolidé V2.6.1, Phase 1) : « blocage de toute
+    usurpation détectée » — l'identité runtime contredit l'identité
+    déclarée => refus immédiat (Exit 81), avant toute évaluation de
+    juridiction. L'identité injectée par le runtime fait foi."""
+
+    HOOK = HOOKS_DIR / "hook_08_anti_usurpation.sh"
+
+    def payload(self, command: str, agent: str | None = None) -> dict:
+        args = {"command": command}
+        if agent:
+            args["agent_id"] = agent
+        return {"conversationId": "conv-1",
+                "toolCall": {"name": "run_command", "args": args}}
+
+    def test_env_payload_contradiction_denies_despite_claimed_jurisdiction(self) -> None:
+        # L'agent tesla-master-code (runtime) tente de se faire passer pour
+        # le titulaire de la juridiction Git dans le payload => usurpation.
+        decision = run_hook(
+            self.HOOK,
+            self.payload("git push origin main", agent="tesla-github-manager"),
+            env_extra={"TESLA_AGENT_IDENTITY": "tesla-master-code"})
+        self.assertEqual(decision["decision"], "deny")
+        self.assertIn("Exit 81", decision["reason"])
+        self.assertIn("usurpation d'identite", decision["reason"])
+        self.assertIn("tesla-master-code", decision["reason"])
+
+    def test_consistent_runtime_and_payload_identity_allowed(self) -> None:
+        decision = run_hook(
+            self.HOOK,
+            self.payload("git push origin main", agent="tesla-github-manager"),
+            env_extra={"TESLA_AGENT_IDENTITY": "tesla-github-manager"})
+        self.assertEqual(decision["decision"], "allow")
+
+    def test_payload_only_identity_still_resolves(self) -> None:
+        # Sans identité runtime, la voie payload reste l'unique signal
+        # (compatibilité V2.5.1 préservée).
+        decision = run_hook(
+            self.HOOK,
+            self.payload("git push origin main", agent="tesla-github-manager"))
+        self.assertEqual(decision["decision"], "allow")
+
+    def test_spoof_check_runs_even_for_reads(self) -> None:
+        # La détection d'usurpation précède TOUTE évaluation — même une
+        # lecture pure est refusée si l'identité est falsifiée (P10).
+        decision = run_hook(
+            self.HOOK,
+            self.payload("git status", agent="tesla-github-manager"),
+            env_extra={"TESLA_AGENT_IDENTITY": "tesla-curator-prime"})
+        self.assertEqual(decision["decision"], "deny")
+        self.assertIn("usurpation d'identite", decision["reason"])
+
+    def test_detect_identity_spoof_unit(self) -> None:
+        import os as _os
+        old = _os.environ.get("TESLA_AGENT_IDENTITY")
+        try:
+            _os.environ.pop("TESLA_AGENT_IDENTITY", None)
+            # Pas d'identité runtime => rien à contredire.
+            self.assertIsNone(git_guard.detect_identity_spoof(self.payload("ls")))
+            _os.environ["TESLA_AGENT_IDENTITY"] = "tesla-arcanis-360"
+            # Identité runtime sans déclaration payload => cohérent.
+            self.assertIsNone(git_guard.detect_identity_spoof(self.payload("ls")))
+            # Contradiction => raison d'usurpation.
+            reason = git_guard.detect_identity_spoof(
+                self.payload("ls", agent="tesla-github-manager"))
+            self.assertIsNotNone(reason)
+            self.assertIn("IDENTITY_SPOOF", reason)
+        finally:
+            if old is None:
+                _os.environ.pop("TESLA_AGENT_IDENTITY", None)
+            else:
+                _os.environ["TESLA_AGENT_IDENTITY"] = old
+
+
 # --------------------------------------------------------------------------- #
 # Phase 3 (étendue) — mission_truth.json hors d'atteinte agent                 #
 # --------------------------------------------------------------------------- #

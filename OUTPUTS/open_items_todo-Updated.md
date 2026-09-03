@@ -37,9 +37,10 @@
 
 | Champ | Valeur |
 | :--- | :--- |
-| **Statut** | `PENDING SOVEREIGN GRAVURE` — proposition de texte prête, gravure réservée au Souverain |
+| **Statut** | `PENDING SOVEREIGN GRAVURE` — texte consolidé v2 prêt (ratifié par le plan consolidé V2.6.1), gravure réservée au Souverain |
 | **Condition de réveil** | Cérémonie de gravure dans `GENESE-v1/ENGINE.md` (fichier d'identité souverain) |
-| **Texte proposé (formulation corrigée par l'audit)** | *« Toute solution proposée par l'agent qui exige de l'opérateur une action hors du chat, alors qu'une voie déterministe in-chat existe (ex. SCD), est invalide et rejetée d'office. La friction évitable est un défaut de conception agentique. En revanche, les ancrages hors-chat du Plan de Contrôle — injection de clé, cérémonies de scellement, veto d'urgence — demeurent des prérogatives souveraines : l'anti-friction lie l'agent, jamais le Souverain. »* |
+| **Texte consolidé v2 (V2.6.2 — formulation finale)** | *« Toute opération ordinaire doit être réalisable dans le chat. Une interaction hors canal n'est admissible que lorsqu'elle est techniquement nécessaire (sécurité, clés, restauration) et impossible à remplacer par une interface intégrée. La friction évitable est un défaut de conception agentique ; les ancrages de sécurité restent des prérogatives souveraines. »* |
+| **Texte v1 (V2.6.1 — formulation corrigée initiale, supersédée)** | *« Toute solution proposée par l'agent qui exige de l'opérateur une action hors du chat, alors qu'une voie déterministe in-chat existe (ex. SCD), est invalide et rejetée d'office. La friction évitable est un défaut de conception agentique. En revanche, les ancrages hors-chat du Plan de Contrôle — injection de clé, cérémonies de scellement, veto d'urgence — demeurent des prérogatives souveraines : l'anti-friction lie l'agent, jamais le Souverain. »* |
 
 ### Note d'audit
 

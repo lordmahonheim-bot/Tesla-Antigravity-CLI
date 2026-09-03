@@ -522,10 +522,8 @@ COMMAND_FIELDS = ("command", "cmd", "script", "shell_command", "bash_command",
                   "command_line", "commands")
 
 
-def resolve_caller(payload: dict[str, Any]) -> str:
-    env_identity = os.environ.get("TESLA_AGENT_IDENTITY", "").strip()
-    if env_identity:
-        return env_identity
+def claimed_identity(payload: dict[str, Any]) -> str | None:
+    """Identité DÉCLARÉE dans le payload (non fiable — fournie par l'agent)."""
     tool_call = payload.get("toolCall") or {}
     args = tool_call.get("args") or {}
     for source in (args, payload.get("caller") or {}):
@@ -534,7 +532,33 @@ def resolve_caller(payload: dict[str, Any]) -> str:
                 value = source.get(key)
                 if isinstance(value, str) and value.strip():
                     return value.strip()
-    return DEFAULT_CALLER
+    return None
+
+
+def resolve_caller(payload: dict[str, Any]) -> str:
+    """Identité effective : runtime (env, racine de confiance) > payload > défaut."""
+    env_identity = os.environ.get("TESLA_AGENT_IDENTITY", "").strip()
+    if env_identity:
+        return env_identity
+    return claimed_identity(payload) or DEFAULT_CALLER
+
+
+def detect_identity_spoof(payload: dict[str, Any]) -> str | None:
+    """V2.6.2 (plan consolidé V2.6.1, Phase 1) : détection d'usurpation.
+
+    L'identité injectée par le runtime (``TESLA_AGENT_IDENTITY``) est la
+    racine de confiance ; l'identité déclarée dans le payload est une
+    affirmation de l'agent. Si les deux se contredisent, l'agent tente
+    d'usurper une identité — refus immédiat (P10), avant toute évaluation
+    de juridiction. Retourne la raison, ou None.
+    """
+    env_identity = os.environ.get("TESLA_AGENT_IDENTITY", "").strip()
+    if not env_identity:
+        return None
+    claimed = claimed_identity(payload)
+    if claimed and claimed != env_identity:
+        return f"IDENTITY_SPOOF:runtime={env_identity} payload={claimed}"
+    return None
 
 
 def extract_command(payload: dict[str, Any]) -> str | None:
@@ -565,6 +589,11 @@ def evaluate_hook(payload: dict[str, Any]) -> dict[str, Any]:
         return {"decision": "allow"}
 
     caller = resolve_caller(payload)
+    spoof = detect_identity_spoof(payload)
+    if spoof is not None:
+        return {"decision": "deny",
+                "reason": f"Exit 81 (D-007): usurpation d'identite detectee "
+                          f"({spoof}). L'identite runtime fait foi."}
     if caller == GIT_JURISDICTION_AGENT:
         return {"decision": "allow",
                 "reason": f"Juridiction Git exclusive: {caller}"}

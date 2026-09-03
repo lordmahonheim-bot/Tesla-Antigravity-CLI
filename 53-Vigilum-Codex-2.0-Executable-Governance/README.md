@@ -6,7 +6,7 @@
 *Mission ID:* `SGC-EXEC-GOV-03` / `SGC-EXEC-GOV-03-R3` (RETEX Hardening)  
 *Ecosystem:* Tesla Antigravity / Vigilum Codex  
 *Status:* `PASS — LOCAL IMPLEMENTATION VALIDATED & AUDITED`  
-*Version:* **2.6.1** (Verdict du Plan de Haut Niveau V2.6.0 : P11 + Gate R, staging-transfer jurisdiction, deferred CI wiring — see `docs/protocol_mapping.md` §7)  
+*Version:* **2.6.2** (Ratification of the Consolidated Plan V2.6.1 — convergence verified, identity-spoof detection, ratified axiom; see `docs/protocol_mapping.md` §7-8)  
 *Core Doctrine:* **"AI Proposes, Code Validates."**
 
 ---
@@ -195,6 +195,17 @@ TOTAL TESTS (V2.0 + V2.1.3): 66 | PASSED: 66 | FAILED: 0
   New: Gate R reconcile (0/50/66), staging-transfer jurisdiction (cp/mv by
   destination), mission_truth.json agent-unwritable, deferred items traced
   (OUTPUTS/open_items_todo-Updated.md — no silent deletion, P8)
+======================================================================
+
+[VIGILUM CODEX 2.6.2 — RATIFICATION DU PLAN CONSOLIDÉ V2.6.1]
+  Convergence verified: every plan assertion matches the delivered
+  implementation (P11 correlation). One executable delta extracted:
+  identity-spoof detection (runtime/payload contradiction → Exit 81 before
+  any jurisdiction evaluation, 5 tests).
+  Python suite: 183 ran, 157 PASS, 26 SKIP (PyNaCl, disclosed P3)
+  Bash hook suite: 11/11 PASS
+  Manifest (v2.6.2): 183 + 11 = 194 declared = executed
+  Ratified axiom engraved: "the agent never generates its own evidence."
 ======================================================================
 ```
 
