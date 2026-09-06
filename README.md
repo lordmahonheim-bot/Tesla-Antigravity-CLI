@@ -192,9 +192,9 @@ MVP-GITHUB/
 * Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
 
 ## Acceptance Criteria
-* All 22 subprojects exist and are fully populated.
+* All 58 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
-* Local repository branch versioning is initialized on `feature/web-raider-mvp-v4`.
+* Local repository branch versioning is initialized on `main`.
 
 ## Final Verdict & Signature Sentence
 **VERDICT: OPERATIONAL SYSTEM STABILIZED**  
