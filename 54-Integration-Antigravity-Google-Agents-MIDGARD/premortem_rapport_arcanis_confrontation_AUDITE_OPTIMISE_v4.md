@@ -132,12 +132,12 @@ audit_chain: "v1.0 original > audit 12 anomalies > v1.0 confrontation > audit 14
 
 **Token Management and RTK**
 
-- [x] **4.** An RTK diagnostic script is executed at startup to validate interception and compression.
+- [x] **4.** An [RTK diagnostic script](../../tools/rtk_diagnostic.sh) is executed at startup to validate interception and compression.
 - [x] **5.** The quota circuit breaker is active (monitoring the token/hour consumption rate).
 
 **Alexandria Database**
 
-- [x] **6.** The alexandria_brain.db database is configured in WAL mode (PRAGMA journal_mode=WAL).
+- [x] **6.** The alexandria_brain.db database via [alexandria_backup.sh](../../tools/alexandria_backup.sh) is configured in WAL mode (PRAGMA journal_mode=WAL).
 - [x] **7.** Database consistency is validated (PRAGMA integrity_check returns ok).
 - [x] **8.** The automatic daily backup (VACUUM INTO) is configured via cron and verified.
 
@@ -148,7 +148,7 @@ audit_chain: "v1.0 original > audit 12 anomalies > v1.0 confrontation > audit 14
 
 **Authentication and Keyring**
 
-- [x] **11.** The headless keyring infrastructure is functional: dbus, gnome-keyring, libsecret-1-0 installed, and daemon active.
+- [x] **11.** The headless keyring infrastructure via [setup_keyring.sh](../../tools/setup_keyring.sh) is functional: dbus, gnome-keyring, libsecret-1-0 installed, and daemon active.
       WARNING: Unlocking the keyring with an empty password stores OAuth tokens without encryption. Acceptable ONLY on a physically isolated single-user machine like MIDGARD.
 - [x] **12.** The ANTIGRAVITY_API_KEY fallback is configured in the .env file and tested (agy auth status returns valid).
 - [x] **13.** The GCP Service Account has a valid JSON key stored outside the Git structure.
@@ -203,7 +203,7 @@ fi
 # alexandria_backup.sh - Non-blocking backup of the Alexandria database
 # Cron: 0 3 * * * /home/lord-mahonheim/bifrost/scripts/alexandria_backup.sh
 
-DB_PATH="$TESLA_ROOT/Avalon/alexandria_brain.db"
+DB_PATH="$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db"
 BACKUP_DIR="/home/lord-mahonheim/bifrost/backups/alexandria"
 DATE=$(date +%Y%m%d)
 
