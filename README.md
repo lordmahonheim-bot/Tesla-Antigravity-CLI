@@ -109,7 +109,7 @@ MVP-GITHUB/
 ├── 05-USB-Resilience/
 ├── 06-Sudo-Askpass/
 ├── 07-Strategic-Armement/
-├── 08-Integration-Antigravity-Google-Agents-MIDGARD/
+├── 08-Premortem/
 ├── 09-Github-Governance/
 ├── 10-Github-MVP-Scaffolding/
 ├── 11-Tesla-Arcanis-360-Skill/
@@ -139,22 +139,27 @@ MVP-GITHUB/
 ├── 35-Voice-Tesla/
 ├── 36-Veille-Strategique/
 ├── 37-MCP-Telegram/
-├── 38-Obsidian-Graph-Relationnel/
-├── 39-Tesla-Writing-Skills/
-├── 40-Book-To-Skill-Tesla-Writing-Skills/
-├── 41-Tesla-Eye/
+├── 38-Promotion-Tesla-Video-Director/
+├── 39-Obsidian-Graph-Relationnel/
+├── 40-Tesla-Writing-Skills/
+├── 41-Book-To-Skill-Tesla-Writing-Skills/
 ├── 42-OPRO-Grad/
-├── 43-Cluedo-Grands-Detectives-2023/
-├── 44-Tesla-Code-Auditor/
-├── 45-Architecture-Hybride-Jules/
-├── 46-Conducteur-Absolu-v3.2.1/
-├── 47-Tesla-Forge-Cloud/
-├── 48-Tesla-Github-MCP/
-├── 49-Stitch-Skills/
-├── 50-Tesla-Github-Manager/
-├── 51-CodeBase-Memory-MCP-PRO/
-├── 52-Tesla-Mirroring-Cognitif-Assimilation/
-└── 53-Vigilum-Codex-2.0-Executable-Governance/
+├── 43-Avalon-Second-Brain/
+├── 44-Tesla-Eye/
+├── 45-Cluedo-Grands-Detectives-2023/
+├── 46-Tesla-Code-Auditor/
+├── 47-Tesla-Github-MCP/
+├── 48-Stitch-Skills/
+├── 49-Tesla-Github-Manager/
+├── 50-Architecture-Hybride-Jules/
+├── 51-Conducteur-Absolu-v3.2.1/
+├── 52-Fix-Maintenance-Team-Synergy/
+├── 53-Vigilum-Codex-2.0-Executable-Governance/
+├── 54-Integration-Antigravity-Google-Agents-MIDGARD/
+├── 55-Tesla-Forge-Cloud/
+├── 56-CodeBase-Memory-MCP-PRO/
+├── 57-Tesla-Mirroring-Cognitif-Assimilation/
+└── 58-Spark-MCP-Gateway/
 ```
 
 ## Workflow Sequence
