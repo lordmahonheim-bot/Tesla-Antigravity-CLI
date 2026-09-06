@@ -19,6 +19,7 @@ L'Agent Principal ne considère jamais une tâche réussie sur la base d'une int
 1. **Evidence Chain :** Toute transition d'état doit être justifiée par une preuve physique, observable et vérifiable.
 2. **Priorité Monotone :** Une Gate aval ne peut jamais annuler un échec (`FAIL` / `BLOCK`) d'une Gate amont. Toute reprise exige une nouvelle preuve.
 3. **Producer ≠ Validator :** L'agent qui produit l'artefact n'est jamais celui qui le certifie.
+4. **Exception du Mode Dégradé :** Si l'environnement d'exécution (ex: GitHub CI) exclut légitimement des dossiers canoniques (`memory/`, `CONTEXT.md`), l'Agent **doit** déclarer un `DEGRADED_MODE`. Dans ce mode, l'absence de ces fichiers précis ne constitue plus un `FAIL` bloquant et n'autorise en aucun cas l'hallucination d'une preuve factice. L'exécution se poursuit techniquement.
 
 ---
 
@@ -79,10 +80,6 @@ L'Agent Principal ne considère jamais une tâche réussie sur la base d'une int
 ### GATE 6 : CLOSURE & EVIDENCE
 *Code terminé ≠ Code validé ≠ Code intégré ≠ Code publié.*
 * **Action :** Compilation de l'**Evidence Chain** (toutes les preuves des Gates 0 à 5) dans un artefact final.
-* **Sanctuarisation Publique (Loi d'Exportation Github) :** 
-  - Tout MVP publié sur le compte GitHub public DOIT obligatoirement être rédigé en **ANGLAIS**.
-  - La rédaction doit conserver une profondeur technique absolue (Règle 14: Anti-Distillation). 
-  - Cette tâche de formatage, rédaction de README MVP et publication est **exclusivement déléguée à `tesla-github-manager`**. `tesla-writing-skills` est interdit d'intervention sur les MVPs publics.
 * **Sanctuarisation :** Le push distant est strictement subordonné à l'obtention explicite du feu vert de Lord Mahonheim (`PUSH_REQUEST.md`). Apposition des Badges MVP.
 * **Vérification Finale :** Double Commit & Push (local + MVP-GITHUB) vérifié via `git status`.
 * **Décision :** La boucle est close lorsque toutes les conditions de clôture sont satisfaites et que l'Evidence Chain est complète, vérifiable et traçable. `MAIN_RENDUE_A_MAHONHEIM=1`.
@@ -96,13 +93,13 @@ L'Agent Principal ne considère jamais une tâche réussie sur la base d'une int
 # OUTPUTS/CONTRACTS/CONTRACT_[AGENT]_[ID].yaml
 agent_identity: "tesla-master-code"
 mission_atomic: "Implémenter X dans Y - Une seule tâche"
-project_root_absolu: "/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/45-XXX/"
+project_root_absolu: "$TESLA_ROOT/MVP-GITHUB/45-XXX/"
 fichiers_autorises: ["README.md", "SKILL.md"]
-fichiers_interdits: ["/home/lord-mahonheim/bifrost/tesla/memory/*", "/home/lord-mahonheim/bifrost/tesla/.agents/skills/*/SKILL.md"]
+fichiers_interdits: ["$TESLA_ROOT/memory/*", "$TESLA_ROOT/.agents/skills/*/SKILL.md"]
 operations_autorisees: ["write_file", "read_file", "list_dir", "lsp_diagnostics", "run_command ls"]
 operations_interdites: ["git push", "ask_permission", "read_file sans rg préalable 60k lignes"]
 conditions_arret: {lsp_errors_max: 0, secret_scan: "passed", budget_tokens_max: 15000, rollback_disponible: true}
-checkpoint_format: "/home/lord-mahonheim/bifrost/tesla/OUTPUTS/CHECKPOINT_[AGENT]_[ID].yaml"
+checkpoint_format: "$TESLA_ROOT/OUTPUTS/CHECKPOINT_[AGENT]_[ID].yaml"
 tool_dependencies: ["rg", "lsp_diagnostics", "scan-secrets.sh"]
 circuit_breaker: {max_retries: 3}
 grace_period: 15 # secondes
@@ -117,7 +114,7 @@ status: "SUCCESS" # SUCCESS | PARTIAL | FAIL
 workdir_respected: true
 baseline_fingerprint_checked: true
 stale_state: false
-files_created: ["/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/45-XXX/README.md"]
+files_created: ["$TESLA_ROOT/MVP-GITHUB/45-XXX/README.md"]
 files_modified: []
 lsp_diagnostics: {errors: 0, warnings: 0, proof: "pyright output hash abc123"}
 secret_scan: {passed: true, tool: "scan-secrets.sh"}
@@ -168,18 +165,3 @@ Fingerprint: FINGERPRINT:abc:def:2026-08-09T...
 - Double Commit: local [hash], MVP-GITHUB [hash]
 - Badges: Présents
 ```
-
-### D. Registre Exhaustif des Agents d'Élite (La Team Synergy)
-*Pour garantir un Broker Pattern (Gate 3) parfait, l'Orchestrateur doit obligatoirement respecter ce registre des délégations strictes :*
-1. **`tesla-team-synergy`** : Orchestrateur de Missions Complexes (Génère le DAG, PLAN.md, et Capability Scoring).
-2. **`tesla-arcanis-360`** : Deep Research, Structuration fondamentale, Architecture système.
-3. **`tesla-curator-prime`** : Gardien de la Mémoire Canonique, Indexation, Curation et Certification (SGC/SGP).
-4. **`tesla-master-code`** : Ingénierie logicielle pure, Implémentation technique, câblage et scripts complexes.
-5. **`tesla-github-manager`** : **Exclusivité** sur la création des MVPs publics, rédaction des READMEs en **ANGLAIS** sans distillation, et gestion des commits/pushs vers les dépôts distants.
-6. **`tesla-premortem`** : Évaluateur de risques, Red Teaming, Analyse des failles avant exécution (Shift-Left).
-7. **`tesla-writing-skills`** : Rédaction de la documentation **interne**, optimisation des Skills, TDD de compétences (Documentations francophones).
-8. **`tesla-code-auditor`** : Validation impartiale du code (LSP Self-Healing, Gatekeeper 4 niveaux).
-9. **`tesla-loop-orchestrator`** : Moteur d'exécution asynchrone (Boucle Act-Verify-Learn-Repeat).
-10. **`tesla-web-raider`** : Navigation autonome avancée, Veille et Recherche externe poussée.
-11. **`tesla-reddit-commander`** : Automatisation et publication ciblée sur Reddit.
-12. **`tesla-video-director`** : Conception et production vidéo.

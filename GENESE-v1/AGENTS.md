@@ -68,6 +68,12 @@ Toute mission suit désormais de manière stricte et algorithmique les 7 Gates d
 **Règle Zéro absolue : NO PROOF, NO PASS (Fail-Closed).**
 Aucune étape ne peut être ignorée, et chaque étape requiert une preuve physique (Evidence Chain).
 
+> [!TIP]
+> **EXCEPTION EXPLICITE : LE MODE DÉGRADÉ (Degraded Mode)**
+> Si l'Agent s'exécute dans un environnement où le dossier local `/memory/` ou d'autres fichiers de gouvernance (`CONTEXT.md`, `.agents/`) sont légitimement absents (par exemple sur un dépôt public cloné `MVP-GITHUB` ou dans une CI/CD) :
+> **Interdiction d'halluciner ou de bloquer le système.** L'Agent doit officiellement déclarer son passage en **Mode Dégradé**. Il contourne la vérification des "Gates" manquantes, ne fige pas l'exécution pour "No proof", et se concentre strictement sur l'exécution du code et la résolution de la tâche.
+
+
 ------------------------------------------------------------------------
 
 # 3. Doctrine Force-Tooling
@@ -197,12 +203,6 @@ AGENTS garantit :
 > Il produit un **Artefact Déclaratif (Requête d'Exécution)** dans `/OUTPUTS` et rend la main.
 > C'est l'Orchestrateur (Tesla), détenteur des droits absolus, qui valide et exécute physiquement cet artefact de manière contrôlée.
 
-> [!IMPORTANT]
-> **RÈGLE N°7.3 : Anti-Hallucination des Cloud Workers (Jules)**
-> 
-> L'Orchestrateur (Tesla) a l'interdiction absolue de fournir des chemins système absolus (ex: `/home/lord-mahonheim/...`) aux Cloud Workers asynchrones comme Jules.
-> Cette pratique déclenche des faux positifs de violation de périmètre et des effondrements de contexte (Context Collapse) au niveau du Guardrail distant. L'Orchestrateur a l'obligation mécanique de formuler ses requêtes en utilisant **strictement des chemins relatifs** au dépôt local cible. Le CLI `tesla-jules` gère le pontage.
-
 ------------------------------------------------------------------------
 
 # 8. Contrat de délégation
@@ -248,14 +248,14 @@ La qualité de Tesla dépend de la qualité de cette orchestration.
 
 # 11. Système de Gestion de Chantiers (SGC)
 
-Le dossier [Gestion-de-Chantiers/](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/) est régi par le **Système de Gestion de Chantiers (SGC)**. Il régit la traçabilité complète de chaque projet, de son ouverture jusqu'à son archivage immuable.
+Le dossier [Gestion-de-Chantiers/](file://$TESLA_ROOT/Gestion-de-Chantiers/) est régi par le **Système de Gestion de Chantiers (SGC)**. Il régit la traçabilité complète de chaque projet, de son ouverture jusqu'à son archivage immuable.
 
 Dès que Lord Mahonheim formule la phrase *« J'ouvre un chantier [NOM] »*, la séquence opérationnelle suivante est déclenchée :
 
 1. **Cadrage** : Poser immédiatement 2 à 3 questions rapides de cadrage (périmètre, objectif cible, dépendances).
-2. **Création physique** : Générer le cahier des charges nommé `[NOM-DU-CHANTIER]_v1.0_AAAA-MM-JJ.md` dans le dossier [Gestion-de-Chantiers/](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/) en respectant la structure obligatoire en 11 sections.
-3. **Tableau de bord** : Mettre à jour le fichier de suivi central [INDEX.md](file:///home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/INDEX.md) (statut initial : 🟢 Ouvert).
-4. **Ancrage** : Mettre à jour l'ancre cognitive [PROJECT_STATE.md](file:///home/lord-mahonheim/bifrost/tesla/memory/PROJECT_STATE.md).
+2. **Création physique** : Générer le cahier des charges nommé `[NOM-DU-CHANTIER]_v1.0_AAAA-MM-JJ.md` dans le dossier [Gestion-de-Chantiers/](file://$TESLA_ROOT/Gestion-de-Chantiers/) en respectant la structure obligatoire en 11 sections.
+3. **Tableau de bord** : Mettre à jour le fichier de suivi central [INDEX.md](file://$TESLA_ROOT/Gestion-de-Chantiers/INDEX.md) (statut initial : 🟢 Ouvert).
+4. **Ancrage** : Mettre à jour l'ancre cognitive [PROJECT_STATE.md](file://$TESLA_ROOT/memory/PROJECT_STATE.md).
 5. **Indexation** : Indexer le document dans la base de recherche locale d'Alexandria.
 <!-- trigger sync -->
 <!-- trigger 2 -->
@@ -285,7 +285,7 @@ L'Agent a l'obligation stricte de :
 
 # 14. Protocole d'Harmonisation de la Source de Vérité (Dossier `/memory`)
 
-La source de vérité absolue est le répertoire `/home/lord-mahonheim/bifrost/tesla/memory` et l'ensemble des fichiers qui y figurent. 
+La source de vérité absolue est le répertoire `$TESLA_ROOT/memory` et l'ensemble des fichiers qui y figurent. 
 Tous ces fichiers doivent être bien alignés avec l'état actuel de l'écosystème de Tesla et Antigravity CLI. Ils doivent refléter un état à jour et une harmonie parfaite.
 
 > [!IMPORTANT]
