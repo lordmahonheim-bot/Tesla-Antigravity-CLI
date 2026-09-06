@@ -168,7 +168,7 @@ L'implémentation physique s'effectue en 5 phases successives, classées par ord
   1. Modifier le script d'initialisation de base de données de l'écosystème (`memory/db_init.py`) pour y intégrer les structures relationnelles `loop_executions` et `loop_iterations` (DDL version 2.0).
   2. Lancer la mise à jour physique de la base SQLite locale.
   3. Mettre à jour l'ancre cognitive générale `PROJECT_STATE.md` pour marquer le lancement du chantier.
-* **Livrables :** Tables DDL opérationnelles dans `/home/lord-mahonheim/bifrost/tesla/database/alexandria_brain.db`.
+* **Livrables :** Tables DDL opérationnelles dans `$TESLA_ROOT/database/alexandria_brain.db`.
 * **Vérification :** Commande `sqlite3 database/alexandria_brain.db ".schema loop_executions"` retournant la structure attendue.
 
 ### Phase 2 : Développement du Gardien Technique (`tesla-code-auditor`)

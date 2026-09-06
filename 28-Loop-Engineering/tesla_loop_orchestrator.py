@@ -8,9 +8,9 @@ import time
 import yaml
 from datetime import datetime
 
-DB_PATH = "/home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db"
-OUTPUTS_DIR = "/home/lord-mahonheim/bifrost/tesla/OUTPUTS"
-REPO_DIR = "/home/lord-mahonheim/bifrost/tesla"
+DB_PATH = "$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db"
+OUTPUTS_DIR = "$TESLA_ROOT/OUTPUTS"
+REPO_DIR = "$TESLA_ROOT"
 
 def execute_db_query(query, params=(), commit=False, fetchone=False, fetchall=False):
     max_retries = 5

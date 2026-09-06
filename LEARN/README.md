@@ -27,9 +27,9 @@ Pour sanctuariser la connaissance et la rendre globale, l'apprentissage doit obl
 Afin d'automatiser cet échappement, l'utilisation de ce répertoire est régie de manière stricte par le Vigilum Codex :
 
 > **[VC-MEM-06] Sanctuaire d'Acquisition Cognitive (/LEARN)**
-> Le répertoire `/home/lord-mahonheim/bifrost/tesla/memory/LEARN/` est officiellement érigé en sous-domaine canonique de la source de vérité.
+> Le répertoire `$TESLA_ROOT/memory/LEARN/` est officiellement érigé en sous-domaine canonique de la source de vérité.
 > 
-> 1. **Bypass du Silo Mémoriel (Routage Absolu) :** Lors de l'exécution d'une commande `/Learn`, l'Agent a l'interdiction de se contenter de générer un artéfact d'interface standard (qui finit piégé dans le dossier `brain/`). Il DOIT obligatoirement utiliser un appel système `write_to_file` pointant vers le chemin absolu du sanctuaire : `/home/lord-mahonheim/bifrost/tesla/memory/LEARN/`.
+> 1. **Bypass du Silo Mémoriel (Routage Absolu) :** Lors de l'exécution d'une commande `/Learn`, l'Agent a l'interdiction de se contenter de générer un artéfact d'interface standard (qui finit piégé dans le dossier `brain/`). Il DOIT obligatoirement utiliser un appel système `write_to_file` pointant vers le chemin absolu du sanctuaire : `$TESLA_ROOT/memory/LEARN/`.
 > 2. **Ségrégation Historique (Anti-Semantic Bloat) :** Le sanctuaire doit abriter une architecture d'archivage (`ARCHIVES/`). Le répertoire racine `/LEARN/` est réservé aux apprentissages "frais" (en cours d'assimilation). Dès qu'une leçon est intégrée à la *Cartographie Intégrale*, le fichier source brut doit être basculé dans les archives pour maintenir la clarté cognitive de l'écosystème.
 
 ---

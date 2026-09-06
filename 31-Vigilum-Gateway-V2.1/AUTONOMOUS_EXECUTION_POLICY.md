@@ -6,10 +6,10 @@ This policy governs the behavior of the Orchestrator (Tesla) and all instantiate
 
 ## 1. Pre-Authorized Workspace Perimeter
 In `/goal` mode, the Antigravity system implicitly considers the following paths to be under an **`Allow`** policy by default:
-- `/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/*`
-- `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/*`
-- `/home/lord-mahonheim/bifrost/tesla/memory/*`
-- `/home/lord-mahonheim/bifrost/tesla/.agents/skills/*`
+- `$TESLA_ROOT/MVP-GITHUB/*`
+- `$TESLA_ROOT/OUTPUTS/*`
+- `$TESLA_ROOT/memory/*`
+- `$TESLA_ROOT/.agents/skills/*`
 
 The operations `write_file`, `read_file`, `mkdir`, `cp`, and `mv` are authorized within these paths without human intervention.
 

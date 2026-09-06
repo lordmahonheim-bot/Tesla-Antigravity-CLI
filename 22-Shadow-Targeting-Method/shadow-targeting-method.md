@@ -30,7 +30,7 @@ To preserve the modularity of the ecosystem, the following rule applies:
     injection_type: shadow-targeted
     target_subagent: self
     ```
-*   **Database Injection Flag**: In the [alexandria_brain.db](file:///home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db) database, the `subagents_skills` table must carry the value `injection_method = 'shadow-targeting'`.
+*   **Database Injection Flag**: In the [alexandria_brain.db](file://$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db) database, the `subagents_skills` table must carry the value `injection_method = 'shadow-targeting'`.
 
 ---
 

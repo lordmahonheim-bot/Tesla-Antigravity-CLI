@@ -9,7 +9,7 @@
 | Date | 2026-06-28 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Workspace Path | `$TESLA_ROOT` |
 | NTFS Driver | `ntfs3` (Kernel native) |
 | Device Node | `/dev/sdb1` |
 

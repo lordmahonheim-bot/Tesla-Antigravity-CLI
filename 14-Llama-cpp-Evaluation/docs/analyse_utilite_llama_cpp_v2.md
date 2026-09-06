@@ -87,7 +87,7 @@ In-depth analysis of the document and its practical application on `MIDGARD` (8 
 To integrate these concepts into Lord Mahonheim's infrastructure without installing local AI models:
 
 ### Scenario A: Cloud-Local Vector Indexing of Alexandria (Recommended)
-1.  **Generation**: When modifying an Avalon file, the indexing script [sync_brain.py](file:///home/lord-mahonheim/bifrost/tesla/sandbox/scripts/sync_brain.py) transmits the text content to the Google Gemini cloud embeddings API via the Antigravity CLI.
+1.  **Generation**: When modifying an Avalon file, the indexing script [sync_brain.py](file://$TESLA_ROOT/sandbox/scripts/sync_brain.py) transmits the text content to the Google Gemini cloud embeddings API via the Antigravity CLI.
 2.  **Storage**: The returned vectors are written locally into the SQLite table `fts_vault_index` enriched with vector coordinate columns.
 3.  **Querying**: Semantic search is performed by locally comparing the vector coordinates (by cosine similarity via a lightweight native Python script), without installing any artificial intelligence model on `MIDGARD`.
 

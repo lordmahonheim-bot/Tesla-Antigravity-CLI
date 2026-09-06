@@ -47,7 +47,7 @@ if ! tesla_scd_is_valid_directive "$CLEAN_TEXT"; then
 fi
 
 ROOT_DIR="${TESLA_ROOT:-$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)}"
-if [ -z "$ROOT_DIR" ]; then ROOT_DIR="/home/lord-mahonheim/bifrost/tesla"; fi
+if [ -z "$ROOT_DIR" ]; then ROOT_DIR="$TESLA_ROOT"; fi
 
 # 6. Atomic O_EXCL Anti-Replay (Master-Code) — consommation SCD
 if ! tesla_scd_consume "$SCD_STEP_IDX" "$ROOT_DIR"; then

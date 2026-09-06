@@ -58,7 +58,7 @@ To prohibit any destructive action or autonomous software drift, the following e
 ## 4. Pillar 3: Documentation and Lifecycle (Obsidian Avalon)
 
 Every engineering action must be documented to enrich Alexandria's long-term memory:
-1. **Intervention Reports:** Systematic writing in Markdown format under `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/`.
+1. **Intervention Reports:** Systematic writing in Markdown format under `$TESLA_ROOT/OUTPUTS/`.
 2. **Technical Sheets (Artifacts):** Documentation of each infrastructure script in `Avalon/01-Library/Artefacts/` with the tag `status: valid` for autonomous documentation.
 3. **Taxonomy Registry:** Maintenance of strict tagging (e.g., `#type/concept`, `#status/to-be-validated`, `#technical/system`) to facilitate access via Lord Mahonheim's Dataview queries.
 

@@ -24,7 +24,7 @@ tool_dependencies:
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
 circuit_breaker:
   max_retries: 3
 ---
@@ -963,7 +963,7 @@ This section documents the external references, industry best practices, and pri
 
 ## Règle Absolue de Livraison (SGC)
 > [!IMPORTANT]
-> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `$TESLA_ROOT/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
 
 ---
 

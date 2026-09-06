@@ -11,8 +11,8 @@
 | Date | 2026-07-03 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
-| Sandbox Path | `/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB` |
+| Workspace Path | `$TESLA_ROOT` |
+| Sandbox Path | `$TESLA_ROOT/MVP-GITHUB` |
 
 ## Important Security Notice
 This project automates the sanitization and replication of local working environments into public repositories. It excludes private credentials, GPG configurations, SSH keys, databases, and local sandbox cache directories to ensure compliance with security and privacy requirements.

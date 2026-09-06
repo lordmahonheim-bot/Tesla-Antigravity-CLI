@@ -16,4 +16,4 @@ Using the Premortem approach:
 
 ## Audit report template
 This module provides a standard markdown audit template to run premortems on any software module or organizational system.
-The template file is located at [premortem_template.md](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/08-Premortem-Diagnostic/templates/premortem_template.md).
+The template file is located at [premortem_template.md](file://$TESLA_ROOT/MVP-GITHUB/08-Premortem-Diagnostic/templates/premortem_template.md).

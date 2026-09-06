@@ -55,16 +55,16 @@ The hybrid search is accelerated by **35%**, dropping from **310 ms** to **200 m
 
 ### 4.1 SQLite WAL Relational Modeling (4 Tables)
 The `database/alexandria_brain.db` database is configured in WAL (`Write-Ahead Logging`) mode to allow fast concurrent reads during writes.
-- [database_manager.py](file:///home/lord-mahonheim/bifrost/tesla/core/database_manager.py): Manages the database lifecycle.
-- [embeddings.py](file:///home/lord-mahonheim/bifrost/tesla/core/embeddings.py): Manages secure network calls to the Gemini API with robust rate limits handling (3x exponential backoff) and automatic chunking into sublists (batching by 96).
-- [security.py](file:///home/lord-mahonheim/bifrost/tesla/core/security.py): The `PIIScrubber` module applies compiled regexes to sanitize chunks before any transmission (redacting emails, JWTs, Google/OpenAI API keys, GitHub tokens, and generic secrets).
+- [database_manager.py](file://$TESLA_ROOT/core/database_manager.py): Manages the database lifecycle.
+- [embeddings.py](file://$TESLA_ROOT/core/embeddings.py): Manages secure network calls to the Gemini API with robust rate limits handling (3x exponential backoff) and automatic chunking into sublists (batching by 96).
+- [security.py](file://$TESLA_ROOT/core/security.py): The `PIIScrubber` module applies compiled regexes to sanitize chunks before any transmission (redacting emails, JWTs, Google/OpenAI API keys, GitHub tokens, and generic secrets).
 
 ### 4.2 Privacy Gate and Offline Robustness
 - **Privacy Gate**: The indexer detects the `confidential: true` or `private: true` tag in the document's YAML frontmatter, or checks if the file is located in the protected `/02-Areas/Confidentiel/` folder. If so, the file is flagged with `confidential = 1` in SQLite and **no network call to Gemini is issued**. The document is indexed locally only via FTS5.
 - **SQLite Retry Queue (Offline Mode)**: If the Gemini API is unreachable or returns a quota error, the document indexation does not crash. Its text chunks are saved in the `pending_embeddings` table for later reprocessing. The hybrid search seamlessly and transparently degrades to pure local FTS5 BM25 mode.
 
 ### 4.3 Ephemeral llama.cpp Tooling
-- [llama_quantize_pack.py](file:///home/lord-mahonheim/bifrost/tesla/tools/llama_quantize_pack.py): Allows converting and quantizing models. It strictly adheres to the ephemeral isolation doctrine (verification of 8 GB free disk space, isolated `/tmp/llama-pack-*` temporary folder unconditionally self-cleaned via `finally` block, `llama-quantize` execution in a subprocess, and final validation of the `GGUF` binary header).
+- [llama_quantize_pack.py](file://$TESLA_ROOT/tools/llama_quantize_pack.py): Allows converting and quantizing models. It strictly adheres to the ephemeral isolation doctrine (verification of 8 GB free disk space, isolated `/tmp/llama-pack-*` temporary folder unconditionally self-cleaned via `finally` block, `llama-quantize` execution in a subprocess, and final validation of the `GGUF` binary header).
 
 ---
 

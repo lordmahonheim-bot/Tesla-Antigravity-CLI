@@ -1,7 +1,7 @@
 #!/bin/bash
 # git_backup.sh - Effectue un commit automatique de sauvegarde sur le dépôt local du Vault Avalon.
 
-VAULT_DIR="/home/lord-mahonheim/bifrost/tesla/Avalon"
+VAULT_DIR="$TESLA_ROOT/Avalon"
 
 if [ ! -d "$VAULT_DIR/.git" ]; then
     echo "[!] Dépôt Git introuvable dans $VAULT_DIR."

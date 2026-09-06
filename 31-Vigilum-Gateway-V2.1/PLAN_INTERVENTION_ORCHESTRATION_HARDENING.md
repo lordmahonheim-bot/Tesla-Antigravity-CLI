@@ -49,7 +49,7 @@ This plan sequences the exact actions required to deploy the Vigilum Gateway V2.
 *(The Low-Code approach by Apodex)*
 
 - **Securing the Antigravity Workspace:**
-  - Verify that the paths `/home/lord-mahonheim/bifrost/tesla/`, `/MVP-GITHUB/`, and `/OUTPUTS/` are explicitly declared under a default `Allow` policy.
+  - Verify that the paths `$TESLA_ROOT/`, `/MVP-GITHUB/`, and `/OUTPUTS/` are explicitly declared under a default `Allow` policy.
 - **Creation of the Autonomous Policy File:**
   - Draft `AUTONOMOUS_EXECUTION_POLICY.md` detailing the `/goal` profile (limits, absolute exceptions such as `git push` without human validation, etc.).
 

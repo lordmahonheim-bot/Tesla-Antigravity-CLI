@@ -17,7 +17,7 @@ def clean_absolute_paths(text):
     if not text:
         return text
     # Replace absolute home path with relative markdown workspace path dynamically
-    for prefix in (WORKSPACE + "/", "/home/lord-mahonheim/bifrost/tesla/", "/home/lord-mahonheim/"):
+    for prefix in (WORKSPACE + "/", "$TESLA_ROOT/", "/home/lord-mahonheim/"):
         text = text.replace(prefix, "")
     return text
 

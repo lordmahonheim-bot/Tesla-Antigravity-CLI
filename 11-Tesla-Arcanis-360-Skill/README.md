@@ -11,7 +11,7 @@
 | Date | 2026-07-03 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Workspace Path | `$TESLA_ROOT` |
 | Skill Path | `.agents/skills/tesla-arcanis-360` |
 
 ## Important Security Notice

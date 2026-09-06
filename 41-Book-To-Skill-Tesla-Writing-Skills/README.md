@@ -14,7 +14,7 @@
 ### Installation
 Clone and symlink the skill to your Antigravity skills directory:
 ```bash
-cd /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/40-Book-To-Skill-Tesla-Writing-Skills
+cd $TESLA_ROOT/MVP-GITHUB/40-Book-To-Skill-Tesla-Writing-Skills
 ln -s $(pwd) ~/.gemini/config/plugins/tesla-skills/skills/book-to-skill
 ```
 

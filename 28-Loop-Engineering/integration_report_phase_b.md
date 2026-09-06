@@ -16,7 +16,7 @@ In accordance with the Rule 20 directive, the technical implementation of MVP 28
    - **DELAY**: Reinject feedback, increment iteration counter (Max: 3).
    - **BLOCK**: Execute Git rollback (`git checkout HEAD~1 -- .`), generate `block_report.md` report in `OUTPUTS/`.
 4. **SQLite Persistence**:
-   - The v2.0 schema was initialized on `/home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db`.
+   - The v2.0 schema was initialized on `$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db`.
    - Created `loop_executions` (tracks loop statuses) and `loop_iterations` (tracks intra-loop iterations) tables.
 5. **Tesla Governance Gateway (TGG) Integration**:
    - Verified non-duplication of `loop_id`.

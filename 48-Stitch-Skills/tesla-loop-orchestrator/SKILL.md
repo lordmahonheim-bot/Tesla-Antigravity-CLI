@@ -13,7 +13,7 @@ tool_dependencies:
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
 circuit_breaker:
   max_retries: 3
 ---
@@ -146,12 +146,12 @@ If `tesla-loop-orchestrator` must be uninstalled, execute the following actions:
 2. **Log & Backup Purge**:
    Delete backup and loop directories:
    ```bash
-   rm -rf /home/lord-mahonheim/bifrost/tesla/.runtime/backups/
-   rm -rf /home/lord-mahonheim/bifrost/tesla/.runtime/loops/
+   rm -rf $TESLA_ROOT/.runtime/backups/
+   rm -rf $TESLA_ROOT/.runtime/loops/
    ```
 3. **Remove Skill Directory**:
    ```bash
-   rm -rf /home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-loop-orchestrator/
+   rm -rf $TESLA_ROOT/.agents/skills/tesla-loop-orchestrator/
    ```
 4. **Verify Git Tree**: Run `git status` to ensure a clean workspace.
 

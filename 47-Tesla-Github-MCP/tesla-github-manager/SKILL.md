@@ -25,7 +25,7 @@ tool_dependencies:
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
     - "/home/lord-mahonheim/bifrost/MVP-GITHUB/*"
 circuit_breaker:
   max_retries: 3
@@ -67,7 +67,7 @@ circuit_breaker:
 
 | Rule | Behavior |
 |---|---|
-| **Creuset Containment** | Any testing and exploratory execution → **STRICTLY** `/home/lord-mahonheim/bifrost/tesla/sandboxes/creuset` |
+| **Creuset Containment** | Any testing and exploratory execution → **STRICTLY** `$TESLA_ROOT/sandboxes/creuset` |
 | **Remote Push** | Requires **explicit and prior** permission from Lord Mahonheim before any `git push` |
 | **Critical Actions** | Any deletion, rename, or configuration change → prepare the action + request validation |
 | **Autonomous /goal** | Modular planning, autonomous resolution of sub-steps, escalation only at security checkpoints |
@@ -121,7 +121,7 @@ Always structure documentation from the most critical to the most detailed:
 
 > [!CAUTION]
 > **STRICT VALIDATION GATE**: Before ANY commit of a README or documentation containing Mermaid diagrams (especially for MVPs), you MUST imperatively execute the following validation script:
-> `bash /home/lord-mahonheim/bifrost/tesla/.agents/scripts/mermaid_validator.sh <file.md>`
+> `bash $TESLA_ROOT/.agents/scripts/mermaid_validator.sh <file.md>`
 > 
 > If the script returns an error, you MUST correct the Mermaid syntax before proceeding with the commit. Zero tolerance for broken diagrams.
 
@@ -972,11 +972,11 @@ graph LR
 
 ```bash
 # Check status of both spaces
-git -C /home/lord-mahonheim/bifrost/tesla status
+git -C $TESLA_ROOT status
 git -C /home/lord-mahonheim/bifrost/MVP-GITHUB status
 
 # Synchronize tesla (after permission)
-git -C /home/lord-mahonheim/bifrost/tesla push origin main
+git -C $TESLA_ROOT push origin main
 
 # Synchronize MVP-GITHUB (after permission)
 git -C /home/lord-mahonheim/bifrost/MVP-GITHUB push origin main
@@ -1064,7 +1064,7 @@ graph TD
 ## 📤 Absolute Delivery Rule (SGC)
 
 > [!IMPORTANT]
-> **Absolutely all deliverables, reports, plans, and audits** produced by `tesla-github-manager` must be physically stored in the directory `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria).
+> **Absolutely all deliverables, reports, plans, and audits** produced by `tesla-github-manager` must be physically stored in the directory `$TESLA_ROOT/OUTPUTS`, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria).
 >
 > **`OUTPUTS` is the only delivery airlock.** No report must remain in `/tmp`, in the current working directory, or in the Creuset without migration to OUTPUTS.
 

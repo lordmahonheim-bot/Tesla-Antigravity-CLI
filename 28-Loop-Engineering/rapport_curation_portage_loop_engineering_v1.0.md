@@ -134,7 +134,7 @@ Le SDK Antigravity actuel impose des contraintes sur le cycle de vie des session
 Pour intégrer le Loop Engineering au sein de nos Skills et sous-agents Python sans dépendances externes, nous recommandons le déploiement d'une architecture à trois composants : un Skill local, un Orchestrateur Python natif, et une extension du schéma de base de données Alexandria.
 
 ### 5.1 Spécification du Skill Local : `tesla-loop-engineering`
-Ce Skill doit être créé sous `/home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-loop-engineering/SKILL.md`. Il a pour rôle de contraindre le format de pensée et de sortie de l'agent lorsqu'il est engagé dans un cycle itératif.
+Ce Skill doit être créé sous `$TESLA_ROOT/.agents/skills/tesla-loop-engineering/SKILL.md`. Il a pour rôle de contraindre le format de pensée et de sortie de l'agent lorsqu'il est engagé dans un cycle itératif.
 
 #### Contenu Recommandé du Système d'Instructions (`SKILL.md`) :
 ```markdown

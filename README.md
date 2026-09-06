@@ -12,7 +12,7 @@
 | Date | 2026-06-28 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Workspace Path | `$TESLA_ROOT` |
 | Python Version | 3.10+ |
 | Node.js Version | 18+ |
 | SQLite Version | 3.37+ |
@@ -39,7 +39,7 @@ This repository acts as a public MVP release of the core workflow automation and
 
 ## Problem Statement
 In previous iterations, the AI agent functioned without clear local boundaries. This resulted in multiple system level errors:
-1. **Broken local paths:** Hardcoded paths (`/home/lord-mahonheim/bifrost/tesla`) rendered scripts non-portable.
+1. **Broken local paths:** Hardcoded paths (`$TESLA_ROOT`) rendered scripts non-portable.
 2. **Context Saturation:** Linear directory sweeps overloaded the model's token cache, leading to high latency and search failures.
 3. **Authentication blocks:** Background commands froze due to missing TTY prompts, and git operations were rejected due to unbound SSH key permissions.
 4. **Isolated tools:** Scripts were built in isolation without common imports, causing naming collisions and dependency breakage.

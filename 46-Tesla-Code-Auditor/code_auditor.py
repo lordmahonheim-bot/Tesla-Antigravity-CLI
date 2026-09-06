@@ -49,7 +49,7 @@ if __name__ == "__main__":
     
     audit_result = run_audits(args.manifest)
     
-    output_dir = "/home/lord-mahonheim/bifrost/tesla/OUTPUTS"
+    output_dir = "$TESLA_ROOT/OUTPUTS"
     os.makedirs(output_dir, exist_ok=True)
     verdict_path = os.path.join(output_dir, "audit_verdict.json")
     

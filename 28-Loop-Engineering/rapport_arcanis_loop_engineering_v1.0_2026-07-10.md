@@ -83,7 +83,7 @@ L'orchestrateur Python `tesla_loop_orchestrator.py` gère les transitions logiqu
 ### §C.1 — Faits Shadow Vérifiés
 * **Instabilité de Semgrep en local** : Semgrep n'est actuellement pas installé dans le dépôt virtuel local `.venv/bin/` sur la machine MIDGARD [FAIT]. Les tentatives d'appel direct échoueront tant que le binaire ou le package n'est pas provisionné localement.
 * **Hermétisme de la Sandbox MIDGARD** : MIDGARD applique le mode `CODE_ONLY` qui interdit tout accès réseau externe sortant [FAIT]. L'installation dynamique à la volée de dépendances NPM ou Python par l'orchestrateur ou la CLI Loopy est impossible.
-* **Absence des tables Alexandria** : La base de données SQLite active `/home/lord-mahonheim/bifrost/tesla/database/alexandria_brain.db` ne possède pas encore les tables `loop_execution` et `loop_iterations` requises pour la persistance de l'état des boucles [FAIT].
+* **Absence des tables Alexandria** : La base de données SQLite active `$TESLA_ROOT/database/alexandria_brain.db` ne possède pas encore les tables `loop_execution` et `loop_iterations` requises pour la persistance de l'état des boucles [FAIT].
 * **Layout existant de l'Orchestrateur** : Le fichier `.agents/orchestrator_loop_eng/PROJECT.md` spécifie déjà l'arborescence cible pour les scripts et configurations, actant le choix de la co-location au sein des dossiers de skills [FAIT].
 
 ### §C.2 — Scénarios d'Attaque
@@ -134,7 +134,7 @@ L'orchestrateur Python `tesla_loop_orchestrator.py` gère les transitions logiqu
 
 ### §F.4 — Analyse du Verrouillage Technologique
 Nous comparons le layout proposé (Co-location) avec deux alternatives :
-1. **Layout Centralisé** : Placer les scripts dans `/home/lord-mahonheim/bifrost/tesla/tools/` et les règles dans `/home/lord-mahonheim/bifrost/tesla/rules/`.
+1. **Layout Centralisé** : Placer les scripts dans `$TESLA_ROOT/tools/` et les règles dans `$TESLA_ROOT/rules/`.
    * *Avantage* : Namespace propre, respecte l'ancienne structure globale.
    * *Inconvénient* : Dispersion des fichiers d'un même composant cognitivement lié.
 2. **Layout par Package Python** : Créer un package local installable via pip (e.g., `pip install -e .`).

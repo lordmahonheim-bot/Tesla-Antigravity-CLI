@@ -105,7 +105,7 @@ graph TD
 
 ## 5. Transactional Isolation Rule and Logs
 
-- **Log Storage**: Scrubbing metadata is stored in the local SQLite database `/home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db` with `WAL` mode enabled (`PRAGMA journal_mode=WAL;`).
+- **Log Storage**: Scrubbing metadata is stored in the local SQLite database `$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db` with `WAL` mode enabled (`PRAGMA journal_mode=WAL;`).
 - **Conflict Management**: Any write to the SQLite database uses a context manager with multiple attempts (retry backoff) and transactional isolation (`with conn:`).
 - **Prohibition of Raw Secrets Logging**: No raw secret shall be logged in the session files (`SESSION_LOG.md`, `SESSION_TRANSCRIPTS.md`) or in the SQLite database.
 

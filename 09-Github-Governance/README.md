@@ -11,7 +11,7 @@
 | Date | 2026-06-28 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Workspace Path | `$TESLA_ROOT` |
 | Git version | 2.34+ |
 
 ## Important Security Notice

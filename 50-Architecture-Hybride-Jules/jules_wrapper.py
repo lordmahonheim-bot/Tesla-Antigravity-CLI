@@ -8,7 +8,7 @@ import subprocess
 import re
 import shutil
 
-WORKSPACE = "/home/lord-mahonheim/bifrost/tesla"
+WORKSPACE = "$TESLA_ROOT"
 JULES_BIN_PATH = os.path.expanduser("~/.npm-global/bin/jules")
 
 def find_jules_bin():

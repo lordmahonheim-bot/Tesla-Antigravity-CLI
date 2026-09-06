@@ -208,4 +208,4 @@ decision: RECOMMENDED | WARNING_ISSUED | REJECTED
 
 ## Absolute Delivery Rule (QMS)
 > [!IMPORTANT]
-> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.
+> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `$TESLA_ROOT/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.

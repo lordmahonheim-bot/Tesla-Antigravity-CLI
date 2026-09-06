@@ -163,15 +163,15 @@ Scans modified files for hardcoded secrets, API tokens, credentials, unauthorize
 
 ### Invoking via CLI
 ```bash
-python3 /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/44-Tesla-Code-Auditor/code_auditor.py \
-  --manifest /home/lord-mahonheim/bifrost/tesla/OUTPUTS/output_manifest.json
+python3 $TESLA_ROOT/MVP-GITHUB/44-Tesla-Code-Auditor/code_auditor.py \
+  --manifest $TESLA_ROOT/OUTPUTS/output_manifest.json
 ```
 
 ### Direct Target File Audit
 ```bash
-python3 /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/28-Loop-Engineering/skills/tesla-code-auditor/scripts/code_auditor.py \
+python3 $TESLA_ROOT/MVP-GITHUB/28-Loop-Engineering/skills/tesla-code-auditor/scripts/code_auditor.py \
   --files src/main.py \
-  --output-json /home/lord-mahonheim/bifrost/tesla/OUTPUTS/audit_verdict.json
+  --output-json $TESLA_ROOT/OUTPUTS/audit_verdict.json
 ```
 
 ---

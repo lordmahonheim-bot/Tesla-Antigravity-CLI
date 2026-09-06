@@ -23,7 +23,7 @@ def generate_manifest(contract_path, feedback=None):
         "timestamp": datetime.now().isoformat()
     }
     
-    output_dir = "/home/lord-mahonheim/bifrost/tesla/OUTPUTS"
+    output_dir = "$TESLA_ROOT/OUTPUTS"
     os.makedirs(output_dir, exist_ok=True)
     manifest_path = os.path.join(output_dir, "output_manifest.json")
     

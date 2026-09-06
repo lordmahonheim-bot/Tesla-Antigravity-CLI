@@ -14,8 +14,8 @@ import subprocess
 from pathlib import Path
 
 # Configuration via Environment with safe defaults
-CHAIN_HEAD_PATH = Path(os.environ.get("VIGILUM_CHAIN_HEAD", "/home/lord-mahonheim/bifrost/tesla/runtime/gate2/chain_head.sha256"))
-REPO_DIR = Path(os.environ.get("VIGILUM_REPO_DIR", "/home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/53-Vigilum-Codex-2.0-Executable-Governance/core/anchor/repo_anchor"))
+CHAIN_HEAD_PATH = Path(os.environ.get("VIGILUM_CHAIN_HEAD", "$TESLA_ROOT/runtime/gate2/chain_head.sha256"))
+REPO_DIR = Path(os.environ.get("VIGILUM_REPO_DIR", "$TESLA_ROOT/MVP-GITHUB/53-Vigilum-Codex-2.0-Executable-Governance/core/anchor/repo_anchor"))
 KEY_PATH = Path(os.environ.get("VIGILUM_KEY_PATH", "/etc/vigilum/keys/id_ed25519_anchor"))
 REMOTE_BRANCH = os.environ.get("VIGILUM_REMOTE_BRANCH", "audit-trail")
 CHECK_INTERVAL = int(os.environ.get("VIGILUM_CHECK_INTERVAL", 900))  # Default 15 minutes

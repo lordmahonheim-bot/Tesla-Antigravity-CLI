@@ -17,7 +17,7 @@ tool_dependencies:
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
 circuit_breaker:
   max_retries: 3
 ---
@@ -413,7 +413,7 @@ Every completed mission produces a structured deliverable set, formatted accordi
 | **Recommendations** | Bloc 9.2 | `[R-XX]` formatted actions with priority, horizon, precondition. |
 | **Final Report** | Blocs 1 + 9 + 10 + 11 | Executive summary, conclusions, bibliography, limits — certified sign-off. |
 
-> Every report respects the **Absolute Delivery Rule (SGC)**: all outputs are physically stored under `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`.
+> Every report respects the **Absolute Delivery Rule (SGC)**: all outputs are physically stored under `$TESLA_ROOT/OUTPUTS`.
 
 ---
 
@@ -738,4 +738,4 @@ The Director activates AREngine automatically when:
 
 
 > [!IMPORTANT]
-> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.
+> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `$TESLA_ROOT/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the sole delivery gateway.

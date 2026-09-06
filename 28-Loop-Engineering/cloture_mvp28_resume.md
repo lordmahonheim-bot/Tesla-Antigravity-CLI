@@ -14,7 +14,7 @@ L'ultime étape de la **Phase E (Clôture SGC)** du Plan MVP 28 (**Loop Engineer
 
 Le projet MVP 28 introduit et scelle le paradigme d'auto-correction et de rétroaction itérative (*Act-Verify-Learn-Repeat*). Il résout formellement le problème d'auto-certification des modèles génératifs en instaurant une **séparation stricte** entre l'écrivain de code (`tesla-master-code`) et le validateur de conformité (`tesla-code-auditor`), pilotés par l'orchestrateur déterministe (`tesla-loop-orchestrator`).
 
-Toutes les exigences architecturales, documentaires, techniques et de mémoire canonique sont validées et scellées. Le statut du MVP 28 dans `/home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/INDEX.md` est désormais passé à **🔴 Clôturé**.
+Toutes les exigences architecturales, documentaires, techniques et de mémoire canonique sont validées et scellées. Le statut du MVP 28 dans `$TESLA_ROOT/Gestion-de-Chantiers/INDEX.md` est désormais passé à **🔴 Clôturé**.
 
 ---
 
@@ -52,7 +52,7 @@ Toutes les exigences architecturales, documentaires, techniques et de mémoire c
 
 ### 🟢 Phase E — Publication & Clôture SGC
 - **Dépôt Git Publique** : Packaging, synchronisation et archivage sous `MVP-GITHUB/28-Loop-Engineering/`.
-- **Registre SGC** : Mise à jour du registre `/home/lord-mahonheim/bifrost/tesla/Gestion-de-Chantiers/INDEX.md` avec le statut **🔴 Clôturé**.
+- **Registre SGC** : Mise à jour du registre `$TESLA_ROOT/Gestion-de-Chantiers/INDEX.md` avec le statut **🔴 Clôturé**.
 - **Livrable de Clôture** : Génération du présent rapport dans `OUTPUTS/cloture_mvp28_resume.md`.
 
 ---

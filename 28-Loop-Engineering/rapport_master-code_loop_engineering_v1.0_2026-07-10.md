@@ -14,7 +14,7 @@ Conformément aux conclusions du rapport d'analyse de **Tesla Arcanis-360** (`ra
 ### Observations directes et contraintes d'environnement :
 1. **Réseau Hermétique (Mode `CODE_ONLY`) :** La station MIDGARD n'a aucun accès réseau externe. Toutes les dépendances logicielles doivent être résolues localement ou s'appuyer sur l'existant.
 2. **Absence locale de Semgrep dans le venv :** L'outil `semgrep` n'est pas provisionné dans le répertoire virtuel `.venv/bin/`. Toute invocation directe par l'auditeur de code échouera sans une stratégie de contournement ou de provisionnement statique hors-ligne.
-3. **Absence des tables relationnelles dans Alexandria :** La base de données SQLite `alexandria_brain.db` (située dans `/home/lord-mahonheim/bifrost/tesla/database/`) n'implémente pas encore les tables `loop_executions` et `loop_iterations` requises pour la persistance de l'état des boucles.
+3. **Absence des tables relationnelles dans Alexandria :** La base de données SQLite `alexandria_brain.db` (située dans `$TESLA_ROOT/database/`) n'implémente pas encore les tables `loop_executions` et `loop_iterations` requises pour la persistance de l'état des boucles.
 4. **Biais d'Auto-Certification :** `tesla-master-code` est l'exécuteur des modifications de code. Si le même agent évalue ses propres modifications, le risque de "reward hacking" est critique. L'indépendance de `tesla-code-auditor` par rapport à `tesla-master-code` est donc un impératif architectural.
 
 ---

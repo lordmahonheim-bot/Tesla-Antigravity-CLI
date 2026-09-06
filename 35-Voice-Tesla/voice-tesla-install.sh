@@ -9,7 +9,7 @@
 set -euo pipefail
 
 # Injection dynamique du chemin de whisper-cli
-export PATH="$PATH:/home/lord-mahonheim/bifrost/tesla/tools/whisper.cpp/build/bin"
+export PATH="$PATH:$TESLA_ROOT/tools/whisper.cpp/build/bin"
 
 readonly SCRIPT_VERSION="1.0.0"
 readonly INSTALL_DIR="${HOME}/.local/share/voice-tesla"

@@ -203,7 +203,7 @@ fi
 # alexandria_backup.sh - Non-blocking backup of the Alexandria database
 # Cron: 0 3 * * * /home/lord-mahonheim/bifrost/scripts/alexandria_backup.sh
 
-DB_PATH="/home/lord-mahonheim/bifrost/tesla/Avalon/alexandria_brain.db"
+DB_PATH="$TESLA_ROOT/Avalon/alexandria_brain.db"
 BACKUP_DIR="/home/lord-mahonheim/bifrost/backups/alexandria"
 DATE=$(date +%Y%m%d)
 

@@ -32,7 +32,7 @@ This MVP deploys the following core components into the Tesla ecosystem:
         "args": [
             "--user", "--scope", "-p", "MemoryMax=4G",
             "timeout", "15s",
-            "/home/lord-mahonheim/bifrost/tesla/tools/codebase-memory-mcp-pro/codebase-memory-mcp-pro/build/c/codebase-memory-mcp",
+            "$TESLA_ROOT/tools/codebase-memory-mcp-pro/codebase-memory-mcp-pro/build/c/codebase-memory-mcp",
             "mcp"
         ],
         "env": {

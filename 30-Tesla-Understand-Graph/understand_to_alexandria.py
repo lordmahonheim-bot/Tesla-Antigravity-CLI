@@ -2,7 +2,7 @@ import json
 import sqlite3
 import os
 
-DB_PATH = '/home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db'
+DB_PATH = '$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db'
 
 def setup_db():
     conn = sqlite3.connect(DB_PATH)

@@ -275,7 +275,7 @@ python3 core/gatekeeper.py \
   --lock /path/to/lock.json \
   --mission SGC-EXEC-GOV-03 \
   --operation write_file \
-  --root /home/lord-mahonheim/bifrost/tesla
+  --root $TESLA_ROOT
 ```
 
 ### 5. Running the Full Test Suite

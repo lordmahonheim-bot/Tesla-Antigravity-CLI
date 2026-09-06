@@ -34,7 +34,7 @@ flowchart TD
         FormatCheck --> ManifestGen["📄 Generate output_manifest.json\n(SHA-256 File Hashes)"]
     end
 
-    ManifestGen -->|2. Emits Output Manifest| OUTPUT[("📁 /home/lord-mahonheim/bifrost/tesla/OUTPUTS/\noutput_manifest.json")]
+    ManifestGen -->|2. Emits Output Manifest| OUTPUT[("📁 $TESLA_ROOT/OUTPUTS/\noutput_manifest.json")]
     OUTPUT -->|3. Passed for Independent Audit| TCA["🛡️ tesla-code-auditor (MVP 44)"]
     
     TCA -->|Audit Verdict & Learning Deltas| TLO
@@ -63,7 +63,7 @@ When invoked by `tesla-loop-orchestrator` during the `ACT` phase, `tesla-master-
 
 ### Command Line Interface (`master_code.py`)
 ```bash
-python3 /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/16-Tesla-Master-Code/master_code.py \
+python3 $TESLA_ROOT/MVP-GITHUB/16-Tesla-Master-Code/master_code.py \
   --contract /path/to/loop_contract.yaml \
   --feedback "Pyright: TYPE_MISMATCH in src/main.py line 42"
 ```

@@ -11,7 +11,7 @@
 | Date | 2026-06-28 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
+| Workspace Path | `$TESLA_ROOT` |
 
 ## Important Security Notice
 This project defines templates and processes for project risk audits. All private environment configs, sensitive credentials, and personal server hostnames are strictly anonymized in target audit files.

@@ -24,7 +24,7 @@ To declare the MCP server in the Antigravity ecosystem (`~/.gemini/antigravity-c
       "args": [
         "run",
         "--directory",
-        "/home/lord-mahonheim/bifrost/tesla/.agents/skills/tesla-forge-mcp",
+        "$TESLA_ROOT/.agents/skills/tesla-forge-mcp",
         "server.py"
       ],
       "env": {

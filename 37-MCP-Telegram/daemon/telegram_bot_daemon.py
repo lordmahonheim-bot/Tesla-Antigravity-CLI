@@ -79,7 +79,7 @@ def main():
                     
                     # SYNAPSE MÉMORIELLE (Vigilum Codex)
                     try:
-                        synapse_path = "/home/lord-mahonheim/bifrost/tesla/memory/TELEGRAM_SYNAPSE.md"
+                        synapse_path = "$TESLA_ROOT/memory/TELEGRAM_SYNAPSE.md"
                         from datetime import datetime
                         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         with open(synapse_path, "a", encoding="utf-8") as f:

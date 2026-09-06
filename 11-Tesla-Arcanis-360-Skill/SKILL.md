@@ -587,4 +587,4 @@ confidence_by_angle:
 
 ## Absolute Delivery Rule (SGC)
 > [!IMPORTANT]
-> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the unique delivery airlock.
+> Absolutely all deliverables, reports, plans, and audits must be physically stored in the `$TESLA_ROOT/OUTPUTS` directory, which itself is dynamically linked (via symlink) to the final knowledge base (Avalon/Alexandria). `OUTPUTS` is the unique delivery airlock.

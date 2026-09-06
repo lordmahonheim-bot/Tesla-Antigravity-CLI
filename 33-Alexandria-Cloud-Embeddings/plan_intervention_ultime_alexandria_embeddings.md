@@ -14,7 +14,7 @@ sources: ["[[plan_intervention_alexandria_embeddings.md]]", "[[Plan_d_Interventi
 
 ## 1. Diagnostic Summary
 
-The current semantic architecture of Alexandria ([indexer_hybrid.py](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/indexer_hybrid.py)) poses critical hardware and financial risks on MIDGARD (8 GB RAM, pure CPU). Its coupling with `PyTorch`, `sentence-transformers`, and `ChromaDB` (including `onnxruntime`) consumes over 1.2 GB of RAM at rest and peaks at over 5.2 GB when indexing large batches. This technical debt weakens the language server (`pyright` via `karellen-lsp-mcp`), causing repeated crashes and blocking the Self-Healing loop. Furthermore, the absence of a local deduplication cache and a strict privacy policy (PII/confidential data) exposes the system to sensitive data leaks and network quota waste during re-indexations.
+The current semantic architecture of Alexandria ([indexer_hybrid.py](file://$TESLA_ROOT/DataBase/Files/indexer_hybrid.py)) poses critical hardware and financial risks on MIDGARD (8 GB RAM, pure CPU). Its coupling with `PyTorch`, `sentence-transformers`, and `ChromaDB` (including `onnxruntime`) consumes over 1.2 GB of RAM at rest and peaks at over 5.2 GB when indexing large batches. This technical debt weakens the language server (`pyright` via `karellen-lsp-mcp`), causing repeated crashes and blocking the Self-Healing loop. Furthermore, the absence of a local deduplication cache and a strict privacy policy (PII/confidential data) exposes the system to sensitive data leaks and network quota waste during re-indexations.
 
 The transition to a **cloud-local architecture** relying on the Gemini API for embeddings generation and on a single SQLite database configured in WAL mode (`alexandria_brain.db`) completely eliminates the local memory footprint at rest while preserving the sovereignty and speed of local searches.
 
@@ -253,7 +253,7 @@ class EmbeddingProvider(ABC):
 
 ### 5.4 The llama.cpp Doctrine (Ephemeral Usage)
 
-To protect MIDGARD from any memory overload linked to the execution of resident inference daemons, the `llama.cpp` toolchain must obey the strict hardware doctrine formalized in the [LLAMA_CPP_DOCTRINE.md](file:///home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md) file:
+To protect MIDGARD from any memory overload linked to the execution of resident inference daemons, the `llama.cpp` toolchain must obey the strict hardware doctrine formalized in the [LLAMA_CPP_DOCTRINE.md](file://$TESLA_ROOT/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md) file:
 
 1. **Prohibition of Resident Inference**: Absolute prohibition to run `llama-server`, `llama-cli` in interactive mode, or to import `llama-cpp-python` in production scripts.
 2. **Single Use / Tooling**: llama.cpp is only allowed for model conversion (HF to GGUF) and quantization (Q4_K_M, Q8_0).
@@ -272,7 +272,7 @@ To protect MIDGARD from any memory overload linked to the execution of resident 
 *   **Actions**:
     1. Measure the indexer's resident RAM in idle state and during the indexation of a control batch of 100 documents.
     2. Record the average semantic search latency.
-    3. Document these metrics in `/home/lord-mahonheim/bifrost/tesla/OUTPUTS/benchmark_midgard_before.md`.
+    3. Document these metrics in `$TESLA_ROOT/OUTPUTS/benchmark_midgard_before.md`.
 *   **Validation Recipe (Phase 0)**: 
     - The benchmark file is created and contains real encrypted hardware data (RAM, CPU, time).
 
@@ -300,7 +300,7 @@ To protect MIDGARD from any memory overload linked to the execution of resident 
 *   **Actions**:
     1. Write the `tools/quantize_model.py` script using `subprocess` on the local `llama-quantize` binary.
     2. Implement the temporary folder creation under `/tmp/` and the automatic cleanup via `trap EXIT` or Python `try...finally` block.
-    3. Write the doctrine file `/home/lord-mahonheim/bifrost/tesla/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md`.
+    3. Write the doctrine file `$TESLA_ROOT/DataBase/Files/LLAMA.CPP/LLAMA_CPP_DOCTRINE.md`.
 *   **Validation Recipe (Phase III)**:
     - Successful quantization test of a minimal model (e.g., TinyLLaMA 110M).
     - Verification after execution that the `/tmp/llama-pack-*` temporary folder was fully destroyed.

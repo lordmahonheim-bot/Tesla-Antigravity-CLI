@@ -8,7 +8,7 @@ owner: Tesla
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
 ---
 
 # TESLA DESIGN MAKER
@@ -37,4 +37,4 @@ Lorsqu'invoqué pour une tâche de design, tu dois :
 
 ## Règle Absolue de Livraison (SGC)
 > [!IMPORTANT]
-> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `/home/lord-mahonheim/bifrost/tesla/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
+> Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `$TESLA_ROOT/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.

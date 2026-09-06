@@ -10,7 +10,7 @@
 set -euo pipefail
 
 # Injection dynamique du chemin de whisper-cli
-export PATH="$PATH:/home/lord-mahonheim/bifrost/tesla/tools/whisper.cpp/build/bin:/home/lord-mahonheim/.local/bin"
+export PATH="$PATH:$TESLA_ROOT/tools/whisper.cpp/build/bin:/home/lord-mahonheim/.local/bin"
 
 # ---------------------------------------------------------------------------
 # CONSTANTES & CONFIGURATION

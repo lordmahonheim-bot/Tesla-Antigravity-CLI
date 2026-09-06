@@ -9,8 +9,8 @@
 | Date | 2026-07-03 |
 | Host Machine | MIDGARD |
 | Operating System | Linux (Ubuntu/Debian) |
-| Workspace Path | `/home/lord-mahonheim/bifrost/tesla` |
-| Vault Path | `/home/lord-mahonheim/bifrost/tesla/Avalon` |
+| Workspace Path | `$TESLA_ROOT` |
+| Vault Path | `$TESLA_ROOT/Avalon` |
 | Database Path | `Avalon/03-Resources/alexandria_brain.db` |
 
 ## Important Security Notice

@@ -292,12 +292,12 @@ Intégrer harmonieusement la nouvelle capacité dans le corpus vivant de Tesla s
 
 | Document Cible | Condition Obligatoire d'Écriture | Contrôle Déterministe |
 |---|---|---|
-| [`SOUL.md`](file:///home/lord-mahonheim/bifrost/tesla/SOUL.md) | Mutation d'un principe immuable ou d'identité. | Diff sémantique approuvé par Mahonheim. |
-| [`ENGINE.md`](file:///home/lord-mahonheim/bifrost/tesla/ENGINE.md) | Évolution du moteur de raisonnement cognitif. | Vérification de non-régression cognitive. |
-| [`AGENTS.md`](file:///home/lord-mahonheim/bifrost/tesla/.agents/AGENTS.md) | Nouveau sous-agent, Skill ou règle d'orchestration. | Table de délégation mise à jour sans doublon. |
-| [`FORCE_TOOLING.md`](file:///home/lord-mahonheim/bifrost/tesla/FORCE_TOOLING.md) | Nouvelle capacité, MCP ou doctrine d'outillage. | Lifecycle complet (Découverte ➔ Retrait). |
-| [`PROJECT_STATE.md`](file:///home/lord-mahonheim/bifrost/tesla/memory/PROJECT_STATE.md) | Modification du point de reprise système. | Ancrage de la mission et du `chain_head`. |
-| [`OUTPUTS/open_items...`](file:///home/lord-mahonheim/bifrost/tesla/OUTPUTS/open_items_todo-Updated.md) | Clôture ou création d'items en suspens. | Passage à RESOLVED avec ID et date exacte. |
+| [`SOUL.md`](file://$TESLA_ROOT/SOUL.md) | Mutation d'un principe immuable ou d'identité. | Diff sémantique approuvé par Mahonheim. |
+| [`ENGINE.md`](file://$TESLA_ROOT/ENGINE.md) | Évolution du moteur de raisonnement cognitif. | Vérification de non-régression cognitive. |
+| [`AGENTS.md`](file://$TESLA_ROOT/.agents/AGENTS.md) | Nouveau sous-agent, Skill ou règle d'orchestration. | Table de délégation mise à jour sans doublon. |
+| [`FORCE_TOOLING.md`](file://$TESLA_ROOT/FORCE_TOOLING.md) | Nouvelle capacité, MCP ou doctrine d'outillage. | Lifecycle complet (Découverte ➔ Retrait). |
+| [`PROJECT_STATE.md`](file://$TESLA_ROOT/memory/PROJECT_STATE.md) | Modification du point de reprise système. | Ancrage de la mission et du `chain_head`. |
+| [`OUTPUTS/open_items...`](file://$TESLA_ROOT/OUTPUTS/open_items_todo-Updated.md) | Clôture ou création d'items en suspens. | Passage à RESOLVED avec ID et date exacte. |
 
 ### 🔬 Exécution de la Loi de Parité Absolue
 L'audit de parité est exécuté via le binaire :

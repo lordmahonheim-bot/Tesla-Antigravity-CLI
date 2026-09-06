@@ -1,8 +1,8 @@
 #!/bin/bash
 # alexandria_backup.sh - Sauvegarde non bloquante de la base Alexandria
-# Cron : 0 3 * * * /home/lord-mahonheim/bifrost/tesla/tools/alexandria_backup.sh
+# Cron : 0 3 * * * $TESLA_ROOT/tools/alexandria_backup.sh
 
-DB_PATH="/home/lord-mahonheim/bifrost/tesla/Avalon/03-Resources/alexandria_brain.db"
+DB_PATH="$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db"
 BACKUP_DIR="/home/lord-mahonheim/bifrost/backups/alexandria"
 DATE=$(date +%Y%m%d)
 

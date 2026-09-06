@@ -25,7 +25,7 @@ tool_dependencies:
 permission_context:
   mode: "goal"
   required_paths:
-    - "/home/lord-mahonheim/bifrost/tesla/*"
+    - "$TESLA_ROOT/*"
     - "/home/lord-mahonheim/bifrost/MVP-GITHUB/*"
 circuit_breaker:
   max_retries: 3
@@ -64,7 +64,7 @@ circuit_breaker:
 
 | Rule | Behavior |
 |---|---|
-| **Crucible Confinement** | Any exploratory test and execution → **STRICTLY** `/home/lord-mahonheim/bifrost/tesla/sandboxes/creuset` |
+| **Crucible Confinement** | Any exploratory test and execution → **STRICTLY** `$TESLA_ROOT/sandboxes/creuset` |
 | **Remote Push** | Requires **explicit and prior** permission from Lord Mahonheim before any `git push` |
 | **Critical Actions** | Any deletion, rename, or configuration modification → prepare action + request validation |
 | **Autonomous /goal** | Modular planning, autonomous resolution of sub-steps, escalation only at security checkpoints |
@@ -934,11 +934,11 @@ graph LR
 
 ```bash
 # Check status of both spaces
-git -C /home/lord-mahonheim/bifrost/tesla status
+git -C $TESLA_ROOT status
 git -C /home/lord-mahonheim/bifrost/MVP-GITHUB status
 
 # Synchronize tesla (after permission)
-git -C /home/lord-mahonheim/bifrost/tesla push origin main
+git -C $TESLA_ROOT push origin main
 
 # Synchronize MVP-GITHUB (after permission)
 git -C /home/lord-mahonheim/bifrost/MVP-GITHUB push origin main
@@ -1026,7 +1026,7 @@ graph TD
 ## 📤 Absolute Delivery Rule (SGC)
 
 > [!IMPORTANT]
-> **Absolutely all deliverables, reports, plans, and audits** produced by `tesla-github-manager` must be physically stored in the `/home/lord-mahonheim/bifrost/tesla/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria).
+> **Absolutely all deliverables, reports, plans, and audits** produced by `tesla-github-manager` must be physically stored in the `$TESLA_ROOT/OUTPUTS` directory, which itself is dynamically linked (via a symlink) to the final knowledge base (Avalon/Alexandria).
 >
 > **`OUTPUTS` is the only delivery airlock.** No report should remain in `/tmp`, in the current working directory, or in the Crucible without migration to OUTPUTS.
 

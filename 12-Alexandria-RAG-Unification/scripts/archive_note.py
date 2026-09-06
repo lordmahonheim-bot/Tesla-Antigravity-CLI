@@ -15,9 +15,9 @@ import subprocess
 from pathlib import Path
 import frontmatter
 
-VAULT_DIR = Path("/home/lord-mahonheim/bifrost/tesla/Avalon")
+VAULT_DIR = Path("$TESLA_ROOT/Avalon")
 ARCHIVES_DIR = VAULT_DIR / "04-Archives"
-SCRIPTS_DIR = Path("/home/lord-mahonheim/bifrost/tesla/sandbox/scripts")
+SCRIPTS_DIR = Path("$TESLA_ROOT/sandbox/scripts")
 
 def archive_and_update(note_rel_path_str, new_content_file_or_str):
     note_path = VAULT_DIR / note_rel_path_str

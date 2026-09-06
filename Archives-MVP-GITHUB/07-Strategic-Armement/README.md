@@ -12,7 +12,7 @@ To ensure clear governance and prevent code bloat, technical projects are strict
 *   **Pillar 3: Governed AI Operations**: Build autonomous crawlers (Web Raider) and governance guards (Git & Pre-commit protocols).
 
 ## Project Roadmaps
-The development lifecycle is detailed in [plan_armement_pluridisciplinaire_tesla.md](file:///home/lord-mahonheim/bifrost/tesla/MVP-GITHUB/07-Strategic-Armement/plan_armement_pluridisciplinaire_tesla.md). It outlines:
+The development lifecycle is detailed in [plan_armement_pluridisciplinaire_tesla.md](file://$TESLA_ROOT/MVP-GITHUB/07-Strategic-Armement/plan_armement_pluridisciplinaire_tesla.md). It outlines:
 1. Short-term target: Local indexing and self-healing LSP scripts.
 2. Mid-term target: Sovereign Playwright scrapers and automatic screenshot verification.
 3. Long-term target: Physical device resilience wrappers and advanced backup protocols.

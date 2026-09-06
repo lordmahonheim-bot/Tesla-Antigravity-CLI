@@ -114,9 +114,9 @@ Score : **6/6** — Conforme Vigilum Codex.
 ### 4.1 Commit MVP-GITHUB — Commandes préparées
 
 ```bash
-git -C /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB add 28-Loop-Engineering/
-git -C /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB commit -m "feat(28-loop-engineering): add Loop Engineering MVP with tesla-loop-orchestrator and tesla-code-auditor"
-git -C /home/lord-mahonheim/bifrost/tesla/MVP-GITHUB push origin main
+git -C $TESLA_ROOT/MVP-GITHUB add 28-Loop-Engineering/
+git -C $TESLA_ROOT/MVP-GITHUB commit -m "feat(28-loop-engineering): add Loop Engineering MVP with tesla-loop-orchestrator and tesla-code-auditor"
+git -C $TESLA_ROOT/MVP-GITHUB push origin main
 ```
 
 ⏳ **En attente de validation de Lord Mahonheim.**
