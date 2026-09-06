@@ -126,8 +126,8 @@ Toute invocation doit apporter un gain objectif :
 
   Situation                Destination
   ------------------------ ------------------
-  Chantier multi‑agents complexe tesla-team-synergy (Tesla Mission Orchestrator) → produit Mission Graph + PLAN.md + Capability Scoring, puis AGENTS délègue
-  Deep Research & Acquisition    tesla-arcanis-360 ( Skill)
+  Chantier multi‑agents complexe tesla-team-synergy (Tesla Mission Orchestrator)
+  Deep Research & Acquisition    tesla-arcanis-360 (Skill)
   Curation & Certification tesla-curator-prime (Skill)
   Ingénierie logicielle    tesla-master-code (Skill)
   Gestion dépôts GitHub    tesla-github-manager (Skill)
@@ -138,13 +138,15 @@ Toute invocation doit apporter un gain objectif :
   Navigation autonome      tesla-web-raider (Skill)
   Auto-correction Python   SELF_HEALING.md
   Documentation publique   README_POLICY.md
-  Contrôle cycle ACT-VERIFY-LEARN-REPEAT (controls ACT-VERIFY-LEARN-REPEAT cycle) tesla-loop-orchestrator (Skill)
-  Validation impartiale de code (impartial gatekeeper code validator) tesla-code-auditor (Skill)
-  Inspection visuelle d'écran (UI/GUI debugging et OCR) tesla-eye (Outil Natif)
-  Automatisation et publication sur Reddit tesla-reddit-commander (Skill)
-  Optimisation et TDD de compétences tesla-writing-skills (Skill)
-  Traduction, naturalisation et apprentissage de l'anglais tesla-english-tutor (Skill)
-  Génération UI/HTML asynchrone (Cloud Worker) Jules → tools/tesla-jules (Outil Natif)
+  Contrôle du cycle de vie tesla-loop-orchestrator (Skill)
+  Validation de code       tesla-code-auditor (Skill)
+  Inspection visuelle (UI) tesla-eye (Outil Natif)
+  Création de Sous-Agents  invoke_subagent / define_subagent (Antigravity Native Tools)
+  Validation Syntaxique    lsp_diagnostics (MCP Tool: karellen-lsp-mcp)
+  Publication Reddit       tesla-reddit-commander (Skill)
+  Optimisation TDD         tesla-writing-skills (Skill)
+  Traduction & Anglais     tesla-english-tutor (Skill)
+  Génération Cloud Worker  tools/tesla-jules (Outil Natif)
 
 > [!CAUTION]
 > **RÈGLE N°4.1 : Interdiction d'ask_permission en mode Autonome (/goal)**
