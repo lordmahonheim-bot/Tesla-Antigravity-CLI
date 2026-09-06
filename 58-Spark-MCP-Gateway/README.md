@@ -47,14 +47,14 @@ The implementation actively enforces the following security boundaries:
 
 Running the gateway directly:
 ```bash
-python 54-Tesla-Spark-MCP-Gateway.py
+python 58-Tesla-Spark-MCP-Gateway.py
 ```
 
 Or via Uvicorn for production-grade serving:
 ```bash
-uvicorn 54-Tesla-Spark-MCP-Gateway:app --host 127.0.0.1 --port 8080
+uvicorn 58-Tesla-Spark-MCP-Gateway:app --host 127.0.0.1 --port 8080
 ```
 
 ### Deliverables
-- `54-Tesla-Spark-MCP-Gateway.py`: The reference gateway implementation.
+- `58-Tesla-Spark-MCP-Gateway.py`: The reference gateway implementation.
 - `SPARK_MCP_Gateway_Integration_Report.md`: Integration & Negative Tests Audit.
