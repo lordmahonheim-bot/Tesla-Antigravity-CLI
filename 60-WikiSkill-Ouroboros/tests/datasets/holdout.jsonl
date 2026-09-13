@@ -1,0 +1,2 @@
+{"file": ".agents/skills/{skill}/SKILL.md", "must_contain": "SYSTEM SPECIFICATION", "reason": "specification systeme (cas de generalisation)"}
+{"file": ".agents/skills/{skill}/SKILL.md", "must_contain": "Vigilum Codex", "reason": "doctrine de gouvernance (cas extreme)"}

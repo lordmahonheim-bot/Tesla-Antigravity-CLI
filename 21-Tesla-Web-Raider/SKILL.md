@@ -255,6 +255,70 @@ TWR agit comme un fournisseur de services pour le reste de l'écosystème :
 *"La vérité sur le réseau ne réside pas dans le bruit du DOM, mais dans la clarté de la preuve certifiée."*
 
 
+## 10. Boucle WikiSkill (Ouroboros) — Obligation de traçabilité cryptographique
+
+> [!IMPORTANT]
+> Toute action de recherche/collecte de `tesla-web-raider` est assujettie à la
+> boucle **WikiSkill v3.0 (Ouroboros)**. Aucune exécution ne doit être déclarée
+> réussie sans trace physique scellée sur disque (Règle Zéro « NO PROOF, NO PASS »).
+> Il est **interdit** de simuler, d'extrapoler ou de forger à la volée la trace ou
+> l'infrastructure : seuls les scripts déterministes de `60-WikiSkill-Ouroboros/scripts/`
+> produisent les preuves (Vigilum Codex 2.6.2 : « l'agent ne génère jamais sa propre preuve »).
+
+### 10.1 Séquence obligatoire après chaque mission
+
+1. **Bootstrap (une fois, idempotent)** — si le socle physique est absent :
+   ```bash
+   python3 "$TESLA_ROOT/MVP-GITHUB/60-WikiSkill-Ouroboros/scripts/bootstrap_runtime.py" \
+     --root "$TESLA_ROOT" --skills tesla-web-raider --domains web-osint
+   ```
+   Crée `runtime/evidence/traces/tesla-web-raider/{.staging,quarantine,.locks}` et
+   `.agents/wiki/web-osint/{patterns,broker,archive,index.tsv,logs.md,chain_head.sha256,skill-impact.md}`.
+
+2. **Phase A — Scellement** : produire la trace JSON (schéma `ExecutionTrace`,
+   `secrets_scrubbed: true` obligatoire) puis la formater, hacher et sceller :
+   ```bash
+   python3 60-WikiSkill-Ouroboros/scripts/schemas.py --seal \
+     --input runtime/evidence/traces/tesla-web-raider/trace.json \
+     --out  runtime/evidence/traces/tesla-web-raider/trace.sealed.json
+   ```
+
+3. **Phase A — Vérification d'intégrité** (obligatoire avant livraison) :
+   ```bash
+   python3 60-WikiSkill-Ouroboros/scripts/schemas.py --verify \
+     --input runtime/evidence/traces/tesla-web-raider/trace.sealed.json
+   ```
+
+4. **Phase B — Écriture atomique + chaînage** :
+   ```bash
+   python3 60-WikiSkill-Ouroboros/scripts/trace_writer.py \
+     runtime/evidence/traces/tesla-web-raider/trace.sealed.json \
+     --root "$TESLA_ROOT" --update-chain
+   ```
+
+### 10.2 Contre-rationalisations interdites (Red Flags)
+
+*   ❌ Déclarer l'intégration WikiSkill « bénéfique » sans trace scellée présente sur disque.
+*   ❌ Créer un sous-agent factice portant le nom `tesla-web-raider` au lieu de charger le vrai `SKILL.md` (usurpation).
+*   ❌ Créer l'infrastructure à la main (`mkdir -p`) : seul `bootstrap_runtime.py` est autorisé.
+*   ❌ Retourner un score de gating simulé (`1.0` codé en dur) : le gating est fail-closed.
+
+### 10.3 Gating (proposition de patch de compétence)
+
+Si un comportement fondamental de recherche doit évoluer, le flux canonique est :
+```bash
+python3 60-WikiSkill-Ouroboros/scripts/skill_proposer.py tesla-web-raider
+python3 60-WikiSkill-Ouroboros/scripts/intent_formatter.py <patch.intent.patch>
+python3 60-WikiSkill-Ouroboros/scripts/patch_broker.py     <patch.intent.patch>
+python3 60-WikiSkill-Ouroboros/scripts/sandbox_evaluator.py <patch.intent.patch> \
+  --repo-path "$TESLA_ROOT/MVP-GITHUB" \
+  --eval-script 60-WikiSkill-Ouroboros/scripts/gating_judge.py
+# puis git_committer.py APRÈS validation humaine (Biological Gate)
+```
+Tout rejet (sandbox / gating) annule la proposition — priorité monotone, aucune Gate aval n'efface un échec amont.
+
+---
+
 ## Règle Absolue de Livraison (SGC)
 > [!IMPORTANT]
 > Absolument tous les livrables, rapports, plans et audits doivent être stockés physiquement dans le répertoire `$TESLA_ROOT/OUTPUTS`, qui lui-même est lié dynamiquement (via un symlink) à la base de connaissance finale (Avalon/Alexandria). `OUTPUTS` est l'unique sas de livraison.
