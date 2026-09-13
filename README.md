@@ -35,7 +35,7 @@ This repository contains anonymized configuration models and utility wrappers. N
 
 ## Executive Summary
 Vigilum Codex is an institution-matrice dedicated to human performance, strategic intelligence, and governed local AI operations. The projects hosted within this repository form the technical infrastructure of the Tesla agent, operating locally on MIDGARD.
-This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 59 subprojects ranging from static code syntax healing to secure graphical authentication wrappers, hybrid search engines, universal knowledge curation, and predictive failure diagnostics.
+This repository acts as a public MVP release of the core workflow automation and governance modules. It integrates 60 subprojects ranging from static code syntax healing to secure graphical authentication wrappers, hybrid search engines, universal knowledge curation, and predictive failure diagnostics.
 
 ## Problem Statement
 In previous iterations, the AI agent functioned without clear local boundaries. This resulted in multiple system level errors:
@@ -84,6 +84,7 @@ graph TD
     Gov --> AB["57-Tesla-Mirroring-Cognitif-Assimilation"]
     Media --> AC["58-Spark-MCP-Gateway"]
     Data --> AD["59-Antigravity-Workspace-MCP"]
+    Gov --> AE["60-WikiSkill-Ouroboros"]
 
 
     Data --> C["02-Alexandria-Database"]
@@ -167,7 +168,8 @@ MVP-GITHUB/
 ├── 56-CodeBase-Memory-MCP-PRO/
 ├── 57-Tesla-Mirroring-Cognitif-Assimilation/
 ├── 58-Spark-MCP-Gateway/
-└── 59-Antigravity-Workspace-MCP/
+├── 59-Antigravity-Workspace-MCP/
+└── 60-WikiSkill-Ouroboros/
 ```
 
 ## Workflow Sequence
@@ -182,6 +184,7 @@ MVP-GITHUB/
 9. Internet operations, OSINT searches, web navigation via Webwright, fact-checking, and evidence collection are dispatched to and certified by `21-Tesla-Web-Raider` to support all subagent operations.
 10. Shadow-targeted injection mechanisms, naming conventions, and metadata standards are defined and validated by `22-Shadow-Targeting-Method` to bypass subscription limits while maintaining modularity.
 11. All runtime filesystem modifications and git push actions are mediated deterministically by `53-Vigilum-Codex-2.0-Executable-Governance`, enforcing transactional staging, anti-TOCTOU confinement, and POSIX atomic anti-replay tokens.
+12. Wiki synchronization and documentation gating lifecycle (P0-P3 Ouroboros) are managed securely by `60-WikiSkill-Ouroboros`.
 
 ## Feature Highlights (v3.0.0)
 *   **SQLite Safe Mode (`mode=rw`):** Centralized `db_connector.py` database wrapper enforces read-write only constraints by default. This blocks scripts from silently creating blank SQLite files on disk if the primary database is missing, ensuring configuration consistency.
@@ -200,7 +203,7 @@ MVP-GITHUB/
 * Backup Protocol: Commits must always be preceded by local git status checks to exclude caches and databases.
 
 ## Acceptance Criteria
-* All 59 subprojects exist and are fully populated.
+* All 60 subprojects exist and are fully populated.
 * Pyright reports 0 errors across all Python files.
 * Local repository branch versioning is initialized on `main`.
 
