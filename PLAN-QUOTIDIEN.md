@@ -554,6 +554,54 @@ Spark tourne dans le cloud Google, avec accès à Gmail, Agenda et Drive. Il **n
 
 ---
 
+## Annexe — Finalisation GitHub (2 minutes, action souveraine)
+
+### Ce qui est déjà en place
+
+| Élément | État |
+| :--- | :--- |
+| Issues **#5 → #16** | ✅ Créées — les 12 tâches, corps complet avec prompt agent |
+| Libellés | ✅ Créés : `quotidien`, `preuve`, `parite`, `gouvernance`, `decision-souveraine` |
+| Jalon | ✅ Créé : **« Quotidien V1 — 12 tâches »** (échéance 12/11/2026) |
+| Rattachement libellés/jalon aux issues | ⚠️ **Non appliqué — limitation de l'intégration** (voir ci-dessous) |
+
+### Le blocage rencontré, dit sans détour
+
+L'agent qui a publié ces issues opère via une **application GitHub** dont le jeton permet de **créer** mais pas de **modifier** une issue (`403 Resource not accessible by integration`, vérifié sur trois méthodes : `gh issue edit`, `PATCH /issues/{n}` avec libellés, `PATCH /issues/{n}` avec jalon). Le rattachement a donc été refusé, y compris au moment de la création.
+
+**Deux conséquences assumées :**
+1. Les 12 issues doivent être **étiquetées et rattachées au jalon** par vous — 2 minutes dans l'interface, ou par la commande ci-dessous.
+2. Une issue de test, **#18** (*« [TEST] verification libelles — a supprimer »*), a été créée pour isoler la cause. Sa suppression est également interdite au jeton de l'intégration. **Elle est à supprimer par vous** — elle ne contient aucun contenu de travail.
+
+### Reprise en une commande (à lancer avec un jeton qui a le droit d'écriture)
+
+```bash
+cd "$TESLA_ROOT"
+MS="Quotidien V1 — 12 tâches"
+
+gh issue edit 5  --add-label preuve,gouvernance,decision-souveraine --milestone "$MS"
+gh issue edit 6  --add-label parite,gouvernance,decision-souveraine --milestone "$MS"
+gh issue edit 7  --add-label preuve,gouvernance                      --milestone "$MS"
+gh issue edit 8  --add-label quotidien,preuve                        --milestone "$MS"
+gh issue edit 9  --add-label quotidien,preuve                        --milestone "$MS"
+gh issue edit 10 --add-label quotidien,preuve                        --milestone "$MS"
+gh issue edit 11 --add-label quotidien,gouvernance,decision-souveraine --milestone "$MS"
+gh issue edit 12 --add-label quotidien,decision-souveraine           --milestone "$MS"
+gh issue edit 13 --add-label gouvernance,decision-souveraine,preuve  --milestone "$MS"
+gh issue edit 14 --add-label gouvernance,preuve                      --milestone "$MS"
+gh issue edit 15 --add-label parite,gouvernance,decision-souveraine  --milestone "$MS"
+gh issue edit 16 --add-label quotidien,gouvernance                   --milestone "$MS"
+
+# Issue de test à retirer (sans contenu de travail)
+gh issue delete 18 --yes
+```
+
+**Alternative sans ligne de commande :** dans l'onglet *Issues*, filtrez par jalon « Quotidien V1 », sélectionnez les 12 issues, puis **Labels** et **Milestone** dans la barre d'actions groupées.
+
+> **Note doctrinale.** Cette limite illustre exactement le principe **P2 — Producer ≠ Validator** : l'acteur qui produit n'est pas celui qui dispose de l'autorité de certification. Ici, l'agent produit les issues ; **vous** détenez le pouvoir de les étiqueter, de les rattacher et de clore #18.
+
+---
+
 > **Formule de clôture**
 > *Ce plan ne rajoute pas de la doctrine : il rend exécutable celle qui existe déjà.*
 > **No Proof, No Parity, No Publish.**
