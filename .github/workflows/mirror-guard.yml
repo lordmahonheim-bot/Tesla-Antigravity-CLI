@@ -1,7 +1,7 @@
 name: mirror-guard
 on:
   pull_request:
-    paths: ['LEARN/**', 'PROTOCOLES/**']
+    paths: ['LEARN/**', 'PROTOCOLES/**', 'AGY-Project-MAIN-LIST.md']
 permissions:
   contents: read
 jobs:
@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "::error::LEARN/ et PROTOCOLES/ sont des MIROIRS UNIDIRECTIONNELS."
+          echo "::error::LEARN/, PROTOCOLES/ et AGY-Project-MAIN-LIST.md sont des MIROIRS UNIDIRECTIONNELS."
           exit 1
