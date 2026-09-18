@@ -38,6 +38,12 @@ class ExecutionTrace:
         self.sha256 = self.compute_hash()
         return json.dumps(asdict(self), indent=2)
 
+    def verify_hash(self) -> bool:
+        """Verifie l'integrite cryptographique (recalcule vs stocke)."""
+        if not self.sha256:
+            return False
+        return self.compute_hash() == self.sha256
+
     @classmethod
     def from_json(cls, json_str: str) -> 'ExecutionTrace':
         data = json.loads(json_str)

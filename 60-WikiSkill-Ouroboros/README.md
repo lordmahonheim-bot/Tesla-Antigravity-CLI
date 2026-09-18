@@ -8,19 +8,43 @@ The objective of the WikiSkill Integration (Ouroboros) MVP is to implement an au
 ## Mermaid Graph (Ouroboros Cycle)
 ```mermaid
 graph TD
-    %% Ouroboros Cycle
+    %% Ouroboros Cycle — v2 Zero-Touch
     subgraph Ouroboros [Ouroboros Wiki Lifecycle]
-        P0[P0: Initial Documentation] --> P1[P1: Evaluation & Gating]
-        P1 -->|Pass| P2[P2: Trace & Record]
-        P1 -->|Fail| P3[P3: Proposer / Refinement]
-        P3 --> P0
-        P2 --> P0
+        P0[P0: Auto-Capture<br/>hook + daemon] --> P1[P1: Distillation<br/>trace to pattern]
+        P1 --> P2[P2: Mutation<br/>rule forging]
+        P2 --> P3[P3: Gating<br/>sandbox + double-split]
+        P3 -->|Pass| C[Local commit]
+        P3 -->|Fail x3| Q[quarantine]
+        C --> P0
     end
 ```
+
+## Zero-Touch Automation (v2)
+
+Phase A no longer depends on the orchestrator remembering to call
+`trace_writer.py` (governance-by-incantation, forbidden by Vigilum P4).
+Capture is now deterministic machinery:
+
+- **Immediate layer** — `hooks/antigravity/hook_11_ouroboros_capture.sh` drops a
+  receipt into `runtime/ouroboros/inbox/` on sub-agent completion. Never blocks.
+- **Guaranteed layer** — `scripts/ouroboros_daemon.py` (systemd user service)
+  drains the inbox, scans Antigravity transcripts from persistent cursors
+  (bounded retroactive backfill on first start), then runs the full cycle.
+- **Engine** — `scripts/ouroboros_cycle.py`: verify → distill → forge → gate →
+  commit locally. Idempotent, state in `runtime/` (gitignored).
+
+```bash
+python3 -m unittest discover -s tests   # 24 tests, stdlib only
+./deploy/install.sh --interval 60       # service + hook registration
+```
+
+Full contract: [`SKILL.md`](SKILL.md). Creuset assimilation patch:
+[`deploy/ASSIMILATION.md`](deploy/ASSIMILATION.md).
 
 ## Deliverables
 - **WikiSkill Integration**: Core logic to handle wiki content lifecycle.
 - **Ouroboros Cycle Implementation**: Nodes P0 to P3, incorporating gating and trace mechanisms.
+- **Auto-Capture Layer**: hook + daemon + converter + deterministic rule forging.
 - **Scripts Backup**: Archival of the execution scripts within the MVP directory.
 
 ## Governance

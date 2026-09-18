@@ -1,0 +1,22 @@
+[Unit]
+Description=Ouroboros Auto-Capture Daemon (Tesla WikiSkill Zero-Touch)
+Documentation=https://github.com/lordmahonheim-bot/Tesla-Antigravity-CLI/tree/main/60-WikiSkill-Ouroboros
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Instancie par install.sh : chemins absolus resolus a l'installation.
+ExecStart=__PYTHON__ __MVP_DIR__/scripts/ouroboros_daemon.py --interval __INTERVAL__
+Environment="TESLA_ROOT=__TESLA_ROOT__"
+Environment="TESLA_BRAIN_ROOT=__BRAIN_ROOT__"
+WorkingDirectory=__TESLA_ROOT__
+Restart=on-failure
+RestartSec=60
+TimeoutStopSec=30
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target
