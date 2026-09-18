@@ -162,12 +162,68 @@ class AutocaptureTest(IsolatedRoot):
         self.assertGreaterEqual(len(receipt["steps"]), 2)
 
     def test_unknown_status_scores_zero(self):
+        # V2.1 FIX : "a termine" est maintenant considere comme succes (FR).
+        # On teste donc un vrai cas ambigu sans aucun marqueur EN/FR.
         lines = [json.dumps({"type": "SUBAGENT_RESULT", "step_index": 3,
-                             "content": "tesla-master-code a termine, resultat ambigu"})]
+                             "content": "tesla-master-code a produit un livrable en attente de validation manuelle, resultat incertain, besoin de revue"})]
         receipts = parse_transcript_segment(lines, "conv-x")
         self.assertEqual(len(receipts), 1)
         self.assertEqual(receipts[0]["outcome"], "unknown")
         self.assertEqual(receipts[0]["score"], 0.0)
+
+    def test_french_success_detection(self):
+        # V2.1 : verification que les marqueurs francophones sont detectes (fix cecite linguistique)
+        cases = [
+            ("tesla-github-manager Mission accomplie avec succes task_id=gh-77a304c9", "success"),
+            ("tesla-github-manager 100% Succes - PR fusionnee", "success"),
+            ("tesla-web-raider Mission accomplie, extraction terminee avec succes", "success"),
+            ("tesla-master-code Termine avec succes", "success"),
+            ("tesla-github-manager ECHEC critique lors du push", "failure"),
+            ("tesla-web-raider Erreur lors de la collecte", "failure"),
+            ("tesla-master-code Partiel - livrable incomplet", "partial"),
+        ]
+        for text, expected_outcome in cases:
+            lines = [json.dumps({"type": "TOOL_RESULT", "step_index": 1, "content": text})]
+            receipts = parse_transcript_segment(lines, "conv-fr")
+            self.assertEqual(len(receipts), 1, f"Aucun recu pour '{text}'")
+            self.assertEqual(receipts[0]["outcome"], expected_outcome,
+                             f"Outcome mismatch pour '{text}' : got {receipts[0]['outcome']} expected {expected_outcome}")
+            if expected_outcome == "success":
+                self.assertEqual(receipts[0]["score"], 1.0)
+            elif expected_outcome == "partial":
+                self.assertEqual(receipts[0]["score"], 0.5)
+            else:
+                self.assertEqual(receipts[0]["score"], 0.0)
+
+    def test_french_checkpoint_contract(self):
+        # Gouvernance Option B : [CHECKPOINT CONTRACT] et variantes FR doivent etre captures
+        lines = [
+            json.dumps({"type": "TOOL_RESULT", "step_index": 2,
+                        "content": "[CHECKPOINT CONTRACT]\ncontract_type: CHECKPOINT\nstatus: SUCCESS\ntask_id=chk-1\n- step: collecte"}),
+            json.dumps({"type": "TOOL_RESULT", "step_index": 3,
+                        "content": "[CONTRAT CHECKPOINT]\ntype_contrat: CHECKPOINT\nstatus: SUCCES\ntask_id=chk-fr-1"}),
+            json.dumps({"type": "TOOL_RESULT", "step_index": 4,
+                        "content": "POINT DE CONTROLE - Mission accomplie avec succes task_id=chk-fr-2"}),
+        ]
+        receipts = parse_transcript_segment(lines, "conv-chk")
+        self.assertEqual(len(receipts), 3)
+        outcomes = [r["outcome"] for r in receipts]
+        self.assertIn("success", outcomes)
+
+    def test_github_manager_capture(self):
+        # Regression specifique au diagnostic : tesla-github-manager 77a304c9... etait ignore (0 trace)
+        lines = [json.dumps({"type": "SUBAGENT_RESULT", "step_index": 10,
+                             "content": "tesla-github-manager (77a304c9...) Mission accomplie avec succes - PR #42 fusionnee, 100% Succes"})]
+        receipts = parse_transcript_segment(lines, "conv-77a304c9")
+        self.assertEqual(len(receipts), 1)
+        self.assertEqual(receipts[0]["skill"], "tesla-github-manager")
+        self.assertEqual(receipts[0]["outcome"], "success")
+        self.assertEqual(receipts[0]["score"], 1.0)
+        dest = ingest_receipt(receipts[0], self.root)
+        trace = json.loads(dest.read_text(encoding="utf-8"))
+        self.assertEqual(trace["skill"], "tesla-github-manager")
+        self.assertEqual(trace["domaine"], "github-ops")
+        self.assertEqual(trace["outcome"], "success")
 
 
 class DistillerTest(IsolatedRoot):
