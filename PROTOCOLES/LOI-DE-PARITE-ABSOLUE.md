@@ -80,7 +80,7 @@ L'audit croise obligatoirement deux strates. Le sous-ensemble exact de fichiers 
 |-----|-------------------------------------|------|
 | `PROJECT_STATE` | `PROJECT_STATE.md` | Ancrage à court terme |
 | `SESSION_LOG` | `SESSION_LOG.md` | Historique chronologique |
-| `PROJECTS_BASE` | `AGY-Project-MAIN-LIST.md` | Taxonomie canonique |
+| `PROJECTS_BASE` | `liste_projets_antigravity_BASE.md` | Taxonomie canonique |
 
 ### Matrice de couplage obligatoire
 
@@ -139,7 +139,7 @@ done
 PARITY_FINGERPRINT=$(cat \
   "$TESLA_ROOT/memory/PROJECT_STATE.md" \
   "$TESLA_ROOT/memory/SESSION_LOG.md" \
-  "$TESLA_ROOT/memory/AGY-Project-MAIN-LIST.md" \
+  "$TESLA_ROOT/memory/liste_projets_antigravity_BASE.md" \
   | sha256sum | cut -d' ' -f1)
 ```
 
@@ -186,7 +186,7 @@ Pseudo-code du sens inverse :
 declared_ids=$(jq -r '.modules.registered[]?' "$TESLA_ROOT/.agents/TESLA.json" | sort -u)
 
 # Pour chaque fichier mémoriel, vérifier que l'ID audité n'est pas un fantôme
-for mem in memory/PROJECT_STATE.md memory/AGY-Project-MAIN-LIST.md; do
+for mem in memory/PROJECT_STATE.md memory/liste_projets_antigravity_BASE.md; do
   [ -f "$TESLA_ROOT/$mem" ] || continue
   if grep -F -w -q -- "$ID" "$TESLA_ROOT/$mem"; then
     # Présent en mémoire : vérifier qu'il existe aussi dans les manifestes
