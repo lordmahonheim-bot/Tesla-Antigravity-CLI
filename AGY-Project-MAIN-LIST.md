@@ -655,6 +655,53 @@ Ce document dresse la cartographie et la structure étanche de nos réalisations
   • scripts/schemas.py (pour garantir le contrat de données des traces).
   • scripts/index_linter.py (pour interdire les dépassements de tokens).
   • scripts/patch_broker.py (pour interdire l'écriture libre sur les SKILL.md).
+  
+### 62.2 - FICHE TECHNIQUE : Ouroboros V2 (Zero-Touch WikiSkill)
+## 1. DÉFINITION ET MISSION
+**Ouroboros V2 (tesla-wiki-manager)** est le système nerveux autonome de l'écosystème Tesla. Il remplace la "Gouvernance par Incantation" (où l'orchestrateur devait manuellement mémoriser les traces) par un processus **"Zero-Touch"**. Il capture, distille, et forge de nouvelles compétences sémantiques en tâche de fond (daemon), sans la moindre intervention d'un LLM pour le jugement, garantissant une boucle d'apprentissage continu 100% déterministe.
+## 2. ARCHITECTURE LOGIQUE (Cycle en 5 Phases)
+
+```mermaid
+graph TD
+    P0[P0: Auto-Capture<br/>Hook + Daemon] --> P1[P1: Distillation<br/>Trace -> Pattern Wiki]
+    P1 --> IDX[Index Wiki<br/>Budget Max: 4000 tokens]
+    IDX --> P2[P2: Mutation<br/>Forge des Règles]
+    P2 --> PROP[Propositions de Patch]
+    PROP --> P3[P3: Gating<br/>Sandbox Déterministe]
+    P3 -->|PASS| C[Commit Local Souverain]
+    P3 -->|FAIL x3| Q[Mise en Quarantaine]
+    C --> P0
+```
+## 3. SPÉCIFICATIONS TECHNIQUES
+### A. La Couche "Auto-Capture" (Nouveauté V2)
+Le système ne perd plus aucune donnée. Il opère sur un double filet de sécurité :
+1. **La Voie Réflexe (Le Hook) :** Le script `hook_11_ouroboros_capture.sh` est branché sur l'infrastructure Antigravity CLI. Dès qu'un agent d'élite termine l'utilisation d'un outil, un "reçu JSON" est silencieusement déposé dans `runtime/ouroboros/inbox/`.
+2. **La Voie Garantie (Le Démon) :** Un service natif systemd (`ouroboros-capture.service`) tourne en arrière-plan (intervalle : 60s). Il aspire l'inbox, scanne les transcrits d'Antigravity pour récupérer les traces orphelines, et lance le cycle d'ingestion.
+### B. Empreinte Matérielle (MIDGARD)
+*   **Consommation RAM :** ~15 Mo (Démon Python en veille).
+*   **Dépendances :** Uniquement la librairie standard Python 3. (Aucun appel réseau, aucune dépendance externe lourde).
+*   **Stockage :** Traces compressées et scellées par hash (`.agents/traces/`).
+## 4. CONFORMITÉ DOCTRINALE (Vigilum Codex 2.0)
+
+Ouroboros V2 est l'incarnation logicielle du Vigilum Codex. Ses garde-fous sont codés en dur :
+
+| Axiome | Traduction Logicielle dans Ouroboros V2 |
+| :--- | :--- |
+| **Bannissement du LLM-as-a-Judge** | Le scoring, l'éviction, la distillation et le gating sont exécutés par des scripts mathématiques et déterministes (`distiller.py`, `rule_forger.py`). Aucun avis probabiliste n'est demandé à l'IA. |
+| **Intégrité Cryptographique** | Chaque trace capturée est scellée par un condensat **SHA-256**. Une modification manuelle d'un octet invalide la trace et déclenche sa mise en quarantaine. |
+| **Frugalité Cognitive (Anti-Bloat)** | Le script `index_linter.py` impose un plafond absolu de **4000 tokens** par domaine. En cas de dépassement, l'éviction est déterministe (ratio HITS/Récence) et les patterns obsolètes sont archivés, jamais supprimés. |
+| **Sécurité Souveraine** | Le `git_committer.py` applique les patchs ayant réussi le Gating et valide le Commit **localement**. Aucune opération de "push" réseau n'est autorisée. |
+| **Zero-Touch Ops (Règle 8)** | Le processus vit dans `systemctl --user`. Lord Mahonheim n'a plus jamais à ouvrir un terminal pour surveiller ou déclencher l'ingestion mémorielle. |
+## 5. CARTOGRAPHIE DES COMPOSANTS (Arborescence)
+
+*   **Le Cerveau (Scripts Déterministes) :** `.agents/skills/tesla-wiki-manager/scripts/`
+    *   `ouroboros_daemon.py` : L'aspirateur et déclencheur de cycles.
+    *   `ouroboros_cycle.py` : Le moteur A-to-D.
+    *   `ouroboros_autocapture.py` : Le convertisseur de reçus en traces scellées.
+    *   `distiller.py` : L'extracteur de patterns.
+*   **Le Senseur (Antigravity CLI) :** `.antigravity/hooks/hook_11_ouroboros_capture.sh`
+*   **La Base de Données :** `.agents/traces/` (Brut) ➔ `.agents/wiki/` (Savoir distillé).
+*   **Le Sas de Transit :** `runtime/ouroboros/inbox/`
 
 
 ## INVENTAIRE DES AGENTS D'ÉLITE (TSLB)
