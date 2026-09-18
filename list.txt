@@ -56,3 +56,5 @@
 56-CodeBase-Memory-MCP-PRO
 57-Tesla-Mirroring-Cognitif-Assimilation
 58-Spark-MCP-Gateway
+59-Antigravity-Workspace-MCP
+60-WikiSkill-Ouroboros

@@ -1,0 +1,2 @@
+{"file": ".agents/skills/{skill}/SKILL.md", "must_contain": "{skill}", "reason": "le SKILL declare son identite"}
+{"file": ".agents/skills/{skill}/SKILL.md", "must_contain": "## ", "reason": "le SKILL est structure en sections"}
