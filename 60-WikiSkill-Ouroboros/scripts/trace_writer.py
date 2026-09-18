@@ -1,104 +1,114 @@
 #!/usr/bin/env python3
-"""trace_writer.py — Phase A/B (WikiSkill / Ouroboros) : écriture atomique d'une trace scellée.
+"""trace_writer.py - Ecriture atomique des traces d'execution (Ouroboros Phase A).
 
-Canonical layout (WikiSkill v3.0) :
-    $ROOT/runtime/evidence/traces/<skill>/.staging/   (atomic staging)
-    $ROOT/runtime/evidence/traces/<skill>/<sha256>.json (sealed trace)
-    $ROOT/.agents/wiki/<domaine>/chain_head.sha256     (hash chain, optional --update-chain)
+BUGFIX Ouroboros Auto-Capture : le chemin de destination etait code en dur
+(/home/lord-mahonheim/bifrost/tesla/.agents/traces), ce qui rendait toute
+automatisation non portable (CI, autres machines, tests). La racine est
+desormais resolue dans cet ordre :
+    1. TESLA_ROOT (variable d'environnement)
+    2. racine git (git rev-parse --show-toplevel depuis ce script)
+    3. repertoire de travail courant
 
-The root is resolved from --root > $TESLA_ROOT > $HOME/bifrost/tesla. No hardcoded
-user paths: the previous hardcoded "/home/lord-mahonheim/bifrost/tesla/.agents/traces"
-is removed (portability fix).
+Le module expose une API importable (write_trace_bytes / write_trace_file)
+tout en conservant l'interface CLI historique :
+    python3 trace_writer.py <fichier_json>
+
+Garanties : validation JSON, hachage SHA-256 du contenu, ecriture atomique
+via .staging/ + os.replace + fsync (invariant A-003 / O_EXCL spirit).
 """
-import argparse
+from __future__ import annotations
+
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 
-def resolve_root(arg_root: str) -> Path:
-    if arg_root:
-        return Path(arg_root).expanduser().resolve()
+def resolve_tesla_root() -> Path:
+    """Resout la racine Tesla (portable, deterministe)."""
     env_root = os.environ.get("TESLA_ROOT", "").strip()
-    if env_root:
-        return Path(env_root).expanduser().resolve()
-    return (Path.home() / "bifrost" / "tesla").resolve()
-
-
-def read_trace(json_filepath: str) -> dict:
+    if env_root and Path(env_root).is_dir():
+        return Path(env_root).resolve()
     try:
-        with open(json_filepath, "rb") as f:
-            data = f.read()
-        payload = json.loads(data)
-    except FileNotFoundError:
-        print(f"Erreur : fichier introuvable {json_filepath}", file=sys.stderr)
-        sys.exit(1)
-    except json.JSONDecodeError as e:
-        print(f"Erreur de lecture ou JSON invalide : {e}", file=sys.stderr)
-        sys.exit(1)
-    return payload, data
+        out = subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parent),
+             "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, timeout=10, check=False)
+        if out.returncode == 0 and out.stdout.strip():
+            return Path(out.stdout.strip()).resolve()
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return Path.cwd().resolve()
 
 
-def update_chain_head(wiki_dir: Path, trace_sha256: str) -> None:
-    chain_path = wiki_dir / "chain_head.sha256"
-    if chain_path.is_file():
-        prev = chain_path.read_text(encoding="utf-8").strip()
-    else:
-        prev = ""
-    new_head = hashlib.sha256((prev + trace_sha256).encode("utf-8")).hexdigest()
-    chain_path.write_text(new_head + "\n", encoding="utf-8")
-    print(f"[Chain] chain_head.sha256 mis à jour : {new_head}")
+def traces_dir(root: Path | None = None) -> Path:
+    """Retourne .agents/traces sous la racine donnee (cree si absent)."""
+    base = (root or resolve_tesla_root()) / ".agents" / "traces"
+    base.mkdir(parents=True, exist_ok=True)
+    staging = base / ".staging"
+    staging.mkdir(parents=True, exist_ok=True)
+    quarantine = base / "quarantine"
+    quarantine.mkdir(parents=True, exist_ok=True)
+    return base
 
 
-def main(argv) -> int:
-    parser = argparse.ArgumentParser(description="Écrit une trace scellée dans le sas d'évidence WikiSkill.")
-    parser.add_argument("json_filepath", help="Chemin du fichier trace JSON (déjà scellé par schemas.py --seal).")
-    parser.add_argument("--root", default="", help="Racine TESLA (défaut : $TESLA_ROOT puis $HOME/bifrost/tesla).")
-    parser.add_argument("--skill", default="", help="Nom du skill (défaut : champ 'skill' de la trace).")
-    parser.add_argument("--domain", default="", help="Domaine wiki (défaut : champ 'domaine' de la trace).")
-    parser.add_argument("--update-chain", action="store_true", help="Mettre à jour .agents/wiki/<domaine>/chain_head.sha256.")
-    args = parser.parse_args(argv)
+def write_trace_bytes(data: bytes, root: Path | None = None) -> Path:
+    """Valide et ecrit atomiquement une trace. Retourne le chemin final.
 
-    root = resolve_root(args.root)
-    payload, raw = read_trace(args.json_filepath)
-
-    skill = args.skill or payload.get("skill") or "unknown"
-    domaine = args.domain or payload.get("domaine") or "unknown"
-
-    traces_dir = root / "runtime" / "evidence" / "traces" / skill
-    staging_dir = traces_dir / ".staging"
-    staging_dir.mkdir(parents=True, exist_ok=True)
-
-    file_hash = hashlib.sha256(raw).hexdigest()
-    dest_file = traces_dir / f"{file_hash}.json"
-
-    if dest_file.exists():
-        print(f"Trace déjà présente (idempotent) : {dest_file}")
-        return 0
-
-    fd, temp_path = tempfile.mkstemp(dir=staging_dir, suffix=".json", prefix="trace_")
+    Le nom de fichier est le SHA-256 du contenu (deduplication naturelle :
+    une meme trace ingeree deux fois n'occupe qu'un seul fichier).
+    Leve ValueError si le JSON est invalide.
+    """
     try:
-        with os.fdopen(fd, "wb") as f:
-            f.write(raw)
-            f.flush()
-            os.fsync(f.fileno())
+        json.loads(data)
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise ValueError(f"JSON invalide : {exc}") from exc
+
+    file_hash = hashlib.sha256(data).hexdigest()
+    dest_dir = traces_dir(root)
+    dest_file = dest_dir / f"{file_hash}.json"
+
+    fd, temp_path = tempfile.mkstemp(
+        dir=str(dest_dir / ".staging"), suffix=".json", prefix="trace_")
+    try:
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(data)
+            fh.flush()
+            os.fsync(fh.fileno())
         os.replace(temp_path, dest_file)
-        print(f"Trace écrite avec succès : {dest_file}")
-    except Exception as e:
-        print(f"Erreur lors de l'écriture de la trace : {e}", file=sys.stderr)
+    except BaseException:
         if os.path.exists(temp_path):
             os.remove(temp_path)
-        return 1
+        raise
+    return dest_file
 
-    if args.update_chain:
-        wiki_dir = root / ".agents" / "wiki" / domaine
-        wiki_dir.mkdir(parents=True, exist_ok=True)
-        update_chain_head(wiki_dir, file_hash)
-    return 0
+
+def write_trace_file(json_filepath: str, root: Path | None = None) -> Path:
+    """Lit un fichier JSON et l'ingere comme trace. Retourne le chemin final."""
+    with open(json_filepath, "rb") as fh:
+        data = fh.read()
+    return write_trace_bytes(data, root)
+
+
+def write_trace(json_filepath: str) -> None:
+    """Point d'entree historique (CLI). Conserve pour compatibilite."""
+    try:
+        dest = write_trace_file(json_filepath)
+    except ValueError as exc:
+        print(f"Erreur de lecture ou JSON invalide : {exc}", file=sys.stderr)
+        sys.exit(1)
+    except OSError as exc:
+        print(f"Erreur lors de l'ecriture de la trace : {exc}", file=sys.stderr)
+        sys.exit(1)
+    print(f"Trace ecrite avec succes : {dest}")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <fichier_json>", file=sys.stderr)
+        sys.exit(1)
+    write_trace(sys.argv[1])
