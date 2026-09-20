@@ -1,3 +1,8 @@
+> **ARCHIVE — remplacée pour le parcours sans Chrome (audit du 2026-09-19).**
+> Les commandes, modèles, chiffres et certifications ci-dessous ne sont pas
+> une procédure validée. Ne pas appliquer les changements système ni les
+> exemples d’auto-exécution. Utiliser le [guide corrigé TERMINATOR](LIVRABLE_FINAL_AIStudio_Headless_Terminator.md).
+
 # Rapport d'Extraction : Intégration Éditeurs et Écosystème Antigravity
 
 **Cible** : Profil MIDGARD (Intel i7, 8 Go RAM totale, HDD 1 To, Ubuntu, Antigravity CLI v1.2.7)

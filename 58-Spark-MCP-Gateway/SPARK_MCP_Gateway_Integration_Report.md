@@ -1,3 +1,8 @@
+> **Rapport historique (2026-09-06).** Les validations distantes rapportées
+> ci-dessous n’ont pas été reproduites lors de l’audit du 2026-09-19 et ne
+> certifient pas la révision actuelle. Voir le [README corrigé](README.md) et
+> les tests ASGI hors ligne pour les garanties effectivement vérifiées.
+
 # SPARK MCP Gateway Integration Report
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)

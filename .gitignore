@@ -57,3 +57,6 @@ Thumbs.db
 # orchestration registry, audit passes, subagent receipts) — hygiene E5
 **/runtime/
 
+
+# Local Gemini review artefacts and prompts (never executed or committed)
+**/.tesla-ai/

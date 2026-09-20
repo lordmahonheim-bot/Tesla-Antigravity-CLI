@@ -1,61 +1,61 @@
 #!/usr/bin/env python3
+"""Read-only Tesla SPARK MCP Gateway (official MCP Python SDK 1.x).
+
+Run this file directly. Requires a bearer token by default, even on loopback.
+Local development without auth requires TESLA_SPARK_ALLOW_LOCAL_NO_AUTH=1.
+Never use that exception with a reverse proxy/tunnel or a uvicorn bind override.
+The Gemini bridge is deliberately separate: a remote tool cannot send local
+files to Google, spend Gemini quota or execute generated code.
 """
-Tesla SPARK MCP Gateway — reference implementation.
-
-Key design decisions:
-- Streamable HTTP transport (MCP 2025-03-26). SSE is deprecated.
-- Endpoint is exactly /mcp (do NOT expose /mcp/sse).
-- DNS-rebinding protection stays ENABLED; the tunnel/proxy host(s) are
-  explicitly allowlisted instead of disabling security.
-- No fake OAuth/DCR endpoints. Use header auth (`Authorization: Bearer ...`)
-  when the client is remote; leave TOKEN empty for local development.
-- Bind only to 127.0.0.1. Public exposure is handled by Nginx / named tunnel.
-
-Run directly:
-    python mcp_gateway.py
-
-Or with uvicorn:
-    uvicorn mcp_gateway:app --host 127.0.0.1 --port 8080
-"""
-
 from __future__ import annotations
 
+import base64
+import binascii
+import hmac
+import json
 import os
+import re
 from typing import Any
+from urllib.parse import quote
 
+import httpx
 import uvicorn
-from mcp.server import MCPServer
+from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
-# --------------------------------------------------------------------------- #
-# Configuration (env-driven, no secrets committed)
-# --------------------------------------------------------------------------- #
-HOST = os.environ.get("TESLA_SPARK_MCP_HOST", "127.0.0.1")
+HOST = os.environ.get("TESLA_SPARK_MCP_HOST", "127.0.0.1").strip()
 PORT = int(os.environ.get("TESLA_SPARK_MCP_PORT", "8080"))
-# Optional bearer token. Leave empty for loopback-only development.
 TOKEN = os.environ.get("TESLA_SPARK_MCP_TOKEN", "").strip()
-# Optional stable externally-facing hostname (e.g. named Cloudflare tunnel).
 TUNNEL_HOST = os.environ.get("TESLA_SPARK_TUNNEL_HOST", "").strip()
+LOCAL_NO_AUTH = os.environ.get("TESLA_SPARK_ALLOW_LOCAL_NO_AUTH") == "1"
+GITHUB_TOKEN = os.environ.get("GITHUB_PERSONAL_ACCESS_TOKEN", "").strip()
+GITHUB_REPO = "lordmahonheim-bot/Tesla-Antigravity-CLI"
+MAX_GITHUB_BYTES = 2 * 1024 * 1024
 
-# --------------------------------------------------------------------------- #
-# Transport security: protect DNS rebinding while allowing real hosts
-# --------------------------------------------------------------------------- #
-allowed_hosts: list[str] = [
-    "127.0.0.1",
-    "127.0.0.1:*",
-    "localhost",
-    "localhost:*",
-]
-allowed_origins: list[str] = [
-    "http://127.0.0.1:*",
-    "http://localhost:*",
-]
 
+def validate_config() -> None:
+    """Fail closed before serving; never expose credentials in diagnostics."""
+    if not 1 <= PORT <= 65535:
+        raise ValueError("Invalid MCP port.")
+    if not TOKEN and not (LOCAL_NO_AUTH and HOST in {"127.0.0.1", "localhost", "::1"} and not TUNNEL_HOST):
+        raise ValueError("TESLA_SPARK_MCP_TOKEN required; unauthenticated remote access refused.")
+    if TOKEN and (len(TOKEN) < 32 or not TOKEN.isascii() or any(ord(c) < 33 or ord(c) > 126 for c in TOKEN)):
+        raise ValueError("MCP token must contain at least 32 printable ASCII characters without spaces.")
+    if TUNNEL_HOST and (len(TUNNEL_HOST) > 253 or any(
+        not re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
+        for label in TUNNEL_HOST.split(".")
+    )):
+        raise ValueError("Tunnel host must be an exact DNS hostname, without scheme, port or wildcard.")
+
+
+validate_config()
+allowed_hosts = ["127.0.0.1", "127.0.0.1:*", "localhost", "localhost:*", "[::1]", "[::1]:*"]
+allowed_origins = ["http://127.0.0.1:*", "http://localhost:*", "http://[::1]:*"]
 if TUNNEL_HOST:
-    allowed_hosts += [TUNNEL_HOST, f"{TUNNEL_HOST}:*"]
+    allowed_hosts += [TUNNEL_HOST, f"{TUNNEL_HOST}:443"]
     allowed_origins.append(f"https://{TUNNEL_HOST}")
 
 security = TransportSecuritySettings(
@@ -63,112 +63,102 @@ security = TransportSecuritySettings(
     allowed_hosts=allowed_hosts,
     allowed_origins=allowed_origins,
 )
-
-# --------------------------------------------------------------------------- #
-# MCP server definition
-# --------------------------------------------------------------------------- #
-mcp = MCPServer(
+mcp = FastMCP(
     "Tesla SPARK Gateway",
-    instructions=(
-        "Tesla SPARK local gateway. Currently exposes a single read-only "
-        "probe tool used to validate the MCP link."
-    ),
+    instructions="Read-only status and GitHub tools. No local execution or Gemini generation.",
+    host=HOST, port=PORT, transport_security=security,
+    stateless_http=True, json_response=True,
 )
 
 
-@mcp.tool(name="tesla_status", description="Returns the gateway operational status. Use as a connectivity proof of life.")
+@mcp.tool(name="tesla_status", description="Read-only gateway connectivity probe; not a MIDGARD hardware audit.")
 async def tesla_status() -> dict[str, Any]:
-    """Read-only proof-of-life tool for the Tesla SPARK gateway."""
+    """Report only this process, never imply remote hardware was verified."""
     return {
-        "ok": True,
-        "status": "Gateway opérationnelle",
-        "service": "Tesla SPARK MCP",
-        "mode": "tesla_status",
-        "tier": "readonly",
-        "transport": "streamable-http",
+        "ok": True, "service": "Tesla SPARK MCP", "tier": "readonly",
+        "transport": "streamable-http", "gemini_execution": False,
+        "authenticated": bool(TOKEN), "hardware_verified": False,
     }
 
 
-# --------------------------------------------------------------------------- #
-# Optional bearer auth middleware
-# --------------------------------------------------------------------------- #
+def github_path(path: str) -> str:
+    """Only relative repository paths; prevent query/traversal injection."""
+    if len(path) > 1024 or any(ord(c) < 32 or ord(c) == 127 for c in path):
+        raise ValueError("Invalid repository path.")
+    if path and (path.startswith("/") or "\\" in path or any(p in {"", ".", ".."} for p in path.split("/"))):
+        raise ValueError("Invalid repository path.")
+    return quote(path, safe="/")
 
-import httpx
-import base64
 
-GITHUB_TOKEN = os.environ.get("GITHUB_PERSONAL_ACCESS_TOKEN", "").strip()
-GITHUB_REPO = "lordmahonheim-bot/Tesla-Antigravity-CLI"
+async def github_contents(path: str) -> dict | list:
+    """Bound GitHub latency/memory; return sanitized errors and no redirects."""
+    try:
+        encoded = github_path(path)
+    except ValueError:
+        return {"error": "Invalid repository path."}
+    if not GITHUB_TOKEN:
+        return {"error": "GitHub read access not configured."}
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}", "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"}
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=False) as client:
+            async with client.stream("GET", f"https://api.github.com/repos/{GITHUB_REPO}/contents/{encoded}", headers=headers) as response:
+                if response.status_code != 200:
+                    return {"error": f"GitHub HTTP {response.status_code}; check path, permissions or quota."}
+                body = bytearray()
+                async for chunk in response.aiter_bytes():
+                    body.extend(chunk)
+                    if len(body) > MAX_GITHUB_BYTES:
+                        return {"error": "GitHub response exceeds 2 MiB."}
+        data = json.loads(body)
+        if not isinstance(data, (dict, list)):
+            return {"error": "Invalid GitHub response."}
+        return data
+    except (httpx.HTTPError, ValueError):
+        return {"error": "GitHub network or response error."}
 
-@mcp.tool(name="github_read_file", description="Read a file from the connected GitHub repository (Tesla-Antigravity-CLI).")
+
+@mcp.tool(name="github_read_file", description="Read a UTF-8 file from the Tesla-Antigravity-CLI repository; never execute its content.")
 async def github_read_file(path: str) -> dict[str, Any]:
-    """Reads the content of a file from the repository."""
-    if not GITHUB_TOKEN:
-        return {"error": "GITHUB_PERSONAL_ACCESS_TOKEN not configured."}
-    
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{path}"
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-    
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(url, headers=headers)
-        if resp.status_code == 404:
-            return {"error": f"File not found: {path}"}
-        resp.raise_for_status()
-        data = resp.json()
-        
-        if data.get("type") == "file" and "content" in data:
-            content = base64.b64decode(data["content"]).decode('utf-8')
-            return {"path": path, "content": content}
-        elif isinstance(data, list):
-            return {"error": f"Path is a directory, not a file: {path}"}
-        return {"error": "Unable to decode file content."}
+    """Handle directory, binary, symlink and oversize responses safely."""
+    data = await github_contents(path)
+    if isinstance(data, list):
+        return {"error": "Path is a directory, not a file."}
+    if "error" in data:
+        return data
+    if data.get("type") != "file" or data.get("encoding") != "base64" or data.get("target"):
+        return {"error": "Not a supported inline file (symlink, submodule or oversized file)."}
+    try:
+        content = base64.b64decode("".join(data["content"].split()), validate=True).decode("utf-8")
+    except (KeyError, AttributeError, TypeError, ValueError, binascii.Error):
+        return {"error": "File is not valid base64 UTF-8 content."}
+    return {"path": path, "content": content}
 
-@mcp.tool(name="github_list_directory", description="List the contents of a directory in the connected GitHub repository.")
+
+@mcp.tool(name="github_list_directory", description="List a directory in the connected Tesla GitHub repository.")
 async def github_list_directory(path: str = "") -> dict[str, Any]:
-    """Lists files and folders in a specific directory of the repository."""
-    if not GITHUB_TOKEN:
-        return {"error": "GITHUB_PERSONAL_ACCESS_TOKEN not configured."}
-        
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{path}"
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-    
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(url, headers=headers)
-        if resp.status_code == 404:
-            return {"error": f"Directory not found: {path}"}
-        resp.raise_for_status()
-        data = resp.json()
-        
-        if isinstance(data, list):
-            items = [{"name": item["name"], "type": item["type"], "path": item["path"]} for item in data]
-            return {"path": path or "/", "items": items}
-        return {"error": f"Path is a file, not a directory: {path}"}
+    """List metadata only, without downloading file content."""
+    data = await github_contents(path)
+    if isinstance(data, dict):
+        return data if "error" in data else {"error": "Path is a file, not a directory."}
+    try:
+        items = [{key: item[key] for key in ("name", "type", "path")} for item in data]
+    except (KeyError, TypeError):
+        return {"error": "Invalid GitHub directory response."}
+    return {"path": path or "/", "items": items, "possibly_truncated": len(items) >= 1000}
 
 
 class BearerAuthMiddleware(BaseHTTPMiddleware):
-    """Reject requests without the configured bearer token.
-
-    When TOKEN is empty, the middleware is a no-op (local development).
-    """
+    """Authenticate before MCP dispatch, using constant-time byte comparison."""
 
     async def dispatch(self, request: Request, call_next: Any) -> Response:
         if TOKEN:
-            auth = request.headers.get("authorization", "")
-            expected = f"Bearer {TOKEN}"
-            if auth != expected:
-                return JSONResponse({"error": "unauthorized"}, status_code=401)
+            auth = request.headers.get("authorization", "").encode("utf-8")
+            if not hmac.compare_digest(auth, f"Bearer {TOKEN}".encode("ascii")):
+                return JSONResponse({"error": "unauthorized"}, status_code=401, headers={"WWW-Authenticate": "Bearer"})
         return await call_next(request)
 
 
-# The Starlette ASGI app served by uvicorn. Mounted at the SDK's default
-# /mcp path. Do not mount this inside a parent app under another /mcp prefix or
-# the endpoint becomes /mcp/mcp.
-app = BearerAuthMiddleware(mcp.streamable_http_app(transport_security=security))
+app = BearerAuthMiddleware(mcp.streamable_http_app())
 
 if __name__ == "__main__":
     uvicorn.run(app, host=HOST, port=PORT, log_level="info")

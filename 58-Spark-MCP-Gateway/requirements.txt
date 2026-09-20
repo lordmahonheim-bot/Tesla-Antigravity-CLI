@@ -1,0 +1,4 @@
+# Direct versions exercised by the terminal-only integration tests.
+mcp==1.30.0
+httpx==0.28.1
+uvicorn==0.53.0
