@@ -1,3 +1,8 @@
+> **ARCHIVE — remplacée pour le parcours sans Chrome (audit du 2026-09-19).**
+> Les commandes, modèles, chiffres et certifications ci-dessous ne sont pas
+> une procédure validée. Ne pas appliquer les changements système ni les
+> exemples d’auto-exécution. Utiliser le [guide corrigé TERMINATOR](LIVRABLE_FINAL_AIStudio_Headless_Terminator.md).
+
 # LIVRABLE FINAL : INTÉGRATION ÉDITEUR DE CODE × ANTIGRAVITY CLI (MIDGARD)
 
 ![Status](https://img.shields.io/badge/Status-MVP-blue) ![Ecosystem](https://img.shields.io/badge/Ecosystem-TESLA%20ANTIGRAVITY-purple) ![Security](https://img.shields.io/badge/Security-ID%20LOCKED-red) ![Python](https://img.shields.io/badge/Python-3.12+-blue)

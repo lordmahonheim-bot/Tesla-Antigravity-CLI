@@ -1,3 +1,8 @@
+> **ARCHIVE — remplacée pour le parcours sans Chrome (audit du 2026-09-19).**
+> Les commandes, modèles, chiffres et certifications ci-dessous ne sont pas
+> une procédure validée. Ne pas appliquer les changements système ni les
+> exemples d’auto-exécution. Utiliser le [guide corrigé TERMINATOR](LIVRABLE_FINAL_AIStudio_Headless_Terminator.md).
+
 # NŒUD 5 - Pipeline Git (Terminator Split)
 
 Ce document définit le pipeline de gestion des versions et d'intégration Git via le terminal (Terminator), adapté pour du code généré et édité localement, en conformité absolue avec le **Vigilum Codex**.
