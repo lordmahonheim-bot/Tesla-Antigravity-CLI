@@ -1,0 +1,2335 @@
+================================================================================
+                 FICHE TECHNIQUE INTÉGRALE ET DESCRIPTIVE
+                     PROJET : TESLA-ANTIGRAVITY-CLI
+              Écosystème TESLA ANTIGRAVITY / VIGILUM CODEX
+================================================================================
+
+Ref. document      : OUTPUTS/Fiche_Technique_Intégrale_Tesla_Antigravity_CLI_2026-09-23.txt
+Version            : 1.0.0
+Date de production : 2026-09-23
+Nature             : Fiche technique descriptive, informative et exhaustive
+Portée             : Ensemble du dépôt et du projet Tesla-Antigravity-CLI
+Dépôt              : https://github.com/lordmahonheim-bot/Tesla-Antigravity-CLI
+Branche auditée    : main (miroir) / arena/01a0d00b-tesla-antigravity-cli (session)
+Point de tête      : de98204db4b541a689d6f5211cb82d51f17bf090
+                     "[MIRROR] sync 2026-09-23T20:08:45+00:00"
+Auteur / Autorité  : Abdellah MOUHTAJ, alias LORD Mahonheim / Mahonheim
+Doctrine d'ancrage : Vigilum Codex - "NO PROOF, NO PASS" (Fail-Closed)
+Langue             : Français (corpus OUTPUTS) - les README de modules restent
+                     en anglais strict conformément à MY_COMPANY.md (S14)
+
+--------------------------------------------------------------------------------
+0. NOTE MÉTHODOLOGIQUE - COMMENT CETTE FICHE A ÉTÉ PRODUITE
+--------------------------------------------------------------------------------
+
+Cette fiche n'est pas une synthèse narrative. Elle est un document de
+constats : chaque chiffre, chaque chemin, chaque verdict cité a été obtenu
+par une commande exécutée sur le clone réel du dépôt le 2026-09-23.
+
+Commandes de preuve exécutées (reproductibles à l'identique) :
+
+  1. find . -path ./.git -prune -o -type f -print | wc -l
+  2. find . -name '*.md' / '*.py' / '*.sh' / '*.json' / '*.yaml' -print | wc -l
+  3. find . -name '*.md' -print0 | xargs -0 cat | wc -l        (lignes)
+  4. ls -d [0-9][0-9]-* | wc -l                               (modules)
+  5. bash tools/quotidien_status.sh                            (vérité du dépôt)
+  6. bash tools/quotidien_status.sh --tests                    (+ baseline 53)
+  7. cd 53-.../ && python3 bin/test_runner.py --mission ARENA-DOC-TECH
+  8. cd 53-.../ && python3 -m unittest discover -s tests
+  9. cd 60-.../ && python3 -m unittest discover -s tests
+ 10. cd 60-.../ && python3 scripts/self_test.py
+ 11. git log --oneline | wc -l ; git remote -v
+ 12. grep -rniE "api[_-]?key|secret|token|password" --include=*.py|*.json|*.sh
+
+Conventions de cette fiche :
+  [VÉRIFIÉ]  = mesure exécutée, résultat cité littéralement.
+  [DÉCLARÉ]  = affirme par un document du dépôt, non confirmé par l'exécution.
+  [ÉCART]    = divergence constatée entre le déclaré et l'observé.
+
+Le document applique à lui-même la Loi de Parité Absolue (P1 No Proof No Pass,
+P4 "l'absence d'erreur n'est pas le succès", P6 parité bidirectionnelle).
+
+================================================================================
+PARTIE 1 - RÉSUMÉ EXÉCUTIF
+================================================================================
+
+1.1 CE QU'EST CE DÉPÔT
+
+Tesla-Antigravity-CLI est la publication publique (MVP) de l'infrastructure
+technique d'un agent d'IA local nommé "Tesla", opère sur une station de
+travail baptisée MIDGARD, pilotée via Antigravity CLI (commande `agy`).
+
+Ce n'est PAS une application, ni une bibliothèque, ni un framework
+installable. C'est un dépôt de gouvernance et d'orchestration : il réunit
+
+  - 59 modules numérotés (01 à 60, le 13 étant absent du disque) ;
+  - 2 protocoles canoniques constitutionnels ;
+  - 7 documents de genèse (couche identité + gouvernance) ;
+  - 14 "agents d'élite" (skills / sous-agents) spécifiques ;
+  - 1 moteur de gouvernance exécutable (module 53, 183 tests déclarés) ;
+  - 1 boucle d'auto-apprentissage déterministe (module 60, Ouroboros).
+
+La thèse centrale du projet tient en une formule :
+"L'IA propose, le code valide." Autrement dit, la sécurité d'un agent
+autonome ne peut pas reposer sur des instructions en langage naturel
+(system prompt) : elle doit être compilée au niveau du système
+d'exploitation (hooks Git, verrous POSIX O_CREAT|O_EXCL, schémas JSON,
+codes de sortie, jetons à usage unique).
+
+1.2 CHIFFRES CLÉS [VÉRIFIÉ]
+
+  Fichiers suivis (hors .git) ............ 446
+  Volume du dépôt (hors .git) ............ 7,2 Mo
+  Documents Markdown ..................... 208 fichiers / 28 597 lignes
+  Scripts Python .........................  98 fichiers / 20 438 lignes
+  Scripts Shell ..........................  60 fichiers /  3 986 lignes
+  Fichiers JSON ..........................  37
+  Fichiers YAML/YML ......................  11
+  README.md ..............................  72
+  SKILL.md (contrats de compétence) ......  20
+  Modules numérotés physiquement présents .  59
+  Modules déclarés dans list.txt .........  60
+  Commits dans l'historique local ........   1 (miroir écrasé)
+  Licence ................................ MIT (c) 2026 Lord Mahonheim
+
+1.3 VERDICT GLOBAL [VÉRIFIÉ]
+
+  bash tools/quotidien_status.sh
+    -> "VERDICT : BLOCK - dérive détectée (fail-closed, P7)"
+
+  bash tools/quotidien_status.sh --tests
+    -> section 5 : "bin/test_runner.py : exit 1 (baseline NON verte)"
+
+Le dépôt est donc, au sens de sa propre doctrine, en état de dérive
+déclarée et tracee. Ce n'est pas une anomalie cachée : le dépôt contient
+lui-même le diagnostic (PLAN-QUOTIDIEN.md, constats C1 à C8) et le
+registre des points ouverts (OUTPUTS/open_items_todo-Updated.md).
+
+Lecture honnête : la richesse doctrinale et documentaire est exceptionnelle ;
+la reproductibilité de la preuve sur un clone propre ne l'est pas encore.
+
+================================================================================
+PARTIE 2 - IDENTITÉ, AUTEUR, DOCTRINE
+================================================================================
+
+2.1 IDENTITÉ DE L'AUTEUR ET DU PROJET (ABOUT_ME.md, MY_COMPANY.md)
+
+  Nom public .................. Abdellah MOUHTAJ
+  Alias interne ............... LORD Mahonheim / Mahonheim
+  Structure mère .............. Vigilum Codex (institution-matrice)
+  Positionnement .............. Human Performance & Governed AI Opérations
+                                Consultant / Ops Consultant - AI Agents,
+                                CLI Workflows & Local Governance
+  Niveau technique déclaré .... "NO-code, Low-code" (politique explicite)
+  Formule de l'auteur ......... Connaissance > Structure > Mémoire >
+                                Action > Gouvernance
+
+Conséquence structurante sur le dépôt : l'auteur ne code pas. Il arbitre,
+valide et exige la preuve. Le dépôt est donc conçu comme un instrument de
+gouvernance déléguée à des agents, et non comme un produit logiciel.
+
+2.2 LES TROIS BRANCHES DE VIGILUM CODEX (MY_COMPANY.md S3)
+
+  1. Human Performance ......... excellence de service, standardisation
+                                 premium, soft skills, communication.
+  2. Strategic Intelligence .... veille, analyse, mémoire, structuration,
+                                 décision, détection de signaux faibles.
+  3. Governed AI Opérations .... agents IA, workflows CLI, gouvernance
+                                 locale, automatisation, traçabilité.
+
+Principe directeur : "L'humain au centre. L'IA comme infrastructure.
+La gouvernance comme sauvegarde."
+
+2.3 LES 8 RÈGLES DE LA DOCTRINE (MY_COMPANY.md S12)
+
+  1. Clarté avant complexité
+  2. Production avant accumulation
+  3. Cohérence avant expansion
+  4. Excellence avant vitesse
+  5. Humain au centre
+  6. Standard comme colonne vertébrale
+  7. IA comme infrastructure
+  8. Gouvernance comme sauvegarde
+
+2.4 IDENTITÉ VISUELLE ET ÉDITORIALE [VÉRIFIÉ]
+
+Chaque README de module porte le même ruban de badges :
+
+  ![Status](...Status-MVP-blue)
+  ![Ecosystem](...Ecosystem-TESLA%20ANTIGRAVITY-purple)
+  ![Security](...Security-ID%20LOCKED-red)
+  ![Python](...Python-3.12+-blue)
+
+Formules signatures récurrentes :
+  "An un-governed agent is a liability; structure is the mother of security."
+  "Précision in structure brings governance in exécution."
+  "NO PROOF, NO PASS."
+
+2.5 LICENCE ET CONFORMITÉ [VÉRIFIÉ]
+
+  LICENSE ......... MIT, "Copyright (c) 2026 Lord Mahonheim"
+  SECURITY.md ..... divulgation privée uniquement (pas d'issue publique)
+  CODE_OF_CONDUCT.md, CONTRIBUTING.md, SUPPORT.md présents à la racine
+  CONTRIBUTING.md . Conventional Commits impose (ex. feat(ui): ...)
+  CODEOWNERS ...... "* @lordmahonheim-bot" (approbation obligatoire)
+
+================================================================================
+PARTIE 3 - ARCHITECTURE CANONIQUE
+================================================================================
+
+3.1 LA PILE DE DÉMARRAGE (GENESE-v1/)  [VÉRIFIÉ : 7 fichiers, 1 267 lignes]
+
+  Fichier            Lignes   Rôle
+  -----------------  -------  ------------------------------------------
+  TESLA.json            114   Manifeste plateforme (Single Source of Truth)
+  SOUL.md               196   Identité et principes immuables de "Tesla"
+  ENGINE.md             168   Moteur cognitif universel (demande > décision)
+  AGENTS.md             313   Gouvernance opérationnelle (table de délégation)
+  FORCE_TOOLING.md      200   Outillage force (interdiction d'ignorer un outil)
+  GEMINI.md             161   Règles comportementales du moteur cognitif
+  settings.json         115   Permissions et liste blanche d'exécution
+
+Ordre de chargement déclaré dans TESLA.json (bootstrap.loadOrder) :
+  SOUL.md > ENGINE.md > AGENTS.md > FORCE_TOOLING.md > CONTEXT.md > GEMINI.md
+avec "stopOnMissingCore": true (arrêt si un document coeur manque).
+
+Couches architecturales déclarées (TESLA.json architecture.layers) :
+  SOUL > ENGINE > AGENTS > FORCE_TOOLING > SKILLS > MCP > TOOLS
+
+Identité "Tesla" : indépendante du moteur cognitif sous-jacent (Gemini,
+GPT, Claude, Qwen...). L'identité survit au changement de modèle.
+
+3.2 LES 10 PRINCIPES INVIOLABLES (PROTOCOLES/GRAVURE-SUR-MARBRE.md)
+
+  P1  NO PROOF, NO MARBLE ...... aucune transition sans preuve matérielle
+                                 (code retour 0, hash SHA-256 verifie)
+  P2  PRODUCER != VALIDATOR .... l'auteur d'un livrable ne le valide pas
+  P3  UNKNOWN != PASS .......... inobservable = BLOCKED, jamais un succès
+  P4  L'absence d'erreur n'est pas le succès (exit 0 d'un grep != preuve)
+  P5  NO SELF-EVIDENCE ......... jamais modifier + fabriquer la preuve +
+                                 se déclarer validateur
+  P6  Parité bidirectionnelle .. anti-amnesie ET anti-fantome
+  P7  FAIL CLOSED .............. toute ambiguïté provoque un arrêt contrôle
+  P8  No Silent Délétion ....... aucun retrait silencieux, toujours tracer
+  P9/P10  (compléments : scellement et autorité biologique exclusive)
+
+3.3 LES 7 GATES DU CONDUCTEUR ABSOLU v3.2.1
+
+Source réelle : 51-Conducteur-Absolu-v3.2.1/Le_Conducteur_Absolu_v3.2.1.md
+(167 lignes) [VÉRIFIÉ]
+
+  GATE 0  AUTHORITY & RELOAD COGNITIF
+  GATE 1  CANONICAL DISCOVERY (anti-extrapolation, BASELINE_FINGERPRINT)
+  GATE 2  MISSION CONTRACT (le DAG blindé)
+  GATE 3  DÉLÉGATION & BROKER PATTERN
+  GATE 4  INDEPENDENT VÉRIFICATION (gatekeeper à 4 niveaux)
+  GATE 5  CANONICAL INTÉGRATION (Zero-Friction Mapping)
+  GATE 6  CLOSURE & EVIDENCE
+
+Règle Zéro : "NO PROOF, NO PASS" (Fail-Closed). Toute mission exige un DAG
+valide par l'opérateur, puis une Evidence Chain par noeud.
+
+3.4 LE PROTOCOLE GRAVURE SUR MARBRE (8 phases)
+
+PROTOCOLES/GRAVURE-SUR-MARBRE.md - version 2.0.0, 534 lignes [VÉRIFIÉ]
+
+  Phase 0  AUTHORITY ........ autorité, contrat, verrouillage pre-vol
+  Phase 1  CLOSURE .......... clôture interne du cahier des charges, DoD
+  Phase 2  VALIDATION ....... audit indépendant multi-paliers (Gate 4)
+  Phase 3  ASSIMILATION ..... cartographie chirurgicale, Loi de Parité
+  Phase 4  PUBLIC STAGING ... ingénierie documentaire, décorrélation
+  Phase 5  AUTHORIZATION .... Biological Gate Mahonheim (jeton signé)
+  Phase 6  PUBLICATION ...... transaction Git et parité distante
+  Phase 7  SEAL ............. certificat de marbre, ancrage cryptographique
+
+[ÉCART] Le fichier PROTOCOLES/PROTOCOLE_CANONIQUE_GRAVURE_SUR_MARBRE_
+VIGILUM_CODEX_2.0.md est strictement identique à GRAVURE-SUR-MARBRE.md
+(diff -q : IDENTIQUES, 534 lignes chacun). Doublon à consolider.
+
+3.5 LA LOI DE PARITÉ ABSOLUE (PROTOCOLES/LOI-DE-PARITE-ABSOLUE.md, 426 lignes)
+
+Objet : audit post-mission déterministe de cohérence globale (Phase 3.5).
+Postulat de double existence :
+
+  Capacité déployée mais absente de la mémoire -> AMNÉSIE
+  Capacité mémorisée mais absente de l'exécution -> FANTÔME
+  Les deux = Context Collapse = BLOCK
+
+3.6 LES 4 PLANS DE VIGILUM CODEX 2.0 (module 53)
+
+  Plan 1  Proposal & Ingestion .. l'agent produit un intent JSON non
+                                  exécutable, valide par schéma
+  Plan 2  Broker & Gatekeeper ... tesla_brokerd + gatekeeper.py
+                                  (RFC 8785 JCS, anti-TOCTOU, journal)
+  Plan 3  Exécution & Mutation .. écriture atomique O_CREAT|O_EXCL,
+                                  reçus done/ et failed/
+  Plan 4  Guardrail & Anti-Replay  hooks pre-commit (11 fichiers) et
+                                  pre-push (nonces à usage unique)
+
+Invariants d'ingénierie :
+  Q-001  ingestion staging atomique (même système de fichiers)
+  T-002  confinement anti-TOCTOU et anti-symlinks (O_NOFOLLOW, realpath)
+  R4     crash-recovery journalise, idempotence
+  A-001..A-003  anti-rejeu atomique POSIX (verrous de nonces)
+
+================================================================================
+PARTIE 4 - CARTOGRAPHIE EXHAUSTIVE DES MODULES (CHANTIERS / MVP)
+================================================================================
+
+Convention de lecture de chaque entrée :
+  OBJET ..... mission du chantier
+  LIVRABLES . fichiers physiquement présents sur le disque [VÉRIFIÉ]
+  ANALYSE ... apport architectural
+  ÉTAT ...... OPÉRANT / DOCUMENTAIRE / PARTIEL
+
+Rappel : 59 modules numérotés sont physiquement présents. Le module 13
+(13-Jules-Cloud-Integration) est déclaré dans list.txt et dans README.md
+mais ABSENT du disque -> statut FANTÔME au sens de la Loi de Parité.
+
+--------------------------------------------------------------------------------
+4.1 SOCLE TECHNIQUE LOCAL (01 - 06)
+--------------------------------------------------------------------------------
+
+01-LSP-Self-Healing
+  OBJET ..... Immuniser l'environnement de développement contre les bugs de
+              typage et d'importation en automatisant la correction du code.
+  LIVRABLES . README.md, examples/test_lsp.py
+  ANALYSE ... Le serveur LSP Pyright (module karellen-lsp-mcp) agit comme un
+              anticorps : la vérification statique précédé toute exécution.
+              La boucle de Self-Healing convertit les erreurs fatales pour un
+              LLM en itérations d'auto-correction silencieuses. C'est la
+              couche "Core" de tout l'édifice.
+  ÉTAT ...... DOCUMENTAIRE + exemple exécutable
+
+02-Alexandria-Database
+  OBJET ..... Bibliothèque universelle d'Alexandria : base de connaissances
+              partagée (SQL + FTS5 + ChromaDB) hébergée sur le second
+              cerveau Avalon (TASLB - Tesla Avalon Second Living Brain).
+  LIVRABLES . README.md, indexer_hybrid.py, search_router.py
+  ANALYSE ... Indexation hybride incrémentale : SQLite FTS5 (BM25 lexical) +
+              ChromaDB local (SentenceTransformer all-MiniLM-L6-v2, CPU).
+              Incrementalite par timestamp, auto-purge des fichiers supprimés.
+              Le routeur fusionné les classements par Reciprocal Rank Fusion
+              (RRF, constante de lissage k=60) avec tolérance aux erreurs de
+              syntaxe MATCH.
+  ÉTAT ...... OPÉRANT (scripts présents)
+
+03-Memory-MLT
+  OBJET ..... Persistance cognitive d'une session à l'autre sans "mur de
+              texte" ni saturation du contexte de jetons.
+  LIVRABLES . README.md, update_session_history.py
+  ANALYSE ... Idempotence sémantique : au lieu de concaténer les
+              transcriptions, le parseur detecte des ancres HTML de session
+              et cristallise la connaissance dans un graphe de relations
+              (knowledge_graph.json). Équivalent architectural de la
+              consolidation mémoire court terme -> néocortex.
+  ÉTAT ...... OPÉRANT
+
+04-Web-Raider
+  OBJET ..... Capacités de navigation, d'extraction de contenu et d'actions
+              autonomes en ligne (web-scraping, OSINT).
+  LIVRABLES . README.md, SKILL.md, examples/scrape_démo.py
+  ANALYSE ... Playwright en mode headless non interactif + boucle de
+              validation visuelle (screenshot diffing). La sandbox protégé
+              l'hôte des vecteurs d'attaque web tout en donnant à l'agent une
+              vue algorithmique ET visuelle du DOM.
+  ÉTAT ...... OPÉRANT (contrat SKILL.md + démo)
+
+05-USB-Resilience
+  OBJET ..... Remonter une clé USB NTFS marquée "dirty bit" sous Linux sans
+              perte de données.
+  LIVRABLES . README.md, examples/repair_mount_usb.sh
+  ANALYSE ... Réparation de la MFT via ntfsfix puis montage force par le
+              pilote noyau moderne ntfs3. Illustration d'ingénierie bas
+              niveau (VFS) et de restauration d'I/O chirurgicale sans
+              formatage.
+  ÉTAT ...... OPÉRANT
+
+06-Sudo-Askpass
+  OBJET ..... Éliminer le blocage sudo des processus de fond tout en durcissant
+              la sécurité système de MIDGARD.
+  LIVRABLES . README.md, scripts/sudo-askpass-zenity, scripts/sudogui
+  ANALYSE ... Application du "Moindre Privilège Contextuel" : NOPASSWD
+              reserve exclusivement au disque interne stable /dev/sda,
+              authentification graphique forcée pour tout volume amovible.
+              passwd_timeout=0 évite la fermeture prématurée de l'invite.
+              Verrouillé l'élévation de privilège depuis un script externe ou
+              une clé USB infectée.
+  ÉTAT ...... OPÉRANT
+
+--------------------------------------------------------------------------------
+4.2 STRATÉGIE, GOUVERNANCE DE DÉPÔT ET SCAFFOLDING (07 - 12)
+--------------------------------------------------------------------------------
+
+07-Strategic-Armement
+  OBJET ..... Planifier la supervision matérielle autonome et la maintenance
+              logicielle future de Tesla sur MIDGARD.
+  LIVRABLES . README.md, plan_armement_pluridisciplinaire_tesla.md
+  ANALYSE ... Couche prédictive matérielle : anticipation des OOM Killers et
+              de la dégradation SSD (wear leveling).
+  ÉTAT ...... DOCUMENTAIRE
+
+08-Premortem
+  OBJET ..... Stress-tester les plans avant mise en œuvre.
+  LIVRABLES . README.md (le gabarit premortem_template.md vit dans
+              Archives-MVP-GITHUB/08-Premortem-Diagnostic/templates/)
+  ANALYSE ... Sandbox cognitif inspiré de Gary Klein et Daniel Kahneman.
+              Version 1.0, remplacée par 20-Tesla-Premortem.
+  ÉTAT ...... DOCUMENTAIRE (historique)
+
+09-Github-Governance
+  OBJET ..... Maintenir, auditer, versionner et sécuriser l'ensemble des
+              dépôts GitHub sous doctrine Vigilum Codex.
+  LIVRABLES . README.md, SKILL.md
+  ANALYSE ... Skill tesla-github-manager v3.0.0 (1034 lignes, 17 sections +
+              SGC selon AGY-Project-MAIN-LIST.md). Synthèse de 3 sources
+              (ChatGPT v2.0, Apodex, RENA). Intégré OpenSSF Scorecard
+              (cible >= 8/10), GitHub Advanced Security, Private Vulnerability
+              Reporting, 7 diagrammes Mermaid, checklist d'audit /20, matrice
+              de décision 7 scénarios, templates Issues/PR, Dependabot, CI/CD,
+              Git LFS, SemVer.
+              Le .gitignore racine est explicitement annoté
+              "09-Github-Governance: Exclusion Strict (Doctrine Vigilum Codex)".
+  ÉTAT ...... OPÉRANT (contrat)
+
+10-Github-MVP-Scaffolding
+  OBJET ..... Scaffolder la structure publique du projet en filtrant secrets,
+              configurations privées et archives.
+  LIVRABLES . README.md, scripts/export-workspace-sanitized.sh,
+              scripts/git_backup.sh
+  ANALYSE ... Étanchéité entre coffre-fort local et cloud. L'injection de
+              .github/CODEOWNERS avant le push verrouillé l'approbation.
+              Résout l'anomalie de gouvernance RSK-01.
+  ÉTAT ...... OPÉRANT
+
+11-Tesla-Arcanis-360-Skill
+  OBJET ..... Compétence d'analyse documentaire et d'audit critique de sûreté.
+  LIVRABLES . README.md, SKILL.md, translate.py
+  ANALYSE ... Organe de renseignement de l'écosystème (Deep Research, OSINT,
+              scan massif de répertoires). Opérant selon le "Request-Review
+              Asymétrique" : aucune action destructrice autorisée. Introduit
+              le protocole Shadow-Targeting (voir module 22).
+  ÉTAT ...... OPÉRANT
+
+12-Alexandria-RAG-Unification
+  OBJET ..... Résoudre le découplage entre les index RAG locaux de test et la
+              véritable base du second cerveau Obsidian (Avalon).
+  LIVRABLES . README.md, scripts/archive_note.py, scripts/validate_note.py
+  ANALYSE ... Unification sous Avalon/03-Resources/alexandria_brain.db
+              (FTS5 + vectoriel). validate_note.py valide le frontmatter YAML
+              par AST ; archive_note.py opère des mutations sémantiques
+              sécurisées. Avalon devient la Single Source of Truth.
+  ÉTAT ...... OPÉRANT
+
+13-Jules-Cloud-Integration
+  OBJET ..... Intégré l'agent cloud "Jules" pour délester CPU/RAM de MIDGARD.
+  LIVRABLES . AUCUN - répertoire absent du disque [VÉRIFIÉ]
+  ANALYSE ... [ÉCART MAJEUR] Déclaré à la ligne 125 du README.md (arborescence),
+               à la ligne 97 (diagramme Mermaid, branche Média),  à la ligne 180
+              (workflow, étape 5) et à la ligne 13 de list.txt.
+              tools/quotidien_status.sh le signalé :
+              "[FAIL] déclaré mais ABSENT du disque : 13-Jules-Cloud-Integration"
+              Le contenu réel de ce chantier a été repris par
+              50-Architecture-Hybride-Jules (qui contient 9 fichiers).
+              Correction proposée : soit recréer le répertoire, soit retirer
+              les 4 références (parité P6).
+  ÉTAT ...... FANTÔME (mémoire sans exécution)
+
+14-Llama-cpp-Evaluation
+  OBJET ..... Évaluer llama.cpp sous contrainte absolue : ne faire tourner
+              AUCUN modèle d'IA local.
+  LIVRABLES . README.md, docs/analyse_utilité_llama_cpp_v2.md
+  ANALYSE ... Entériné la "prohibition d'inférence" : llama.cpp est cantonné
+              au packaging,  à la compression et à la conversion GGUF
+              (quantification / split) pour publications externes.
+  ÉTAT ...... DOCUMENTAIRE (doctrine)
+
+15-Obsidian-Database
+  OBJET ..... Structurer le coffre Obsidian Avalon selon la taxonomie PARA et
+              déployer un moteur SQLite FTS5 avec ingestion de binaires.
+  LIVRABLES . README.md, init_alexandria.sh, rag_local/agy_focus.py,
+              rag_local/agy_indexer.py
+  ANALYSE ... Arborescence PARA (00-Inbox, 01-Projects, 02-Areas,
+              03-Resources, 04-Archives, _MOC, _Méta). Base en mode WAL pour
+              éviter les verrous lors de lectures/écritures parallèles par
+              plusieurs sous-agents. Ingestion multiformat (pdftotext,
+              ffmpeg, pandoc).
+  ÉTAT ...... OPÉRANT
+
+--------------------------------------------------------------------------------
+4.3 INGÉNIERIE LOGICIELLE, MÉMOIRE AGENTIQUE ET MÉDIA (16 - 18)
+--------------------------------------------------------------------------------
+
+16-Tesla-Master-Code
+  OBJET ..... Compétence isolée de développement logiciel soumise aux
+              barrières strictes de validation locale (linter/LSP).
+  LIVRABLES . README.md, SKILL.md, master_code.py, lint_all.sh, biome.json,
+              pyrightconfig.json, ruff.toml
+  ANALYSE ... "Chief Software Engineering Agent". Pipeline de validation à 10
+              étapes (linting -> typecheck -> tests unitaires...). Seule
+              entité autorisée à coder et à manipuler des démons systemd.
+              Configuration outillage complète : Biome (JS/TS), Ruff (Python),
+              Pyright (typage). Sandboxes d'exécution (Deno pour JS, Wasmtime
+              pour C/Rust) selon AGY-Project-MAIN-LIST.md.
+  ÉTAT ...... OPÉRANT (le mieux outillé des modules "code")
+
+17-DB-Subagents-Skills
+  OBJET ..... Base locale SQLite enregistrant sessions, tâches, feedbacks et
+              skills injectés des sous-agents, alimentée par un parseur de
+              logs automatisé.
+  LIVRABLES . README.md, db_connector.py, db_init.py,
+              log_subagent_parser.py (331 lignes),
+              sync_projects_list.py (352 lignes),
+              update_session_history.py (502 lignes)
+  ANALYSE ... Trois fonctions distinctes :
+              - db_connector.py : wrapper centralisé en SQLite Safe Mode
+                (mode=rw) - empêche la création silencieuse de fichiers .db
+                vides si la base principale manque ;
+              - log_subagent_parser.py : agent DLP natif, isolation
+                transactionnelle (with conn:) et regex-scrubbing des tokens
+                AWS, GitHub, Slack, JWT et clés SSH ;
+              - update_session_history.py : rotation active des transcriptions
+                (> 15 jours) vers /backup/transcripts_archive.
+              Le schéma SQL est idempotent, en mode WAL, avec comptabilisation
+              exacte des jetons (tokens_prompt / tokens_complétion /
+              token_budget).
+  ÉTAT ...... OPÉRANT (module le plus complet côté données)
+
+18-Tesla-Video-Director
+  OBJET ..... Production d'artefacts audiovisuels par API Google GenAI.
+  LIVRABLES . README.md, SKILL.md, MVP-Promotion-Tesla-Video-Director.md,
+              upload_file.py (218 lignes), vidéo/generate_vidéo.py (439),
+              vidéo/prep_vidéo.py (250), vidéo/inspect_vidéo.py (197),
+              vidéo/transcribe.py
+  ANALYSE ... Découplage parfait entre l'intelligence (modèles Google GenAI
+              via API Interactions / Omni Flash et API Files) et la puissance
+              brute locale (FFmpeg). Hors périmètre explicite : clés API
+              tierces (Groq, OpenAI, Runway), modèles lourds locaux (Whisper,
+              YOLO), remplacement du prompt système principal.
+              Le SKILL.md v2 intégré le moteur de rapport AREngine
+              (Analytical Report Engine, 13 blocs, 6 règles transversales).
+  ÉTAT ...... OPÉRANT
+
+--------------------------------------------------------------------------------
+4.4 ESCOUADE D'ÉLITE : CONTRATS DE COMPÉTENCES (19 - 22)
+--------------------------------------------------------------------------------
+
+19-Tesla-Curator-Prime
+  OBJET ..... Agent d'élite de curation et de certification documentaire
+              (remplacé l'ancien document-analyst).
+  LIVRABLES . README.md, SKILL.md
+  ANALYSE ... "Chief Knowledge Officer (CKO)". Devise : "Truth before
+              velocity". 10 outils documentaires spécifiés : Document Parser,
+              Citation Extractor, Evidence Builder, Contradiction Detector,
+              Knowledge Graph Builder, Timeline Builder, Confidence Scorer,
+              Source Classifier, Duplicate Detector, Référence Checker.
+              Hub documentaire vers les MCP (Alexandria, Obsidian Avalon,
+              SQLite, Context7, GitHub, Filesystem, Browser/Playwright,
+              Web Search). Le développement des scripts est délégué à
+              tesla-master-code : séparation stricte des privilèges.
+  ÉTAT ...... OPÉRANT (contrat)
+
+20-Tesla-Premortem
+  OBJET ..... Restructurer la skill premortem en version 2.0.
+  LIVRABLES . README.md, SKILL.md
+  ANALYSE ... Passage de rapports textuels isolés à une base relationnelle de
+              risques à 7 tables (assessments, risks, assumptions,
+              dependencies, signals, prédictions, metrics) et conception d'un
+              Risk Knowledge Graph : un risque survenu sur le projet X
+              renforce la résilience du projet Y. Détient un pouvoir de veto
+              (Gatekeeper final).
+  ÉTAT ...... OPÉRANT (contrat)
+
+21-Tesla-Web-Raider
+  OBJET ..... Version "skill d'élite" de la navigation autonome (déclinaison
+              du module 04).
+  LIVRABLES . README.md, SKILL.md
+  ANALYSE ... Opérateur d'exploration web capable d'extraire des données
+              structurées. Sert de bras armé OSINT à tous les sous-agents.
+  ÉTAT ...... OPÉRANT (contrat)
+
+22-Shadow-Targeting-Method
+  OBJET ..... Formaliser la méthode d'invocation silencieuse des agents
+              spécialisés.
+  LIVRABLES . README.md, shadow-targeting-method.md
+  ANALYSE ... Innovation centrale du projet : la récursion d'un agent sur
+              lui-même. On transféré une identité complète (le contenu d'un
+              SKILL.md) sur une instance clonée de `self` afin de réaliser un
+              Deep Research récursif, sans modifier le core d'Antigravity et
+              sans outrepasser un prompt racine verrouillé. C'est le pattern
+              qui a libéré Tesla de la boucle unique d'invocation.
+  ÉTAT ...... DOCUMENTAIRE (méthode)
+
+--------------------------------------------------------------------------------
+4.5 ARCHITECTURE RÉACTIVE : BUS, PLUGINS, GATEWAY (23 - 27)
+--------------------------------------------------------------------------------
+
+23-Architecture-Entr
+  OBJET ..... Isoler la logique de watching d'événements via l'utilitaire
+              UNIX `entr`.
+  LIVRABLES . README.md, justfile
+  ANALYSE ... Étage primaire de réactivité : le justfile delegue l'écoute des
+              I/O au noyau Linux. [ÉCART] tools/quotidien_status.sh signalé
+              `entr` ABSENT de l'environnement, et le justfile référence
+              tools/capability_bus/capability_dispatcher.sh (répertoire
+              inexistant) et find memory/ (répertoire inexistant).
+  ÉTAT ...... PARTIEL (fantômes d'automatisation, constat C5)
+
+24-Event-Bus
+  OBJET ..... Bus d'événements asynchrone léger pour l'orchestration.
+  LIVRABLES . README.md, event_dispatcher.sh
+  ANALYSE ... Migration d'une topologie synchrone-monolithique vers une
+              topologie réactive (message broker) : les agents publient et
+              écoutent, permettant une orchestration non bloquante.
+  ÉTAT ...... OPÉRANT (démonstrateur)
+
+25-Capability-Bus
+  OBJET ..... Moduler les capacités du système par plugins déclenchés sur
+              événements.
+  LIVRABLES . README.md, capability_dispatcher.sh, capability_resolver.sh,
+              registry.json, sources.json, plugins/00_canonical_sync.sh,
+              plugins/01_lint.sh, plugins/02_memory.sh, plugins/03_avalon.sh,
+              plugins/04_alexandria.sh, plugins/05_arcanis.sh
+  ANALYSE ... Le registre JSON est riche et normalisé : chaque plugin déclaré
+              id, type, version, owner, stage, requires (binaires), provides,
+              depends_on, events (FileChanged, FileCreated, ManualSync),
+              levels, enabled, script, priority et une politique
+              (retry / timeout / parallel / critical). Exemple : canonical_sync
+              requiert jq et sha256sum, retry 0, timeout 30 s, critical true.
+              Un agent n'hérite que des capacités dont il a besoin.
+  ÉTAT ...... OPÉRANT
+
+26-Capability-Canonical-Sync
+  OBJET ..... Synchronisation canonique des fichiers surveillés par le bus.
+  LIVRABLES . 00_canonical_sync.sh, README.md, sources.json
+  ANALYSE ... Files d'attente canoniques jouant le rôle de verrou de
+              synchronisation (mutex) contre les écritures concurrentes
+              multi-agents sur bases SQLite et Markdown.
+  ÉTAT ...... OPÉRANT
+
+27-Tesla-Governance-Gateway (TGG)
+  OBJET ..... Infrastructure d'orchestration, validation et gouvernance des
+              opérations de l'écosystème @lordmahonheim-bot.
+  LIVRABLES . README.md, policy_engine.sh, capability_registry.json,
+              pre-commit, agents/alexandria.sh, agents/memory.sh,
+              agents/tesla-arcanis.sh, agents/tesla-curator-prime.sh,
+              agents/tesla-github-manager.sh, agents/tesla-master-code.sh
+  ANALYSE ... Clé de voûte "Couche 1" : autorisation d'exécution globale via
+              hooks de pre-lancement. Le registre mappe 6 capacités vers
+              6 agents avec priorités P0 à P3 et politiques strict-block
+              (sécurité, dépôt, code) ou warn (documentation). C'est
+              l'ancêtre déclaratif du module 53 (qui rend la même chose
+              exécutable).
+  ÉTAT ...... OPÉRANT
+
+--------------------------------------------------------------------------------
+4.6 ORCHESTRATION, AUTO-AMELIORATION ET ANALYSE DE CODE (28 - 32)
+--------------------------------------------------------------------------------
+
+28-Loop-Engineering
+  OBJET ..... Paradigme de rétroaction itérative Act-Verify-Learn-Repeat avec
+              transitions PASS / DELAY / BLOCK.
+  LIVRABLES . 25 fichiers : README.md, SKILL.md, PLAN.md,
+              Plan_Finalisation_MVP28.md, tesla_loop_orchestrator.py
+              (262 lignes), mission_graph.yaml, budget_ledger.md,
+              capability_routing.md, scheduler_plan.md, justfile,
+              pyrightconfig.json, clôture_mvp28_résumé.md,
+              intégration_report_phase_b.md, WebRaider_Audit_Practices.md,
+              premortem_loop_engineering_final.md,
+              premortem_purge_mvp28_mvp13.md + 6 rapports d'agents dates
+              2026-07-10 (arcanis, audit_github, curator, curation_portage,
+              master-code, premortem)
+  ANALYSE ... Résout le problème du reward hacking et de l'auto-certification
+              en déconnectant physiquement l'écrivain (tesla-master-code) du
+              validateur (tesla-code-auditor). L'orchestrateur gère état,
+              budgets et transactions de rollback Git/shutil. Chaîne de
+              validation à 4 niveaux : SemGrep (sécurité), Pyright (typage),
+              smoke tests (import/runtime), Policy Engine (conventions).
+              C'est le module le mieux documenté du dépôt : chaque agent
+              d'élite a produit son propre rapport d'audit, archivé.
+  ÉTAT ...... OPÉRANT + traces d'orchestration complètes
+
+29-Tesla-Team-Synergy
+  OBJET ..... Meta-skill d'orchestration stratégique multi-agents :
+              transformer un chantier complexe en Mission Graph DAG.
+  LIVRABLES . README.md, SKILL.md, CAPABILITY_SCORING.md, MODEL_ROUTING.md,
+              PLAN_TEMPLATE.md, TEAM_RÔLES.md,
+              contracts/contract_template.yaml, examples/mission_graph.yaml
+  ANALYSE ... "Cerveau planificateur pur" : il produit des artefacts
+              déterministes (DAG, contrats, budget ledger) et n'execute
+              jamais (Règle Absolue n.4). Capability Scoring indépendant du
+              vendor, routage de modèle fondé sur les ressources
+              (Token-Economy, Budget Manager). Migration de la base
+              alexandria_brain.db en version 4.0 pour tracer exécutions,
+              complexités, tentatives (retry/fallback) et états de mission.
+  ÉTAT ...... OPÉRANT (contrat + gabarits)
+
+30-Tesla-Understand-Graph
+  OBJET ..... Moteur hybride d'analyse de bases de code (AST Tree-sitter +
+              LLM sémantique) produisant des graphes JSON indexables.
+  LIVRABLES . README.md, graph_generator.py, amdec_shield.py,
+              understand_to_alexandria.py, lsp_graph_wrapper.py
+  ANALYSE ... Cartographie statique des fonctions et imports AVANT de
+              solliciter les LLM : résout l'asymétrie de la Token Economy.
+              Le bouclier AMDEC (OOM Filters, Token Budget Circuit Breaker)
+              agit comme fusible financier et matériel.
+  ÉTAT ...... OPÉRANT
+
+31-Vigilum-Gateway-V2.1
+  OBJET ..... Renforcer l'orchestration autonome en mode /goal : résoudre les
+              deadlocks d'autorisation MCP et les crashs d'orchestration.
+  LIVRABLES . README.md, AUTONOMOUS_EXÉCUTION_POLICY.md,
+              PLAN_INTERVENTION_ORCHESTRATION_HARDENING.md,
+              exécution_request_schéma.yaml
+  ANALYSE ... Politique "No-Ask" pour les sous-agents + "Broker Pattern" :
+              toute opération sensible hors périmètre est déportée vers
+              l'Agent Principal via un artefact déclaratif pur. Règles
+              absolues 4.1, 7.1 (Grâce Period), 7.2 (Broker Pattern).
+              Résilience TRPB (Token Rate & Permission Breakers). Résout le
+              "Tool Neglect" et prévient l'effondrement de l'arbre
+              d'exécution asynchrone.
+  ÉTAT ...... OPÉRANT (politique + schéma)
+
+32-SIA-TESLA-H (Self-Improving AI)
+  OBJET ..... Auto-amelioration maitrisee (Harness-Only) sans Semantic Bloat
+              ni fuite de Token Economy.
+  LIVRABLES . README.md, SIA_POLICY.md
+  ANALYSE ... Architecture Zero-Trust à 3 niveaux de mémoire (Short, Working,
+              Canonical). Arena de test + Gate Keeper pour valider les patchs
+              SKILL.md. Hard-Caps par circuit-breaker (max_retries=3) sur les
+              outils LSP. Interdiction d'auto-modifier les poids du modèle.
+              Résultats [DÉCLARÉ, non rejoues ici] : pilote sur 10 tâches
+              synthétiques, -56 % d'erreurs, +12 % de coût maximum.
+  ÉTAT ...... DOCUMENTAIRE (politique)
+
+--------------------------------------------------------------------------------
+4.7 DONNÉES, EMBEDDINGS ET INTERFACES HOMME-MACHINE (33 - 37)
+--------------------------------------------------------------------------------
+
+33-Alexandria-Cloud-Embeddings
+  OBJET ..... Transitionner la recherche sémantique locale vers une
+              architecture d'embeddings Cloud-Locale (SQLite + API Gemini)
+              pour libérer MIDGARD des dépendances lourdes.
+  LIVRABLES . README.md, indexer_hybrid.py (199 lignes),
+              core/database_manager.py (217), core/embeddings.py,
+              core/search_router.py, core/security.py,
+              tools/llama_quantize_pack.py, LLAMA_CPP_DOCTRINE.md,
+              benchmark_baseline.md, benchmark_new.md,
+              plan_intervention_ultime_alexandria_embeddings.md,
+              rapport_exécution_technique.md
+  ANALYSE ... Le chantier le plus abouti sur le plan "performance mesurée".
+              Élimination de torch, chromadb et sentence-transformers.
+              Composants : DatabaseManager SQLite WAL (4 tables),
+              GeminiEmbeddingProvider (SDK google-genai, batchs de 96, retry
+              exponentiel x3), PIIScrubber (regex), Gate de Confidentialité,
+              file d'attente hors-ligne pending_embeddings. Recherche hybride
+              RRF (k=60) avec produit scalaire NumPy local sur le Top 100 FTS5.
+              Benchmarks [DÉCLARÉ] : -71,9 % RAM au repos, -77,4 % RAM max,
+              -87,7 % CPU en indexation. Unification technique 2026-07-16 :
+              base mémoire universelle v4.0.
+  ÉTAT ...... OPÉRANT (le module "données" de référence)
+
+34-Reddit-Commander
+  OBJET ..... Intégration Reddit (lecture, veille, édition, publication)
+              compatible Antigravity CLI et Alexandria.
+  LIVRABLES . README.md, reddit_client.py (274 lignes),
+              reddit_commander.py (357), reddit_db.py, reddit_forms.py (220)
+  ANALYSE ... Architecture API-first (PRAW) avec fallback Mock en Safe Mode
+              strict : votes karma et messages privés INTERDITS. Stockage
+              SQLite WAL pour l'idempotence sémantique (watchlist + ledger
+              d'audit). Autofill Playwright headed + Human Vérification Gate :
+              en cas de challenge anti-bot, l'agent se suspend proprement et
+              notifié l'opérateur plutôt que de simuler un comportement
+              indétectable (qui provoquerait le bannissement).
+  ÉTAT ...... OPÉRANT - statut CLOS
+
+35-Voice-Tesla
+  OBJET ..... Interface de contrôle vocal asynchrone (Speech-to-Text) pour
+              piloter Antigravity CLI sans clavier, en 100 % local.
+  LIVRABLES . README.md, voice-tesla.sh (611 lignes - le plus gros script
+              shell du dépôt), voice-health-check.sh (346),
+              voice-tesla-install.sh (371)
+  ANALYSE ... Pipeline STT entièrement local : arecord/pw-record ->
+              whisper-cli (modèle ggml-base.bin) -> zellij action write-chars
+              vers la session `agy` active. Une Task Force complète
+              (Web-Raider, Arcanis-360, Curator-Prime, Master-Code, Premortem)
+               a rejeté l'architecture "Full Colab" (NO-GO) pour instabilité du
+              lifecycle (idle timeout, captchas) et friction UX.
+              Benchmark de latence [DÉCLARÉ] : 4,69 s.
+              Démontré qu'un TUI strict peut être étendu de façon asynchrone
+              par un injecteur externe (multiplexing Zellij) sans modifier le
+              code source du programme cible.
+  ÉTAT ...... OPÉRANT - statut CLOS
+
+36-Veille-Strategique
+  OBJET ..... Systématiser l'acquisition et l'analyse des signaux faibles et
+              forts du marche mondial de l'IA.
+  LIVRABLES . README.md, Charte_Veille_Stratégique.md, INDEX.md,
+              Proposition_Amélioration.md,
+              "La grille de rédaction d'un rapport analytique.md",
+              watch.sh, Highlights-Outputs/README.md,
+              Strategic-Outputs/README.md
+  ANALYSE ... Dispositif asynchrone "zéro intervention" avec service systemd
+              de surveillance `entr`, MOC et métadonnées YAML pour requetage
+              instantané par Alexandria. Bascule l'agent d'une posture "Pull"
+               à une posture "Push" d'intelligence.
+              [ÉCART - constat C6] watch.sh déclaré lui-même son déclencheur
+              comme placeholder ("Remplacez la commande echo ... par votre
+              trigger Alexandria, rsync ou git commit"), dépend de `entr`
+              (ABSENT) et les deux réceptacles de sortie ne contiennent qu'un
+              README. La veille est outillée mais stérile.
+  ÉTAT ...... PARTIEL
+
+37-MCP-Telegram
+  OBJET ..... Mobile Command Center : pilote MIDGARD à distance et reçoit des
+              notifications asynchrones.
+  LIVRABLES . README.md, mcp_server/server.py, mcp_server/requirements.txt
+              (une seule dépendance : `mcp`), daemon/telegram_bot_daemon.py
+  ANALYSE ... Flux bidirectionnel strict avec verrouillage d'authentification
+              absolu (ID Lock) : seul le compte Telegram de l'opérateur peut
+              communiquer avec la machine. Antigravity CLI s'étend dans la
+              poche de l'opérateur.
+  ÉTAT ...... OPÉRANT - statut CLOS
+
+--------------------------------------------------------------------------------
+4.8 PROMOTION, GRAPHE, RÉDACTION ET OPTIMISATION (38 - 44)
+--------------------------------------------------------------------------------
+
+38-Promotion-Tesla-Video-Director
+  OBJET ..... Créer le MVP promotionnel de l'agent Tesla-Video-Director.
+  LIVRABLES . README.md
+  ANALYSE ... Preuve de l'industrialisation des assets : Tesla documente et
+              deploie ses propres sous-agents sur les dépôts publics de
+              manière autonome et sécurisée (via tesla-github-manager).
+  ÉTAT ...... DOCUMENTAIRE - statut CLOS
+
+39-Obsidian-Graph-Relationnel
+  OBJET ..... Transformer la mémorisation RAG centralisée en un réseau
+              décentralisé de fichiers Markdown liés par wikilinks.
+  LIVRABLES . README.md
+  ANALYSE ... Orchestration ininterrompue d'un graphe de mission (N1-N4) avec
+              5 agents d'élite. Pipelines ETL session_to_graph.py et
+              generate_daily_log.py avec boucle Self-Healing (chunking,
+              exponential backoff, file merge). Colorimétrie "Vigilum Codex"
+              native dans le graph.json d'Obsidian. Anti Semantic-Bloat et
+              anti-OOM.
+  ÉTAT ...... DOCUMENTAIRE - statut CLOS
+
+40-Tesla-Writing-Skills
+  OBJET ..... Intégrer la philosophie TDD du framework "Superpowers" et durcir
+              la gouvernance contre la sur-distillation.
+  LIVRABLES . README.md
+  ANALYSE ... Loi de fer : "NO SKILL WITHOUT A FAILING TEST FIRST" (cycle
+              RED-GREEN-REFACTOR applique à la documentation comportementale).
+              La "Doctrine d'Actionnabilite" (Règle n.14) interdit de
+              résumer au détriment des détails procéduraux : c'est une
+              barrière sémantique contre les hallucinations par abstraction.
+  ÉTAT ...... DOCUMENTAIRE (doctrine)
+
+41-Book-To-Skill-Tesla-Writing-Skills
+  OBJET ..... Contrer l'hallucination par troncature en transformant les
+              compétences monolithiques en architectures modulaires a
+              chargement paresseux.
+  LIVRABLES . README.md, SKILL.md
+  ANALYSE ... Règle des 800 lignes (plafond dur), routage via SKILL.md /
+              glossary.md, "Overlap Pointers" actifs et table de
+              rationalisations Lazy Loading. Formulation de la Règle 15
+              (Doctrine d'Anti-Extrapolation) dans GEMINI.md.
+              Blindage sémantique : "L'agent ne devine plus ; il lit."
+  ÉTAT ...... OPÉRANT (contrat)
+
+42-OPRO-Grad
+  OBJET ..... Optimisation exécutive des compétences : convertir la création
+              de skills (TDD) en cycle algorithmique d'optimisation textuelle.
+  LIVRABLES . README.md
+  ANALYSE ... OPRO-Grad v3.2, sous-agent d'auto-amelioration contrôlée
+              (Harness-Only) pour prévenir le Semantic Bloat. Prérequis
+              déclarés : Python 3.12+ et une instance lanceDB active pour
+              l'état sémantique local. Mécanismes intégrés : Rollout Evidence,
+              Bounded Updates (Textual Learning Rate), Validation Gate,
+              Rejected-Edit Buffer, Epoch-Wise Slow/Méta Update. Inspiré du
+              document SkillOpt (Microsoft, 2026).
+  ÉTAT ...... DOCUMENTAIRE
+
+43-Avalon-Second-Brain
+  OBJET ..... Second cerveau Obsidian "Avalon" couple à Gemini Antigravity CLI.
+  LIVRABLES . README.md
+  ANALYSE ... Avalon est le socle physique de toute la couche mémoire du
+              dépôt (TASLB). C'est la cible d'indexation de 02, 12, 15, 30,
+              33 et 39.
+  ÉTAT ...... DOCUMENTAIRE
+
+44-Tesla-Eye
+  OBJET ..... Organe sensoriel visuel : captures d'écran X11 à la demande.
+  LIVRABLES . README.md, tesla_eye.py
+  ANALYSE ... Capture X11 via Pillow (PIL). Alimenté l'inspection visuelle
+              GUI/OCR en tâche de fond. Complètement le module 04 (qui fait
+              de la validation visuelle dans le navigateur).
+  ÉTAT ...... OPÉRANT
+
+--------------------------------------------------------------------------------
+4.9 LIVRABLES CONCRETS, AUDIT ET SKILLS EXTERNES (45 - 49)
+--------------------------------------------------------------------------------
+
+45-Cluedo-Grands-Detectives-2023
+  OBJET ..... Manuel interactif de règles de jeu : preuve de capacité de rendu
+              UI premium zero-cloud.
+  LIVRABLES . README.md, Cluedo_MVP_Delivery_Report_2026-08-03.md,
+              manuel_cluedo_clean.html, test_manuel_cluedo_v2.html,
+              Cluedo-Manuel-Interactif.pdf, Manuel-Cluedo-VF.pdf
+  ANALYSE ... Seul module du dépôt livrant des binaires (2 PDF) et des
+              interfaces HTML autonomes (zéro dépendance externe, images
+              Base64). Le correctif d'impression A4 illustre la maitrise du
+              rendu hétérogène des moteurs Chromium. Preuve que
+              l'écosystème sait produire un artefact fini, pas seulement de
+              la doctrine.
+  ÉTAT ...... OPÉRANT (livrable fini)
+
+46-Tesla-Code-Auditor
+  OBJET ..... Filtrage déterministe des hallucinations syntaxiques et logiques
+              avant commit.
+  LIVRABLES . README.md, code_auditor.py
+  ANALYSE ... Niveau 1 du skill tesla-code-auditor : chaque bloc de code
+              généré est soumis à une boucle de Self-Healing propulsée par le
+              protocole LSP (karellen-lsp-mcp). lsp_diagnostics ausculte
+              l'AST ; en cas de violation, boucle de correction fermée
+              jusqu'à restitution d'un code sanctuarisé (Zero-Warning).
+              Gatekeeper impartial : physiquement déconnecté du codeur.
+  ÉTAT ...... OPÉRANT
+
+47-Tesla-Github-MCP
+  OBJET ..... Interactions API natives sur dépôts distants SANS clone local.
+  LIVRABLES . README.md, tesla-arcanis-360/SKILL.md,
+              tesla-github-manager/SKILL.md
+  ANALYSE ... Devie le paradigme de l'outil local vers des appels API RESTful
+              natifs (Model Context Protocol). Lectures distantes, CRUD et
+              gestion de Pull Requests atomiques et asynchrones, sans
+              instanciation de dépôt Git sur MIDGARD. Résout la congestion
+              I/O et les risques de désynchronisation disque.
+  ÉTAT ...... OPÉRANT (contrats)
+
+48-Stitch-Skills
+  OBJET ..... Assimiler les compétences du standard Google Stitch-Skills.
+  LIVRABLES . README.md + 5 contrats : tesla-design-maker/SKILL.md,
+              tesla-loop-orchestrator/SKILL.md, tesla-master-code/SKILL.md,
+              tesla-video-director/SKILL.md, tesla-writing-skills/SKILL.md
+  ANALYSE ... Couplage par "Verrouillage Sémantique" (Information Gap) : le
+              frontmatter YAML ne décrit que les déclencheurs (triggers), pas
+              le workflow, afin d'éviter le sur-declenchement contextuel.
+              L'invocation dynamique relié ces composants au Mission Graph
+              sans réécrire le code de l'Agent Principal.
+  ÉTAT ...... OPÉRANT (5 contrats)
+
+49-Tesla-Github-Manager
+  OBJET ##### Contrôle absolu des dépôts sous Doctrine d'Actionnabilite.
+  LIVRABLES . README.md, SKILL.md, CONTRIBUTING.md
+  ANALYSE ... Monopole absolu des commandes `git` retire à l'Agent Principal.
+              Verrouillage matériel des commandes push : aucune écriture
+              distante sans approbation explicite de l'opérateur. Règles 4 et
+              7.2 (Gouvernance Git) figées dans le manifeste canonique.
+  ÉTAT ...... OPÉRANT (contrat)
+
+--------------------------------------------------------------------------------
+4.10 CLOUD, GOUVERNANCE EXÉCUTABLE ET PONTS MCP (50 - 60)
+--------------------------------------------------------------------------------
+
+50-Architecture-Hybride-Jules
+  OBJET ..... Pontage architectural avec le Cloud Worker "Jules".
+  LIVRABLES . README.md, jules_wrapper.py, Jules_Mission_Contract.yaml,
+              Jules_Cloud_Worker_Zéro_Trust_Protocol.md,
+              Cloud_Exécution_Worker_Spec.md, Data_Scrubbing_Policy.md,
+              Jules_Tech_Specs_And_Tests.md, Plan_Intégration_Jules.md,
+              TEAM_SYNERGY_REPORT.md
+  ANALYSE ... Répond au "Context Collapse" des processus distants causé par
+              l'injection de chemins systèmes locaux absolus. Zero-Friction
+              Mapping : toutes les requêtes sont traduites en chemins
+              strictement relatifs au dépôt cible. Règle 7.3
+              (Anti-Hallucination des Cloud Workers). Isolement asynchrone sur
+              branche staging/jules_*.
+              NOTE : c'est ce module qui porte réellement le contenu du
+              chantier 13 (voir 4.2, entrée 13).
+  ÉTAT ...... OPÉRANT
+
+51-Conducteur-Absolu-v3.2.1
+  OBJET ..... Ossature algorithmique Fail-Closed validant chaque transition
+              d'état d'une mission.
+  LIVRABLES . README.md, Le_Conducteur_Absolu_v3.2.1.md (167 lignes)
+  ANALYSE ... Principe "NO PROOF, NO PASS". 7 Gates obligatoires, DAG valide
+              par l'opérateur (Authority Gate), Evidence Chain par noeud.
+              Règles 2 et 20 figées dans AGENTS.md et GEMINI.md.
+              [ÉCART - constat C3] GENESE-v1/AGENTS.md et GENESE-v1/GEMINI.md
+              pointent vers memory/Le_Conducteur_Absolu_v3.2.1.md, chemin qui
+              n'existe pas dans le dépôt. tools/quotidien_status.sh confirme :
+              4 fichiers référencent ce chemin (AGY-Project-MAIN-LIST.md,
+              GENESE-v1/AGENTS.md, GENESE-v1/GEMINI.md, PLAN-QUOTIDIEN.md).
+              GATE 0 est donc non résoluble en l'état.
+              [ÉCART] Le README.md de ce module est en total contre-sens
+              doctrinal : il presente un "Absolute Driver" à "autorité
+              totale, débarrassé des couches de sécurité héritées" fondé sur
+              NMPC et apprentissage par renforcement - un vocabulaire de
+              pilotage automobile qui contredit frontalement le principe
+              Fail-Closed du protocole qu'il est sensé documenter.
+  ÉTAT ...... OPÉRANT (protocole) / README à réécrire
+
+52-Fix-Maintenance-Team-Synergy
+  OBJET ##### Règle de déploiement Team-Synergy "Anti-Amputation".
+  LIVRABLES . README.md
+  ANALYSE ... Retour d'expérience : l'Agent Principal avait généré un DAG
+              partiel en omettant la majorité de l'escouade. Blindage de la
+              Règle n.11 dans GEMINI.md : déploiement exhaustif et mécanique
+              des 6 agents d'élite (Arcanis-360, Curator-Prime, Web-Raider,
+              Master-Code, PREMORTEM, Github-Manager), chacun avec un rôle
+              pertinent et interconnecté. Interdiction absolue de présenter un
+              DAG amputé.
+  ÉTAT ...... DOCUMENTAIRE (correctif de gouvernance)
+
+53-Vigilum-Codex-2.0-Executable-Governance   *** MODULE PHARE ***
+  OBJET ..... Gouvernance déterministe imposée au niveau du système
+              d'exploitation, substituée aux contraintes de prompt.
+  LIVRABLES . 92 fichiers répartis en 10 répertoires :
+              bin/ (12 outils) : audit_cap.py, audit_parité.py/.sh, gate_r.py,
+                marble_certificate.py, memory_parité.py, mission_controller.py,
+                probe_capabilities.py, slsa_attestation.py (359 lignes),
+                staging_gate.py, test_runner.py (233), workspace_hygiène.py
+              core/ : gatekeeper.py, broker/tesla_brokerd.py (278),
+                anchor/vigilum_anchor.py,
+                orchestration/ (gate2_guard.py 958 lignes - le plus gros
+                fichier Python du dépôt, orchestration_gate.py 623,
+                vigilum_gate_daemon.py, yaml_mini.py 264),
+                hooks/antigravity/ (hook_07 à hook_10),
+                hooks/pre-commit/ (01 à 11 + tesla-pre-commit-main.sh),
+                hooks/pre-push/tesla-pre-push-main.sh,
+                hooks/lib/ (tesla-exit-codes.sh, tesla-logging.sh,
+                tesla-scd.sh, tesla_git_guard.py 657, tesla_preflight.py,
+                tesla_zéro_middleman.py)
+              deploy/ : audit-trail.service, vigilum-gate.service
+              docs/ : 7 documents (AUDIT_REPORT, RETEX_HARDENING_2.1,
+                RETEX_GATE2_BYPASS, RETEX_SESSION_ORCHESTRATOR_ERRORS,
+                VIGILUM_CODEX_2.0_CANONICAL_ÉDITION, protocol_mapping,
+                PLAN_INTERVENTION_CORRECTIF_ORCHESTRATOR)
+              evidence/ : 18 artefacts (chain_head.sha256, attestations
+                gate_r, spec_lock, 11 ledgers test_runner, validation_summary)
+              examples/ : mission_graph_sealed.yaml + 6 reçus JSON
+              manifest/ : memory_manifest_v2.1.yaml, test_manifest_v2.1.yaml
+              schémas/ : intent_v3.1, memory_pillars_v2.1,
+                mission_graph_v2.0, receipt_v1.0
+              tests/ : 5 suites Python + test_hooks_suite.sh
+              requirements.txt : une seule dépendance externe (pynacl>=1.6.2)
+  ANALYSE ... Version courante déclarée : 2.6.3 (SPEC LOCK).
+              Doctrine : "AI Proposés, Code Validates".
+              Modes de défaillance adressés : prompt injection et dérive,
+              TOCTOU (symlinks, path traversal), mutation partielle et état
+              corrompu, rejeu de jetons.
+              Mécanismes : intents JSON non exécutables, RFC 8785 JSON
+              Canonicalization Scheme, confinement O_NOFOLLOW + realpath,
+              journal d'état avec crash-recovery, écriture atomique
+              O_CREAT|O_EXCL, nonces à usage unique pour le push.
+              Verrous opérationnels documentés avec leurs codes de sortie :
+                Gate 2 (DAG approuvé) ............... exit 1
+                Anti-Usurpation (Règle n.4) ......... exit 1
+                Hook 07 orchestration ............... exit 81
+                13 piliers mémoire (M-014) .......... exit 40
+                Staging N+1 (S-002)
+                Audit Ceiling (L-001) ............... exit 80
+                Universal Runner (R-004)
+                Draft Hygiène (H-005) ............... exit 90
+                Tri-State Probe (U-006) ............. PASS/FAIL/UNKNOWN-CONFINED
+              L'ancrage cryptographique est publié :
+              evidence/chain_head.sha256 = feb5a0bd14e350d34af4d799f535fd4c
+              d107076194136f2274b9c94917cbb6ab
+              [ÉCART] Le certificat de marbre cité par
+              AGY-Project-MAIN-LIST.md (CERTIFICATES/MARBLE_CERTIFICATE_SGC-
+              EXEC-GOV-03_20260827.yaml) n'existe pas : le répertoire
+              CERTIFICATES/ est absent du module [VÉRIFIÉ].
+  ÉTAT ...... OPÉRANT mais baseline NON VERTE (voir Partie 8)
+
+54-Integration-Antigravity-Google-Agents-MIDGARD
+  OBJET ..... Interfacer les agents Google avec l'écosystème local dans un
+              cloisonnement strict.
+  LIVRABLES . README.md, scripts/alexandria_backup.sh,
+              scripts/rollback_agy.sh, scripts/rtk_diagnostic.sh,
+              scripts/setup_keyring.sh, templates/premortem_template.md,
+              premortem_rapport_arcanis_confrontation_AUDITE_OPTIMISÉ_v4.md
+  ANALYSE ... Le sas de validation Cloud -> local. Sauvegarde, rollback,
+              diagnostic RTK et gestion des identifiants (keyring).
+              NOTE : alexandria_backup.sh, rtk_diagnostic.sh et
+              setup_keyring.sh sont dupliqués à la racine dans tools/ ;
+              rollback_agy.sh n'existe QUE dans ce module.
+  ÉTAT ...... OPÉRANT
+
+55-Tesla-Forge-Cloud
+  OBJET ..... Serveur MCP "Tesla Forge" : pont cryptographique et sémantique
+              entre ressources Cloud et capacités d'exécution locales.
+  LIVRABLES . README.md, tesla-forge-mcp/main.py, tesla-forge-mcp/server.py,
+              tesla-forge-mcp/pyproject.toml, tesla-forge-mcp/uv.lock,
+              tesla-forge-mcp/.python-version
+  ANALYSE ... Seul module du dépôt géré par `uv` (pyproject.toml + uv.lock +
+              .python-version) : reproductibilité absolue de l'environnement
+              Python. Transforme MIDGARD en noeud de calcul interopérable
+              pour tout LLM compatible MCP.
+  ÉTAT ...... OPÉRANT
+
+56-CodeBase-Memory-MCP-PRO
+  OBJET ..... Mémoire structurelle profonde pour l'analyse de bases de code
+              massives.
+  LIVRABLES . README.md
+  ANALYSE ... Moteur d'indexation structurelle base sur le fork C/C++ win4r,
+              parsing AST Tree-sitter et structures de graphe, interrogeable
+              en Cypher via MCP. Pipeline en deux phases pour la sécurité
+              matérielle. Résout l'asymétrie de la Token Economy :
+              représentation spatiale des dépendances au lieu de lectures de
+              fichiers séquentielles.
+  ÉTAT ...... DOCUMENTAIRE
+
+57-Tesla-Mirroring-Cognitif-Assimilation
+  OBJET ..... Pipeline d'apprentissage et de synchronisation unidirectionnel.
+  LIVRABLES . Tesla-Mirroring-Cognitif-Assimilation.md (ASDP v1.0, statut
+              CANONICAL, date 2026-08-25) - seul fichier, aucun README.md
+  ANALYSE ... Élève l'implémentation "TESLA-MIRRORING v5" au rang de patron
+              architectural générique : ASDP (Asynchronous Synchronization
+              Daemon Pattern). Synthèse de 3 sources (baseline locale,
+              proposition ChatGPT, proposition RENA) via un pipeline
+              d'ingénierie inverse en 8 phases. Résout la dégradation
+              cognitive liée au redémarrage des sessions : mémoire
+              procédurale permanente.
+              [ÉCART MINEUR] unique module sans README.md.
+  ÉTAT ...... DOCUMENTAIRE
+
+58-Spark-MCP-Gateway
+  OBJET ..... Tunnel réseau sécurisé E2E entre Google SPARK et MIDGARD.
+  LIVRABLES . README.md, 58-Tesla-Spark-MCP-Gateway.py,
+              SPARK_MCP_Gateway_Intégration_Report.md
+  ANALYSE ... FastAPI + Uvicorn, transport Streamable HTTP (spécification MCP
+              2025-03-26) strictement borné à /mcp, SSE abandonné. Ingress via
+              Cloudflare Tunnel Zéro Trust -> Nginx reverse proxy ->
+              127.0.0.1:8080. Protections : TransportSecuritySettings avec
+              allowlists d'hôte et d'origine (anti DNS rebinding), middleware
+              Bearer Auth (Starlette), outils GitHub REST en PAT read-only
+              (github_read_file, github_list_directory).
+              [ÉCART - constat C7] 1 seul .py, sans requirements.txt, sans
+              lanceur, sans test.
+  ÉTAT ...... PARTIEL
+
+59-Antigravity-Workspace-MCP
+  OBJET ##### Capacité native d'interagir avec Google Workspace (Gmail).
+  LIVRABLES . README.md, Antigravity_Workspace_MCP_Rapport_Final.md
+              (0 ligne exécutable)
+  ANALYSE ... Intégration du serveur open-source
+              taylorwilsdon/google_workspace_mcp, confinement et resolution
+              des dépendances via `uv` (131 paquets) dans une sandbox
+              dédiée. OAuth 2.0 local (credentials.json), aucun webhook
+              distant expose, MCP_SINGLE_USER_MODE=true. Communication par
+              stdio : bénéfice des API cloud sans ouvrir de port.
+              "Sovereign Shield preserve."
+  ÉTAT ...... DOCUMENTAIRE (rapport)
+
+60-WikiSkill-Ouroboros
+  OBJET ..... Boucle d'auto-apprentissage continu 100 % déterministe, sans
+              intervention humaine ("Zero-Touch"), version V2.1 multilingue.
+  LIVRABLES . 32 fichiers :
+              scripts/ (19) : ouroboros_daemon.py (414 lignes),
+                ouroboros_cycle.py (379), ouroboros_autocapture.py (646),
+                distiller.py (326), rule_forger.py (235), gating_judge.py
+                (212), self_test.py (203), patch_broker.py, schémas.py,
+                secrets_scrubber.py, index_linter.py, skill_proposer.py,
+                sandbox_evaluator.py, trace_writer.py, git_committer.py,
+                locker.py, ast_quarantine.py, bootstrap_runtime.py,
+                intent_formatter.py, ouroboros_repair_fr.py
+              hooks/antigravity/hook_11_ouroboros_capture.sh (268 lignes)
+              tests/ : test_ouroboros_auto.py (434 lignes),
+                datasets/train_val.jsonl, datasets/holdout.jsonl
+              deploy/ : install.sh, ASSIMILATION.md,
+                ouroboros-capture.service.template
+              README.md, SKILL.md, GOVERNANCE_CHECKPOINT_CONTRACT.md
+  ANALYSE ... Le cycle Ouroboros en 5 phases :
+                P0 Auto-Capture (hook + démon systemd, intervalle 60 s)
+                P1 Distillation (trace -> pattern, wiki plafonné à 4000 tokens
+                   par index_linter.py, éviction déterministe HITS/récence)
+                P2 Mutation (forge de règles -> propositions de patch,
+                   Unified Diff atomique via patch_broker.py)
+                P3 Gating (sandbox déterministe, git worktree, double-split)
+                -> PASS : commit local souverain / FAIL x3 : quarantaine
+              Conformité doctrinale codée en dur :
+                - Bannissement du LLM-as-a-Judge : scoring, éviction,
+                  distillation et gating exécutés par des scripts
+                  mathématiques. Aucun avis probabiliste demande à l'IA.
+                - Intégrité cryptographique : chaque trace scellée par
+                  SHA-256 ; un octet modifié invalide la trace.
+                - Frugalité cognitive : plafond absolu 4000 tokens/domaine,
+                  archivage plutôt que suppression (P8).
+                - Sécurité souveraine : git_committer.py applique les patchs
+                  valides et commit LOCALEMENT ; aucun push réseau.
+              V2.1 corrige une "cécité linguistique" : la regex \bSUCCESS\b
+              strictement anglaise ignorait les agents francophones écrivant
+              "Mission accomplie avec succès". Ajout d'un STATUS_MAP
+              multilingue EN+FR insensible aux accents, et options
+              --force-rescan / --repair-conv / --backfill-days.
+              Empreinte déclarée : ~15 Mo de RAM, bibliothèque standard
+              Python uniquement, aucun appel réseau.
+  ÉTAT ...... OPÉRANT (voir Partie 8 pour le détail des tests)
+
+================================================================================
+PARTIE 5 - INVENTAIRE DES AGENTS D'ÉLITE (TSLB)
+================================================================================
+
+Source : AGY-Project-MAIN-LIST.md, section "INVENTAIRE DES AGENTS D'ÉLITE".
+Ces 14 agents sont déclarés BÂTIS et inscrits dans la gouvernance active.
+20 fichiers SKILL.md sont physiquement présents dans le dépôt [VÉRIFIÉ].
+
+  Agent                       Spécialité et rôle
+  --------------------------  -------------------------------------------------
+  tesla-team-synergy          Mission Orchestrator : invoque et coordonne
+                              physiquement un groupe de sous-agents (DAG)
+                              pour les chantiers architecturaux massifs.
+  tesla-premortem             Résilience & Risk Authority : gardien final,
+                              audits FMEA/AMDEC, pouvoir de veto.
+  tesla-master-code           Ingénierie logicielle (Forgeron) : SEULE entité
+                              autorisée à coder et à manipuler des démons
+                              systemd.
+  tesla-arcanis-360           Deep Research & Acquisition : organe de
+                              renseignement (OSINT, scan massif).
+  tesla-web-raider            Navigation autonome : extraction de données
+                              structurées.
+  tesla-curator-prime         Curation & Certification : gardien du
+                              Zettelkasten, normes PARA.
+  tesla-writing-skills        Ingénierie sémantique & MOCs : YAML, "Règle des
+                              2 Liens".
+  tesla-loop-orchestrator     Pilote du cycle Act-Verify-Learn : état,
+                              budgets, rollback Git/shutil.
+  tesla-code-auditor          Validateur impartial : SemGrep, Pyright,
+                              smoke tests. Physiquement déconnecté du codeur.
+  tesla-github-manager        Déploiement des dépôts distants : pushs
+                              synchronisés, README, versioning public.
+  tesla-opro-optimizer        Optimiseur sémantique : mute les instructions
+                              agentiques (SKILL.md) via DSPy.
+  tesla-eye                   Inspection visuelle GUI/OCR : captures d'écran
+                              en tâche de fond.
+  tesla-video-director        Production vidéo : scripte, structure, gère les
+                              artefacts audiovisuels.
+  tesla-reddit-commander      Automatisation Reddit : publications ciblées.
+
+Agent additionnel déclaré (module 62 de la MAIN-LIST, porte physiquement par
+le module 60) :
+
+  tesla-wiki-manager          Coeur du système Ouroboros : gestionnaire de
+                              l'apprentissage continu. Anti LLM-as-a-Judge,
+                              validations binaires et cryptographiques.
+
+Principe de séparation des privilèges (constant dans tout le dépôt) :
+  - Le Curator audite, le Master Code developpe.
+  - Le Master Code écrit, le Code Auditor valide.
+  - Le Team Synergy planifié, la couche AGENTS execute.
+  - Le Wiki Manager propose, l'Arène decide.
+Aucun agent ne cumule production et validation (P2).
+
+--------------------------------------------------------------------------------
+5.1 RÉPARTITION PHYSIQUE DES 20 SKILL.md [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+  Modules "contrat unique"  : 04, 09, 11, 16, 18, 19, 20, 21, 28, 29, 41, 49
+  Modules "multi-contrats"  : 47 (2 skills), 48 (5 skills), 60 (1 skill)
+
+================================================================================
+PARTIE 6 - INFRASTRUCTURE TRANSVERSE
+================================================================================
+
+6.1 RÉPERTOIRES NON NUMÉROTÉS [VÉRIFIÉ]
+
+  .github/ ................. gouvernance GitHub
+  Archives-MVP-GITHUB/ ..... instantané gelé des modules 01 à 09
+  EXPORT/ .................. 23 fichiers exportés vers l'agent "RENA"
+  GENESE-v1/ ............... 7 documents de genèse (1 267 lignes)
+  LEARN/ ................... sanctuaire d'acquisition cognitive
+  OUTPUTS/ ................. sas d'autorité des livrables
+  PROTOCOLES/ .............. 3 fichiers, 1 494 lignes
+  SPARK-MCP-Gateways/ ...... Calibre-Spark-MCP-Gateway.py
+  tools/ ................... 4 scripts d'exploitation
+
+6.2 tools/ - LES 4 OUTILS D'EXPLOITATION [VÉRIFIÉ]
+
+  alexandria_backup.sh
+    Sauvegarde non bloquante de la base Alexandria. Conçu pour cron
+    (0 3 * * *). Force le mode WAL avant copie, `set -e`, sortie en erreur
+    explicite si la base est absente. [ÉCART] le répertoire de destination
+    est code en dur : /home/lord-mahonheim/bifrost/backups/alexandria.
+
+  quotidien_status.sh
+    Outil central de cette fiche : "contrôle de vérité du dépôt, LECTURE
+    SEULE". Aucune mutation, aucun réseau, aucune écriture disque.
+    5 sections : parité du registre (list.txt <-> disque), référence
+    canonique memory/, modules sans actif exécutable, dépendances
+    d'exécution, baseline module 53 (--tests).
+    Sortie : 0 = aucune dérive / 1 = dérive (FAIL-CLOSED).
+
+  rtk_diagnostic.sh
+    Diagnostic de démarrage de session : présence de RTK, activation des
+    hooks (rtk gain --format json), test de compression réel dans un dépôt
+    Git. Codes de retour explicites.
+
+  setup_keyring.sh
+    Infrastructure de secrets pour `agy` : dbus, gnome-keyring, libsecret,
+    xdg-utils ; création d'un service systemd utilisateur
+    tesla-keyring.service (Type=simple, XDG_RUNTIME_DIR).
+
+6.3 .github/ - GOUVERNANCE DU DÉPÔT DISTANT [VÉRIFIÉ]
+
+  CODEOWNERS
+    "* @lordmahonheim-bot" - propriété globale du dépôt. Toute pull request
+    exige l'approbation du propriétaire.
+
+  dependabot.yml (version 2)
+    Deux écosystèmes surveillés, rythme hebdomadaire :
+      - package-ecosystem: "pip",            directory: "/"
+      - package-ecosystem: "github-actions", directory: "/"
+
+  workflows/mirror-guard.yml  (SEUL workflow du dépôt)
+    Déclencheur : pull_request sur les chemins
+      ['LEARN/**', 'PROTOCOLES/**', 'AGY-Project-MAIN-LIST.md']
+    Permissions : contents: read
+    Job souverainete-locale : echo "::error:: ... MIROIRS UNIDIRECTIONNELS."
+                              puis exit 1
+    Lecture : c'est un garde-fou de miroir, PAS une preuve. Aucun test, aucun
+    lint, aucun audit de parité n'est exécuté à la publication
+    (constat C4 de PLAN-QUOTIDIEN.md, confirme).
+
+6.4 .gitignore - DOCTRINE D'EXCLUSION [VÉRIFIÉ]
+
+  En-tete explicite : "09-Github-Governance: Exclusion Strict
+  (Doctrine Vigilum Codex)".
+
+  Exclusions par famille :
+    Environnements virtuels ..... .venv/ venv/ ENV/ env/
+    Bytecode Python ............. **/__pycache__/ *.pyc *.pyo *.pyd
+    Bases physiques ............. **/*.db *.db-journal *.db-wal *.db-shm
+                                  *.sqlite *.sqlite3
+    Caches vectoriels ........... **/.chroma_vectors/ **/.agy_cache/
+    Logs et caches d'outils ..... **/*.log **/logs/ .pytest_cache/
+                                  .mypy_cache/ .pyrightpy/
+    Secrets ..................... .env .env.* (sauf !.env.example)
+    Transcriptions privées ...... **/SESSION_TRANSCRIPTS.md **/SESSION_LOG.md
+    Réglages OS/IDE ............. .DS_Store Thumbs.db .idea/ .vscode/ *.swp
+    Binaires lourds ............. *.apk *.whl **/node_modules/
+    État runtime (Vigilum 2.1) .. **/runtime/  (hygiène E5)
+
+  Conséquence : aucune base de données, aucun vecteur, aucune transcription
+  de session, aucun état d'orchestration n'est versionne. Le dépôt est
+  publiable en l'état.
+
+6.5 Archives-MVP-GITHUB/ - L'INSTANTANÉ GELÉ [VÉRIFIÉ]
+
+  Contenu : 01-LSP-Self-Healing, 02-Alexandria-Database, 03-Memory-MLT,
+            04-Web-Raider, 05-USB-Resilience, 06-Sudo-Askpass,
+            07-Strategic-Armement, 08-Premortem-Diagnostic (et non
+            08-Premortem), 09-Github-Governance
+            + CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE, MY_COMPANY.md,
+              README.md, SECURITY.md, SUPPORT.md
+
+  Vérification de fidélité :
+    diff -q Archives-MVP-GITHUB/02-Alexandria-Database/indexer_hybrid.py \
+            02-Alexandria-Database/indexer_hybrid.py   -> IDENTIQUES
+    diff -q Archives-MVP-GITHUB/README.md README.md    -> DIFFÉRENTS
+
+  Lecture : les modules archives sont des copies fidèles ; la racine a, elle,
+  évolue. L'archive joue donc bien son rôle de témoin historique.
+
+6.6 EXPORT/ - LIVRABLES VERS L'AGENT "RENA" [VÉRIFIÉ : 23 fichiers]
+
+  EXPORT/To_RENA/CODE_EDITOR/ : 19 documents d'orchestration nodale
+    NOEUD1_Curator_Cadrage(.md/_Terminator.md)
+    NOEUD1_Arcanis360_DeepResearch_IDE.md
+    NOEUD2_Arcanis_RechercheAIStudio.md / _TUI_AIStudio.md
+    NOEUD2_WebRaider_ExtractionTech_IDE.md
+    NOEUD3_CuratorPrime_EtudeFaisabilite_IDE.md
+    NOEUD3_WebRaider_API_AIStudio.md / _ExtractionAIStudio.md
+    NOEUD4_MasterCode_Bridge_Terminator.md / _Faisabilité.md
+    NOEUD4_PREMORTEM_Certification_IDE.md
+    NOEUD5_GithubManager_Git_Terminator.md / _Pipeline.md
+    NOEUD6_Curator_PlanIntervention.md
+    NOEUD7_PREMORTEM_Certification.md
+    LIVRABLE_FINAL_Intégration_IDE_Antigravity_CLI.md
+    LIVRABLE_FINAL_Plan_AIStudio_AGY.md
+    LIVRABLE_FINAL_AIStudio_Headless_Terminator.md
+  EXPORT/To_RENA/MCP/AnythingMCP.txt
+  EXPORT/ contient aussi .keep, .keep2 et .test-push-main (marqueurs de
+  présence et de test de push).
+
+  Lecture : cette arborescence documente une orchestration réelle à 7 noeuds
+  multi-agents (Cadrage > Recherche > Faisabilité > Bridge > Pipeline >
+  Plan > Certification). C'est la meilleure preuve disponible que la
+  méthode Team-Synergy a effectivement tourné.
+
+6.7 PROTOCOLES/ - LE DROIT CONSTITUTIONNEL [VÉRIFIÉ : 1 494 lignes]
+
+  GRAVURE-SUR-MARBRE.md ................................ 534 lignes, v2.0.0
+  LOI-DE-PARITE-ABSOLUE.md ............................. 426 lignes, v2.0.0
+  PROTOCOLE_CANONIQUE_GRAVURE_SUR_MARBRE_VIGILUM_CODEX_2.0.md .. 534 lignes
+
+  [ÉCART] Les fichiers 1 et 3 sont strictement identiques (diff -q :
+  IDENTIQUES). Le troisième porte le nom du livrable d'origine
+  (OUTPUTS/...). Doublon à trancher : conserver une source et pointer
+  l'autre.
+
+6.8 LEARN/ - SANCTUAIRE D'ACQUISITION COGNITIVE [VÉRIFIÉ : 253 lignes]
+
+  README.md (58 lignes) ............ manifeste architectural
+  CARTOGRAPHIE_APPRENTISSAGES_
+    INTÉGRALE.md (158 lignes) ..... index gouverne des règles actives VC-XXX
+  ARCHIVES/ARCHIVES_APPRENTISSAGES.md (37 lignes) .. fossiles historiques
+
+  Problème résolu : Antigravity génère ses artefacts dans un répertoire
+  éphémère propre à chaque session (~/.gemini/antigravity-cli/brain/<uuid>/).
+  La mémoire y est compartimentée et volatile : "hors de vue = hors de
+  conscience".
+
+  Loi dogmatique [VC-MEM-06] : le répertoire /LEARN/ est érigé en
+  sous-domaine canonique de la source de vérité. A l'exécution de /Learn,
+  l'agent à l'INTERDICTION de se contenter d'un artefact d'interface ; il
+  DOIT appeler write_to_file vers le chemin absolu du sanctuaire. Ségrégation
+  obligatoire : racine = apprentissages frais, ARCHIVES/ = leçons intégrées.
+
+  Structure de la CARTOGRAPHIE (6 familles de piliers) :
+    I.   Gouvernance & Orchestration (la doctrine du Conducteur)
+    II.  Rigueur opérationnelle & traitement des données
+    III. Sécurité & Failsafes
+    IV.  Rituels continus & conscience mémorielle
+    V.   Cycle de vie MVP & processus de publication
+    VI.  Meta-cognition & déterminisme
+
+6.9 OUTPUTS/ - LE SAS D'AUTORITÉ [VÉRIFIÉ : 10 fichiers avant cet ajout]
+
+  CHECKPOINT_CONTRACT.yaml ............................. contrat type v3.2.2
+  open_items_todo-Updated.md ........................... registre des différés
+  Diagnostic_Post_Déploiement_Gouvernance_Vigilum_2.0.md
+  Plan_Intervention_Ultime_Vigilum_Codex_2.1.md
+  Rapport_Incident_WikiSkill_TeslaWebRaider_2026-09-13.md
+  AutoCapture_Ouroboros_ZeroTouch_2026-09-18.md
+  Audit_Plan_V2.5.0_Et_Solution_Définitive_V2.5.1.md
+  Verdict_Audit_Plan_V2.6.0.md
+  Verdict_Audit_Plan_V2.6.1.md
+  Verdict_Audit_Plan_V2.6.2_SPEC_LOCK.md
+
+  Lecture : OUTPUTS/ est le seul répertoire ou un livrable devient
+  "canonique". La séquence Audit > Plan > Verdict > SPEC LOCK y est lisible
+  de bout en bout, ce qui constitue en soi une Evidence Chain documentaire.
+
+  Format du CHECKPOINT_CONTRACT.yaml (modèle canonique) :
+    contract_type, version, mission, status, evidence_chain[] (step +
+    détails), timestamp. L'exemple versionne trace 4 étapes : Audit
+    Validation, Git Exécution, Biological Gate Passed, Remote Sync.
+
+================================================================================
+PARTIE 7 - PILE TECHNIQUE ET DÉPENDANCES
+================================================================================
+
+7.1 LANGAGES ET RUNTIMES
+
+  Python ......... 98 fichiers, 20 438 lignes. Version cible : 3.12+
+                   (badge de tous les README) ; le README racine annonce
+                   3.10+ et la table d'environnement testée 3.10+.
+                   [ÉCART MINEUR] trois cibles différentes coexistent.
+  Bash ........... 60 fichiers, 3 986 lignes
+  JavaScript/TS .. configuration seulement (biome.json), aucun source
+  YAML ........... 11 fichiers (schémas, contrats, manifestes, workflows)
+  JSON ........... 37 fichiers (schémas, registres, reçus, preuves)
+
+7.2 DÉPENDANCES EXTERNES DÉCLARÉES
+
+  Module 53 - requirements.txt
+    pynacl>=1.6.2  (SEULE dépendance externe)
+    Le commentaire du fichier est explicite : "Le coeur de gouvernance
+    (hooks, orchestration_gate, gate2_guard, mission_controller,
+    marble_certificate, slsa_attestation) est STDLIB ONLY." La dépendance ne
+    sert qu'au courtier de délégation Ed25519
+    (core/orchestration/vigilum_gate_daemon.py), déployé sous UID separe.
+    Sans elle, la couche daemon est classée UNKNOWN-CONFINED (invariant P3)
+    et ses tests SKIP avec raison explicite - jamais un PASS implicite.
+
+  Module 37 - mcp_server/requirements.txt : `mcp` (une ligne)
+  Module 55 - pyproject.toml + uv.lock (gestion par `uv`)
+
+  Dépendances citées dans la documentation mais non déclarées dans un fichier
+  de dépendances racine :
+    Playwright, sentence-transformers, ChromaDB, SQLite FTS5, Pyright,
+    SemGrep, Pillow (module 44), whisper-cli / ggml-base.bin (module 35),
+    PRAW (module 34), FastAPI + Uvicorn + mcp SDK (module 58), google-genai
+    SDK (module 33), lanceDB (module 42), jq (utilitaire système).
+
+7.3 STOCKAGE
+
+  SQLite ............ FTS5, mode WAL généralisé (concurrence multi-agents),
+                      Safe Mode mode=rw via db_connector.py
+  ChromaDB .......... vectoriel local (module 02, abandonné au profit de
+                      l'API Gemini dans le module 33)
+  Fichiers .......... Markdown, YAML, JSON scellé par SHA-256
+  Aucun fichier .db, .sqlite, .chroma_vectors n'est versionne (.gitignore)
+
+7.4 OUTILLAGE DE QUALITÉ
+
+  Pyright ........... pyrightconfig.json (modules 16 et 28)
+  Ruff .............. ruff.toml (module 16)
+  Biome ............. biome.json (module 16, lint JS/TS)
+  SemGrep ........... invoque par la chaîne de validation du module 28
+  just .............. justfile (modules 23 et 28)
+  entr .............. watching d'événements (modules 23 et 36) - ABSENT de
+                      l'environnement de vérification [VÉRIFIÉ]
+
+7.5 ENVIRONNEMENT CIBLE DÉCLARÉ (README.md racine)
+
+  Date ................... 2026-06-28
+  Machine hôte ........... MIDGARD
+  Système ................ Linux (Ubuntu/Debian)
+  Espace de travail ...... $TESLA_ROOT
+  Python ................. 3.10+
+  Node.js ................ 18+
+  SQLite ................. 3.37+
+  Prérequis module 53 .... Ubuntu 22.04+ / Debian 12+, Python 3.12+,
+                           Git 2.34+, jq, pynacl>=1.5.0
+
+================================================================================
+PARTIE 8 - SÉCURITÉ ET GOUVERNANCE EXÉCUTOIRE
+================================================================================
+
+8.1 LES TROIS RÈGLES DE SÉCURITÉ PUBLIÉES (README.md racine)
+
+  1. Isolation : les outils s'exécutent dans les privilèges utilisateur
+     désignés.
+  2. Zéro Network Autonomy : l'agent ne peut ni ajouter de remote, ni
+     committer de clés, ni pousser du code sans autorisation manuelle
+     explicite.
+  3. Backup Protocol : tout commit est précédé d'un git status local pour
+     exclure caches et bases de données.
+
+8.2 CHAÎNE DE VERROUS GIT (module 53, core/hooks/) [VÉRIFIÉ : 20 fichiers]
+
+  pre-commit (12 fichiers, ordre d'exécution) :
+    01-schema-validator.sh ....... validation JSON des intents
+    02-secret-scanner.sh ......... clés API, entropie de Shannon
+    03-scope-validator.sh ........ périmètre de modification
+    04-project-state-check.sh .... dérive d'état, parité mémoire (M-014)
+    05-marble-cert-check.sh ...... validité du certificat de marbre
+    06-lint-check.sh ............. lint
+    07-orchestration-gate.sh ..... Gate 2 / anti-usurpation (exit 81)
+    08-anti-spoofing.sh .......... détection d'usurpation d'identité
+    08-draft-artifact-guard.sh ... brouillons et artefacts éphémères (exit 90)
+    09-zero-middleman.sh ......... interdiction d'intermédiaire
+    10-pre-flight-gate0.sh ....... checklist Gate 0
+    11-draft-artifact-guard.sh ... doublon de garde
+    tesla-pre-commit-main.sh ..... orchestrateur de la chaîne
+
+  pre-push :
+    tesla-pre-push-main.sh ....... invariants A-001, A-002, A-003
+                                   (jeton à usage unique, anti-rejeu)
+
+  hooks Antigravity :
+    hook_07_gate2_interceptor.sh, hook_08_anti_usurpation.sh,
+    hook_09_zéro_middleman.sh, hook_10_gate0_preflight.sh
+    (+ hook_11_ouroboros_capture.sh dans le module 60)
+
+  bibliothèques partagées (core/hooks/lib/) :
+    tesla-exit-codes.sh, tesla-logging.sh, tesla-scd.sh,
+    tesla_git_guard.py (657 lignes), tesla_preflight.py (206),
+    tesla_zéro_middleman.py (205)
+
+  Activation : git config core.hooksPath core/hooks puis chmod +x.
+
+8.3 CODES DE SORTIE NORMALISÉS (extraits vérifiés)
+
+  0    PASS
+  1    FAIL générique / Gate 2 non approuvé
+  10   JSON invalide (schéma)
+  20   secret détecté (entropie de Shannon)
+  40   parité mémoire M-014 incomplète
+  50   Gate R : violation P11
+  66   UNKNOWN (P3 : UNKNOWN != PASS)
+  70   jeton de push absent ou déjà consommé (rejeu)
+  80   plafond d'audit atteint (L-001)
+  81   usurpation / orchestration non autorisée
+  90   artefact éphémère ou brouillon au commit
+
+8.4 PROTECTION DES SECRETS [VÉRIFIÉ]
+
+  Trois couches indépendantes :
+    a) .gitignore exclut .env, .env.* et **/runtime/
+    b) hook 02-secret-scanner.sh bloqué au pre-commit
+    c) regex-scrubbing applicatif (module 17 log_subagent_parser.py : AWS,
+       GitHub, Slack, JWT, SSH ; module 33 PIIScrubber ; module 60
+       secrets_scrubber.py)
+
+  Vérification effectuée sur le dépôt :
+    grep -rniE "api[_-]?key|secret|token|password" --include=*.py --include=*.json --include=*.sh
+  Résultat : aucune valeur sensible. Les seules occurrences sont des noms de
+  colonnes SQL de comptabilisation de jetons d'inférence (tokens_prompt,
+  tokens_complétion, token_budget) et du code de scrubbing.
+  Aucune clé, aucun mot de passe, aucun jeton en dur n'a été trouvé.
+
+8.5 JETON DE PUSH ET ANTI-REJEU
+
+  Tout push distant exige la génération d'un jeton contenant un nonce non
+  consommé, écrit dans TESLA_PUSH_AUTH_FILE. La réutilisation d'un jeton
+  entraine un rejet immédiat (exit 70). Le verrou est créé par le noyau
+  Linux via O_CREAT|O_EXCL, ce qui rend la course (race condition)
+  impossible.
+  Preuve d'exécution [VÉRIFIÉ] dans la sortie de tests/test_hooks_suite.sh :
+    "push blocked: INVARIANT A-003 VIOLATION: Nonce 'test-nonce-12345' has
+     already been consumed (Replay Detected)"
+
+8.6 GATE 0 - VÉRIFICATIONS PHYSIQUES PRE-OUTILS
+
+  Avant tout outil sensible (invoke_subagent, mutation git, élévation de
+  privilèges) : runtime inscriptible, sonde de capacités PASS (U-006/P3),
+  transcript SCD lisible. L'élévation est refusée sauf si
+  TESLA_ALLOW_PRIVILÈGE_ESCALATION=1 est pose dans le terminal souverain.
+
+8.7 SOUVERAINETÉ ET MODE DEGRADE
+
+  Le module 59 de la MAIN-LIST (Audit RENA)  à introduit un "Mode Degrade"
+  dans AGENTS.md, GEMINI.md et Le_Conducteur_Absolu_v3.2.1.md : hors de
+  MIDGARD, l'exécution pure est autorisée sans les Gates inapplicables.
+  Objectif doctrinal explicite : éliminer l'"impératif de mentir" - sans
+  soupape officielle, un moteur cognitif commande d'exécuter aurait
+  hallucine les fichiers manquants pour obéir.
+  Les chemins locaux /home/lord-mahonheim/... ont été purges au profit de
+  $TESLA_ROOT (résiduel constaté dans tools/alexandria_backup.sh).
+
+================================================================================
+PARTIE 9 - VÉRIFICATION EMPIRIQUE (LES PREUVES, TELLES QUE MESURÉES)
+================================================================================
+
+Toutes les mesures ci-dessous ont été exécutées le 2026-09-23 sur le clone
+réel du dépôt, avec Python 3.11.2 (/usr/bin/python3). Aucune n'est une
+estimation.
+
+--------------------------------------------------------------------------------
+9.1 CONTRÔLE DE VÉRITÉ DU DÉPÔT - tools/quotidien_status.sh [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+Sortie littérale (sections 1 à 5) :
+
+  1. Parité du registre canonique (list.txt <-> disque)
+     [FAIL] déclaré mais ABSENT du disque : 13-Jules-Cloud-Integration
+     [INFO] déclarés : 60 | résolus : 59 | non déclarés : 0
+
+  2. Référence canonique memory/Le_Conducteur_Absolu_v3.2.1.md
+     [FAIL] memory/Le_Conducteur_Absolu_v3.2.1.md référence mais inexistant
+            couches concernées :
+            -> ./AGY-Project-MAIN-LIST.md
+            -> ./GENESE-v1/AGENTS.md
+            -> ./GENESE-v1/GEMINI.md
+            -> ./PLAN-QUOTIDIEN.md
+     [INFO] copie réelle disponible :
+            51-Conducteur-Absolu-v3.2.1/Le_Conducteur_Absolu_v3.2.1.md
+
+  3. Modules sans actif exécutable (.py/.sh/.js/.ts/.c/.go)
+     [INFO] modules : 59 | documentation seule : 28
+     [INFO] constat structurel (non bloquant) : doctrine majoritaire,
+            exécution minoritaire
+
+  4. Dépendances d'exécution
+     [FAIL] entr ABSENT - 36-Veille-Strategique/watch.sh et
+            23-Architecture-Entr/justfile:watch ne peuvent pas démarrer
+     [FAIL] pynacl ABSENT - courtier Ed25519 en UNKNOWN-CONFINED (P3) :
+            ses tests doivent SKIP avec raison, jamais PASS
+     [PASS] jq présent
+
+  5. Baseline de gouvernance - module 53 (--tests)
+     [FAIL] bin/test_runner.py : exit 1 (baseline NON verte)
+            verdict_global = FAIL | exit = 1
+            - python-unittest-discovery | exit 1 | FAIL | tests 183 | skip 26
+            - bash-hooks-suite | exit 0 | PASS | tests 11 | skip None
+
+  VERDICT : BLOCK - dérive détectée (fail-closed, P7)
+
+Lecture : 3 families de FAIL. Le module 59 et le module 60 sont désormais
+correctement déclarés dans list.txt (0 "non déclarés") : la partie
+"amnésie" du constat C2 de PLAN-QUOTIDIEN.md à donc été reparée depuis.
+La partie "fantôme" (13-Jules-Cloud-Integration) subsiste.
+
+--------------------------------------------------------------------------------
+9.2 BASELINE DE GOUVERNANCE - MODULE 53 [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+Commande : python3 bin/test_runner.py --mission ARENA-DOC-TECH --no-evidence
+Ledger rendu par le runner lui-même :
+
+  runner ................. Universal Test Runner
+  version ................ 2.1.3
+  verdict_global ......... FAIL
+  exit_code .............. 1
+
+  Suite 1 - python-unittest-discovery
+    command .............. /usr/bin/python3 -m unittest discover -s tests -v
+    exit_code ............ 1
+    verdict .............. FAIL
+    tests_reported ....... 183
+    tests_skipped ........ 26
+    p3_disclosure ........ "26 tests SKIP (UNKNOWN-CONFINED, dépendance/
+                            condition inobservable - jamais un PASS
+                            implicite, invariant P3)"
+    ligne de fin ......... "Ran 183 tests in 4.361s"
+                           "FAILED (failures=13, skipped=26)"
+
+  Suite 2 - bash-hooks-suite
+    command .............. bash tests/test_hooks_suite.sh
+    exit_code ............ 0
+    verdict .............. PASS
+    tests_reported ....... 11
+    ligne de fin ......... "Hook suite passed completely (All 11 tests OK:
+                            A-003 anti-replay, Gate 2 anti-usurpation,
+                            draft guard, memory parity M-014)."
+
+  test_manifest
+    verdict .............. PASS
+    mismatches ........... []   (183 déclarés = 183 exécutés)
+
+Bilan arithmétique : 183 exécutés = 144 PASS + 13 FAIL + 26 SKIP.
+
+9.2.1 Cause racine des 13 échecs - IDENTIFIÉE ET CONFIRMÉE
+
+Les 13 échecs sont TOUS dans une seule classe :
+tests/test_v26_gate_r_and_staging.py :: GateRTests
+(Gate R - Evidence Réconciliation, invariant P11).
+
+Liste exhaustive [VÉRIFIÉ] :
+  test_happy_path_reconciles_and_writes_truth_contract  (ERROR)
+  test_check_only_does_not_write_contract               (FAIL)
+  test_declared_tests_not_executed_blocks               (FAIL)
+  test_disclosed_skips_are_admissible                   (FAIL)
+  test_explicit_ledger_override                         (FAIL)
+  test_ledger_verdict_fail_blocks                       (FAIL)
+  test_missing_attestation_blocks                       (FAIL)
+  test_missing_ledger_is_unknown                        (FAIL)
+  test_missing_suite_blocks                             (FAIL)
+  test_no_key_is_unknown_not_pass                       (FAIL)
+  test_tampered_ledger_after_signing_blocks             (FAIL)
+  test_undisclosed_skips_block                          (FAIL)
+  test_unsigned_envelope_blocks                         (FAIL)
+
+Diagnostic en trois temps :
+
+  (a) État initial, sans clé hermétique installée :
+      message du sous-processus :
+        "Gate R FATAL - secret.key not found at /home/user/.tesla/gate2/secret.key"
+      Les 13 tests obtiennent exit 1 au lieu des codes attendus (0/50/66).
+
+  (b) Clé de test installée au chemin attendu (mode 0600) :
+      résultat : "Ran 183 tests" / "FAILED (failures=11, errors=1, skipped=26)"
+      Les 13 échecs PERSISTENT. La clé n'est donc pas la seule cause.
+
+  (c) Cause profonde [VÉRIFIÉ] :
+      bin/gate_r.py est une implémentation d'échafaudage. Le code source
+      le dit lui-même :
+          # 1. Observation (mocked for scaffolding)
+      Et sa fonction get_hermetic_key() ne lit QUE le fichier
+      ~/.tesla/gate2/secret.key :
+          grep -n "TESLA_CONTROL_PLANE_KEY" bin/gate_r.py  -> AUCUN RÉSULTAT
+      alors que les tests injectent la clé par variable d'environnement :
+          tests/test_v26_gate_r_and_staging.py:310
+              env["TESLA_CONTROL_PLANE_KEY"] = key
+      La variable d'environnement n'est lue que par bin/slsa_attestation.py
+      (ligne 106), jamais par gate_r.py.
+
+      Comportement réel observé sur le chemin nominal :
+        exit 0, stdout = "Gate R RECONCILED - exit 0"
+      Comportement attendu par le test :
+        exit 0, stdout = verdict JSON (verdict RECONCILED, sha256 manifest,
+        sha256 ledger, attestation.signed_by = "vigilum-control-plane-hmac-2026")
+        et écriture de runtime/contracts/mission_truth.json
+
+  Conclusion factuelle : les 13 tests Gate R encodent la spécification
+  V2.6.1 (vérification du ledger, divulgation des SKIP, P11, codes 50/66)
+  alors que le bin/gate_r.py livre dans le dépôt public n'implémente ni la
+  vérification du ledger, ni la sortie JSON, ni la lecture de la clé par
+  variable d'environnement. Ce n'est pas une régression : c'est un écart de
+  parité entre la spécification testée et l'outil livre.
+
+9.2.2 Comparaison avec ce que le module affirme
+
+  53-.../README.md, bloc "[VIGILUM CODEX 2.6.2]" :
+    "Python suite: 183 ran, 157 PASS, 26 SKIP (PyNaCl, disclosed P3)"
+    "Bash hook suite: 11/11 PASS"
+  53-.../README.md, verdict final :
+    "VERDICT: EXÉCUTABLE GOVERNANCE OPERATIONAL & PROVEN"
+
+  Mesure réelle sur clone propre : 183 ran, 144 PASS, 13 FAIL, 26 SKIP.
+
+  [ÉCART] 13 tests. Le README ne documente nulle part la procédure
+  d'installation de la clé hermétique ~/.tesla/gate2/secret.key, alors que
+  c'est le prérequis implicite de 13 tests. La section "Running the Full
+  Test Suite" du README ne cité que 2 suites
+  (tests/test_governance.py et tests/test_hooks_suite.sh) sur les 6 déclarées
+  au manifeste : ce sont celles qui passent.
+  Application littérale du principe P4 du dépôt :
+  "L'absence d'erreur n'est pas le succès."
+
+9.2.3 Ce qui PASSE réellement, sans aucune préparation
+
+  - bash-hooks-suite : 11/11 PASS, y compris l'anti-rejeu A-003, la Gate 2
+    anti-usurpation, le draft guard et la parité mémoire M-014 (13/13
+    piliers requis, manifest-driven).
+  - test_manifest : PASS, aucun écart de comptage.
+  - Les 4 autres suites Python (test_governance.py,
+    test_retex_hardening.py, test_gate2_guard.py,
+    test_v25_orchestrator_lockdown.py) : 144 tests PASS.
+
+--------------------------------------------------------------------------------
+9.3 BOUCLE OUROBOROS - MODULE 60 [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+Suite de tests unitaires (commande exacte du README du module) :
+  python3 -m unittest discover -s tests
+  -> "Ran 27 tests in 0.259s" / "OK"
+  -> 27/27 PASS. Conforme au badge du README ("Tests-27 passing").
+     Les 3 tests francophones ajoutés en V2.1 sont inclus.
+
+Auto-test interne du module :
+  python3 scripts/self_test.py
+  -> "RÉSULTAT SELF-TEST : 8/14 PASS"
+  -> code de sortie : 1  (correctement fail-closed)
+
+  Les 6 contrôles en échec [VÉRIFIÉ] :
+    trace_writer écrit la trace scellée
+    trace_writer met à jour la chaîne de hachage
+    intent_formatter valide le format canonique
+    patch_broker valide la structure
+    gating refuse un worktree sans SKILL (exit 1)
+    gating refuse l'absence de dataset (exit 1)
+
+  Causes relevées dans la sortie :
+    trace_writer.py attend <fichier_json> seul ; l'auto-test invoque
+      --root ... --update-chain -> exit 1
+      "Usage: .../trace_writer.py <fichier_json>"
+    intent_formatter.py -> "Erreur: Bloc JSON métadonnées introuvable."
+    patch_broker.py -> "Error: En-tete JSON invalide. Expecting value:
+      line 1 column 1 (char 0)"
+    gating_judge.py -> "unrecognized arguments: --skill tesla-web-raider"
+      (le script n'accepte que le paramètre positionnel worktree_path)
+
+  Lecture : l'auto-test (self_test.py) et les scripts qu'il verifie ont
+  diverge - les signatures CLI ont évolué sans mise à jour de l'auto-test.
+  Les 27 tests unitaires, eux, passent. Deux oracles du même module donnent
+  donc deux verdicts opposés : c'est précisément le risque que la doctrine
+  P5 (No Self-Evidence) et R-004 (Universal Test Runner) visent à éliminer.
+  Rappel : OUTPUTS/open_items_todo-Updated.md et PLAN-QUOTIDIEN.md (C8)
+  mentionnent une PR WikiSkill annonçant un self-test 14/14.
+
+--------------------------------------------------------------------------------
+9.4 INVENTAIRE QUANTITATIF [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+  find . -path ./.git -prune -o -type f -print | wc -l ......... 446
+  du -sh --exclude=.git . ..................................... 7,2 Mo
+  ls -d [0-9][0-9]-* | wc -l .................................. 59
+
+  Par extension :
+    .md    208   |  28 597 lignes
+    .py     98   |  20 438 lignes
+    .sh     60   |   3 986 lignes
+    .json   37
+    .yaml/.yml 11
+    .pdf     2   (module 45)
+    .html    2   (module 45)
+    .jsonl   2   (datasets du module 60)
+    README.md 72 | SKILL.md 20
+
+  Plus gros fichiers Python du dépôt :
+    53/core/orchestration/gate2_guard.py .................. 958
+    53/tests/test_retex_hardening.py ...................... 882
+    53/tests/test_v25_orchestrator_lockdown.py ............ 745
+    53/core/hooks/lib/tesla_git_guard.py .................. 657
+    60/scripts/ouroboros_autocapture.py ................... 646
+    53/core/orchestration/orchestration_gate.py ........... 623
+    53/tests/test_gate2_guard.py .......................... 599
+    17/update_session_history.py .......................... 502
+    18/vidéo/generate_vidéo.py ............................ 439
+    60/tests/test_ouroboros_auto.py ....................... 434
+
+  Plus gros scripts shell :
+    35/voice-tesla.sh ..................................... 611
+    35/voice-tesla-install.sh ............................. 371
+    35/voice-health-check.sh .............................. 346
+    60/hooks/antigravity/hook_11_ouroboros_capture.sh ..... 268
+
+  Concentration : le module 53 porte à lui seul 27 fichiers .py et 23 .sh,
+  soit l'essentiel de la masse exécutable du dépôt.
+
+--------------------------------------------------------------------------------
+9.5 HISTORIQUE GIT [VÉRIFIÉ]
+--------------------------------------------------------------------------------
+
+  git log --oneline | wc -l ......... 1
+  git log -1 ........................ de98204db4b541a689d6f5211cb82d51f17bf090
+                                       2026-09-23 20:08:45 +0000
+                                       "[MIRROR] sync 2026-09-23T20:08:45+00:00"
+  git remote -v ..................... origin
+      https://github.com/lordmahonheim-bot/Tesla-Antigravity-CLI.git (fetch/push)
+  Branches locales .................. main, arena/01a0d00b-tesla-antigravity-cli
+
+  Lecture : le dépôt public est un MIROIR à historique écrasé. Aucun commit
+  incrementiel n'y est consultable : la traçabilité fine vit sur la station
+  MIDGARD, pas sur GitHub. C'est un choix assumé (Workflow de Continuité :
+  travail direct sur main, cf. module 09), mais il privé le dépôt public de
+  sa propre Evidence Chain chronologique.
+
+================================================================================
+PARTIE 10 - DÉRIVÉS CONSTATÉES (SYNTHÈSE AUDITÉE)
+================================================================================
+
+Classement par sévérité, chaque ligne étant rattachée à une preuve.
+
+D-01 [BLOQUANT] Baseline de gouvernance non verte sur clone propre
+  Preuve ...... 9.2 - 13 FAIL / 183. tools/quotidien_status.sh --tests : BLOCK
+  Nature ...... écart de parité entre la spécification testée (Gate R, P11)
+                et l'outil livre (bin/gate_r.py, échafaudage)
+  Aggravant ... les 13 échecs ne figurent dans aucun registre : OI-03 ne
+                trace que les 26 SKIP (PyNaCl), pas les 13 FAIL
+  Impact ...... tout nouvel arrivant qui clone et execute obtient FAIL
+
+D-02 [BLOQUANT] Référence canonique cassée vers memory/
+  Preuve ...... 9.1 section 2 - 4 fichiers concernés
+  Nature ...... GATE 0 (AUTHORITY & RELOAD COGNITIF) non résoluble en l'état
+  Correctif ... substituer 51-Conducteur-Absolu-v3.2.1/
+                Le_Conducteur_Absolu_v3.2.1.md, ou créer un lien memory/
+
+D-03 [BLOQUANT] Module 13 déclaré, absent du disque (FANTÔME)
+  Preuve ...... 9.1 section 1 ; README.md lignes 97, 125, 180 ; list.txt l.13
+  Nature ...... violation frontale de P6 (parité bidirectionnelle)
+  Correctif ... recréer le répertoire (pointeur vers 50-Architecture-
+                Hybride-Jules) ou retirer les 4 références
+
+D-04 [MAJEUR] Auto-test du module 60 en échec 8/14
+  Preuve ...... 9.3 - exit 1, 6 contrôles FAILED
+  Nature ...... dérive des signatures CLI (trace_writer, gating_judge) non
+                répercutée dans self_test.py
+  Aggravant ... deux oracles contradictoires dans le même module
+                (27/27 unitaires OK vs 8/14 self-test)
+
+D-05 [MAJEUR] La CI ne prouve rien
+  Preuve ...... .github/workflows/ ne contient que mirror-guard.yml
+  Nature ...... aucun test, lint ou audit de parité n'est execute à la
+                publication ; le seul workflow est un garde-fou de miroir
+  Lien ........ OI-01 (câblage CI SLSA diffère)
+
+D-06 [MAJEUR] Dépendances d'exécution absentes
+  Preuve ...... 9.1 section 4 - entr ABSENT, pynacl ABSENT, jq PASS
+  Nature ...... 36-Veille-Strategique/watch.sh et
+                23-Architecture-Entr/justfile:watch ne peuvent pas démarrer ;
+                26 tests du courtier Ed25519 en SKIP
+
+D-07 [MAJEUR] Fantômes d'automatisation dans les justfiles
+  Preuve ...... PLAN-QUOTIDIEN.md C5, confirme par 9.1 (entr absent)
+  Nature ...... 28-Loop-Engineering/justfile référence avalon-daemon.service,
+                avalon-watcher.path, avalon-maintenance.timer (aucun des
+                trois n'existe) ; 23-Architecture-Entr/justfile:watch
+                référence tools/capability_bus/ (inexistant) et memory/
+                (inexistant)
+
+D-08 [MINEUR] Doublon de protocole
+  Preuve ...... diff -q : PROTOCOLES/GRAVURE-SUR-MARBRE.md et
+                PROTOCOLES/PROTOCOLE_CANONIQUE_GRAVURE_SUR_MARBRE_VIGILUM_
+                CODEX_2.0.md sont IDENTIQUES (534 lignes chacun)
+
+D-09 [MINEUR] Certificat de marbre introuvable
+  Preuve ...... ls 53-.../CERTIFICATES -> "No such file or directory"
+  Nature ...... AGY-Project-MAIN-LIST.md (entrée 53) cité
+                CERTIFICATES/MARBLE_CERTIFICATE_SGC-EXEC-GOV-03_20260827.yaml
+                avec son point de tête ; le répertoire n'existe pas
+
+D-10 [MINEUR] README du module 51 en contre-sens doctrinal
+  Preuve ...... lecture de 51-Conducteur-Absolu-v3.2.1/README.md
+  Nature ...... vocabulaire d'"autorité absolue débarrassée des couches de
+                sécurité", NMPC, torque vectoring - incompatible avec le
+                principe Fail-Closed du protocole qu'il documente
+
+D-11 [MINEUR] Cible Python incohérente
+  Preuve ...... badges "Python-3.12+", README racine "Python 3.10+", table
+                d'environnement testée "3.10+"
+  Nature ...... trois cibles pour un même dépôt
+
+D-12 [MINEUR] Chemin absolu résiduel
+  Preuve ...... tools/alexandria_backup.sh :
+                BACKUP_DIR="/home/lord-mahonheim/bifrost/backups/alexandria"
+  Nature ...... contredit la purge $TESLA_ROOT annoncée (module 59 MAIN-LIST)
+
+D-13 [MINEUR] Module sans README
+  Preuve ...... 57-Tesla-Mirroring-Cognitif-Assimilation/ ne contient que
+                Tesla-Mirroring-Cognitif-Assimilation.md
+
+D-14 [STRUCTUREL, NON BLOQUANT] Doctrine majoritaire, exécution minoritaire
+  Preuve ...... 9.1 section 3 : 59 modules, 28 en documentation seule (47 %)
+  Nature ...... constaté par l'outil du dépôt lui-même, classe "non bloquant"
+  Lecture ..... ce n'est pas un défaut en soi : le dépôt se presente comme
+                une preuve de capacité à concevoir, assembler, documenter et
+                gouverner - pas comme une preuve de code pur (MY_COMPANY.md
+                S14 le dit explicitement). Mais cela doit être assume dans
+                le README racine, dont les critères d'acceptation actuels
+                ("Pyright reports 0 errors across all Python files") ne sont
+                vérifiables nulle part dans le dépôt.
+
+================================================================================
+PARTIE 11 - POINTS OUVERTS, FEUILLE DE ROUTE ET DETTE TRACEE
+================================================================================
+
+11.1 REGISTRE DES DIFFÉRÉS (OUTPUTS/open_items_todo-Updated.md)
+
+  OI-01  Câblage CI/CD de l'attestation SLSA sur GitHub Actions
+         Statut ......... DEFERRED - CONDITIONED
+         Composant ...... 53/bin/slsa_attestation.py (8 tests PASS)
+         Condition ...... déploiement d'un job GitHub Actions exigeant une
+                          preuve Gate 2
+         A faire ........ job slsa_attestation.py verify en tête de pipeline ;
+                          secret TESLA_CONTROL_PLANE_KEY côté runner ;
+                          passage L1+HMAC local -> SLSA L2+
+         Note d'audit ... l'actif est CONSERVE (la Gate R dépend de sa
+                          machinerie HMAC/DSSE) ; seul le câblage CI est
+                          diffère. P8 respecte : rien n'est supprime en
+                          silence.
+
+  OI-02  Gravure de l'Invariant Cognitif Anti-Friction dans ENGINE.md
+         Statut ......... PENDING SOVEREIGN GRAVURE
+         Nature ......... texte consolidé v2 prêt, gravure réservée au
+                          Souverain (autorité biologique exclusive)
+
+  OI-03  Courtier Ed25519 (pynacl)
+         Statut ......... 26 tests SKIP, UNKNOWN-CONFINED (P3)
+         Nature ......... divulgation explicite dans le ledger
+                          (tests_skipped / p3_disclosure)
+
+11.2 FEUILLE DE ROUTE "PLAN-QUOTIDIEN" (12 tâches, issues #5 à #16)
+
+  Le dépôt contient son propre plan de redressement, date du 2026-09-17,
+  audité sur main @ eedce00. Charge cible : < 5 h/semaine de temps souverain,
+  soit environ 11 h réparties sur 8 semaines (~1 h 20 / semaine).
+
+  BLOC A - VÉRITÉ (prérequis non negotiable)
+    Q1  Rendre la baseline de gouvernance verte sur clone propre ... issue #5
+    Q2  Réparer la parité du registre et la référence canonique ... issue #6
+    Q3  Transformer le README en preuve : CI "Vérité du dépôt" ..... issue #7
+
+  BLOC B - LA BOUCLE QUOTIDIENNE
+    Q4  Veille quotidienne qui produit réellement (module 36) ...... issue #8
+    Q5  Mémoire de session automatique (03 -> 02) .................. issue #9
+    Q6  Chaîne de preuves quotidienne consultable (60) ............. issue #10
+    Q7  Pont SPARK <-> MIDGARD - décision + option A ............... issue #11
+
+  BLOC C - CÉRÉMONIES SOUVERAINES
+    Q8   Pack Schedules Spark (6 déclencheurs) ..................... issue #12
+    Q9   Fusionner la PR #4 (WikiSkill Ouroboros) sous Gravure ..... issue #13
+    Q10  Débloquer OI-03 : courtier Ed25519 (pynacl) ............... issue #14
+
+  BLOC D - CONSOLIDATION
+    Q11  Réparer ou déférer les fantômes d'automatisation (C5) .... issue #15
+    Q12  Tableau de bord unique + clôture de version ............... issue #16
+
+  Règles de conception des tâches (au nombre de 7, toutes respectées) :
+    aucune n'exige de coder soi-meme ; chacune se terminé par une commande
+    unique produisant PASS ou FAIL ; chacune produit un artefact nommé ;
+    chacune respecte P5 ; chacune est réversible ; chacune s'inscrit dans un
+    Gate existant ; chacune tient en 30 à 90 minutes de temps souverain.
+
+11.3 AUTRE DOCUMENT DE PILOTAGE : PLAN-SPARK-SCHEDULES.md
+
+  6 déclencheurs "prêts à coller" pour Gemini Spark, avec prérequis,
+  procédure de création, tableau de synthèse, discipline de gouvernance
+  après création, et section explicite "ce que ces schedules débloquent - et
+  ce qui reste à faire". Conditionne par Q7/Q8 (pont SPARK <-> MIDGARD).
+
+11.4 DIAGNOSTIC D'ORIGINE (PLAN-QUOTIDIEN.md S2) - ÉTAT AU 2026-09-23
+
+  C1 baseline non verte ............... TOUJOURS VRAI (confirme en 9.2)
+  C2 registre désynchronisé ........... PARTIELLEMENT REPARE
+                                        (0 "non déclarés" désormais ;
+                                         le fantôme 13 subsiste)
+  C3 référence memory/ cassée ......... TOUJOURS VRAI (4 fichiers)
+  C4 CI sans preuve ................... TOUJOURS VRAI (1 workflow)
+  C5 automatisations fantômes ......... TOUJOURS VRAI
+  C6 veille stérile ................... TOUJOURS VRAI (entr absent)
+  C7 pont SPARK mono-fichier .......... TOUJOURS VRAI (1 .py, 0 test)
+  C8 décisions différées .............. OI-01/02/03 toujours ouverts
+
+================================================================================
+PARTIE 12 - RECOMMANDATIONS (HIÉRARCHISÉES, AVEC PREUVE D'ACCEPTATION)
+================================================================================
+
+Chaque recommandation est formulée pour être déléguée à un agent et validee
+par UNE commande. Aucune n'exige de compétence de codage de la part de
+l'opérateur (politique NO-code / Low-code).
+
+R-01 [PRIORITÉ 1] Aligner bin/gate_r.py sur sa spécification, ou dégrader
+     honnêtement les 13 tests en SKIP documente.
+     Deux voies admissibles, les deux conformes à la doctrine :
+       (a) implémenter : lecture de TESLA_CONTROL_PLANE_KEY en secours du
+           fichier hermétique, sortie verdict JSON, vérification du ledger,
+           codes 0/50/66 ;
+       (b) classer UNKNOWN-CONFINED : SKIP avec raison explicite et
+           divulgation dans le ledger, exactement comme les 26 tests PyNaCl.
+     Ce qui n'est PAS admissible : laisser 13 FAIL non traces (P8).
+     Preuve d'acceptation :
+       cd 53-Vigilum-Codex-2.0-Executable-Governance && \
+         python3 bin/test_runner.py --mission R01 ; echo "exit=$?"
+       Attendu : verdict_global = PASS, exit 0.
+
+R-02 [PRIORITÉ 1] Tracer les 13 échecs dans OUTPUTS/open_items_todo-Updated.md
+     sous un identifiant OI-04, avec cause racine et condition de réveil.
+     Preuve : grep -c "OI-04" OUTPUTS/open_items_todo-Updated.md  ->  >= 1
+
+R-03 [PRIORITÉ 1] Réparer la référence canonique memory/.
+     Soit créer memory/ (lien ou copie) vers
+     51-Conducteur-Absolu-v3.2.1/Le_Conducteur_Absolu_v3.2.1.md,
+     soit réécrire les 4 références.
+     Preuve : bash tools/quotidien_status.sh  ->  section 2 sans [FAIL]
+
+R-04 [PRIORITÉ 1] Trancher le statut du module 13.
+     Option recommandée : créer 13-Jules-Cloud-Integration/README.md comme
+     pointeur explicite vers 50-Architecture-Hybride-Jules (réalignement
+     canonique), plutôt que de supprimer 4 références réparties dans 3
+     fichiers.
+     Preuve : bash tools/quotidien_status.sh  ->  section 1 sans [FAIL]
+
+R-05 [PRIORITÉ 2] Faire de tools/quotidien_status.sh un job CI réel.
+     Un workflow qui execute le script et échoue sur BLOCK transforme
+     immédiatement le README en preuve (tâche Q3 du plan quotidien).
+     Preuve : un run GitHub Actions visible sur la PR, statut rouge si BLOCK.
+
+R-06 [PRIORITÉ 2] Resynchroniser self_test.py du module 60 avec les
+     signatures réelles de trace_writer.py et gating_judge.py.
+     Preuve : cd 60-WikiSkill-Ouroboros && python3 scripts/self_test.py ;
+              echo "exit=$?"   ->   "14/14 PASS" et exit 0
+
+R-07 [PRIORITÉ 2] Déclarer les dépendances d'exécution dans un fichier
+     racine (requirements-dev.txt ou section du README) : entr, jq, pynacl,
+     Pillow, PRAW, Playwright. Aujourd'hui, un clone propre ne peut pas
+     savoir ce qu'il doit installer.
+     Preuve : un fichier racine listant les 6 dépendances citées en 9.1/7.4.
+
+R-08 [PRIORITÉ 3] Supprimer le doublon de protocole (D-08) : conserver
+     GRAVURE-SUR-MARBRE.md comme source et transformer l'autre en pointeur.
+     Preuve : find PROTOCOLES -name '*.md' | wc -l  ->  2
+
+R-09 [PRIORITÉ 3] Réécrire 51-Conducteur-Absolu-v3.2.1/README.md dans la
+     langue et le ton du protocole réel (Fail-Closed, 7 Gates, NO PROOF NO
+     PASS) au lieu du vocabulaire de pilotage automobile actuel.
+
+R-10 [PRIORITÉ 3] Uniformiser la cible Python (D-11) : une seule valeur
+     dans les badges, le README racine et la table d'environnement.
+
+R-11 [PRIORITÉ 3] Purger le chemin absolu résiduel de
+     tools/alexandria_backup.sh au profit de $TESLA_ROOT (D-12).
+     Preuve : grep -c "/home/lord-mahonheim" tools/alexandria_backup.sh -> 0
+
+R-12 [PRIORITÉ 3] Ajouter un README.md au module 57 (D-13) et publier le
+     certificat de marbre cité par la MAIN-LIST ou corriger la référence
+     (D-09).
+
+R-13 [PRIORITÉ 3] Revoir les critères d'acceptation du README racine :
+     "Pyright reports 0 errors across all Python files" n'est vérifiable
+     nulle part (aucune configuration Pyright racine, aucun workflow). Les
+     remplacer par la commande réelle : bash tools/quotidien_status.sh.
+
+================================================================================
+PARTIE 13 - LECTURE D'ENSEMBLE : FORCES, LIMITES, POSITIONNEMENT
+================================================================================
+
+13.1 CE QUE CE DÉPÔT APPORTE RÉELLEMENT
+
+  a) Une doctrine de gouvernance d'agents IA rarement formalisée à ce niveau.
+     Le passage de la "gouvernance par incantation" (promesses en langage
+     naturel)  à la "gouvernance exécutable" (hooks, schémas, codes de sortie,
+     nonces, hashes) est le véritable actif intellectuel du projet. La
+     formule "L'IA propose, le code valide" est une réponse concrète et
+     argumentée à un problème réel de l'industrie.
+
+  b) Une séparation des privilèges systématisée. Aucun agent ne cumule
+     production et validation. Cette règle (P2) est appliquée de façon
+     cohérente sur 14 agents et 60 chantiers - c'est une discipline, pas un
+     slogan.
+
+  c) Une traçabilité documentaire de bout en bout. La séquence
+     Audit > Plan > Verdict > SPEC LOCK, lisible dans OUTPUTS/, ainsi que
+     les 6 rapports d'agents dates du module 28 et les 19 documents nodaux
+     d'EXPORT/, constituent une Evidence Chain narrative réelle.
+
+  d) Des briques techniques solides et mesurées. Le module 33 publié des
+     benchmarks chiffrés (-71,9 % RAM au repos, -87,7 % CPU en indexation) ;
+     le module 53 publié 183 tests, 11 hooks et un manifeste déclaratif ;
+     le module 60 publié 27 tests unitaires et une empreinte de ~15 Mo.
+
+  e) Une capacité d'auto-critique inhabituelle. Le dépôt contient son propre
+     diagnostic (8 constats reproductibles), son propre plan de redressement
+     (12 tâches publiées en issues), son propre registre de différés, et un
+     outil de vérité en lecture seule qui retourne BLOCK sans complaisance.
+     Peu de dépôts publics s'auto-auditent à ce niveau.
+
+13.2 SES LIMITES STRUCTURELLES
+
+  a) La preuve n'est pas reproductible sur clone propre. C'est le point
+     cardinal : un dépôt dont la doctrine est "NO PROOF, NO PASS" doit
+     pouvoir être rejoue par un tiers en une commande. Aujourd'hui, cette
+     commande retourne FAIL.
+
+  b) 47 % des modules sont purement documentaires. Le dépôt décrit plus de
+     capacités qu'il n'en livre. La doctrine le justifie (preuve de capacité
+      à concevoir et gouverner, non à coder), mais le README racine annonce
+     l'inverse ("All 60 subprojects exist and are fully populated").
+
+  c) L'historique est écrasé. Un seul commit de miroir privé le dépôt public
+     de sa chronologie : impossible d'y auditer une évolution, un rollback
+     ou une régression.
+
+  d) L'écosystème réel vit ailleurs. Avalon, Alexandria, les bases SQLite,
+     les hooks actifs, les démons systemd, MIDGARD lui-même : rien de tout
+     cela n'est dans le dépôt. Ce qui est publié est une projection, pas le
+     système. Le dépôt le dit ("No active passwords, private Obsidian
+     vaults, local database files"), mais le lecteur non averti peut s'y
+     tromper.
+
+13.3 POSITIONNEMENT HONNÊTE
+
+  Ce dépôt n'est pas un produit logiciel : c'est un corpus de gouvernance
+  exécutable accompagne de démonstrateurs. Sa valeur se juge sur trois
+  critères :
+
+    1. La cohérence doctrinale .................... excellente
+    2. La profondeur technique des modules phares
+       (53, 60, 33, 17, 16) ....................... réelle
+    3. La reproductibilité de la preuve ...........  à réparer (D-01 à D-06)
+
+  Verdict synthétique de cette fiche :
+    SYSTÈME CONCEPTE ET DOCUMENTE : OPÉRANT
+    PREUVE REPRODUCTIBLE SUR CLONE PROPRE : NON VÉRIFIÉE (BLOCK)
+
+  Ce verdict est, en lui-même, conforme à la doctrine du dépôt :
+  P3 (UNKNOWN != PASS) et P4 (l'absence d'erreur n'est pas le succès).
+
+================================================================================
+PARTIE 14 - ANNEXES
+================================================================================
+
+A. ARBORESCENCE DE NIVEAU 1 (état réel au 2026-09-23) [VÉRIFIÉ]
+
+  Tesla-Antigravity-CLI/
+  |-- .github/                     CODEOWNERS, dependabot.yml, workflows/
+  |-- .gitignore                   doctrine d'exclusion Vigilum Codex
+  |-- 01-LSP-Self-Healing/         ... 12-Alexandria-RAG-Unification/
+  |-- [13 absent]
+  |-- 14-Llama-cpp-Evaluation/     ... 60-WikiSkill-Ouroboros/
+  |-- ABOUT_ME.md                  profil opérationnel de l'auteur
+  |-- AGY-Project-MAIN-LIST.md     registre exhaustif V7.1 (733 lignes)
+  |-- Archives-MVP-GITHUB/         instantané gelé des modules 01-09
+  |-- CODE_OF_CONDUCT.md
+  |-- CONTRIBUTING.md
+  |-- EXPORT/                      23 fichiers vers l'agent RENA
+  |-- GENESE-v1/                   SOUL, ENGINE, AGENTS, FORCE_TOOLING,
+  |                                GEMINI, TESLA.json, settings.json
+  |-- LEARN/                       sanctuaire d'acquisition cognitive
+  |-- LICENSE                      MIT (c) 2026 Lord Mahonheim
+  |-- MY_BRANDING.md               positionnement professionnel
+  |-- MY_COMPANY.md                fiche institutionnelle Vigilum Codex
+  |-- OUTPUTS/                     sas d'autorité des livrables
+  |-- PLAN-QUOTIDIEN.md            12 tâches, diagnostic C1-C8
+  |-- PLAN-SPARK-SCHEDULES.md      6 déclencheurs cloud
+  |-- PROTOCOLES/                  Gravure sur Marbre, Loi de Parité
+  |-- README.md                    vitrine publique
+  |-- SECURITY.md
+  |-- SPARK-MCP-Gateways/          Calibre-Spark-MCP-Gateway.py
+  |-- SUPPORT.md
+  |-- list.txt                     registre canonique des 60 modules
+  |-- tools/                       4 scripts d'exploitation
+
+B. DOCUMENTS SOUCHES A LIRE EN PREMIER (par ordre)
+
+  1. README.md .................................. vue d'ensemble publique
+  2. AGY-Project-MAIN-LIST.md ................... les 62 entrées détaillées
+  3. PROTOCOLES/GRAVURE-SUR-MARBRE.md ........... les 10 principes, 8 phases
+  4. PROTOCOLES/LOI-DE-PARITE-ABSOLUE.md ........ P1 à P7, amnésie/fantôme
+  5. 51-Conducteur-Absolu-v3.2.1/Le_Conducteur_Absolu_v3.2.1.md .. 7 Gates
+  6. GENESE-v1/ ................................. SOUL > ENGINE > AGENTS
+  7. 53-.../README.md + docs/RETEX_HARDENING_2.1.md .. gouvernance exécutable
+  8. 60-.../README.md + SKILL.md ................ boucle Ouroboros
+  9. PLAN-QUOTIDIEN.md .......................... état réel et feuille de route
+ 10. OUTPUTS/open_items_todo-Updated.md ......... ce qui est diffère et pourquoi
+
+C. GLOSSAIRE
+
+  AGY / agy ............ commande Antigravity CLI
+  AMDEC / FMEA ......... analyse des modes de défaillance et de leurs effets
+  ASDP ................. Asynchronous Synchronization Daemon Pattern (mod. 57)
+  Avalon ............... coffre Obsidian, second cerveau vivant
+  BASELINE_FINGERPRINT . empreinte d'état capturée en début de mission
+  DAG .................. graphe acyclique dirige (Mission Graph)
+  DSSE ................. Dead Simple Signing Envelope (attestation HMAC)
+  Evidence Chain ....... chaîne de preuves matérielles d'une mission
+  Fail-Closed .......... par défaut, on bloqué ; jamais de succès presume
+  Gate R ............... Evidence Réconciliation (module 53, invariant P11)
+  Gravure sur Marbre ... protocole transactionnel de publication (8 phases)
+  JCS / RFC 8785 ....... JSON Canonicalization Scheme
+  LSP .................. Language Server Protocol (Pyright via karellen)
+  MCP .................. Model Context Protocol
+  MIDGARD .............. nom de la station de travail hôte
+  MLT .................. mémoire à long terme
+  Ouroboros ............ boucle d'auto-apprentissage à 5 phases (module 60)
+  PARA ................. Projects / Areas / Resources / Archives
+  RRF (k=60) ........... Reciprocal Rank Fusion, fusion de classements
+  SGC / SGP ............ Système de Gestion de Chantiers / de Projets
+  Shadow-Targeting ..... invocation récursive d'un agent sur lui-même
+  SIA .................. Self-Improving AI (Harness-Only)
+  SLSA ................. Supply-chain Levels for Software Artifacts
+  TASLB ................ Tesla Avalon Second Living Brain
+  TGG .................. Tesla Governance Gateway (module 27)
+  TOCTOU ............... Time-of-Check to Time-of-Use
+  TRPB ................. Token Rate & Permission Breakers
+  Zero-Touch ........... fonctionnement sans intervention humaine
+
+D. SOURCES INTERNES EXPLOITEES POUR CETTE FICHE
+
+  README.md, ABOUT_ME.md, MY_COMPANY.md, MY_BRANDING.md, LICENSE,
+  SECURITY.md, CONTRIBUTING.md, SUPPORT.md, CODE_OF_CONDUCT.md,
+  AGY-Project-MAIN-LIST.md, PLAN-QUOTIDIEN.md, PLAN-SPARK-SCHEDULES.md,
+  list.txt, .gitignore, .github/{CODEOWNERS,dependabot.yml,workflows/
+  mirror-guard.yml},
+  PROTOCOLES/{GRAVURE-SUR-MARBRE.md,LOI-DE-PARITE-ABSOLUE.md},
+  GENESE-v1/{TESLA.json,SOUL.md,ENGINE.md,AGENTS.md,GEMINI.md,
+  FORCE_TOOLING.md,settings.json},
+  LEARN/{README.md,CARTOGRAPHIE_APPRENTISSAGES_INTÉGRALE.md,ARCHIVES/},
+  OUTPUTS/{CHECKPOINT_CONTRACT.yaml,open_items_todo-Updated.md,...},
+  tools/{quotidien_status.sh,alexandria_backup.sh,rtk_diagnostic.sh,
+  setup_keyring.sh},
+  53-Vigilum-Codex-2.0-Executable-Governance/{README.md,requirements.txt,
+  manifest/test_manifest_v2.1.yaml,bin/,core/,tests/,evidence/},
+  60-WikiSkill-Ouroboros/{README.md,SKILL.md,scripts/,tests/},
+  ainsi que les README.md et SKILL.md des 59 modules.
+
+E. LIMITE DE CETTE FICHE (déclaration d'honnêteté, P3)
+
+  Cette fiche a été produite sur un clone public. Elle ne peut donc pas
+  attester de l'état réel de la station MIDGARD : bases SQLite, coffre
+  Avalon, hooks actifs, démons systemd, services Ouroboros en production,
+  historique Git complet et certificats de marbre originaux sont hors de
+  portée. Tout ce qui les concerne est signalé [DÉCLARÉ] et non [VÉRIFIÉ].
+  Les performances citées (benchmarks du module 33, latence du module 35,
+  -56 % d'erreurs du module 32) proviennent des documents du dépôt et n'ont
+  pas été rejouées ici.
+
+================================================================================
+CLÔTURE
+================================================================================
+
+Document produit le 2026-09-23.
+Périmètre couvert : 446 fichiers, 59 modules physiques, 20 contrats SKILL.md,
+3 protocoles, 7 documents de genèse, 14 agents d'élite.
+Preuves exécutées : 12 commandes, dont 3 suites de tests réelles
+(183 + 27 + 14 contrôles).
+
+Verdict de la fiche :
+  ÉCOSYSTÈME DOCUMENTE ET COHÉRENT ....... OUI
+  MODULES PHARES TECHNIQUEMENT SOLIDES .... OUI (53, 60, 33, 17, 16)
+  PREUVE REPRODUCTIBLE PAR UN TIERS ....... NON - 3 dérives bloquantes
+                                            (D-01, D-02, D-03)
+
+Formule de clôture, conforme à la doctrine du dépôt :
+
+  "Un système qui exige la preuve des autres doit commencer par produire
+   la sienne."
+
+--------------------------------------------------------------------------------
+Fiche technique intégrale - Tesla-Antigravity-CLI - 2026-09-23 - FIN
+--------------------------------------------------------------------------------
