@@ -8,9 +8,9 @@ jobs:
   test-gate-r:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v3
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v4
         with:
           python-version: '3.10'
       - name: Run gate_r tests
@@ -19,9 +19,9 @@ jobs:
   test-ouroboros:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v3
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v4
         with:
           python-version: '3.10'
       - name: Run ouroboros tests
@@ -30,9 +30,9 @@ jobs:
   compile-python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v3
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v4
         with:
           python-version: '3.10'
       - name: Compile all Python files
@@ -41,15 +41,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v3
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v4
         with:
           python-version: '3.10'
       - name: Install linters
-        run: pip install ruff biome pyright
+        run: pip install ruff pyright
       - name: Run lint
-        run: bash 16-Tesla-Master-Code/lint_all.sh || true
+        run: bash 16-Tesla-Master-Code/lint_all.sh
 
   ci-success-governance:
     needs: [test-gate-r, test-ouroboros, compile-python, lint]

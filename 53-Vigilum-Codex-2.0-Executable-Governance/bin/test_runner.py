@@ -209,7 +209,7 @@ def main() -> int:
         "runner": "Universal Test Runner",
         "version": "2.1.3",
         "mission_id": args.mission,
-        "module_root": str(root),
+        "module_root": "./" + root.name,
         "verdict_global": global_verdict,
         "exit_code": 0 if global_verdict == "PASS" else 1,
         "suites": suites,
