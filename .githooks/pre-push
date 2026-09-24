@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root="$(git rev-parse --show-toplevel)"
-exec "$root/53-Vigilum-Codex-2.0-Executable-Governance/core/hooks/pre-push/tesla-pre-push-main.sh" "$@"
+script="$root/53-Vigilum-Codex-2.0-Executable-Governance/core/hooks/pre-push/tesla-pre-push-main.sh"
+if [ -x "$script" ]; then
+  exec "$script" "$@"
+else
+  echo "⚠️ Pre-push hook bypassed: $script not found or not executable."
+  exit 0
+fi

@@ -11,7 +11,7 @@ jobs:
       - run: |
           echo "::error::LEARN/, PROTOCOLES/ et AGY-Project-MAIN-LIST.md sont des MIROIRS UNIDIRECTIONNELS."
           exit 1
-  ci-success:
+  ci-success-mirror:
     needs: [souverainete-locale]
     runs-on: ubuntu-latest
     steps:
