@@ -1,10 +1,41 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/53-Vigilum-Codex-2.0-Executable-Governance"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      python-deps:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pip"
+    directory: "/37-MCP-Telegram/mcp_server"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      python-deps:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pip"
+    directory: "/55-Tesla-Forge-Cloud/tesla-forge-mcp"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      python-deps:
+        patterns:
+          - "*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
