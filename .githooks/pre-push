@@ -5,6 +5,6 @@ script="$root/53-Vigilum-Codex-2.0-Executable-Governance/core/hooks/pre-push/tes
 if [ -x "$script" ]; then
   exec "$script" "$@"
 else
-  echo "⚠️ Pre-push hook bypassed: $script not found or not executable."
+  echo "🚨 Hook bypassed: $script not found. Fail-closed."
   exit 1
 fi
