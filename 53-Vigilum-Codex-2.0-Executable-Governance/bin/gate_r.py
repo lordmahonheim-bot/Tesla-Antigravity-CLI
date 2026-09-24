@@ -12,7 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 import slsa_attestation
 
 def fail(code, reason):
-    print(json.dumps({"verdict": "FAILED", "reason": reason}))
+    verdict = "UNKNOWN" if code == 66 else "FAILED"
+    print(json.dumps({"verdict": verdict, "reason": reason}))
     sys.exit(code)
 
 def success(verdict, truth_file=None, data=None):

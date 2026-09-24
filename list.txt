@@ -10,7 +10,6 @@
 10-Github-MVP-Scaffolding
 11-Tesla-Arcanis-360-Skill
 12-Alexandria-RAG-Unification
-13-Jules-Cloud-Integration
 14-Llama-cpp-Evaluation
 15-Obsidian-Database
 16-Tesla-Master-Code

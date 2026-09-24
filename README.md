@@ -71,9 +71,8 @@ graph TD
 
     Gov --> F["05-USB-Resilience"]
     Gov --> H["07-Strategic-Armement"]
-    Gov --> I["08-Integration-Antigravity-Google-Agents-MIDGARD"]
     Gov --> J["09-Github-Governance"]
-    Gov --> L["11-Tesla-Arcanis-Skill"]
+    Gov --> L["11-Tesla-Arcanis-360"]
     Gov --> U["20-Tesla-Premortem"]
     Gov --> V["21-Tesla-Web-Raider"]
     Gov --> W["22-Shadow-Targeting-Method"]
@@ -94,7 +93,6 @@ graph TD
     Data --> R["17-DB-Subagents-Skills"]
     Data --> T["19-Tesla-Curator-Prime"]
 
-    Media --> N["13-Jules-Cloud-Integration"]
     Media --> O["14-Llama-cpp-Evaluation"]
     Media --> S["18-Tesla-Video-Director"]
 ```
@@ -122,7 +120,6 @@ MVP-GITHUB/
 ├── 10-Github-MVP-Scaffolding/
 ├── 11-Tesla-Arcanis-360-Skill/
 ├── 12-Alexandria-RAG-Unification/
-├── 13-Jules-Cloud-Integration/
 ├── 14-Llama-cpp-Evaluation/
 ├── 15-Obsidian-Database/
 ├── 16-Tesla-Master-Code/
@@ -177,7 +174,6 @@ MVP-GITHUB/
 2. Code edits are checked by `01-LSP-Self-Healing` via local pyright diagnostics, and pre-flight lints are enforced by `16-Tesla-Master-Code`.
 3. Successful revisions are documented and indexed using `02-Alexandria-Database` and the RAG indexers of `15-Obsidian-Database`.
 4. Action logs and subagent sessions are consolidated into `03-Memory-MLT` and `17-DB-Subagents-Skills` databases.
-5. High-level evaluations (`14-Llama-cpp-Evaluation`), cloud computations (`13-Jules-Cloud-Integration`), and media ingestion (`18-Tesla-Video-Director`) are dispatched as needed.
 6. All system or push actions must abide by the rules configured in `09-Github-Governance` and staged cleanly via `10-Github-MVP-Scaffolding`.
 7. Knowledge synthesis, document verification, and citation archives are managed and certified by `19-Tesla-Curator-Prime` before integration into the Obsidian Avalon vault.
 8. Predictive failure scenarios, AMDEC/FMEA assessments, and dynamic risk graph entries are mapped and certified by `20-Tesla-Premortem` before critical systems execution.

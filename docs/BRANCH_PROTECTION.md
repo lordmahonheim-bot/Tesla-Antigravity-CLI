@@ -1,0 +1,15 @@
+```json
+{
+  "required_status_checks": {
+    "strict": true,
+    "contexts": [
+      "ci-success-security",
+      "ci-success-governance"
+    ]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 0
+  }
+}
+```

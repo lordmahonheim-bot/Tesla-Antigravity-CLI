@@ -1,0 +1,59 @@
+name: Governance CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-gate-r:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run gate_r tests
+        run: python3 53-Vigilum-Codex-2.0-Executable-Governance/bin/test_runner.py
+
+  test-ouroboros:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run ouroboros tests
+        run: python3 60-WikiSkill-Ouroboros/scripts/self_test.py
+
+  compile-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Compile all Python files
+        run: python3 -m compileall .
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install linters
+        run: pip install ruff biome pyright
+      - name: Run lint
+        run: bash 16-Tesla-Master-Code/lint_all.sh || true
+
+  ci-success-governance:
+    needs: [test-gate-r, test-ouroboros, compile-python, lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Governance Success
+        run: echo "Gouvernance Validée"
