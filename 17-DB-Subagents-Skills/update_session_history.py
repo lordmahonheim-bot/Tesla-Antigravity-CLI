@@ -252,13 +252,15 @@ final_content = re.sub(
 )
 
 # Build and inject the "Last Known State" block to prevent "First-Match Bias"
+diag_clean = diag_short.replace('\n', ' ')
+act_clean = act_short.replace('\n', ' ')
 last_state_block = (
     f"<!-- LAST_STATE_START -->\n"
     f"## ⚓ Dernier État Connu (Session ID: {conversation_id})\n"
     f"- **Date & Heure** : {date_str}\n"
     f"- **Thème principal** : {theme}\n"
-    f"- **Dernier Diagnostic** : {diag_short.replace('\n', ' ')}\n"
-    f"- **Dernière Action** : {act_short.replace('\n', ' ')}\n"
+    f"- **Dernier Diagnostic** : {diag_clean}\n"
+    f"- **Dernière Action** : {act_clean}\n"
     f"👉 [Consulter la fiche d'ancrage universelle (PROJECT_STATE.md)](file://{CHECKPOINT_FILE})\n"
     f"<!-- LAST_STATE_END -->"
 )
