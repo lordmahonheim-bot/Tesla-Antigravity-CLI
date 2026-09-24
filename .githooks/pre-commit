@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+exec "$root/53-Vigilum-Codex-2.0-Executable-Governance/core/hooks/pre-commit/tesla-pre-commit-main.sh" "$@"

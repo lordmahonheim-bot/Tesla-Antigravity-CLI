@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [ -x ".git/hooks/commit-msg" ]; then
+  exec .git/hooks/commit-msg "$@"
+fi
