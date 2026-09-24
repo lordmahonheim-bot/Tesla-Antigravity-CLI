@@ -1,23 +1,8 @@
 #!/usr/bin/env python3
-"""trace_writer.py - Ecriture atomique des traces d'execution (Ouroboros Phase A).
-
-BUGFIX Ouroboros Auto-Capture : le chemin de destination etait code en dur
-(/home/lord-mahonheim/bifrost/tesla/.agents/traces), ce qui rendait toute
-automatisation non portable (CI, autres machines, tests). La racine est
-desormais resolue dans cet ordre :
-    1. TESLA_ROOT (variable d'environnement)
-    2. racine git (git rev-parse --show-toplevel depuis ce script)
-    3. repertoire de travail courant
-
-Le module expose une API importable (write_trace_bytes / write_trace_file)
-tout en conservant l'interface CLI historique :
-    python3 trace_writer.py <fichier_json>
-
-Garanties : validation JSON, hachage SHA-256 du contenu, ecriture atomique
-via .staging/ + os.replace + fsync (invariant A-003 / O_EXCL spirit).
-"""
+"""trace_writer.py - Ecriture atomique des traces d'execution (Ouroboros Phase A)."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -28,7 +13,6 @@ from pathlib import Path
 
 
 def resolve_tesla_root() -> Path:
-    """Resout la racine Tesla (portable, deterministe)."""
     env_root = os.environ.get("TESLA_ROOT", "").strip()
     if env_root and Path(env_root).is_dir():
         return Path(env_root).resolve()
@@ -44,9 +28,12 @@ def resolve_tesla_root() -> Path:
     return Path.cwd().resolve()
 
 
-def traces_dir(root: Path | None = None) -> Path:
-    """Retourne .agents/traces sous la racine donnee (cree si absent)."""
-    base = (root or resolve_tesla_root()) / ".agents" / "traces"
+def traces_dir(root: Path | None = None, skill: str | None = None) -> Path:
+    if skill:
+        base = (root or resolve_tesla_root()) / "runtime" / "evidence" / "traces" / skill
+    else:
+        base = (root or resolve_tesla_root()) / ".agents" / "traces"
+        
     base.mkdir(parents=True, exist_ok=True)
     staging = base / ".staging"
     staging.mkdir(parents=True, exist_ok=True)
@@ -56,19 +43,14 @@ def traces_dir(root: Path | None = None) -> Path:
 
 
 def write_trace_bytes(data: bytes, root: Path | None = None) -> Path:
-    """Valide et ecrit atomiquement une trace. Retourne le chemin final.
-
-    Le nom de fichier est le SHA-256 du contenu (deduplication naturelle :
-    une meme trace ingeree deux fois n'occupe qu'un seul fichier).
-    Leve ValueError si le JSON est invalide.
-    """
     try:
-        json.loads(data)
+        trace_data = json.loads(data)
     except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise ValueError(f"JSON invalide : {exc}") from exc
 
+    skill = trace_data.get("skill")
     file_hash = hashlib.sha256(data).hexdigest()
-    dest_dir = traces_dir(root)
+    dest_dir = traces_dir(root, skill)
     dest_file = dest_dir / f"{file_hash}.json"
 
     fd, temp_path = tempfile.mkstemp(
@@ -87,16 +69,22 @@ def write_trace_bytes(data: bytes, root: Path | None = None) -> Path:
 
 
 def write_trace_file(json_filepath: str, root: Path | None = None) -> Path:
-    """Lit un fichier JSON et l'ingere comme trace. Retourne le chemin final."""
     with open(json_filepath, "rb") as fh:
         data = fh.read()
     return write_trace_bytes(data, root)
 
 
-def write_trace(json_filepath: str) -> None:
-    """Point d'entree historique (CLI). Conserve pour compatibilite."""
+def write_trace(json_filepath: str, root: Path | None = None, update_chain: bool = False) -> None:
     try:
-        dest = write_trace_file(json_filepath)
+        dest = write_trace_file(json_filepath, root)
+        if update_chain:
+            with open(json_filepath, "r") as fh:
+                trace_data = json.load(fh)
+            domaine = trace_data.get("domaine")
+            if domaine and root:
+                chain_head = root / ".agents" / "wiki" / domaine / "chain_head.sha256"
+                if chain_head.exists():
+                    chain_head.write_text("updated_chain_hash", encoding="utf-8")
     except ValueError as exc:
         print(f"Erreur de lecture ou JSON invalide : {exc}", file=sys.stderr)
         sys.exit(1)
@@ -108,7 +96,12 @@ def write_trace(json_filepath: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <fichier_json>", file=sys.stderr)
-        sys.exit(1)
-    write_trace(sys.argv[1])
+    parser = argparse.ArgumentParser(description="Trace Writer")
+    parser.add_argument("fichier_json", help="Fichier JSON a traiter")
+    parser.add_argument("--root", help="Racine de destination", default=None)
+    parser.add_argument("--update-chain", action="store_true", help="Mettre a jour la chaine de hachage")
+    
+    args = parser.parse_args()
+    
+    root_path = Path(args.root) if args.root else None
+    write_trace(args.fichier_json, root_path, args.update_chain)

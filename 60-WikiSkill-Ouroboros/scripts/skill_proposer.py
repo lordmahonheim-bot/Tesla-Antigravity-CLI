@@ -2,7 +2,7 @@
 """skill_proposer.py — Moteur d'Inférence (simulateur) de WikiSkill.
 
 Génère un fichier .intent.patch au FORMAT CANONIQUE UNIFIÉ :
-  * en-tête métadonnées dans un commentaire HTML `<!-- WIKISKILL_METADATA ... -->`
+  * en-tête métadonnées dans un commentaire HTML ````json ... ````
     (toléré par les outils de diff, lisible par git_committer / intent_formatter /
     patch_broker — correction d'incident : les 4 consommateurs du patch
     s'accordaient sur 3 formats incompatibles) ;
@@ -37,9 +37,9 @@ def build_patch(skill_target: str) -> str:
     )
 
     return (
-        "<!-- WIKISKILL_METADATA\n"
+        "```json\n"
         + json.dumps(metadata, indent=2, ensure_ascii=False)
-        + "\n-->\n\n"
+        + "\n```\n\n"
         + diff_content
     )
 

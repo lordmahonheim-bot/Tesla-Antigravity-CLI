@@ -9,6 +9,7 @@ import uvicorn
 from mcp.server import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
@@ -18,7 +19,7 @@ TOKEN = os.environ.get("CALIBRE_SPARK_MCP_TOKEN", "no-oauth-required").strip()
 TUNNEL_HOST = os.environ.get("CALIBRE_SPARK_TUNNEL_HOST", "").strip()
 
 allowed_hosts = ["127.0.0.1", "127.0.0.1:*", "localhost", "localhost:*"]
-allowed_origins = ["http://127.0.0.1:*", "http://localhost:*"]
+allowed_origins = ["http://127.0.0.1:*", "http://localhost:*", "https://gemini.google.com"]
 if TUNNEL_HOST:
     allowed_hosts += [TUNNEL_HOST, f"{TUNNEL_HOST}:*"]
     allowed_origins.append(f"https://{TUNNEL_HOST}")
@@ -46,10 +47,10 @@ class HTMLTextExtractor(HTMLParser):
     def get_text(self):
         return "".join(self.chunks).strip()
 
-def get_db():
+def get_db(mode: str = "ro") -> sqlite3.Connection:
     if not os.path.exists(DB_PATH):
         raise FileNotFoundError(f"Base de données introuvable : {DB_PATH}")
-    return sqlite3.connect(f"file:{os.path.abspath(DB_PATH)}?mode=ro", uri=True)
+    return sqlite3.connect(f"file:{os.path.abspath(DB_PATH)}?mode={mode}", uri=True, timeout=15.0)
 
 @mcp.tool()
 def search_books(query: str = "", author: str = "", tag: str = "", limit: int = 20) -> str:
@@ -131,15 +132,98 @@ def read_book_content(book_id: int, max_characters: int = 60000, start_offset: i
     except Exception as e:
         return f"Erreur EPUB : {e}"
 
-class BearerAuthMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next: Any) -> Response:
-        if TOKEN:
-            auth = request.headers.get("authorization", "")
-            if auth != f"Bearer {TOKEN}":
-                return JSONResponse({"error": "unauthorized"}, status_code=401)
-        return await call_next(request)
+@mcp.tool()
+def batch_update_books(updates: list[dict]) -> str:
+    """
+    Met à jour en masse les métadonnées des livres (titre, auteur).
+    
+    La liste `updates` doit contenir des dictionnaires avec :
+    - 'id' (int, requis): l'identifiant du livre.
+    - 'title' (str, optionnel): le nouveau titre du livre.
+    - 'author_sort' (str, optionnel): le nom de l'auteur utilisé pour le tri (ex: "Nom, Prénom").
+    
+    Cette opération est sécurisée (requêtes préparées) mais peut échouer si l'interface
+    graphique de Calibre est actuellement ouverte (verrouillage de la base de données).
+    """
+    if not updates:
+        return "Aucune mise à jour fournie."
 
-app = BearerAuthMiddleware(mcp.streamable_http_app(transport_security=security))
+    try:
+        conn = get_db(mode="rw")
+        c = conn.cursor()
+        
+        updated_count = 0
+        for update in updates:
+            book_id = update.get("id")
+            if not book_id:
+                continue
+            
+            fields = []
+            params = []
+            if "title" in update:
+                fields.append("title = ?")
+                params.append(update["title"])
+            if "author_sort" in update:
+                fields.append("author_sort = ?")
+                params.append(update["author_sort"])
+            
+            if not fields:
+                continue
+            
+            query = f"UPDATE books SET {', '.join(fields)} WHERE id = ?"
+            params.append(book_id)
+            
+            c.execute(query, tuple(params))
+            if c.rowcount > 0:
+                updated_count += 1
+                
+        conn.commit()
+        conn.close()
+        return f"Mise à jour réussie : {updated_count} livre(s) modifié(s)."
+    except sqlite3.OperationalError as e:
+        if "database is locked" in str(e).lower():
+            return "Erreur : La base de données est verrouillée. L'interface graphique de Calibre est probablement ouverte. Veuillez la fermer et réessayer."
+        return f"Erreur de base de données : {e}"
+    except Exception as e:
+        return f"Erreur inattendue lors de la mise à jour : {e}"
+
+class BearerAuthMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+            
+        if scope["method"] == "OPTIONS":
+            return await self.app(scope, receive, send)
+            
+        if TOKEN and TOKEN.lower() != "no-oauth-required":
+            headers = dict(scope.get("headers", []))
+            auth = headers.get(b"authorization", b"").decode("utf-8", errors="ignore")
+            if auth != f"Bearer {TOKEN}":
+                await send({
+                    "type": "http.response.start",
+                    "status": 401,
+                    "headers": [(b"content-type", b"application/json")]
+                })
+                await send({
+                    "type": "http.response.body",
+                    "body": b'{"error": "unauthorized"}'
+                })
+                return
+                
+        return await self.app(scope, receive, send)
+
+raw_app = mcp.streamable_http_app(transport_security=security, stateless_http=True, streamable_http_path="/")
+cors_app = CORSMiddleware(
+    raw_app,
+    allow_origins=["https://gemini.google.com"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
+app = BearerAuthMiddleware(cors_app)
 
 if __name__ == "__main__":
     uvicorn.run(app, host=HOST, port=PORT, log_level="info")

@@ -1,0 +1,3 @@
+import inspect
+from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
+print(inspect.getsource(StreamableHTTPSessionManager._handle_stateful_request))

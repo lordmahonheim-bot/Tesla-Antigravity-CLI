@@ -4,14 +4,18 @@ set -u
 
 echo "=== [⚙️] Starting Master Code Verification Check ==="
 
+UNAVAILABLE_STATUS=66
+MISSING_TOOLS=0
+
 # Check Python Syntax & Lints
 if command -v ruff &> /dev/null; then
     echo "[*] Checking Python with Ruff..."
     ruff check .
     RUFF_STATUS=$?
 else
-    echo "[!] Warning: Ruff is not installed. Skipping Python linter."
-    RUFF_STATUS=0
+    echo "[!] ERROR: Ruff is not installed. Code verification cannot proceed (Fail-open forbidden)."
+    RUFF_STATUS=$UNAVAILABLE_STATUS
+    MISSING_TOOLS=1
 fi
 
 # Check Web Syntax & Lints
@@ -20,8 +24,9 @@ if command -v biome &> /dev/null; then
     biome check .
     BIOME_STATUS=$?
 else
-    echo "[!] Warning: Biome is not installed. Skipping JS/TS/JSON linter."
-    BIOME_STATUS=0
+    echo "[!] ERROR: Biome is not installed. Code verification cannot proceed (Fail-open forbidden)."
+    BIOME_STATUS=$UNAVAILABLE_STATUS
+    MISSING_TOOLS=1
 fi
 
 # Check Pyright typing
@@ -30,8 +35,9 @@ if command -v pyright &> /dev/null; then
     pyright
     PYRIGHT_STATUS=$?
 else
-    echo "[!] Warning: Pyright is not installed. Skipping type validation."
-    PYRIGHT_STATUS=0
+    echo "[!] ERROR: Pyright is not installed. Code verification cannot proceed (Fail-open forbidden)."
+    PYRIGHT_STATUS=$UNAVAILABLE_STATUS
+    MISSING_TOOLS=1
 fi
 
 echo "=== [📋] Verification Diagnostics Summary ==="
@@ -39,7 +45,10 @@ echo "Python Ruff Status: $RUFF_STATUS"
 echo "Web Biome Status: $BIOME_STATUS"
 echo "Pyright Status: $PYRIGHT_STATUS"
 
-if [ $RUFF_STATUS -eq 0 ] && [ $BIOME_STATUS -eq 0 ] && [ $PYRIGHT_STATUS -eq 0 ]; then
+if [ $MISSING_TOOLS -ne 0 ]; then
+    echo "[-] ERROR: Code verification failed due to missing tools. Return code $UNAVAILABLE_STATUS."
+    exit $UNAVAILABLE_STATUS
+elif [ $RUFF_STATUS -eq 0 ] && [ $BIOME_STATUS -eq 0 ] && [ $PYRIGHT_STATUS -eq 0 ]; then
     echo "[✓] SUCCESS: All code verification checks passed."
     exit 0
 else
