@@ -80,12 +80,7 @@
     ]
   },
   "engines": {
-    "supported": [
-      "Gemini",
-      "GPT",
-      "Claude",
-      "Qwen"
-    ]
+    "supported": ["Gemini", "GPT", "Claude", "Qwen"]
   },
   "compatibility": {
     "engineIndependent": true,

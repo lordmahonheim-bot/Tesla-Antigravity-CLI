@@ -43,33 +43,23 @@
   },
   "ABOUT_ME.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/ABOUT_ME.md",
-    "targets": [
-      "/home/lord-mahonheim/.gemini/ABOUT_ME.md"
-    ]
+    "targets": ["/home/lord-mahonheim/.gemini/ABOUT_ME.md"]
   },
   "MY_BRANDING.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_BRANDING.md",
-    "targets": [
-      "/home/lord-mahonheim/.gemini/MY_BRANDING.md"
-    ]
+    "targets": ["/home/lord-mahonheim/.gemini/MY_BRANDING.md"]
   },
   "MY_COMPANY.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_COMPANY.md",
-    "targets": [
-      "/home/lord-mahonheim/.gemini/MY_COMPANY.md"
-    ]
+    "targets": ["/home/lord-mahonheim/.gemini/MY_COMPANY.md"]
   },
   "MY_STRATEGIC_STYLE.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/MY_STRATEGIC_STYLE.md",
-    "targets": [
-      "/home/lord-mahonheim/.gemini/MY_STRATEGIC_STYLE.md"
-    ]
+    "targets": ["/home/lord-mahonheim/.gemini/MY_STRATEGIC_STYLE.md"]
   },
   "settings.json": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/settings.json",
-    "targets": [
-      "/home/lord-mahonheim/bifrost/tesla/settings.json"
-    ]
+    "targets": ["/home/lord-mahonheim/bifrost/tesla/settings.json"]
   },
   "shadow-targeting-method.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/shadow-targeting-method.md",
@@ -80,8 +70,6 @@
   },
   "liste_projets_antigravity_v3.md": {
     "canonical": "/home/lord-mahonheim/bifrost/tesla/memory/liste_projets_antigravity_v3.md",
-    "targets": [
-      "/home/lord-mahonheim/.gemini/liste_projets_antigravity_v3.md"
-    ]
+    "targets": ["/home/lord-mahonheim/.gemini/liste_projets_antigravity_v3.md"]
   }
 }

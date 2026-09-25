@@ -19,14 +19,11 @@ else
 fi
 
 # Check Web Syntax & Lints
-if command -v biome &> /dev/null; then
-    echo "[*] Checking Web assets with Biome..."
-    biome check .
-    BIOME_STATUS=$?
+if [ -f package.json ] || [ -f biome.json ]; then
+  if command -v biome &> /dev/null; then echo "[*] Checking Web assets with Biome..."; biome check .; BIOME_STATUS=$?
+  else echo "[!] ERROR: Biome is not installed. Fail-open forbidden."; BIOME_STATUS=$UNAVAILABLE_STATUS; MISSING_TOOLS=1; fi
 else
-    echo "[!] ERROR: Biome is not installed. Code verification cannot proceed (Fail-open forbidden)."
-    BIOME_STATUS=$UNAVAILABLE_STATUS
-    MISSING_TOOLS=1
+  echo "[*] Surface web absente — check Biome hors périmètre."; BIOME_STATUS=0
 fi
 
 # Check Pyright typing

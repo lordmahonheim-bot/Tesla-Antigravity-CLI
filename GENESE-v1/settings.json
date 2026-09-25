@@ -53,12 +53,7 @@
     "governanceRequired": true
   },
   "engines": {
-    "supported": [
-      "Gemini",
-      "GPT",
-      "Claude",
-      "Qwen"
-    ]
+    "supported": ["Gemini", "GPT", "Claude", "Qwen"]
   },
   "reserved": {
     "capabilities": {},
@@ -80,14 +75,7 @@
     "platformManifest": "TESLA.json"
   },
   "architecture": {
-    "layers": [
-      "SOUL",
-      "ENGINE",
-      "AGENTS",
-      "SKILLS",
-      "MCP",
-      "TOOLS"
-    ],
+    "layers": ["SOUL", "ENGINE", "AGENTS", "SKILLS", "MCP", "TOOLS"],
     "manifest": "TESLA.json"
   },
   "governance": {

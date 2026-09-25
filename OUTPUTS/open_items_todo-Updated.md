@@ -66,3 +66,4 @@ de confiance. La version corrigée ci-dessus cible la *friction imposée par l'a
 
 *Résultat du déféré V2.6.1 : aucun composant supprimé ; 1 câblage différé (OI-01) ;
 1 gravure souveraine proposée (OI-02) ; 1 limitation documentée (OI-03).*
+- [ ] OI-04 : Trancher Mode Dégradé : le rendre externe+tracé, ou le supprimer.

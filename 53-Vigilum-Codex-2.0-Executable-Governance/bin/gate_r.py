@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-import os
-import sys
-import json
 import argparse
 import hashlib
-import re
+import json
+import os
+import sys
 from pathlib import Path
+from typing import NoReturn
 
-# Add bin to path to import slsa_attestation
+# Add bin to path to import slsa_attestation  # type: ignore
 sys.path.insert(0, str(Path(__file__).parent))
-import slsa_attestation
+import slsa_attestation  # type: ignore
 
-def fail(code, reason):
+
+def fail(code: int, reason: str) -> NoReturn:
     verdict = "UNKNOWN" if code == 66 else "FAILED"
     print(json.dumps({"verdict": verdict, "reason": reason}))
     sys.exit(code)
@@ -36,7 +37,15 @@ def reconcile(root_dir: str, mission_id: str, explicit_ledger: str, no_write: bo
         
     key = key_env.encode("utf-8")
         
-    ledger_path = Path(explicit_ledger).resolve() if explicit_ledger else root / "evidence" / f"test_runner_{mission_id}_20260903-000000-000001.json"
+    if explicit_ledger:
+        ledger_path = Path(explicit_ledger).resolve()
+    else:
+        # Find latest ledger
+        evidence_dir = root / "evidence"
+        ledgers = list(evidence_dir.glob(f"test_runner_{mission_id}_*.json"))
+        if not ledgers:
+            fail(66, "No ledger found")
+        ledger_path = max(ledgers).resolve()
     
     if not ledger_path.is_file():
         fail(66, "LEDGER file missing")
@@ -77,9 +86,8 @@ def reconcile(root_dir: str, mission_id: str, explicit_ledger: str, no_write: bo
             
     # COMPTE_INSUFFISANT
     for s_name, s_data in ledger_suites.items():
-        if s_name in expected_tests_map:
-            if s_data.get("tests_reported", 0) < expected_tests_map[s_name]:
-                fail(50, "COMPTE_INSUFFISANT")
+        if s_name in expected_tests_map and s_data.get("tests_reported", 0) < expected_tests_map[s_name]:
+            fail(50, "COMPTE_INSUFFISANT")
                 
     # SKIP_NON_DIVULGUE
     for s_name, s_data in ledger_suites.items():

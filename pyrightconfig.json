@@ -1,0 +1,11 @@
+{
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.venv",
+    "**/venv",
+    "55-Tesla-Forge-Cloud/**",
+    "45-Cluedo-Grands-Detectives-2023/**"
+  ],
+  "typeCheckingMode": "basic"
+}

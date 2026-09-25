@@ -4,7 +4,11 @@
   "node_id": "N3",
   "mission_id": "SGC-EXEC-GOV-03-R3",
   "status": "SUCCESS",
-  "output_artifacts": ["README.md", "docs/protocol_mapping.md", "evidence/retex_hardening_summary.json"],
+  "output_artifacts": [
+    "README.md",
+    "docs/protocol_mapping.md",
+    "evidence/retex_hardening_summary.json"
+  ],
   "submitted_at": "2026-08-28T21:05:00+01:00",
   "invocation_id": "inv-550e8400-e29b-41d4-a716-446655440003",
   "started_at": "2026-08-28T21:01:00+01:00",

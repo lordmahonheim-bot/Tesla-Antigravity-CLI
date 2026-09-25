@@ -19,23 +19,32 @@
     "transcript_ref"
   ],
   "properties": {
-    "receipt_version": {"type": "string"},
-    "agent_id": {"type": "string", "minLength": 1},
-    "node_id": {"type": "string", "minLength": 1},
-    "mission_id": {"type": "string", "minLength": 1},
-    "status": {"enum": ["SUCCESS", "COMPLETED", "PARTIAL", "FAILED"]},
-    "output_artifacts": {"type": "array", "items": {"type": "string"}},
-    "submitted_at": {"type": "string", "minLength": 1},
-    "invocation_id": {"type": "string", "pattern": "^inv-[A-Za-z0-9-]{8,64}$"},
-    "started_at": {"type": "string", "minLength": 1},
-    "finished_at": {"type": "string", "minLength": 1},
-    "exit_code": {"type": "integer"},
-    "tool_invocations_count": {"type": "integer", "minimum": 1},
-    "runtime_event_sha256": {"type": "string", "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"},
-    "output_manifest_sha256": {"type": "string", "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"},
-    "executor_attestation": {"type": "string", "minLength": 1},
-    "transcript_ref": {"type": "string", "minLength": 1},
-    "notes": {"type": "string"}
+    "receipt_version": { "type": "string" },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "node_id": { "type": "string", "minLength": 1 },
+    "mission_id": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["SUCCESS", "COMPLETED", "PARTIAL", "FAILED"] },
+    "output_artifacts": { "type": "array", "items": { "type": "string" } },
+    "submitted_at": { "type": "string", "minLength": 1 },
+    "invocation_id": {
+      "type": "string",
+      "pattern": "^inv-[A-Za-z0-9-]{8,64}$"
+    },
+    "started_at": { "type": "string", "minLength": 1 },
+    "finished_at": { "type": "string", "minLength": 1 },
+    "exit_code": { "type": "integer" },
+    "tool_invocations_count": { "type": "integer", "minimum": 1 },
+    "runtime_event_sha256": {
+      "type": "string",
+      "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"
+    },
+    "output_manifest_sha256": {
+      "type": "string",
+      "pattern": "^(sha256:)?[a-fA-F0-9]{64}$"
+    },
+    "executor_attestation": { "type": "string", "minLength": 1 },
+    "transcript_ref": { "type": "string", "minLength": 1 },
+    "notes": { "type": "string" }
   },
   "additionalProperties": true
 }

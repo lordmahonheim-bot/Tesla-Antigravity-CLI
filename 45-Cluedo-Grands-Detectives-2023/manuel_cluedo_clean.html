@@ -758,7 +758,7 @@
 
 <script>
     // Navigation Tabs
-    function openTab(tabId, btn) {
+    function _openTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.classList.remove('active');
         });
@@ -779,7 +779,7 @@
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.style.maxHeight = `${panel.scrollHeight}px`;
             } 
         });
     }
@@ -818,7 +818,7 @@
         const data = roomData[roomName] || {desc: "Vous entrez dans la pièce...", img: "data:image/jpeg;base64,[BASE64_TRUNCATED]", portals: []};
         
         document.getElementById('modal-title').innerText = roomName;
-        document.getElementById('modal-desc').innerText = "« " + data.desc + " »";
+        document.getElementById('modal-desc').innerText = `« ${data.desc} »`;
         document.getElementById('modal-img').src = data.img;
         
         const portalsContainer = document.getElementById('modal-portals');
@@ -830,7 +830,7 @@
                 btn.style.width = '100%';
                 btn.style.marginTop = '1rem';
                 btn.style.background = 'rgba(201, 169, 97, 0.3)';
-                btn.innerText = "Emprunter le passage secret vers : " + p.to;
+                btn.innerText = `Emprunter le passage secret vers : ${p.to}`;
                 btn.onclick = () => {
                     alert(p.text);
                     openRoomModal(p.to);
@@ -842,12 +842,12 @@
         modal.style.display = "block";
     }
 
-    function closeRoomModal() {
+    function _closeRoomModal() {
         document.getElementById('room-modal').style.display = "none";
     }
 
     // Dice Simulator
-    function rollDice() {
+    function _rollDice() {
         const faces = ['1', '2', '3', '4', '5', 'LOUPE'];
         const d1 = document.getElementById('dice1');
         const d2 = document.getElementById('dice2');
@@ -870,7 +870,7 @@
         "Alibi : Montrez une carte à un autre joueur.",
         "Rumeur : Formulez une hypothèse gratuite."
     ];
-    function piocherCarte() {
+    function _piocherCarte() {
         const res = document.getElementById('carte-result');
         res.innerText = "Pioche en cours...";
         setTimeout(() => {
