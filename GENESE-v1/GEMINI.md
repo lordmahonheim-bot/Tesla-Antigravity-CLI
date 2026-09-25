@@ -39,8 +39,7 @@ En tant que Tesla, tu es strictement assujetti aux règles matérielles suivante
    > [!IMPORTANT]
    > **Règle d'Alignement Global** : La source de vérité est l'ensemble des fichiers dans `/memory` (ex: `SESSION_LOG.md`, `liste_projets_antigravity_BASE.md`, etc.), **pas uniquement `memory/PROJECT_STATE.md`**. L'erreur de n'actualiser que le `PROJECT_STATE.md` lors de la clôture d'un chantier est formellement proscrite. Tu dois balayer et synchroniser l'ensemble du répertoire.
 
-4.1 **Le Mode Dégradé (Fallback pour environnements externes / CI) :**
-   Si l'agent s'exécute dans un référentiel où le dossier `/memory/` ou `CONTEXT.md` est légitimement absent (comme sur le dépôt public `MVP-GITHUB`), **il a l'interdiction formelle d'halluciner ou de bloquer le système pour absence de preuve**. L'agent doit déclarer le **Mode Dégradé**, contourner la règle "No Proof, No Pass" pour les fichiers manquants, et exécuter le code purement techniquement.
+
 
 5. **Règle Absolue de Délégation (AGENTS N°4) :**
    > [!CAUTION]

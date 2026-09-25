@@ -758,7 +758,7 @@
 
 <script>
     // Navigation Tabs
-    function _openTab(tabId, btn) {
+    function openTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.classList.remove('active');
         });
@@ -842,12 +842,12 @@
         modal.style.display = "block";
     }
 
-    function _closeRoomModal() {
+    function closeRoomModal() {
         document.getElementById('room-modal').style.display = "none";
     }
 
     // Dice Simulator
-    function _rollDice() {
+    function rollDice() {
         const faces = ['1', '2', '3', '4', '5', 'LOUPE'];
         const d1 = document.getElementById('dice1');
         const d2 = document.getElementById('dice2');
@@ -870,7 +870,7 @@
         "Alibi : Montrez une carte à un autre joueur.",
         "Rumeur : Formulez une hypothèse gratuite."
     ];
-    function _piocherCarte() {
+    function piocherCarte() {
         const res = document.getElementById('carte-result');
         res.innerText = "Pioche en cours...";
         setTimeout(() => {

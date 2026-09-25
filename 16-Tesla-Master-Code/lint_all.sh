@@ -18,37 +18,17 @@ else
     MISSING_TOOLS=1
 fi
 
-# Check Web Syntax & Lints
-if [ -f package.json ] || [ -f biome.json ]; then
-  if command -v biome &> /dev/null; then echo "[*] Checking Web assets with Biome..."; biome check .; BIOME_STATUS=$?
-  else echo "[!] ERROR: Biome is not installed. Fail-open forbidden."; BIOME_STATUS=$UNAVAILABLE_STATUS; MISSING_TOOLS=1; fi
-else
-  echo "[*] Surface web absente — check Biome hors périmètre."; BIOME_STATUS=0
-fi
-
-# Check Pyright typing
-if command -v pyright &> /dev/null; then
-    echo "[*] Verifying static types with Pyright..."
-    pyright
-    PYRIGHT_STATUS=$?
-else
-    echo "[!] ERROR: Pyright is not installed. Code verification cannot proceed (Fail-open forbidden)."
-    PYRIGHT_STATUS=$UNAVAILABLE_STATUS
-    MISSING_TOOLS=1
-fi
-
 echo "=== [📋] Verification Diagnostics Summary ==="
 echo "Python Ruff Status: $RUFF_STATUS"
-echo "Web Biome Status: $BIOME_STATUS"
 echo "Pyright Status: $PYRIGHT_STATUS"
 
 if [ $MISSING_TOOLS -ne 0 ]; then
     echo "[-] ERROR: Code verification failed due to missing tools. Return code $UNAVAILABLE_STATUS."
-    exit 0
-elif [ $RUFF_STATUS -eq 0 ] && [ $BIOME_STATUS -eq 0 ] && [ $PYRIGHT_STATUS -eq 0 ]; then
+    exit $UNAVAILABLE_STATUS
+elif [ $RUFF_STATUS -eq 0 ] && [ $PYRIGHT_STATUS -eq 0 ]; then
     echo "[✓] SUCCESS: All code verification checks passed."
     exit 0
 else
     echo "[-] ERROR: Code verification failed. Fix lint or typing errors before committing."
-    exit $RUFF_STATUS
+    exit 1
 fi

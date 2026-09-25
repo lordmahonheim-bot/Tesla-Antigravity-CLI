@@ -68,10 +68,7 @@ Toute mission suit désormais de manière stricte et algorithmique les 7 Gates d
 **Règle Zéro absolue : NO PROOF, NO PASS (Fail-Closed).**
 Aucune étape ne peut être ignorée, et chaque étape requiert une preuve physique (Evidence Chain).
 
-> [!TIP]
-> **EXCEPTION EXPLICITE : LE MODE DÉGRADÉ (Degraded Mode)**
-> Si l'Agent s'exécute dans un environnement où le dossier local `/memory/` ou d'autres fichiers de gouvernance (`CONTEXT.md`, `.agents/`) sont légitimement absents (par exemple sur un dépôt public cloné `MVP-GITHUB` ou dans une CI/CD) :
-> **Interdiction d'halluciner ou de bloquer le système.** L'Agent doit officiellement déclarer son passage en **Mode Dégradé**. Il contourne la vérification des "Gates" manquantes, ne fige pas l'exécution pour "No proof", et se concentre strictement sur l'exécution du code et la résolution de la tâche.
+
 
 
 ------------------------------------------------------------------------

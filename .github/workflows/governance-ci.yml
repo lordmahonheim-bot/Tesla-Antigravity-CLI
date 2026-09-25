@@ -55,7 +55,7 @@ jobs:
         run: bash 16-Tesla-Master-Code/lint_all.sh
 
   ci-success-governance:
-    needs: [test-gate-r, test-ouroboros, compile-python, lint]
+    needs: [test-gate-r, test-ouroboros, compile-python, lint, gate-r-reconcile]
     runs-on: ubuntu-latest
     steps:
       - name: Governance Success
@@ -72,12 +72,4 @@ jobs:
           python-version: '3.10'
       - name: Gate R Reconcile
         run: |
-          set +e
           python3 53-Vigilum-Codex-2.0-Executable-Governance/bin/gate_r.py reconcile --root . --mission SGC-EXEC-GOV-03-R3 --ledger 53-Vigilum-Codex-2.0-Executable-Governance/evidence/test_runner_SGC-EXEC-GOV-03-R3_20260924-153248-111549.json
-          STATUS=$?
-          if [ $STATUS -eq 66 ]; then
-            echo "Clé manquante (Exit 66) : Fail-closed attendu en CI."
-            exit 0
-          elif [ $STATUS -ne 0 ]; then
-            exit $STATUS
-          fi
