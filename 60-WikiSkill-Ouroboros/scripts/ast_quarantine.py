@@ -2,9 +2,8 @@
 import ast
 import sys
 from pathlib import Path
-from typing import List, Set
 
-DANGEROUS_CALLS: Set[str] = {
+DANGEROUS_CALLS: set[str] = {
     "os.system", "os.popen", "subprocess.run", "subprocess.Popen",
     "subprocess.call", "subprocess.check_call", "subprocess.check_output",
     "exec", "eval", "__import__", "builtins.exec", "builtins.eval"
@@ -12,7 +11,7 @@ DANGEROUS_CALLS: Set[str] = {
 
 class QuarantineAnalyzer(ast.NodeVisitor):
     def __init__(self):
-        self.violations: List[str] = []
+        self.violations: list[str] = []
 
     def visit_Call(self, node: ast.Call):
         func_name = self._resolve_name(node.func)

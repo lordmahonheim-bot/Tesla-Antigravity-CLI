@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import fcntl
-import os
 from types import TracebackType
-from typing import Optional, Type, IO
+from typing import IO
+
 
 class FS_Lock:
     def __init__(self, filepath: str):
         self.filepath = filepath
-        self.fd: Optional[IO] = None
+        self.fd: IO | None = None
 
     def __enter__(self):
         # Ouvre ou crée le fichier sans tronquer son contenu
@@ -27,9 +27,9 @@ class FS_Lock:
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType]
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None
     ) -> None:
         if self.fd:
             try:

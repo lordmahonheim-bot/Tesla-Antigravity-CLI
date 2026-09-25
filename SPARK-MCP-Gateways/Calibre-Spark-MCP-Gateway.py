@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import os
 import sqlite3
-import zipfile
 import xml.etree.ElementTree as ET
+import zipfile
 from html.parser import HTMLParser
-from typing import Any
+
 import uvicorn
 from mcp.server import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
-from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
-from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
 
 HOST = os.environ.get("CALIBRE_SPARK_MCP_HOST", "127.0.0.1")
 PORT = int(os.environ.get("CALIBRE_SPARK_MCP_PORT", "8081"))

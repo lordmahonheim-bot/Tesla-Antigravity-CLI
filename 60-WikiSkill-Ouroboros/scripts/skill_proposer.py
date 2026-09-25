@@ -65,7 +65,7 @@ def main(argv) -> int:
         with open(patch_filepath, "w", encoding="utf-8") as f:
             f.write(build_patch(args.skill_target))
         print(f"Proposition générée avec succès : {patch_filepath}")
-    except IOError as e:
+    except OSError as e:
         print(f"Erreur d'écriture du fichier : {e}", file=sys.stderr)
         return 1
     return 0

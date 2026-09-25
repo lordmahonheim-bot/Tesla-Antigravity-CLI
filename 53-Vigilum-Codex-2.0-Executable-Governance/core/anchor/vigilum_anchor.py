@@ -5,12 +5,12 @@ Reads the cryptographic state of Gate 2 and anchors it to a remote Git repositor
 using signed commits, ensuring an immutable audit trail.
 """
 
-import os
-import sys
 import fcntl
-import time
 import logging
+import os
 import subprocess
+import sys
+import time
 from pathlib import Path
 
 # Configuration via Environment with safe defaults

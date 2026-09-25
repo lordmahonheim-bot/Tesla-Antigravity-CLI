@@ -4,10 +4,10 @@
 Fuses SQLite FTS5 lexical ranking and ChromaDB semantic search using RRF
 """
 import os
-import sqlite3
 import re
+import sqlite3
 import sys
-from typing import List, Dict, Any, Tuple
+from typing import Any
 
 try:
     import chromadb
@@ -26,7 +26,7 @@ MODEL_NAME = os.environ.get("ALEXANDRIA_MODEL", "all-MiniLM-L6-v2")
 RRF_K = 60
 TOP_N_RESULTS = 5
 
-def execute_lexical_search(query: str, limit: int = 20) -> List[Tuple[str, str, str]]:
+def execute_lexical_search(query: str, limit: int = 20) -> list[tuple[str, str, str]]:
     if not os.path.exists(DB_PATH):
         return []
     conn = sqlite3.connect(DB_PATH)
@@ -59,12 +59,12 @@ def execute_lexical_search(query: str, limit: int = 20) -> List[Tuple[str, str, 
     conn.close()
     return results
 
-def execute_semantic_search(query: str, chroma_collection: Any, encoder: SentenceTransformer, limit: int = 20) -> Dict[str, Any]:
+def execute_semantic_search(query: str, chroma_collection: Any, encoder: SentenceTransformer, limit: int = 20) -> dict[str, Any]:
     query_embedding = encoder.encode(query, show_progress_bar=False).tolist()
     return chroma_collection.query(query_embeddings=[query_embedding], n_results=limit)
 
-def compute_rrf(lexical_results: List[Tuple[str, str, str]], semantic_results: Dict[str, Any]) -> List[Dict[str, Any]]:
-    rrf_scores: Dict[str, Dict[str, Any]] = {}
+def compute_rrf(lexical_results: list[tuple[str, str, str]], semantic_results: dict[str, Any]) -> list[dict[str, Any]]:
+    rrf_scores: dict[str, dict[str, Any]] = {}
     for rank, (chunk_id, filepath, content) in enumerate(lexical_results, start=1):
         if chunk_id not in rrf_scores:
             rrf_scores[chunk_id] = {"filepath": filepath, "content": content, "score": 0.0}

@@ -1,9 +1,9 @@
+import logging
 import os
 import sys
 import time
-import logging
-from typing import Optional
-from playwright.sync_api import sync_playwright, Page, BrowserContext
+
+from playwright.sync_api import BrowserContext, Page, sync_playwright
 
 logger = logging.getLogger("reddit_forms")
 
@@ -11,7 +11,7 @@ WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 USER_DATA_DIR = os.path.join(WORKSPACE_DIR, ".runtime", "playwright_reddit_user")
 
 
-def detect_challenge(page: Page) -> Optional[str]:
+def detect_challenge(page: Page) -> str | None:
     """Inspect the page for active CAPTCHAs, 2FA prompts, or age gates."""
     captcha_selectors = [
         "iframe[src*='recaptcha']",
@@ -59,9 +59,9 @@ def detect_challenge(page: Page) -> Optional[str]:
 def run_human_verification_gate(page: Page, reason: str) -> None:
     """Pause the script, alert the operator, and wait for human completion."""
     print("\n" + "=" * 80)
-    print(f"!!! [HUMAN VERIFICATION GATE TRIGGERED] !!!")
+    print("!!! [HUMAN VERIFICATION GATE TRIGGERED] !!!")
     print(f"Reason: {reason}")
-    print(f"Please resolve this security challenge or log in manually in the opened browser window.")
+    print("Please resolve this security challenge or log in manually in the opened browser window.")
     print("Do NOT close the browser window. Once you have resolved the gate, return here.")
     print("=" * 80)
     
@@ -79,7 +79,7 @@ class RedditFormsEngine:
     
     def __init__(self) -> None:
         self.playwright = None
-        self.context: Optional[BrowserContext] = None
+        self.context: BrowserContext | None = None
 
     def start_session(self) -> Page:
         """Start a headed browser session with a persistent user data directory."""

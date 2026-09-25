@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 validate_note.py - Script de validation AST du frontmatter des fiches Markdown.
 Vérifie la syntaxe YAML et la conformité sémantique (champs, types, formats).
 """
 
-import sys
-import re
 import datetime
+import sys
 from pathlib import Path
+
 import frontmatter
+
 
 def validate_frontmatter(file_path):
     path = Path(file_path)

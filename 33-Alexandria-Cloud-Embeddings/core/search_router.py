@@ -6,10 +6,13 @@ Moteur de fusion optimisé sous la doctrine du Vigilum Codex.
 
 import os
 import re
+
 import numpy as np
 from dotenv import load_dotenv
+
 load_dotenv()
-from typing import List, Dict, Any, Tuple
+from typing import Any
+
 from core.database_manager import DatabaseManager
 from core.embeddings import GeminiEmbeddingProvider
 
@@ -25,7 +28,7 @@ RRF_K = 60
 TOP_N_RESULTS = 5
 
 
-def execute_lexical_search(db_manager: DatabaseManager, query: str, limit: int = 100) -> List[Tuple[str, str, str]]:
+def execute_lexical_search(db_manager: DatabaseManager, query: str, limit: int = 100) -> list[tuple[str, str, str]]:
     """Interroge la table virtuelle FTS5 de SQLite et retourne les candidats triés par BM25."""
     conn = db_manager.get_connection()
     query_clean = query.replace("'", " ")
@@ -59,7 +62,7 @@ def execute_lexical_search(db_manager: DatabaseManager, query: str, limit: int =
     return results
 
 
-def execute_hybrid_search(db_manager: DatabaseManager, provider: GeminiEmbeddingProvider, query_text: str) -> List[Dict[str, Any]]:
+def execute_hybrid_search(db_manager: DatabaseManager, provider: GeminiEmbeddingProvider, query_text: str) -> list[dict[str, Any]]:
     """Exécute la recherche hybride avec RRF combinant FTS5 et similarité cosinus NumPy locale."""
     # 1. Génération de l'embedding de la requête
     query_vector = None

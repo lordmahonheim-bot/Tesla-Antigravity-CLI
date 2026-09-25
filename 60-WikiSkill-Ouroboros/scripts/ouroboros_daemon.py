@@ -50,14 +50,14 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ouroboros_autocapture import ingest_receipt, parse_transcript_segment  # noqa: E402
-from ouroboros_cycle import run_cycle, state_dir  # noqa: E402
-from trace_writer import resolve_tesla_root  # noqa: E402
+from ouroboros_autocapture import ingest_receipt, parse_transcript_segment
+from ouroboros_cycle import run_cycle, state_dir
+from trace_writer import resolve_tesla_root
 
 _STOP = False
 
 
-def _handle_stop(signum, frame):  # noqa: ARG001
+def _handle_stop(signum, frame):
     global _STOP
     _STOP = True
 
@@ -196,7 +196,7 @@ def scan_transcripts(root: Path, state: Path, brain: Path | None,
     if brain is None:
         log(state, "scan: aucun cerveau Antigravity resolu (TESLA_BRAIN_ROOT absent) -> passe. "
                    "Verifiez env TESLA_BRAIN_ROOT ou --brain-root. "
-                   f"Candidats tentes: home/.gemini/antigravity-cli/brain, etc.")
+                   "Candidats tentes: home/.gemini/antigravity-cli/brain, etc.")
         return 0
     transcripts = sorted(brain.glob("*/.system_generated/logs/transcript.jsonl"))
     # Fallback: cherche aussi directement *.jsonl sous brain

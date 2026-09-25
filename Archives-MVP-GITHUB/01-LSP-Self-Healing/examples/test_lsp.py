@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 01-LSP-Self-Healing: LSP Server Diagnostics Client
 Checks local Python scripts health using karellen-lsp-mcp daemon
 """
 import asyncio
-import sys
-import os
 import json
+import os
+import sys
 
 # Dynamic local import resolution
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

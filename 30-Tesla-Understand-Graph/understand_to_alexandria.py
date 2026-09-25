@@ -1,6 +1,6 @@
 import json
-import sqlite3
 import os
+import sqlite3
 
 DB_PATH = '$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db'
 

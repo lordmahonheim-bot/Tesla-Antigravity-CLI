@@ -1,3 +1,0 @@
-import sys
-import uvicorn
-from Calibre_Spark_MCP_Gateway import app # the python file name has hyphens...

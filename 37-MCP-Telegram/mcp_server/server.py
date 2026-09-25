@@ -1,10 +1,11 @@
-import os
-import json
-import urllib.request
 import asyncio
+import json
+import os
+import urllib.request
+
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import TextContent, Tool
 
 app = Server("telegram-mcp")
 
@@ -59,7 +60,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             else:
                 return [TextContent(type="text", text=f"Erreur de l'API Telegram: {result.get('description')}")]
     except Exception as e:
-        return [TextContent(type="text", text=f"Échec de l'envoi du message: {str(e)}")]
+        return [TextContent(type="text", text=f"Échec de l'envoi du message: {e!s}")]
 
 async def main():
     async with stdio_server() as (read_stream, write_stream):

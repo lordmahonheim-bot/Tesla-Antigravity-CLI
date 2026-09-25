@@ -37,7 +37,7 @@ class BrokerPaths:
     journal: Path
 
     @classmethod
-    def from_root(cls, root: Path) -> "BrokerPaths":
+    def from_root(cls, root: Path) -> BrokerPaths:
         base = root / "runtime" / "intents"
         return cls(
             root.resolve(),
@@ -212,7 +212,7 @@ def process_file(paths: BrokerPaths, source: Path, *, secret: bytes | None, allo
             # Post-mutation verification
             post_hash = hashlib.sha256(target.read_bytes()).hexdigest()
             if not hmac.compare_digest(post_hash, actual_hash):
-                raise IOError("Post-mutation hash verification failed")
+                raise OSError("Post-mutation hash verification failed")
 
             log_state_transition(paths.journal, intent_id, "VERIFIED")
             write_result(paths.done, payload, "SUCCESS", target=target.relative_to(paths.root).as_posix())

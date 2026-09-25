@@ -1,8 +1,7 @@
-import os
-import sys
-import json
 import argparse
-import random
+import json
+import os
+
 
 def run_audits(manifest_path):
     print(f"[Code-Auditor] Reading manifest from {manifest_path}")

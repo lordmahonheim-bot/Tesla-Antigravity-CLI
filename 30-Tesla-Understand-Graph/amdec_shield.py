@@ -1,4 +1,3 @@
-import os
 
 MAX_LINES = 2000
 BLACKLIST_EXTS = ['.min.js', '.min.css', '.lock']

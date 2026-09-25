@@ -337,7 +337,7 @@ class GateRTests(unittest.TestCase):
         self.ledger.unlink()
         code, verdict = self.gate_r()
         self.assertEqual(code, 66)  # P3 : inobservable
-        self.assertIn("LEDGER", verdict.get("reason", ""))
+        self.assertIn("ledger", verdict.get("reason", ""))
 
     def test_ledger_verdict_fail_blocks(self) -> None:
         self.rewrite_ledger(verdict="FAIL")

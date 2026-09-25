@@ -33,10 +33,11 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from distiller import aggregate_patterns  # noqa: E402
-from intent_formatter import MAX_JUSTIFICATION_WORDS, validate_patch as validate_intent  # noqa: E402
-from patch_broker import validate_patch as validate_broker  # noqa: E402
-from trace_writer import resolve_tesla_root  # noqa: E402
+from distiller import aggregate_patterns
+from intent_formatter import MAX_JUSTIFICATION_WORDS
+from intent_formatter import validate_patch as validate_intent
+from patch_broker import validate_patch as validate_broker
+from trace_writer import resolve_tesla_root
 
 MAX_ADDED_LINES = 40
 MANAGER = "tesla-wiki-manager"

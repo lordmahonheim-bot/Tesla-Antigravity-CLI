@@ -4,7 +4,8 @@ import os
 import re
 import shutil
 from datetime import datetime
-from db_connector import get_db_connection, DB_PATH, WORKSPACE
+
+from db_connector import DB_PATH, WORKSPACE, get_db_connection
 
 INDEX_PATH = os.path.join(WORKSPACE, "Gestion-de-Chantiers/INDEX.md")
 ARCHIVE_README_PATH = os.path.join(WORKSPACE, "Gestion-de-Chantiers/Archivage-de-Chantiers/README.md")
@@ -250,7 +251,7 @@ def sync_list():
                         for dtask in db_tasks[sid]:
                             if dtask not in details["realisations"]:
                                 details["realisations"].append(dtask)
-            except Exception as e:
+            except Exception:
                 pass
                 
         # Build Markdown section

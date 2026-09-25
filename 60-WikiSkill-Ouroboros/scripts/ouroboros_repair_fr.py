@@ -21,10 +21,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ouroboros_autocapture import parse_transcript_segment, ingest_receipt
-from trace_writer import resolve_tesla_root
-from ouroboros_daemon import resolve_brain_root, scan_transcripts, state_dir
+from ouroboros_autocapture import ingest_receipt, parse_transcript_segment
 from ouroboros_cycle import run_cycle
+from ouroboros_daemon import resolve_brain_root, scan_transcripts, state_dir
+from trace_writer import resolve_tesla_root
+
 
 def simulate_french_session(root: Path):
     print("[Repair] Simulation session tesla-github-manager 77a304c9 en francais...")

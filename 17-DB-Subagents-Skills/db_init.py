@@ -2,7 +2,9 @@
 # db_init.py — Initialize tables in alexandria_brain.db with schema versioning
 import os
 from datetime import datetime
-from db_connector import get_db_connection, DB_PATH
+
+from db_connector import DB_PATH, get_db_connection
+
 
 def init_database():
     print(f"[*] Initializing database at {DB_PATH}...")

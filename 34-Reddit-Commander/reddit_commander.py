@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-import os
-import sys
 import argparse
 import logging
+import os
+import sys
 import time
-from typing import Optional
 
 # Set up local paths so it can import adjacent modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -144,7 +143,7 @@ def cmd_publish(args: argparse.Namespace) -> None:
     content_hash = db.compute_content_hash(args.body)
     
     if db.check_duplicate_content(content_hash):
-        print(f"[!] Error: Semantically identical post already exists in ledger. Action blocked.")
+        print("[!] Error: Semantically identical post already exists in ledger. Action blocked.")
         sys.exit(1)
         
     client = RedditClient(mock=args.mock)
@@ -189,7 +188,7 @@ def cmd_engage(args: argparse.Namespace) -> None:
     content_hash = db.compute_content_hash(args.body)
     
     if db.check_duplicate_content(content_hash):
-        print(f"[!] Error: Semantically identical comment already exists in ledger. Action blocked.")
+        print("[!] Error: Semantically identical comment already exists in ledger. Action blocked.")
         sys.exit(1)
         
     client = RedditClient(mock=args.mock)

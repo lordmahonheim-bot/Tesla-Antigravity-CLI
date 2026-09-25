@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import sys
 from datetime import datetime
+
 from PIL import ImageGrab
+
 
 def capture_screen(output_path=None):
     """

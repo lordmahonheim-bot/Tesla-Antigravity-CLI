@@ -4,6 +4,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
+
 async def handle_all(request: Request):
     print(f"--- INCOMING {request.method} {request.url.path} ---")
     print(request.headers)

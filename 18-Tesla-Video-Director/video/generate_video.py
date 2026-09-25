@@ -7,20 +7,21 @@ Uses the official google-genai SDK.
 """
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 import re
 import sys
-import time
-import urllib.request
 import urllib.error
+import urllib.request
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from google import genai
 
 # Load local upload helper logic inline to prevent dependency issues
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from upload_file import upload_file, wait_for_active
+
 
 def get_api_key(args):
     """Retrieves API key from command args or environment."""
@@ -60,8 +61,7 @@ def parse_and_validate_duration(value):
         clean_value = str(value).strip().lower()
         if clean_value in ('none', ''):
             return None
-        if clean_value.endswith('s'):
-            clean_value = clean_value[:-1]
+        clean_value = clean_value.removesuffix('s')
         try:
             val = float(clean_value)
         except ValueError:

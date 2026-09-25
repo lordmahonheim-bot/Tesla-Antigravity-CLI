@@ -93,8 +93,9 @@ async def tesla_status() -> dict[str, Any]:
 # Optional bearer auth middleware
 # --------------------------------------------------------------------------- #
 
-import httpx
 import base64
+
+import httpx
 
 GITHUB_TOKEN = os.environ.get("GITHUB_PERSONAL_ACCESS_TOKEN", "").strip()
 GITHUB_REPO = "lordmahonheim-bot/Tesla-Antigravity-CLI"

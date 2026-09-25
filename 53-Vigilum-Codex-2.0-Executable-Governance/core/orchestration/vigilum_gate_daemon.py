@@ -15,9 +15,9 @@ import sys
 from pathlib import Path
 
 try:
-    import nacl.signing
     import nacl.encoding
     import nacl.exceptions
+    import nacl.signing
 except ImportError:
     # V2.5.1 (audit) : diagnostic sur stderr (canal d'erreur POSIX) — le
     # message aller sur stdout laissait les harnais de test sans cause racine.
@@ -135,9 +135,9 @@ async def handle_client(reader: asyncio.StreamReader, writer: asyncio.StreamWrit
         logger.error("Timeout de la connexion")
         resp = {"status": "error", "error_code": "TIMEOUT"}
     except Exception as e:
-        logger.error(f"Erreur IPC (UID: {peer_uid}): {str(e)}")
+        logger.error(f"Erreur IPC (UID: {peer_uid}): {e!s}")
         # TAMPER_EVIDENT log
-        logger.critical(f"TAMPER_EVIDENT: Echec ou tentative invalide depuis UID {peer_uid} - {str(e)}")
+        logger.critical(f"TAMPER_EVIDENT: Echec ou tentative invalide depuis UID {peer_uid} - {e!s}")
         resp = {"status": "error", "error_code": "MALFORMED_REQUEST"}
         
     try:

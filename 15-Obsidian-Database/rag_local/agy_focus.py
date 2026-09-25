@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # agy_focus.py — Moteur de recherche et de ciblage contextuel local FTS / Vectoriel
 import os
-import sys
 import shutil
+import sys
+
 import chromadb
 from chromadb.utils import embedding_functions
+
 
 def focus_context(query, target_dir, limit=5):
     cache_dir = os.path.join(target_dir, ".agy_cache")

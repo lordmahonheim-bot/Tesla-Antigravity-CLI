@@ -46,7 +46,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import hmac
 import json
 import os
 import secrets
@@ -62,15 +61,15 @@ from typing import Any
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from core.orchestration.orchestration_gate import (  # noqa: E402
+from core.orchestration.orchestration_gate import (
     EXIT_BLOCKED,
     EXIT_PASS,
     EXIT_UNKNOWN,
     EXIT_USAGE,
+    GraphError,
     compute_approval_sha256,
     dag_verify,
     load_graph_file,
-    GraphError,
 )
 
 TOKEN_VERSION = "G2T-1"

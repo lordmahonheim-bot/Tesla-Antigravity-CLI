@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """
 archive_note.py - Gère la mutation sémantique et l'historisation des notes.
@@ -7,12 +6,13 @@ Archive l'ancienne version d'une note dans 04-Archives et met à jour l'original
 avec des liens bidirectionnels de suivi historique.
 """
 
-import os
-import sys
-import shutil
 import datetime
+import os
+import shutil
 import subprocess
+import sys
 from pathlib import Path
+
 import frontmatter
 
 VAULT_DIR = Path("$TESLA_ROOT/Avalon")

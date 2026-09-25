@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
 import time
 from abc import ABC, abstractmethod
+
 import numpy as np
 from google import genai
 from google.genai import errors
+
 
 class EmbeddingProvider(ABC):
     @abstractmethod
     def generate_embeddings(self, texts: list[str]) -> list[np.ndarray]:
         """Génère une liste de vecteurs d'embeddings normalisés L2 pour une liste de textes."""
-        pass
 
     @property
     @abstractmethod
     def model_version(self) -> str:
         """Version ou nom du modèle d'embedding utilisé."""
-        pass
 
     @property
     @abstractmethod
     def dimension(self) -> int:
         """Dimension des vecteurs générés."""
-        pass
 
 
 class GeminiEmbeddingProvider(EmbeddingProvider):

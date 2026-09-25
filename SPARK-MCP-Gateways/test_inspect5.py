@@ -1,3 +1,5 @@
 import inspect
+
 from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
+
 print(inspect.getsource(StreamableHTTPSessionManager.asgi_app))

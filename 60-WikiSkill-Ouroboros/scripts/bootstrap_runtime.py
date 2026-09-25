@@ -46,7 +46,7 @@ def resolve_root(arg_root: str) -> Path:
 
 
 def genesis_head(domaine: str) -> str:
-    return hashlib.sha256(f"WIKISKILL_GENESIS::{domaine}".encode("utf-8")).hexdigest()
+    return hashlib.sha256(f"WIKISKILL_GENESIS::{domaine}".encode()).hexdigest()
 
 
 def ensure_traces(root: Path, skill: str) -> None:

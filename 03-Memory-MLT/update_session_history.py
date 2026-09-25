@@ -3,11 +3,11 @@
 03-Memory-MLT: Idempotent Cognitive Session Memory Updater
 Parses Antigravity transcript logs and builds session summaries in LTM
 """
-import os
 import json
+import os
 import re
-import sys
 import subprocess
+import sys
 from datetime import datetime
 
 # Resolution of workspace paths

@@ -35,7 +35,7 @@ from typing import Any
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from core.orchestration.orchestration_gate import _default_receipts_dir  # noqa: E402
+from core.orchestration.orchestration_gate import _default_receipts_dir
 
 EXIT_PASS = 0
 EXIT_BLOCKED = 1

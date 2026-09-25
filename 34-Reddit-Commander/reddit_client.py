@@ -1,7 +1,8 @@
+import logging
 import os
 import time
-import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from dotenv import load_dotenv
 
 # Config logging
@@ -42,7 +43,7 @@ class MockReddit:
         def __init__(self, name: str) -> None:
             self.display_name = name
 
-        def new(self, limit: int = 10) -> List[Any]:
+        def new(self, limit: int = 10) -> list[Any]:
             posts = []
             for i in range(limit):
                 class MockSubmission:
@@ -56,7 +57,7 @@ class MockReddit:
                 posts.append(MockSubmission())
             return posts
 
-        def submit(self, title: str, selftext: str = "", url: Optional[str] = None) -> Any:
+        def submit(self, title: str, selftext: str = "", url: str | None = None) -> Any:
             class MockSubmitted:
                 id = f"new_post_{int(time.time())}"
                 permalink = f"/r/{self.display_name}/comments/{id}"
@@ -138,7 +139,7 @@ class RedditClient:
                     self.mock_mode = True
                     self.reddit = MockReddit()
 
-    def get_user_profile(self, username: str) -> Dict[str, Any]:
+    def get_user_profile(self, username: str) -> dict[str, Any]:
         """Fetch user profile details (Read-Only)."""
         try:
             user = self.reddit.redditor(username)
@@ -153,7 +154,7 @@ class RedditClient:
             logger.error(f"Error fetching user profile {username}: {e}")
             raise
 
-    def get_subreddit_posts(self, subreddit_name: str, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_subreddit_posts(self, subreddit_name: str, limit: int = 10) -> list[dict[str, Any]]:
         """Fetch recent submissions from a subreddit (Read-Only)."""
         try:
             sub = self.reddit.subreddit(subreddit_name)
@@ -174,7 +175,7 @@ class RedditClient:
             logger.error(f"Error fetching posts from r/{subreddit_name}: {e}")
             raise
 
-    def create_post(self, subreddit_name: str, title: str, body: str) -> Dict[str, Any]:
+    def create_post(self, subreddit_name: str, title: str, body: str) -> dict[str, Any]:
         """Create a new text post in a subreddit (Mutation)."""
         if self.safe_mode:
             logger.warning(f"[SAFE MODE] Prevented post submission to r/{subreddit_name}: '{title}'")
@@ -203,7 +204,7 @@ class RedditClient:
             logger.error(f"Failed to submit post to r/{subreddit_name}: {e}")
             raise
 
-    def create_comment(self, parent_id: str, body: str) -> Dict[str, Any]:
+    def create_comment(self, parent_id: str, body: str) -> dict[str, Any]:
         """Create a comment reply to a post or comment (Mutation)."""
         if self.safe_mode:
             logger.warning(f"[SAFE MODE] Prevented comment reply to parent {parent_id}: '{body[:30]}...'")
@@ -212,7 +213,7 @@ class RedditClient:
                 "parent_id": parent_id,
                 "body": body,
                 "id": "safe_mode_mock_id",
-                "permalink": f"/comments/mock_post/safe_mode_mock_id"
+                "permalink": "/comments/mock_post/safe_mode_mock_id"
             }
 
         try:
@@ -236,7 +237,7 @@ class RedditClient:
             logger.error(f"Failed to reply to {parent_id}: {e}")
             raise
 
-    def edit_content(self, item_id: str, body: str) -> Dict[str, Any]:
+    def edit_content(self, item_id: str, body: str) -> dict[str, Any]:
         """Edit an existing post or comment (Mutation)."""
         if self.safe_mode:
             logger.warning(f"[SAFE MODE] Prevented editing item {item_id}")

@@ -17,8 +17,8 @@ import argparse
 import hashlib
 import json
 import sys
-from dataclasses import dataclass, asdict, field
-from typing import Any, Dict, List
+from dataclasses import asdict, dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -30,9 +30,9 @@ class ExecutionTrace:
     model: str
     outcome: str
     score: float
-    verdict_sources: List[str]
+    verdict_sources: list[str]
     ast_quarantine_status: str
-    steps: List[Dict[str, Any]]
+    steps: list[dict[str, Any]]
     final_answer: str
     secrets_scrubbed: bool
     sha256: str = field(default="")
@@ -112,7 +112,7 @@ def cmd_verify(input_path: str) -> None:
     print(f"[Phase A] VERDICT: INTÈGRE — sha256 {embedded} vérifié pour trace_id={trace.trace_id}")
 
 
-def main(argv: List[str]) -> int:
+def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="Phase A : formater, hacher, sceller une trace d'exécution WikiSkill.")
     parser.add_argument("--seal", action="store_true", help="Sceller une trace (remplit et fige sha256).")
     parser.add_argument("--verify", action="store_true", help="Vérifier l'intégrité cryptographique d'une trace.")

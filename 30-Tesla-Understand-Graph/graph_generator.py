@@ -1,6 +1,7 @@
-import os
-import json
 import ast
+import json
+import os
+
 
 def parse_file(filepath):
     nodes = []
@@ -17,7 +18,7 @@ def parse_file(filepath):
             elif isinstance(node, ast.Import):
                 for alias in node.names:
                     edges.append({"source": filepath, "target": alias.name, "type": "imports"})
-    except Exception as e:
+    except Exception:
         pass
     return nodes, edges
 

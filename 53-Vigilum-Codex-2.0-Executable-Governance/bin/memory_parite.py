@@ -34,7 +34,7 @@ from typing import Any
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from core.orchestration.yaml_mini import YamlMiniError, load_file  # noqa: E402
+from core.orchestration.yaml_mini import YamlMiniError, load_file
 
 EXIT_PASS = 0
 EXIT_BLOCKED = 1

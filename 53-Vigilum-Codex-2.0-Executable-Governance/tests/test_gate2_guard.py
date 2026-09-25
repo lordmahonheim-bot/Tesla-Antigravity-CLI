@@ -43,16 +43,18 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from core.orchestration.gate2_guard import (  # noqa: E402
+from core.orchestration.gate2_guard import (
     LOCK_STATE_RESERVED,
     TOKEN_VERSION,
     canonical_bytes,
-    gate2_dir,
     pre_flight_delegation_check,
     redeem_delegation_token,
     sign_token,
 )
-from core.orchestration.orchestration_gate import compute_approval_sha256, load_graph_file  # noqa: E402
+from core.orchestration.orchestration_gate import (
+    compute_approval_sha256,
+    load_graph_file,
+)
 
 GUARD = ROOT / "core" / "orchestration" / "gate2_guard.py"
 MISSION = "SPINOFF-DIAG-GATE2-BYPASS"

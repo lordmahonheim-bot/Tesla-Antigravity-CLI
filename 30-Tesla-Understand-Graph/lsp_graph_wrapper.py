@@ -1,6 +1,7 @@
 import json
 import os
 
+
 class UnderstandGraphLSPWrapper:
     """
     Mock LSP Wrapper that intersects standard LSP queries with the Understand-Anything semantic graph.

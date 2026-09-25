@@ -24,22 +24,25 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from distiller import distill_trace, enforce_budget  # noqa: E402
-from gating_judge import _check_holdout, _check_train_val  # noqa: E402
-from index_linter import REQUIRED_COLUMNS, lint_file  # noqa: E402
-from intent_formatter import validate_patch as validate_intent  # noqa: E402
-from ouroboros_autocapture import (  # noqa: E402
-    build_trace,
+from distiller import distill_trace, enforce_budget
+from gating_judge import _check_holdout, _check_train_val
+from index_linter import REQUIRED_COLUMNS, lint_file
+from intent_formatter import validate_patch as validate_intent
+from ouroboros_autocapture import (
     ingest_receipt,
     parse_transcript_segment,
 )
-from ouroboros_cycle import run_cycle  # noqa: E402
-from ouroboros_daemon import drain_inbox, resolve_brain_root, scan_transcripts  # noqa: E402
-from patch_broker import validate_patch as validate_broker  # noqa: E402
-from rule_forger import forge_pattern  # noqa: E402
-from schemas import ExecutionTrace  # noqa: E402
-from secrets_scrubber import REDACTED, scrub_text  # noqa: E402
-from trace_writer import write_trace_bytes  # noqa: E402
+from ouroboros_cycle import run_cycle
+from ouroboros_daemon import (
+    drain_inbox,
+    resolve_brain_root,
+    scan_transcripts,
+)
+from patch_broker import validate_patch as validate_broker
+from rule_forger import forge_pattern
+from schemas import ExecutionTrace
+from secrets_scrubber import REDACTED, scrub_text
+from trace_writer import write_trace_bytes
 
 
 class IsolatedRoot(unittest.TestCase):

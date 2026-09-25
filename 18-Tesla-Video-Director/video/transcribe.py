@@ -8,8 +8,9 @@ import argparse
 import os
 import sys
 import time
+
 from google import genai
-from google.genai import types
+
 
 def get_api_key(args):
     """Récupère la clé API Gemini depuis les arguments ou l'environnement."""

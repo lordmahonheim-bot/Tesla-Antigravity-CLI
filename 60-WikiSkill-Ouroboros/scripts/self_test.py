@@ -12,7 +12,6 @@ Valide, dans des sandboxes temporaires, que la chaîne corrigée est opérationn
 Exit code 0 si TOUS les contrôles PASSent, 1 sinon.
 """
 import json
-import os
 import shutil
 import subprocess
 import sys

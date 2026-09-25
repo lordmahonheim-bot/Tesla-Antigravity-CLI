@@ -3,11 +3,11 @@
 02-Alexandria-Database: Incremental Hybrid Indexer
 Indexes documentation using lexical SQLite FTS5 and semantic ChromaDB
 """
+import hashlib
 import os
 import sqlite3
-import hashlib
-from typing import List, Any
 import sys
+from typing import Any
 
 # Conditional load of heavy dependencies
 try:
@@ -61,7 +61,7 @@ def generate_deterministic_id(filepath: str, chunk_index: int) -> str:
     key = f"{filepath}#chunk_{chunk_index}"
     return hashlib.sha256(key.encode("utf-8")).hexdigest()
 
-def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> List[str]:
+def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
     chunks = []
     start = 0
     if len(text) <= size:

@@ -23,7 +23,6 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import Tuple
 
 DIFF_START_RE = re.compile(r"^(diff --git|--- a/|--- \./|--- \.agents/)", re.MULTILINE)
 
@@ -38,7 +37,7 @@ def extract_diff_section(patch_path: str) -> str:
     return content[match.start():]
 
 
-def _parse_metadata_object(raw: str) -> Tuple[str, str]:
+def _parse_metadata_object(raw: str) -> tuple[str, str]:
     try:
         metadata = json.loads(raw)
     except json.JSONDecodeError as exc:
@@ -49,7 +48,7 @@ def _parse_metadata_object(raw: str) -> Tuple[str, str]:
         raise ValueError(f"Cle manquante dans les metadonnees WIKISKILL : {exc}") from exc
 
 
-def extract_metadata_from_patch(patch_path: str) -> Tuple[str, str]:
+def extract_metadata_from_patch(patch_path: str) -> tuple[str, str]:
     """Extrait (skill_target, justification) d'un .intent.patch.
 
     Formats acceptes, par ordre de priorite :

@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 
+
 def format_size(size_bytes):
     """Formats file size in bytes to a human-readable string."""
     try:

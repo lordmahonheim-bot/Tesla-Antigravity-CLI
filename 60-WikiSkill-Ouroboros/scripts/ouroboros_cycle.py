@@ -44,10 +44,10 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from distiller import distill_trace  # noqa: E402
-from rule_forger import forge_all_eligible, proposals_dir  # noqa: E402
-from schemas import ExecutionTrace  # noqa: E402
-from trace_writer import resolve_tesla_root  # noqa: E402
+from distiller import distill_trace
+from rule_forger import forge_all_eligible, proposals_dir
+from schemas import ExecutionTrace
+from trace_writer import resolve_tesla_root
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 

@@ -66,10 +66,10 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ast_quarantine import analyze_file as ast_analyze  # noqa: E402
-from schemas import ExecutionTrace  # noqa: E402
-from secrets_scrubber import scrub_text  # noqa: E402
-from trace_writer import resolve_tesla_root, write_trace_bytes  # noqa: E402
+from ast_quarantine import analyze_file as ast_analyze
+from schemas import ExecutionTrace
+from secrets_scrubber import scrub_text
+from trace_writer import resolve_tesla_root, write_trace_bytes
 
 # --- Vocabulaire deterministe --------------------------------------------
 

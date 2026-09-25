@@ -28,8 +28,9 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from index_linter import REQUIRED_COLUMNS, lint_file as lint_index_file  # noqa: E402
-from trace_writer import resolve_tesla_root  # noqa: E402
+from index_linter import REQUIRED_COLUMNS
+from index_linter import lint_file as lint_index_file
+from trace_writer import resolve_tesla_root
 
 MAX_OBSERVATIONS = 5
 INDEX_NAME = "index.tsv"

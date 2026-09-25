@@ -6,12 +6,13 @@ import re
 import sys
 import tempfile
 from pathlib import Path
-from typing import List
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from index_linter import (
     MAX_TOKENS,
     REQUIRED_COLUMNS,
+)
+from index_linter import (
     lint_file as lint_index_file,
 )
 from intent_formatter import validate_patch as validate_intent
@@ -19,8 +20,8 @@ from patch_broker import validate_patch as validate_broker
 
 THRESHOLD = 0.9
 
-def _check_train_val(worktree: Path) -> List[tuple[str, bool, str]]:
-    results: List[tuple[str, bool, str]] = []
+def _check_train_val(worktree: Path) -> list[tuple[str, bool, str]]:
+    results: list[tuple[str, bool, str]] = []
 
     indexes = sorted(worktree.glob(".agents/wiki/*/index.tsv"))
     if not indexes:
@@ -75,8 +76,8 @@ def _write_temp(suffix: str, content: str) -> str:
         fh.write(content)
     return fh.name
 
-def _check_holdout() -> List[tuple[str, bool, str]]:
-    results: List[tuple[str, bool, str]] = []
+def _check_holdout() -> list[tuple[str, bool, str]]:
+    results: list[tuple[str, bool, str]] = []
     temps: list[str] = []
     try:
         header = "\t".join(REQUIRED_COLUMNS) + "\n"
@@ -135,7 +136,7 @@ def _check_holdout() -> List[tuple[str, bool, str]]:
                 pass
     return results
 
-def _report(split: str, results: List[tuple[str, bool, str]]) -> float:
+def _report(split: str, results: list[tuple[str, bool, str]]) -> float:
     passed = sum(1 for _n, ok, _d in results if ok)
     total = len(results) if results else 1
     score = passed / total

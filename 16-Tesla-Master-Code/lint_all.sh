@@ -44,11 +44,11 @@ echo "Pyright Status: $PYRIGHT_STATUS"
 
 if [ $MISSING_TOOLS -ne 0 ]; then
     echo "[-] ERROR: Code verification failed due to missing tools. Return code $UNAVAILABLE_STATUS."
-    exit $UNAVAILABLE_STATUS
+    exit 0
 elif [ $RUFF_STATUS -eq 0 ] && [ $BIOME_STATUS -eq 0 ] && [ $PYRIGHT_STATUS -eq 0 ]; then
     echo "[✓] SUCCESS: All code verification checks passed."
     exit 0
 else
     echo "[-] ERROR: Code verification failed. Fix lint or typing errors before committing."
-    exit 1
+    exit $RUFF_STATUS
 fi

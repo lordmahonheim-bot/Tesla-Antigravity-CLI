@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # agy_indexer.py — Indexeur sémantique local pour RAG embarqué
 import os
-import sys
 import subprocess
+import sys
+
 import chromadb
 from chromadb.utils import embedding_functions
+
 
 def get_files_to_index(directory):
     # Tente d'utiliser git pour lister les fichiers non ignorés

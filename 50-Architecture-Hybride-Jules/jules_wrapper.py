@@ -2,11 +2,11 @@
 # tesla-jules — Governed wrapper for Google Jules & Antigravity CLI
 # Under the Vigilum Codex doctrine for Lord Mahonheim
 
-import sys
 import os
-import subprocess
 import re
 import shutil
+import subprocess
+import sys
 
 WORKSPACE = "$TESLA_ROOT"
 JULES_BIN_PATH = os.path.expanduser("~/.npm-global/bin/jules")
@@ -167,10 +167,10 @@ def main():
         
         # Step 4: Output instructions
         print("\n[+] Pull and apply completed successfully in staging branch.")
-        print(f"[*] Please run the diagnostics:")
-        print(f"    1. Run pyright: `.venv/bin/pyright`")
-        print(f"    2. Inspect changes: `git diff master`")
-        print(f"    3. Merge to master when ready:")
+        print("[*] Please run the diagnostics:")
+        print("    1. Run pyright: `.venv/bin/pyright`")
+        print("    2. Inspect changes: `git diff master`")
+        print("    3. Merge to master when ready:")
         print(f"       `git checkout master && git merge {branch_name}` (Requires Ctrl+K confirmation)")
 
     else:

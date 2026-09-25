@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import os
-import time
-import subprocess
-import urllib.request
-import urllib.parse
 import json
+import os
+import subprocess
+import time
+import urllib.parse
+import urllib.request
 
 # Charger les variables d'environnement
 env_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -92,7 +92,7 @@ def main():
                 except subprocess.TimeoutExpired:
                     send_message("❌ Timeout : La commande a dépassé 10 minutes.")
                 except Exception as e:
-                    send_message(f"❌ Erreur critique : {str(e)}")
+                    send_message(f"❌ Erreur critique : {e!s}")
         time.sleep(1)
 
 if __name__ == "__main__":

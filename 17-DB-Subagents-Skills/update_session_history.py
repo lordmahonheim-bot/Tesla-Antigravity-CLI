@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # update_session_history.py — Idempotent cognitive session memory & checkpoint updater
-import os
 import json
+import os
 import re
-import sys
-import subprocess
 import shutil
+import subprocess
+import sys
 from datetime import datetime
-from db_connector import get_db_connection, DB_PATH, WORKSPACE
+
+from db_connector import WORKSPACE
 
 MEMORY_DIR = os.path.join(WORKSPACE, "memory")
 HISTORY_FILE = os.path.join(MEMORY_DIR, "SESSION_TRANSCRIPTS.md")

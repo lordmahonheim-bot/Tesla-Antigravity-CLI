@@ -1,8 +1,8 @@
-import os
-import sqlite3
 import hashlib
 import logging
-from typing import Any, Dict, List, Optional
+import os
+import sqlite3
+from typing import Any
 
 logger = logging.getLogger("reddit_db")
 
@@ -56,7 +56,7 @@ def init_db(db_path: str = DEFAULT_DB_PATH) -> None:
         conn.close()
 
 
-def get_watchlist(db_path: str = DEFAULT_DB_PATH) -> List[Dict[str, Any]]:
+def get_watchlist(db_path: str = DEFAULT_DB_PATH) -> list[dict[str, Any]]:
     """Retrieve all watched subreddits."""
     conn = get_db_connection(db_path)
     try:
@@ -124,7 +124,7 @@ def add_ledger_entry(
         conn.close()
 
 
-def get_ledger(limit: int = 100, db_path: str = DEFAULT_DB_PATH) -> List[Dict[str, Any]]:
+def get_ledger(limit: int = 100, db_path: str = DEFAULT_DB_PATH) -> list[dict[str, Any]]:
     """Retrieve recent ledger entries."""
     conn = get_db_connection(db_path)
     try:

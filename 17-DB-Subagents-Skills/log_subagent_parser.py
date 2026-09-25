@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # log_subagent_parser.py — Parse JSONL transcript logs, detect shadow-targeting, scrub secrets, and update SQLite DB.
-import os
 import json
+import os
 import re
 from datetime import datetime
-from db_connector import get_db_connection, DEFAULT_WORKSPACE
+
+from db_connector import DEFAULT_WORKSPACE, get_db_connection
 
 # Robust Regexes for Scrubbing Sensitive Secrets
 SCRUB_PATTERNS = [

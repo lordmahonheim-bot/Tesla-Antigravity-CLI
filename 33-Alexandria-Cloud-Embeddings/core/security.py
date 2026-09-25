@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import re
 
+
 class PIIScrubber:
     PATTERNS = {
         "google_api_key": r"AIzaSy[a-zA-Z0-9\-_]{33}",

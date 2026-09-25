@@ -5,12 +5,14 @@ Moteur de double indexation lexicale (FTS5) et sémantique (Gemini Cloud)
 Optimisé pour MIDGARD sous la doctrine du Vigilum Codex.
 """
 
-import os
 import hashlib
+import os
+
 import frontmatter
 from dotenv import load_dotenv
+
 load_dotenv()
-from typing import List
+
 from core.database_manager import DatabaseManager
 from core.embeddings import GeminiEmbeddingProvider
 from core.security import PIIScrubber
@@ -33,7 +35,7 @@ def generate_deterministic_id(filepath: str, chunk_index: int) -> str:
     return hashlib.sha256(key.encode("utf-8")).hexdigest()
 
 
-def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> List[str]:
+def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
     """Découpe le contenu textuel via une fenêtre glissante normalisée."""
     chunks = []
     start = 0
@@ -189,7 +191,7 @@ def run_hybrid_indexation() -> None:
         print(f"[-] Impossible de traiter les embeddings en attente : {e}")
 
     print(" ────── ")
-    print(f"[✓] Traitement acheve avec succes sur MIDGARD.")
+    print("[✓] Traitement acheve avec succes sur MIDGARD.")
     print(f"    - Fichiers mis a jour / ajoutes : {indexed_count}")
     print(f"    - Fichiers orphelins purges     : {purged_count}")
     print(" ────── ")

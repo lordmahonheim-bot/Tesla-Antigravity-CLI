@@ -43,7 +43,7 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from tesla_git_guard import (  # noqa: E402
+from tesla_git_guard import (
     GIT_JURISDICTION_AGENT,
     classify_command,
     extract_command,

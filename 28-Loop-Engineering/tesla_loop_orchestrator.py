@@ -1,12 +1,12 @@
 import json
+import os
 import sqlite3
 import subprocess
 import sys
-import os
-import shutil
 import time
-import yaml
 from datetime import datetime
+
+import yaml
 
 DB_PATH = "$TESLA_ROOT/Avalon/03-Resources/alexandria_brain.db"
 OUTPUTS_DIR = "$TESLA_ROOT/OUTPUTS"
@@ -121,7 +121,7 @@ def run_master_code(loop_id, contract_path, feedback=None):
                 ts = file_info.get('timestamp', 'N/A')
                 print(f"  - {path} | Hash: {fhash} | TS: {ts}")
     else:
-        print(f"[Master-Code] Warning: output_manifest.json not found.")
+        print("[Master-Code] Warning: output_manifest.json not found.")
         
     return manifest_path
 

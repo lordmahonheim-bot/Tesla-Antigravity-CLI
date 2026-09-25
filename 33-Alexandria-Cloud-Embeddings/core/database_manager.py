@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import sqlite3
 import os
+import sqlite3
 import time
+
 
 class DatabaseManager:
     def __init__(self, db_path: str):

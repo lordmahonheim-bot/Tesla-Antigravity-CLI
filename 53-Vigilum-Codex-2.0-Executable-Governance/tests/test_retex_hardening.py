@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 from bin.audit_cap import cmd_check, cmd_record
 from bin.memory_parite import DEFAULT_PILLARS, audit_memory, load_pillars
 from bin.staging_gate import cmd_next_milestone, cmd_verify
-from core.orchestration.orchestration_gate import (  # noqa: E402
+from core.orchestration.orchestration_gate import (
     EXIT_BLOCKED,
     EXIT_PASS,
     EXIT_UNKNOWN,
@@ -30,9 +30,8 @@ from core.orchestration.orchestration_gate import (  # noqa: E402
     dag_verify,
     intent_guard,
     receipt_quorum,
-    verify_approval_seal,
 )
-from core.orchestration.yaml_mini import YamlMiniError, load_file  # noqa: E402
+from core.orchestration.yaml_mini import YamlMiniError, load_file
 
 
 def make_graph(*, sealed: bool = True, tamper: bool = False, cyclic: bool = False,
@@ -260,6 +259,7 @@ class OrchestrationGateTests(unittest.TestCase):
     def test_transcript_correlation_resolution_order(self) -> None:
         """D-008 V2.1.3: ordre de résolution direct (ref explicite → isolé → miroir)."""
         import os
+
         from core.orchestration.orchestration_gate import _transcript_correlation
         with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as evidence_dir:
             graph = make_graph()
@@ -784,8 +784,8 @@ class TestManifestTests(unittest.TestCase):
             "manifest_version: \"2.1.3\"\n"
             "suites:\n"
             "  - name: python-unittest-discovery\n"
-            "    expected_tests: {}\n"
-            "total_tests: {}\n".format(declared_python, declared_python), encoding="utf-8")
+            f"    expected_tests: {declared_python}\n"
+            f"total_tests: {declared_python}\n", encoding="utf-8")
         # Chaque module déployé embarque son propre parseur (stdlib-only)
         parser_src = ROOT / "core" / "orchestration" / "yaml_mini.py"
         parser_dst = module / "core" / "orchestration" / "yaml_mini.py"

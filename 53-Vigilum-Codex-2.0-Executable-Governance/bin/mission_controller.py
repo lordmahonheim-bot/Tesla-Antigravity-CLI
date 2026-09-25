@@ -44,11 +44,11 @@ from typing import Any
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from bin.memory_parite import DEFAULT_PILLARS, audit_memory, load_pillars  # noqa: E402
-from bin.probe_capabilities import OPTIONAL_DEFAULT, REQUIRED_DEFAULT, probe_set  # noqa: E402
-from bin.staging_gate import cmd_next_milestone, cmd_verify  # noqa: E402
-from bin.workspace_hygiene import run_hygiene  # noqa: E402
-from core.orchestration.orchestration_gate import (  # noqa: E402
+from bin.memory_parite import audit_memory, load_pillars
+from bin.probe_capabilities import OPTIONAL_DEFAULT, REQUIRED_DEFAULT, probe_set
+from bin.staging_gate import cmd_verify
+from bin.workspace_hygiene import run_hygiene
+from core.orchestration.orchestration_gate import (
     EXIT_BLOCKED,
     EXIT_PASS,
     _default_receipts_dir,
