@@ -71,5 +71,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Gate R Reconcile
+        env:
+          TESLA_CONTROL_PLANE_KEY: ${{ secrets.TESLA_CONTROL_PLANE_KEY }}
         run: |
-          python3 53-Vigilum-Codex-2.0-Executable-Governance/bin/gate_r.py reconcile --root . --mission SGC-EXEC-GOV-03-R3 --ledger 53-Vigilum-Codex-2.0-Executable-Governance/evidence/test_runner_SGC-EXEC-GOV-03-R3_20260924-153248-111549.json
+          python3 53-Vigilum-Codex-2.0-Executable-Governance/bin/gate_r.py reconcile --root 53-Vigilum-Codex-2.0-Executable-Governance --mission SGC-EXEC-GOV-03-R3 --ledger 53-Vigilum-Codex-2.0-Executable-Governance/evidence/test_runner_SGC-EXEC-GOV-03-R3_20260924-153248-111549.json
