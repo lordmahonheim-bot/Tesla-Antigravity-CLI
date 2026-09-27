@@ -20,7 +20,6 @@ fi
 
 echo "=== [📋] Verification Diagnostics Summary ==="
 echo "Python Ruff Status: $RUFF_STATUS"
-echo "Pyright Status: Skipped"
 
 if [ $MISSING_TOOLS -ne 0 ]; then
     echo "[-] ERROR: Code verification failed due to missing tools. Return code $UNAVAILABLE_STATUS."
@@ -29,6 +28,6 @@ elif [ $RUFF_STATUS -eq 0 ]; then
     echo "[✓] SUCCESS: All code verification checks passed."
     exit 0
 else
-    echo "[-] ERROR: Code verification failed. Fix lint or typing errors before committing."
-    exit 1
+    echo "[-] ERROR: Code verification failed. Fix lint errors before committing."
+    exit $RUFF_STATUS
 fi

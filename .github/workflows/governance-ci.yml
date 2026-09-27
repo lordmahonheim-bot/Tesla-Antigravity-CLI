@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install linters
-        run: pip install ruff pyright
+        run: pip install ruff
       - name: Run lint
         run: bash 16-Tesla-Master-Code/lint_all.sh
 
@@ -62,6 +62,7 @@ jobs:
         run: echo "Gouvernance Validée"
 
   gate-r-reconcile:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     needs: [test-gate-r]
     runs-on: ubuntu-latest
     steps:

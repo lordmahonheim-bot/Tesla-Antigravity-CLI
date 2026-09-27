@@ -67,3 +67,14 @@ de confiance. La version corrigée ci-dessus cible la *friction imposée par l'a
 *Résultat du déféré V2.6.1 : aucun composant supprimé ; 1 câblage différé (OI-01) ;
 1 gravure souveraine proposée (OI-02) ; 1 limitation documentée (OI-03).*
 - [ ] OI-04 : Trancher Mode Dégradé : le rendre externe+tracé, ou le supprimer.
+
+## OI-05 — Conflit de confiance (P2 borné) : Clé symétrique en CI
+
+| Champ | Valeur |
+| :--- | :--- |
+| **Statut** | `KNOWN LIMITATION` — Arbitrage consigné suite à l'Audit 6 |
+| **Constat** | La clé symétrique Control Plane vit désormais dans GitHub Actions Secrets pour débloquer la CI. |
+| **Niveau de confiance** | `ATTESTATION LOCALE`, et non plus signature indépendante. |
+| **Arbitrage doctrinal** | Le principe P2 (Producer != Validator) est **borné** et non strictement satisfait. Cet état est toutefois déclaré et conforme à la clause C2 du module. |
+| **Résolution requise (Action future)** | Migrer vers une signature asymétrique (Ed25519 - courtier OI-03 - ou GPG/SSH selon A-002) afin que la CI ne détienne que la clé publique, lui permettant de vérifier sans pouvoir forger. |
+
