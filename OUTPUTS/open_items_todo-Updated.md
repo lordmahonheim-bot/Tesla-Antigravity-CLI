@@ -66,7 +66,7 @@ de confiance. La version corrigée ci-dessus cible la *friction imposée par l'a
 
 *Résultat du déféré V2.6.1 : aucun composant supprimé ; 1 câblage différé (OI-01) ;
 1 gravure souveraine proposée (OI-02) ; 1 limitation documentée (OI-03).*
-- [ ] OI-04 : Trancher Mode Dégradé : le rendre externe+tracé, ou le supprimer.
+- [x] OI-04 : Trancher Mode Dégradé : le rendre externe+tracé, ou le supprimer. (Décision exécutée au round 5, purge dans AGENTS.md et GEMINI.md via commit 9df6355a)
 
 ## OI-05 — Conflit de confiance (P2 borné) : Clé symétrique en CI
 
@@ -74,7 +74,20 @@ de confiance. La version corrigée ci-dessus cible la *friction imposée par l'a
 | :--- | :--- |
 | **Statut** | `KNOWN LIMITATION` — Arbitrage consigné suite à l'Audit 6 |
 | **Constat** | La clé symétrique Control Plane vit désormais dans GitHub Actions Secrets pour débloquer la CI. |
-| **Niveau de confiance** | `ATTESTATION LOCALE`, et non plus signature indépendante. |
+| **Niveau de confiance** | `ATTESTATION LOCALE`, et non plus signature indépendante. Bien que la route `--key-file` applique la garde P2 (refus d'une clé sous la racine du workspace), la route par variable d'environnement `env` (celle utilisée par la CI) n'applique aucun contrôle. |
 | **Arbitrage doctrinal** | Le principe P2 (Producer != Validator) est **borné** et non strictement satisfait. Cet état est toutefois déclaré et conforme à la clause C2 du module. |
 | **Résolution requise (Action future)** | Migrer vers une signature asymétrique (Ed25519 - courtier OI-03 - ou GPG/SSH selon A-002) afin que la CI ne détienne que la clé publique, lui permettant de vérifier sans pouvoir forger. |
 
+## OI-06 — Contributions Fork et Gate R
+
+| Champ | Valeur |
+| :--- | :--- |
+| **Statut** | `KNOWN LIMITATION` — Arbitrage consigné suite à l'Audit 7 |
+| **Constat** | Sur la voie fork, GitHub ne transmet pas les secrets. Par conséquent, Gate R est structurellement inatteignable pour une PR externe. |
+| **Décision** | La contribution fork est acceptée avec Gate R déclarée non applicable lors de la PR ; la vérification devra être rejouée par un mainteneur avant fusion. |
+
+---
+
+## 🛑 P8 Trace de décision (No Silent Deletion)
+
+- **PR #21** : Fermée sans fusion le 27/09/2026. Le livrable associé (Plan MIDGARD-TERMINATOR) subsiste uniquement sur la branche `arena/01a0bb86-tesla-antigravity-cli` (tête `a419e3a3`) et ne sera pas repris sur `main`.

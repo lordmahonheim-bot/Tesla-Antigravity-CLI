@@ -50,16 +50,22 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install linters
-        run: pip install ruff
+        run: pip install ruff==0.16.8
       - name: Run lint
         run: bash 16-Tesla-Master-Code/lint_all.sh
 
   ci-success-governance:
+    if: always()
     needs: [test-gate-r, test-ouroboros, compile-python, lint, gate-r-reconcile]
     runs-on: ubuntu-latest
     steps:
-      - name: Governance Success
-        run: echo "Gouvernance Validée"
+      - name: Évaluer les résultats
+        run: |
+          echo "gate-r-reconcile = ${{ needs.gate-r-reconcile.result }}"
+          for r in "${{ needs.test-gate-r.result }}" "${{ needs.test-ouroboros.result }}" \
+                   "${{ needs.compile-python.result }}" "${{ needs.lint.result }}"; do
+            [ "$r" = "success" ] || { echo "ECHEC : $r"; exit 1; }
+          done
 
   gate-r-reconcile:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
