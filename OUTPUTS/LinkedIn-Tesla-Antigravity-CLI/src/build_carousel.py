@@ -24,13 +24,13 @@ Historique des correctifs (v2) :
 import os
 import sys
 
-from reportlab.pdfgen import canvas
-from reportlab.lib.colors import HexColor, Color
-from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.colors import Color, HexColor
 from reportlab.lib.enums import TA_LEFT
-from reportlab.platypus import Paragraph
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Paragraph
 
 # ------------------------------------------------------------------ CHEMINS
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -449,7 +449,9 @@ def slide6(c):
 # ------------------------------------------------------------------ MAIN
 def build(path=DEFAULT_PDF):
     register_fonts()
-    c = canvas.Canvas(path, pagesize=(W, H))
+    # invariant=1 : sortie binaire reproductible (pas d'horodatage embarque),
+    # afin que deux generations produisent un PDF identique au bit pres.
+    c = canvas.Canvas(path, pagesize=(W, H), invariant=1)
     c.setTitle("Tesla-Antigravity-CLI — Carrousel LinkedIn")
     c.setAuthor("Abdellah MOUHTAJ")
     for fn in (slide1, slide2, slide3, slide4, slide5, slide6):
