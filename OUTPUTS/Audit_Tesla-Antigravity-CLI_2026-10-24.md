@@ -141,7 +141,7 @@ C'est le constat le plus important de l'audit : un système dont la doctrine est
 - `mirror-guard.yml` **échoue systématiquement** dès qu'une PR touche `LEARN/`, `PROTOCOLES/` ou `AGY-Project-MAIN-LIST.md` — y compris pour une correction légitime du propriétaire. Un garde qui bloque tout finit contourné ou désactivé ; un diff/label d'approbation serait plus durable.
 - Le dossier `evidence/` du module 53 accumule un JSON par exécution (18 fichiers visibles) : sans politique de rétention, le repo grossit à chaque run commité.
 - Manquent : shellcheck, vérification des liens Markdown, lint Markdown, cache pip, `concurrency` (annulation des runs obsolètes), timeouts de jobs.
-- Historique : la CI a été rouge sur les branches Dependabot avant d'être verte sur `main` — vérifier que le vert actuel vient d'un correctif et non d'un contournement.
+- Historique : la CI a été rouge sur les branches Dependabot avant d'être verte sur `main` — **cause racine identifiée le 2026-10-24 lors de la PR livrant le présent audit (PR #27)** : `gitleaks/gitleaks-action` v3 exige `GITHUB_TOKEN` pour scanner les pull requests ; absent de `secret-scan.yml`, le job `Scan for Secrets` échouait sur **toutes** les PR (le vert sur `push` masquait le défaut) et le check requis `ci-success-security` était sauté. Corrigé dans la PR #27 (jeton + `pull-requests: read`).
 - Les hooks locaux (`.githooks` fail-closed, bonne idée) ne sont actifs que si `core.hooksPath` est configuré : ce prérequis doit être documenté et/ou automatisé (`tools/install_hooks.sh` existe mais n'est pas mis en avant dans le README).
 
 ### 5.6 Dépendances : le maillon faible de la reproductibilité
